@@ -11,6 +11,7 @@ import "./index.css";
 import Landing from "./pages/Landing.tsx";
 import Classic from "./pages/Classic.tsx";
 import Story from "./pages/Story.tsx";
+import Play from "@/pages/Play.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import "./types/global.d.ts";
 
@@ -50,6 +51,7 @@ createRoot(document.getElementById("root")!).render(
             <Route path="/" element={<Landing />} />
             <Route path="/classic" element={<Classic />} />
             <Route path="/story" element={<Story />} />
+            <Route path="/play" element={<Play />} />
             <Route path="/auth" element={<AuthPage redirectAfterAuth="/" />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
