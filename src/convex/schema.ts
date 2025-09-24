@@ -32,12 +32,34 @@ const schema = defineSchema(
       role: v.optional(roleValidator), // role of the user. do not remove
     }).index("email", ["email"]), // index for the email. do not remove or modify
 
-    // add other tables here
+    // Guestbook entries for the portfolio
+    guestbook: defineTable({
+      name: v.string(),
+      email: v.optional(v.string()),
+      message: v.string(),
+      approved: v.optional(v.boolean()),
+    }).index("by_approved", ["approved"]),
 
-    // tableName: defineTable({
-    //   ...
-    //   // table fields
-    // }).index("by_field", ["field"])
+    // Analytics for tracking portfolio interactions
+    analytics: defineTable({
+      event: v.string(),
+      mode: v.optional(v.string()),
+      projectId: v.optional(v.string()),
+      metadata: v.optional(v.object({
+        userAgent: v.optional(v.string()),
+        referrer: v.optional(v.string()),
+      })),
+    }).index("by_event", ["event"]),
+
+    // Game progress for play mode
+    gameProgress: defineTable({
+      userId: v.optional(v.id("users")),
+      sessionId: v.string(),
+      unlockedProjects: v.array(v.string()),
+      score: v.number(),
+      completed: v.boolean(),
+    }).index("by_session", ["sessionId"])
+      .index("by_user", ["userId"]),
   },
   {
     schemaValidation: false,
