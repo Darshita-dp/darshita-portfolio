@@ -642,13 +642,23 @@ export default function Landing() {
             key={i}
             initial={{ x: -200 }}
             animate={{ x: "110%" }}
-            transition={{ duration: 28 + i * 6, repeat: Infinity, ease: "linear", delay: i * 2 }}
+            transition={{ duration: 32 + i * 7, repeat: Infinity, ease: "linear", delay: i * 2 }}
             className="absolute top-10"
-            style={{ top: `${8 + i * 12}%`, left: `${-20 - i * 8}%` }}
+            style={{
+              top: `${8 + i * 12}%`,
+              left: `${-20 - i * 8}%`,
+              opacity: 0.85 - (i % 3) * 0.08,
+            }}
           >
             <div className="flex items-center gap-2">
-              <div className="w-28 h-10 rounded-full bg-white/60 blur-[1px]" />
-              <div className="w-16 h-8 rounded-full bg-white/50 blur-[1px]" />
+              <div
+                className="w-28 h-10 rounded-full bg-white/60"
+                style={{ filter: `blur(${1 + (i % 3)}px)` }}
+              />
+              <div
+                className="w-16 h-8 rounded-full bg-white/50"
+                style={{ filter: `blur(${0.5 + ((i + 1) % 3)}px)` }}
+              />
             </div>
           </motion.div>
         ))}
@@ -687,6 +697,7 @@ export default function Landing() {
             onClick={() => setReduced((v) => !v)}
             className="text-xs rounded-full px-3 py-1 border bg-white/70 backdrop-blur hover:bg-white/90 transition"
             aria-pressed={reduced}
+            aria-label={reduced ? "Background visuals: Reduced" : "Background visuals: Full"}
             title="Toggle background visuals"
           >
             {reduced ? "Background: Reduced" : "Background: Full"}
@@ -726,6 +737,8 @@ export default function Landing() {
             style={{
               fontFamily: "ui-serif, Georgia, Cambria, Times New Roman, Times, serif",
               letterSpacing: "0.2px",
+              textShadow:
+                "0 1px 0 rgba(255,255,255,0.45), 0 10px 24px rgba(34,85,54,0.10)",
             }}
           >
             — where data finds its story in pastel hues
@@ -741,7 +754,7 @@ export default function Landing() {
           initial={{ opacity: 0, y: 26 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.1 }}
-          className="grid grid-cols-1 md:grid-cols-2 gap-5 max-w-4xl w-full"
+          className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5 max-w-4xl w-full"
           style={{
             // base values
             // @ts-ignore - CSS var used inline
@@ -757,7 +770,7 @@ export default function Landing() {
               initial={{ opacity: 0, scale: 0.96 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.45, delay: 0.08 * index }}
-              whileHover={{ y: -4, scale: 1.02 }}
+              whileHover={{ y: -4, scale: 1.02, rotate: index % 2 === 0 ? 1.5 : -1.5 }}
               whileTap={{ scale: 0.98 }}
               onClick={() => navigate(mode.path)}
               className="group cursor-pointer w-full text-left rounded-2xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
@@ -784,6 +797,7 @@ export default function Landing() {
                       boxShadow:
                         "inset 0 -2px 0 rgba(0,0,0,0.06), 0 6px 12px rgba(0,0,0,0.06)",
                       animation: "icon-bounce 2s infinite",
+                      ["--shine-delay" as any]: `${120 + ((index * 90) % 260)}ms`,
                     }}
                   >
                     <span className="text-2xl">{mode.symbol}</span>
