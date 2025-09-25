@@ -609,19 +609,38 @@ export default function Landing() {
           initial={{ opacity: 0, y: -24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="text-center mb-10"
+          className="text-center mb-10 relative"
         >
-          <h1 className="font-serif tracking-tight text-5xl md:text-7xl text-slate-900 drop-shadow-[0_1px_0_rgba(255,255,255,0.7)]">
-            <span
-              className="inline-block"
-              style={{
-                letterSpacing: "0.5px",
-                textShadow: "0 2px 0 rgba(255,255,255,0.9)",
-              }}
-            >
-              Darshita Patel
-            </span>
+          <h1
+            className="tracking-tight text-6xl md:text-8xl"
+            style={{
+              // Leafy display font stack
+              fontFamily:
+                '"Great Vibes", "Gwendolyn", ui-serif, Georgia, Cambria, "Times New Roman", Times, serif',
+              letterSpacing: "0.4px",
+              color: "oklch(20% 0.04 150)",
+              // Layered shadow for soft embossed + glow
+              textShadow:
+                "0 2px 0 rgba(248,203,166,0.85), 0 10px 24px rgba(34, 85, 54, 0.18), 0 1px 0 rgba(0,0,0,0.05)",
+            }}
+          >
+            <span className="inline-block select-none">Darshita Patel</span>
           </h1>
+          {/* Decorative tiny leaves around the name for a leafy vibe */}
+          <span
+            aria-hidden="true"
+            className="absolute -top-2 left-1/2 -translate-x-[56%] text-2xl"
+            style={{ filter: "drop-shadow(0 2px 2px rgba(0,0,0,0.12))", opacity: 0.9 }}
+          >
+            🍃
+          </span>
+          <span
+            aria-hidden="true"
+            className="absolute top-1 right-1/2 translate-x-[62%] rotate-12 text-xl"
+            style={{ filter: "drop-shadow(0 2px 2px rgba(0,0,0,0.12))", opacity: 0.85 }}
+          >
+            🍃
+          </span>
           <p
             className="mt-3 text-lg md:text-xl text-slate-700/90"
             style={{
