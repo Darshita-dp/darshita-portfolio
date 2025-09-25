@@ -123,49 +123,27 @@ export default function Landing() {
           const seed = Math.abs(Math.sin((i + 1) * 9876.543)) % 1;
           const r = (min: number, max: number) => min + (max - min) * seed;
 
-          // Direction: half go top -> bottom, half go bottom -> top
-          const direction: "down" | "up" = i % 2 === 0 ? "down" : "up";
-
-          // Stagger initial X so they don't bunch up from the same spot
+          // FLOW HORIZONTALLY: remove vertical traversal; distribute Y across viewport
           const initialX = -260 - (i % 5) * 60 - r(0, 120);
-
-          // Slightly vary size for depth
+          const baseY = `${r(6, 90)}%`; // random vertical lane
           const size = 136 + (i % 3) * 36 + r(-10, 24);
           const scale = r(0.9, 1.15);
           const depthOpacity = r(0.65, 1);
-          const swayAmp = r(8, 18); // horizontal sway amplitude (px)
+          const swayAmp = r(8, 18); // horizontal micro-sway remains
           const dur = prefersReducedMotion ? 0 : r(6.2, 9.2);
           const delay = prefersReducedMotion ? 0 : (i % 7) * 0.27 + r(0, 0.35);
-
-          // Compute Y path depending on direction
-          let y1: string, y2: string, y3: string, y4: string;
-          if (direction === "down") {
-            // Broadly from above viewport down past bottom
-            const startYNum = -15 + ((i * 17) % 105) + r(-6, 6);
-            y1 = `${startYNum}%`;
-            y2 = `${Math.min(startYNum + 70 + r(-8, 8), 110)}%`;
-            y3 = `${Math.max(startYNum + 40 + r(-8, 8), -15)}%`;
-            y4 = `${Math.min(startYNum + 120 + r(-12, 12), 120)}%`;
-          } else {
-            // Start below viewport and drift upward across the screen
-            const startYNum = 102 + ((i * 19) % 26) + r(0, 10); // ~102% to ~138%
-            y1 = `${startYNum}%`;
-            y2 = `${Math.max(startYNum - 70 + r(-8, 8), -25)}%`;
-            y3 = `${Math.min(startYNum - 40 + r(-8, 8), 110)}%`;
-            y4 = `${Math.max(startYNum - 120 + r(-12, 12), -35)}%`;
-          }
 
           return (
             <motion.div
               key={`sf-${i}`}
-              initial={{ x: initialX, y: y1, rotate: 0 }}
+              initial={{ x: initialX, y: baseY, rotate: 0 }}
               animate={
                 prefersReducedMotion
-                  ? { x: initialX, y: y1, rotate: 0 }
+                  ? { x: initialX, y: baseY, rotate: 0 }
                   : {
                       x: "115%",
-                      y: [y1, y2, y3, y4],
-                      rotate: direction === "down" ? [-6, 8 + r(-2, 2), -6, -4] : [6, -8 + r(-2, 2), 6, 4],
+                      y: baseY, // keep y mostly constant for horizontal flow
+                      rotate: [-4, 4 + r(-1, 1), -2, -4], // gentle breeze rotation
                     }
               }
               transition={
