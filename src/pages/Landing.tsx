@@ -310,6 +310,9 @@ function FlowerField() {
     freq: number;
     phase: number;
     scale: number;
+    opacity: number;
+    rotPhase: number;
+    rotAmp: number;
   }>>([]);
   const rafRef = useRef<number | null>(null);
   const lastTsRef = useRef<number>(0);
@@ -343,6 +346,9 @@ function FlowerField() {
       freq: 0.6 + Math.random() * 1.2, // [0.6, 1.8]
       phase: Math.random() * Math.PI * 2, // [0, 2π]
       scale: 0.7 + Math.random() * 0.45, // [0.7, 1.15]
+      opacity: 0.35 + Math.random() * 0.4, // 0.35–0.75
+      rotPhase: Math.random() * Math.PI * 2,
+      rotAmp: 3 + Math.random() * 3, // 3–6 deg
     });
 
     // initialize sprites
@@ -371,15 +377,18 @@ function FlowerField() {
 
     // mount SVGs after elements exist
     spritesRef.current.forEach((s: {
-  el: HTMLDivElement;
-  x: number;
-  baseY: number;
-  speed: number;
-  amp: number;
-  freq: number;
-  phase: number;
-  scale: number;
-}) => {
+      el: HTMLDivElement;
+      x: number;
+      baseY: number;
+      speed: number;
+      amp: number;
+      freq: number;
+      phase: number;
+      scale: number;
+      opacity: number;
+      rotPhase: number;
+      rotAmp: number;
+    }) => {
       const size = 96; // base size, scale via transform
       const svg = (function makeSvg() {
         const petalCount = 18;
@@ -451,7 +460,7 @@ function FlowerField() {
         svg.appendChild(center);
         return svg;
       })();
-      s.el.firstChild as HTMLDivElement;
+      svg.style.opacity = String(s.opacity);
       (s.el.firstChild as HTMLDivElement).appendChild(svg);
     });
 
@@ -471,10 +480,14 @@ function FlowerField() {
       for (const s of spritesRef.current) {
         s.x += s.speed * dt;
         const y = s.baseY + s.amp * Math.sin(s.freq * ts / 1000 + s.phase);
-        s.el.style.transform = `translate(${s.x}px, ${y}px) scale(${s.scale})`;
+        // Add subtle rotation wobble
+        const rot = Math.sin((ts / 1000) * 0.6 + s.rotPhase) * s.rotAmp;
 
-        if (s.x > vwNow + 80) {
-          // recycle with fresh params
+        s.el.style.transform = `translate(${s.x}px, ${y}px) scale(${s.scale}) rotate(${rot}deg)`;
+
+        // Limit travel to roughly half the screen, then recycle with fresh params
+        const limitX = vwNow * 0.5 + 60;
+        if (s.x > limitX) {
           const p = newParams();
           s.x = p.x;
           s.baseY = Math.random() * vhNow;
@@ -483,6 +496,14 @@ function FlowerField() {
           s.freq = p.freq;
           s.phase = p.phase;
           s.scale = p.scale;
+          s.opacity = p.opacity;
+          s.rotPhase = p.rotPhase;
+          s.rotAmp = p.rotAmp;
+
+          // Update the mounted SVG's opacity to match the new sprite opacity
+          const wrap = s.el.firstChild as HTMLDivElement | null;
+          const svg = wrap?.firstChild as SVGElement | null;
+          if (svg) svg.style.opacity = String(s.opacity);
         }
       }
 
@@ -495,15 +516,18 @@ function FlowerField() {
     } else {
       // Static placement for reduced motion
       spritesRef.current.forEach((s: {
-  el: HTMLDivElement;
-  x: number;
-  baseY: number;
-  speed: number;
-  amp: number;
-  freq: number;
-  phase: number;
-  scale: number;
-}) => {
+        el: HTMLDivElement;
+        x: number;
+        baseY: number;
+        speed: number;
+        amp: number;
+        freq: number;
+        phase: number;
+        scale: number;
+        opacity: number;
+        rotPhase: number;
+        rotAmp: number;
+      }) => {
         s.x = Math.random() * vw - 60;
         const y = Math.random() * vh;
         s.el.style.transform = `translate(${s.x}px, ${y}px) scale(${s.scale})`;
@@ -515,15 +539,18 @@ function FlowerField() {
       const vwN = window.innerWidth;
       const vhN = window.innerHeight;
       spritesRef.current.forEach((s: {
-  el: HTMLDivElement;
-  x: number;
-  baseY: number;
-  speed: number;
-  amp: number;
-  freq: number;
-  phase: number;
-  scale: number;
-}) => {
+        el: HTMLDivElement;
+        x: number;
+        baseY: number;
+        speed: number;
+        amp: number;
+        freq: number;
+        phase: number;
+        scale: number;
+        opacity: number;
+        rotPhase: number;
+        rotAmp: number;
+      }) => {
         s.baseY = Math.min(Math.max(s.baseY, 0), vhN);
         if (s.x > vwN + 80) s.x = -100;
       });
