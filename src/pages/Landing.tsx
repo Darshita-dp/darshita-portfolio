@@ -124,7 +124,8 @@ export default function Landing() {
             initial={{ x: -160 - i * 40, y: "-10%", rotate: 0 }}
             animate={{
               x: "115%",
-              y: ["-10%", "65%", "35%", "75%"],
+              // Extend vertical travel fully through the viewport to exit bottom
+              y: ["-15%", "85%", "60%", "110%"],
               rotate: [-6, 8, -6, -4],
             }}
             transition={{
