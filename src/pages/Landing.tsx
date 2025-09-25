@@ -701,35 +701,35 @@ function SunflowerCursor() {
   const ref = useRef<HTMLDivElement | null>(null);
   const state = useRef<{ x: number; y: number; boost: boolean }>({ x: -100, y: -100, boost: false });
 
-  // Base sunflower (yellow/orange gradient)
+  // Base sunflower (make all stops fully opaque, remove baked shadow)
   const sunflowerBg = useMemo(() => {
     const svg = `
       <svg xmlns='http://www.w3.org/2000/svg' width='44' height='44' viewBox='0 0 100 100'>
         <defs>
           <linearGradient id='p' x1='0' y1='0' x2='0' y2='1'>
-            <stop offset='0%' stop-color='#FFE07B'/>
-            <stop offset='100%' stop-color='#FFC94A'/>
+            <stop offset='0%' stop-color='#FFE07B' stop-opacity='1'/>
+            <stop offset='100%' stop-color='#FFC94A' stop-opacity='1'/>
           </linearGradient>
           <radialGradient id='c'>
-            <stop offset='0%' stop-color='#7A4A2B'/>
-            <stop offset='100%' stop-color='#5A3A23'/>
+            <stop offset='0%' stop-color='#7A4A2B' stop-opacity='1'/>
+            <stop offset='100%' stop-color='#5A3A23' stop-opacity='1'/>
           </radialGradient>
         </defs>
-        <ellipse cx='50' cy='60' rx='30' ry='30' fill='black' opacity='0.12'/>
-        <g>
+        <ellipse cx='50' cy='60' rx='30' ry='30' fill='black' opacity='0'/>
+        <g opacity='1'>
           ${Array.from({length: 18}).map((_,i)=>{
             const angle = (i*360)/18;
             return `<ellipse cx='50' cy='22' rx='10' ry='23' fill='url(#p)' stroke='rgba(0,0,0,0.24)' stroke-width='0.65' transform='rotate(${angle} 50 50)'/>`
           }).join('')}
           <circle cx='50' cy='50' r='23' fill='url(#c)' stroke='rgba(0,0,0,0.26)' stroke-width='0.65'/>
-          <circle cx='50' cy='50' r='16' fill='#5A3A23'/>
+          <circle cx='50' cy='50' r='16' fill='#5A3A23' />
         </g>
       </svg>
     `;
     return `url("data:image/svg+xml;utf8,${encodeURIComponent(svg)}")`;
   }, []);
 
-  // Hover sunflower (vivid yellow, fully opaque)
+  // Hover sunflower (already fully opaque; remove baked shadow)
   const sunflowerBgHover = useMemo(() => {
     const svg = `
       <svg xmlns='http://www.w3.org/2000/svg' width='44' height='44' viewBox='0 0 100 100'>
@@ -743,7 +743,7 @@ function SunflowerCursor() {
             <stop offset='100%' stop-color='#5A3A23' stop-opacity='1'/>
           </radialGradient>
         </defs>
-        <ellipse cx='50' cy='60' rx='30' ry='30' fill='black' opacity='0.12'/>
+        <ellipse cx='50' cy='60' rx='30' ry='30' fill='black' opacity='0'/>
         <g opacity='1'>
           ${Array.from({length: 18}).map((_,i)=>{
             const angle = (i*360)/18;
@@ -844,17 +844,16 @@ export default function Landing() {
       <svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 100 100'>
         <defs>
           <linearGradient id='p' x1='0' y1='0' x2='0' y2='1'>
-            <stop offset='0%' stop-color='#FFE07B'/>
-            <stop offset='100%' stop-color='#FFC94A'/>
+            <stop offset='0%' stop-color='#FFE07B' stop-opacity='1'/>
+            <stop offset='100%' stop-color='#FFC94A' stop-opacity='1'/>
           </linearGradient>
           <radialGradient id='c'>
-            <stop offset='0%' stop-color='#7A4A2B'/>
-            <stop offset='100%' stop-color='#5A3A23'/>
+            <stop offset='0%' stop-color='#7A4A2B' stop-opacity='1'/>
+            <stop offset='100%' stop-color='#5A3A23' stop-opacity='1'/>
           </radialGradient>
         </defs>
-        <!-- Baked shadow (no filters) -->
-        <ellipse cx='50' cy='58' rx='28' ry='28' fill='black' opacity='0.22'/>
-        <g>
+        <ellipse cx='50' cy='58' rx='28' ry='28' fill='black' opacity='0'/>
+        <g opacity='1'>
           ${Array.from({length: 18}).map((_,i)=>{
             const angle = (i*360)/18;
             return `<ellipse cx='50' cy='22' rx='9' ry='22' fill='url(#p)' stroke='rgba(0,0,0,0.22)' stroke-width='0.6' transform='rotate(${angle} 50 50)'/>`
@@ -881,8 +880,7 @@ export default function Landing() {
             <stop offset='100%' stop-color='#3E2414' stop-opacity='0.9'/>
           </radialGradient>
         </defs>
-        <!-- Softer baked shadow -->
-        <ellipse cx='50' cy='60' rx='30' ry='30' fill='black' opacity='0.22'/>
+        <ellipse cx='50' cy='60' rx='30' ry='30' fill='black' opacity='0'/>
         <g opacity='0.86'>
           ${Array.from({length: 18}).map((_,i)=>{
             const angle = (i*360)/18;
