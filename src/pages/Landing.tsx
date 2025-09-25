@@ -119,20 +119,20 @@ export default function Landing() {
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         {/* Big sunflower heads drifting in a breeze (custom SVG heads only) */}
         {[...Array(10)].map((_, i) => {
-          // deterministic pseudo-random per index
-          const seed = Math.abs(Math.sin((i + 1) * 9876.543)) % 1;
-          const r = (min: number, max: number) => min + (max - min) * seed;
+          // use fresh randomness per element (prevents stacked lanes)
+          const rand = () => Math.random();
+          const r = (min: number, max: number) => min + (max - min) * rand();
 
-          // Spread entries across the full left side and full vertical range
-          const initialX = -320 - r(0, 240) - (i % 4) * 40; // wider random band so they don't stack
-          const baseY = `${r(4, 92)}%`; // random vertical lane across full viewport
-          const size = 136 + (i % 3) * 36 + r(-10, 24);
+          // Wide random left offset and full-viewport vertical lanes
+          const initialX = -400 - r(0, 260); // spread their entry on the far left
+          const baseY = `${r(4, 92)}%`; // true random lanes across the viewport
+          const size = r(120, 200);
           const scale = r(0.9, 1.15);
           const depthOpacity = r(0.65, 1);
-          const swayAmp = r(8, 18); // horizontal micro-sway remains
+          const swayAmp = r(8, 18);
           const dur = prefersReducedMotion ? 0 : r(6.2, 9.2);
-          const delay = prefersReducedMotion ? 0 : (i % 7) * 0.27 + r(0, 0.35);
-          const repeatDelay = prefersReducedMotion ? 0 : r(0.4, 2.0); // desync after each cycle
+          const delay = prefersReducedMotion ? 0 : r(0, 0.7); // fully desync starts
+          const repeatDelay = prefersReducedMotion ? 0 : r(0.4, 2.0);
 
           return (
             <motion.div
@@ -155,7 +155,7 @@ export default function Landing() {
                       repeat: Infinity,
                       ease: "easeInOut",
                       delay,
-                      repeatDelay, // break re-grouping on the left edge
+                      repeatDelay,
                     }
               }
               className="absolute"
@@ -164,11 +164,15 @@ export default function Landing() {
               {/* inner sway + depth */}
               <motion.div
                 initial={{ x: 0, scale, opacity: depthOpacity }}
-                animate={prefersReducedMotion ? { x: 0 } : { x: [-swayAmp, swayAmp, -swayAmp] }}
+                animate={
+                  prefersReducedMotion
+                    ? { x: 0 }
+                    : { x: [-swayAmp, swayAmp, -swayAmp], y: [-2, 2, -2] }
+                }
                 transition={
                   prefersReducedMotion
                     ? { duration: 0 }
-                    : { duration: r(3.2, 5.0), repeat: Infinity, ease: "easeInOut" }
+                    : { duration: r(3.0, 5.2), repeat: Infinity, ease: "easeInOut" }
                 }
               >
                 <SunflowerHead size={size} />
@@ -179,16 +183,17 @@ export default function Landing() {
 
         {/* Petals drifting at various depths (faster to match breeze) */}
         {[...Array(12)].map((_, i) => {
-          const seed = Math.abs(Math.sin((i + 3) * 3456.789)) % 1;
-          const r = (min: number, max: number) => min + (max - min) * seed;
+          const rand = () => Math.random();
+          const r = (min: number, max: number) => min + (max - min) * rand();
+
           const sway = r(6, 14);
-          const dur = prefersReducedMotion ? 0 : 8.5 + (i % 5) + r(-1, 1.2);
-          const delay = prefersReducedMotion ? 0 : (i % 4) * 0.4 + r(0, 0.4);
+          const dur = prefersReducedMotion ? 0 : r(7.8, 10.5);
+          const delay = prefersReducedMotion ? 0 : r(0, 1.0);
           const repeatDelay = prefersReducedMotion ? 0 : r(0.5, 2.2);
           const scale = r(0.85, 1.15);
           const opacity = r(0.6, 0.95);
-          const baseY = `${r(3, 95)}%`; // randomized lanes instead of patterned modulo
-          const initialX = -200 - r(0, 160) - i * 6;
+          const baseY = `${r(3, 95)}%`;
+          const initialX = -240 - r(0, 180);
 
           return (
             <motion.div
@@ -199,7 +204,7 @@ export default function Landing() {
                   ? { x: initialX, y: 0, rotate: 0 }
                   : {
                       x: ["-15%", "115%"],
-                      y: [0, r(-12, 12), 0],
+                      y: [0, r(-14, 14), 0],
                       rotate: [0, 24 + r(-8, 8), -12 + r(-6, 6), 0],
                     }
               }
@@ -211,7 +216,7 @@ export default function Landing() {
                       repeat: Infinity,
                       ease: "easeInOut",
                       delay,
-                      repeatDelay, // avoid vertical stacking at the left edge
+                      repeatDelay,
                     }
               }
               className="absolute"
@@ -227,7 +232,7 @@ export default function Landing() {
                 transition={
                   prefersReducedMotion
                     ? { duration: 0 }
-                    : { duration: 2.6 + r(-0.6, 0.6), repeat: Infinity, ease: "easeInOut" }
+                    : { duration: r(2.0, 3.2), repeat: Infinity, ease: "easeInOut" }
                 }
               >
                 <span style={{ display: "inline-block", transform: `scale(${scale})` }}>🌼</span>
@@ -238,16 +243,17 @@ export default function Landing() {
 
         {/* Leaves for extra whimsy (sped up) */}
         {[...Array(8)].map((_, i) => {
-          const seed = Math.abs(Math.sin((i + 5) * 2222.111)) % 1;
-          const r = (min: number, max: number) => min + (max - min) * seed;
+          const rand = () => Math.random();
+          const r = (min: number, max: number) => min + (max - min) * rand();
+
           const sway = r(10, 22);
-          const dur = prefersReducedMotion ? 0 : 10.5 + i * 1.4 + r(-1, 1);
-          const delay = prefersReducedMotion ? 0 : i * 0.35 + r(0, 0.3);
+          const dur = prefersReducedMotion ? 0 : r(9.5, 12.5);
+          const delay = prefersReducedMotion ? 0 : r(0, 0.8);
           const repeatDelay = prefersReducedMotion ? 0 : r(0.4, 1.8);
           const scale = r(0.9, 1.2);
           const opacity = r(0.7, 0.95);
           const baseY = `${r(5, 90)}%`;
-          const initialX = -220 - r(0, 200) - i * 10;
+          const initialX = -260 - r(0, 220);
 
           return (
             <motion.div
@@ -258,7 +264,7 @@ export default function Landing() {
                   ? { x: initialX, y: 0, rotate: -10 }
                   : {
                       x: "120%",
-                      y: [0, r(-10, 10), 0],
+                      y: [0, r(-12, 12), 0],
                       rotate: [-10, 14 + r(-4, 4), -8 + r(-4, 4), -10],
                     }
               }
@@ -278,7 +284,7 @@ export default function Landing() {
                 transition={
                   prefersReducedMotion
                     ? { duration: 0 }
-                    : { duration: 3.2 + r(-0.6, 0.8), repeat: Infinity, ease: "easeInOut" }
+                    : { duration: r(2.6, 3.6), repeat: Infinity, ease: "easeInOut" }
                 }
               >
                 🍃
