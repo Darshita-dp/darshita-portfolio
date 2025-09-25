@@ -31,3 +31,58 @@
   pointer-events: none;
   mix-blend-mode: soft-light;
 }
+
+/* Sparkle overlay for card hover */
+@keyframes sparkle-move {
+  0% {
+    background-position:
+      0 0,
+      100% 20%,
+      20% 100%,
+      80% 60%,
+      30% 50%;
+    opacity: 0.2;
+  }
+  50% {
+    background-position:
+      10px -8px,
+      90% 12%,
+      28% 92%,
+      76% 54%,
+      36% 46%;
+    opacity: 0.7;
+  }
+  100% {
+    background-position:
+      0 0,
+      100% 20%,
+      20% 100%,
+      80% 60%,
+      30% 50%;
+    opacity: 0.2;
+  }
+}
+
+.sparkle-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 220ms ease;
+  mix-blend-mode: screen;
+  background:
+    radial-gradient(circle at 20% 30%, rgba(255,255,255,0.9) 0 2px, transparent 3px),
+    radial-gradient(circle at 72% 22%, rgba(255,235,150,0.85) 0 2px, transparent 3px),
+    radial-gradient(circle at 38% 74%, rgba(255,205,90,0.8) 0 2px, transparent 3px),
+    radial-gradient(circle at 84% 64%, rgba(255,255,255,0.95) 0 1.5px, transparent 2.5px),
+    radial-gradient(circle at 28% 52%, rgba(255,180,60,0.75) 0 1.8px, transparent 3px);
+  background-repeat: no-repeat;
+  background-size: 6px 6px, 6px 6px, 6px 6px, 5px 5px, 5px 5px;
+  animation: sparkle-move 1200ms ease-in-out infinite;
+  filter: drop-shadow(0 1px 1px rgba(0,0,0,0.08));
+}
+
+/* Show on hover of the card wrapper (uses .group from button) */
+.group:hover .sparkle-overlay {
+  opacity: 1;
+}

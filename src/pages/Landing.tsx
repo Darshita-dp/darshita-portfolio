@@ -642,21 +642,29 @@ export default function Landing() {
             <stop offset='0%' stop-color='#7A4A2B'/>
             <stop offset='100%' stop-color='#5A3A23'/>
           </radialGradient>
+          <filter id='ds' x='-20%' y='-20%' width='140%' height='140%'>
+            <feGaussianBlur in='SourceAlpha' stdDeviation='1.2' result='blur'/>
+            <feOffset dx='0' dy='1.2' result='offsetBlur'/>
+            <feMerge>
+              <feMergeNode in='offsetBlur'/>
+              <feMergeNode in='SourceGraphic'/>
+            </feMerge>
+          </filter>
         </defs>
-        <!-- petals -->
-        ${Array.from({length: 18}).map((_,i)=>{
-          const angle = (i*360)/18;
-          return `<ellipse cx='50' cy='22' rx='9' ry='22' fill='url(#p)' stroke='rgba(0,0,0,0.06)' stroke-width='0.5' transform='rotate(${angle} 50 50)'/>`
-        }).join('')}
-        <!-- center -->
-        <circle cx='50' cy='50' r='22' fill='url(#c)'/>
-        <circle cx='50' cy='50' r='15' fill='#5A3A23'/>
+        <g filter='url(#ds)'>
+          ${Array.from({length: 18}).map((_,i)=>{
+            const angle = (i*360)/18;
+            return `<ellipse cx='50' cy='22' rx='9' ry='22' fill='url(#p)' stroke='rgba(0,0,0,0.06)' stroke-width='0.5' transform='rotate(${angle} 50 50)'/>`
+          }).join('')}
+          <circle cx='50' cy='50' r='22' fill='url(#c)'/>
+          <circle cx='50' cy='50' r='15' fill='#5A3A23'/>
+        </g>
       </svg>
     `;
     return `url("data:image/svg+xml;utf8,${encodeURIComponent(svg)}") 16 16, auto`;
   }, []);
 
-  // Add a larger, darker sunflower cursor for hover over interactive elements
+  // Add a larger, darker sunflower cursor for hover over interactive elements (with drop shadow)
   const sunflowerCursorHover = useMemo(() => {
     const svg = `
       <svg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 100 100'>
@@ -669,13 +677,23 @@ export default function Landing() {
             <stop offset='0%' stop-color='#6B3A1F'/>
             <stop offset='100%' stop-color='#4A2A17'/>
           </radialGradient>
+          <filter id='ds2' x='-20%' y='-20%' width='140%' height='140%'>
+            <feGaussianBlur in='SourceAlpha' stdDeviation='1.6' result='blur'/>
+            <feOffset dx='0' dy='1.6' result='offsetBlur'/>
+            <feMerge>
+              <feMergeNode in='offsetBlur'/>
+              <feMergeNode in='SourceGraphic'/>
+            </feMerge>
+          </filter>
         </defs>
-        ${Array.from({length: 18}).map((_,i)=>{
-          const angle = (i*360)/18;
-          return `<ellipse cx='50' cy='22' rx='10' ry='23' fill='url(#p2)' stroke='rgba(0,0,0,0.12)' stroke-width='0.6' transform='rotate(${angle} 50 50)'/>`
-        }).join('')}
-        <circle cx='50' cy='50' r='23' fill='url(#c2)'/>
-        <circle cx='50' cy='50' r='16' fill='#4A2A17'/>
+        <g filter='url(#ds2)'>
+          ${Array.from({length: 18}).map((_,i)=>{
+            const angle = (i*360)/18;
+            return `<ellipse cx='50' cy='22' rx='10' ry='23' fill='url(#p2)' stroke='rgba(0,0,0,0.12)' stroke-width='0.6' transform='rotate(${angle} 50 50)'/>`
+          }).join('')}
+          <circle cx='50' cy='50' r='23' fill='url(#c2)'/>
+          <circle cx='50' cy='50' r='16' fill='#4A2A17'/>
+        </g>
       </svg>
     `;
     return `url("data:image/svg+xml;utf8,${encodeURIComponent(svg)}") 20 20, auto`;
@@ -855,13 +873,16 @@ export default function Landing() {
             >
               <Card
                 // Add subtle hover glow via group-hover
-                className="border-[1.5px] transition-all duration-300 h-full shadow-sm group-hover:shadow-xl group-hover:border-primary/30"
+                className="relative overflow-hidden border-[1.5px] transition-all duration-300 h-full shadow-sm group-hover:shadow-xl group-hover:border-primary/30"
                 style={{
                   backgroundColor: "rgba(255,255,255,0.7)",
                   backdropFilter: "blur(8px)",
                   borderColor: "rgba(0,0,0,0.06)",
                 }}
               >
+                {/* Sparkle overlay on hover */}
+                <div className="sparkle-overlay" aria-hidden="true" />
+
                 <CardHeader className="text-center pb-3">
                   <div
                     className="w-16 h-16 mx-auto mb-4 rounded-full grid place-items-center transition-transform duration-300 shine-once"
