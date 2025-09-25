@@ -136,14 +136,14 @@ export default function Landing() {
           return (
             <motion.div
               key={`sf-${i}`}
-              initial={{ x: initialX, y: baseY, rotate: 0 }}
+              initial={{ x: initialX, y: 0, rotate: 0 }}
               animate={
                 prefersReducedMotion
-                  ? { x: initialX, y: baseY, rotate: 0 }
+                  ? { x: initialX, y: 0, rotate: 0 }
                   : {
                       x: "115%",
-                      y: baseY, // keep y mostly constant for horizontal flow
-                      rotate: [-4, 4 + r(-1, 1), -2, -4], // gentle breeze rotation
+                      y: 0,
+                      rotate: [-4, 4 + r(-1, 1), -2, -4],
                     }
               }
               transition={
@@ -157,7 +157,7 @@ export default function Landing() {
                     }
               }
               className="absolute"
-              style={{ top: "0%" }}
+              style={{ top: baseY }}
             >
               {/* inner sway + depth */}
               <motion.div
