@@ -642,61 +642,49 @@ export default function Landing() {
             <stop offset='0%' stop-color='#7A4A2B'/>
             <stop offset='100%' stop-color='#5A3A23'/>
           </radialGradient>
-          <filter id='ds' x='-20%' y='-20%' width='140%' height='140%'>
-            <feGaussianBlur in='SourceAlpha' stdDeviation='1.2' result='blur'/>
-            <feOffset dx='0' dy='1.2' result='offsetBlur'/>
-            <feMerge>
-              <feMergeNode in='offsetBlur'/>
-              <feMergeNode in='SourceGraphic'/>
-            </feMerge>
-          </filter>
         </defs>
-        <g filter='url(#ds)'>
+        <!-- Baked shadow (no filters) -->
+        <ellipse cx='50' cy='58' rx='28' ry='28' fill='black' opacity='0.22'/>
+        <g>
           ${Array.from({length: 18}).map((_,i)=>{
             const angle = (i*360)/18;
-            return `<ellipse cx='50' cy='22' rx='9' ry='22' fill='url(#p)' stroke='rgba(0,0,0,0.06)' stroke-width='0.5' transform='rotate(${angle} 50 50)'/>`
+            return `<ellipse cx='50' cy='22' rx='9' ry='22' fill='url(#p)' stroke='rgba(0,0,0,0.22)' stroke-width='0.6' transform='rotate(${angle} 50 50)'/>`
           }).join('')}
-          <circle cx='50' cy='50' r='22' fill='url(#c)'/>
-          <circle cx='50' cy='50' r='15' fill='#5A3A23'/>
+          <circle cx='50' cy='50' r='22' fill='url(#c)' stroke='rgba(0,0,0,0.25)' stroke-width='0.6'/>
+          <circle cx='50' cy='50' r='15' fill='#50331E'/>
         </g>
       </svg>
     `;
     return `url("data:image/svg+xml;utf8,${encodeURIComponent(svg)}") 16 16, auto`;
   }, []);
 
-  // Add a larger, darker sunflower cursor for hover over interactive elements (with drop shadow)
+  // Larger, darker sunflower cursor for hover with baked shadow
   const sunflowerCursorHover = useMemo(() => {
     const svg = `
-      <svg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 100 100'>
+      <svg xmlns='http://www.w3.org/2000/svg' width='44' height='44' viewBox='0 0 100 100'>
         <defs>
           <linearGradient id='p2' x1='0' y1='0' x2='0' y2='1'>
-            <stop offset='0%' stop-color='#FFA726'/>
+            <stop offset='0%' stop-color='#FF9F1C'/>
             <stop offset='100%' stop-color='#FB8C00'/>
           </linearGradient>
           <radialGradient id='c2'>
-            <stop offset='0%' stop-color='#6B3A1F'/>
-            <stop offset='100%' stop-color='#4A2A17'/>
+            <stop offset='0%' stop-color='#5B311B'/>
+            <stop offset='100%' stop-color='#3E2414'/>
           </radialGradient>
-          <filter id='ds2' x='-20%' y='-20%' width='140%' height='140%'>
-            <feGaussianBlur in='SourceAlpha' stdDeviation='1.6' result='blur'/>
-            <feOffset dx='0' dy='1.6' result='offsetBlur'/>
-            <feMerge>
-              <feMergeNode in='offsetBlur'/>
-              <feMergeNode in='SourceGraphic'/>
-            </feMerge>
-          </filter>
         </defs>
-        <g filter='url(#ds2)'>
+        <!-- Baked shadow (no filters) -->
+        <ellipse cx='50' cy='60' rx='30' ry='30' fill='black' opacity='0.28'/>
+        <g>
           ${Array.from({length: 18}).map((_,i)=>{
             const angle = (i*360)/18;
-            return `<ellipse cx='50' cy='22' rx='10' ry='23' fill='url(#p2)' stroke='rgba(0,0,0,0.12)' stroke-width='0.6' transform='rotate(${angle} 50 50)'/>`
+            return `<ellipse cx='50' cy='22' rx='10' ry='23' fill='url(#p2)' stroke='rgba(0,0,0,0.28)' stroke-width='0.7' transform='rotate(${angle} 50 50)'/>`
           }).join('')}
-          <circle cx='50' cy='50' r='23' fill='url(#c2)'/>
-          <circle cx='50' cy='50' r='16' fill='#4A2A17'/>
+          <circle cx='50' cy='50' r='23' fill='url(#c2)' stroke='rgba(0,0,0,0.3)' stroke-width='0.7'/>
+          <circle cx='50' cy='50' r='16' fill='#3E2414'/>
         </g>
       </svg>
     `;
-    return `url("data:image/svg+xml;utf8,${encodeURIComponent(svg)}") 20 20, auto`;
+    return `url("data:image/svg+xml;utf8,${encodeURIComponent(svg)}") 22 22, auto`;
   }, []);
 
   return (
