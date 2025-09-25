@@ -3,6 +3,8 @@ import { useNavigate } from "react-router";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { api } from "@/convex/_generated/api";
+import { useMutation } from "convex/react";
 import "./Landing.icon-bounce.css";
 
 const modes = [
@@ -594,6 +596,7 @@ function LeavesField({ densityScale = 1 }: { densityScale?: number }) {
 export default function Landing() {
   const navigate = useNavigate();
   const prefersReducedMotion = useReducedMotion();
+  const trackEvent = useMutation(api.analytics.trackEvent);
   // [EDIT] local toggle to reduce visuals (persisted)
   const [reduced, setReduced] = useState<boolean>(() => {
     const v = localStorage.getItem("landing_reduce_visuals");
@@ -767,12 +770,24 @@ export default function Landing() {
               key={mode.id}
               type="button"
               title={`Open ${mode.title} mode`}
+              aria-label={`Open ${mode.title} mode — ${mode.description}`}
               initial={{ opacity: 0, scale: 0.96 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.45, delay: 0.08 * index }}
               whileHover={{ y: -4, scale: 1.02, rotate: index % 2 === 0 ? 1.5 : -1.5 }}
               whileTap={{ scale: 0.98 }}
-              onClick={() => navigate(mode.path)}
+              onClick={() => {
+                // Track mode open event, then navigate
+                void trackEvent({
+                  event: "open_mode",
+                  mode: mode.id,
+                  metadata: {
+                    userAgent: navigator.userAgent,
+                    referrer: document.referrer || undefined,
+                  },
+                });
+                navigate(mode.path);
+              }}
               className="group cursor-pointer w-full text-left rounded-2xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
               style={{
                 outlineColor: "#BAE1FF",
