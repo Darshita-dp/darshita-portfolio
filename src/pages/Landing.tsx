@@ -71,82 +71,78 @@ export default function Landing() {
         ))}
       </div>
 
-      {/* Water band with subtle waves */}
-      <div className="absolute left-0 right-0 bottom-0 h-[36vh]">
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              "linear-gradient(180deg, rgba(186,225,255,0.85) 0%, rgba(186,225,255,0.95) 40%, rgba(186,225,255,1) 100%)",
-          }}
-        />
-        {/* Animated wave strips */}
-        {[...Array(3)].map((_, i) => (
-          <motion.div
-            key={i}
-            initial={{ x: "-20%" }}
-            animate={{ x: "20%" }}
-            transition={{ duration: 6 + i * 2, repeat: Infinity, repeatType: "mirror", ease: "easeInOut" }}
-            className="absolute left-0 right-0"
-            style={{
-              bottom: `${8 + i * 10}%`,
-              height: 12,
-              background:
-                "linear-gradient(90deg, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.5) 50%, rgba(255,255,255,0.25) 100%)",
-              maskImage:
-                "radial-gradient(14px 8px at 10% 50%, black 60%, transparent 62%), radial-gradient(14px 8px at 30% 50%, black 60%, transparent 62%), radial-gradient(14px 8px at 50% 50%, black 60%, transparent 62%), radial-gradient(14px 8px at 70% 50%, black 60%, transparent 62%), radial-gradient(14px 8px at 90% 50%, black 60%, transparent 62%)",
-              WebkitMaskImage:
-                "radial-gradient(14px 8px at 10% 50%, black 60%, transparent 62%), radial-gradient(14px 8px at 30% 50%, black 60%, transparent 62%), radial-gradient(14px 8px at 50% 50%, black 60%, transparent 62%), radial-gradient(14px 8px at 70% 50%, black 60%, transparent 62%), radial-gradient(14px 8px at 90% 50%, black 60%, transparent 62%)",
-            }}
-          />
-        ))}
-      </div>
+      
 
-      {/* Floating sunflowers on the water */}
-      <div className="pointer-events-none absolute left-0 right-0 bottom-[8vh]">
-        {[
-          { left: "6%" },
-          { left: "22%" },
-          { left: "38%" },
-          { left: "56%" },
-          { left: "74%" },
-          { left: "88%" },
-        ].map((pos, i) => (
+      {/* Flying sunflowers and petals in the wind */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        {/* Sunflowers drifting diagonally across the sky */}
+        {[...Array(7)].map((_, i) => (
           <motion.div
-            key={i}
+            key={`sf-${i}`}
+            initial={{ x: -120 - i * 40, y: 10 + i * 12, rotate: 0 }}
+            animate={{ x: "110%", y: [10 + i * 12, 4 + i * 10, 12 + i * 14, 10 + i * 12], rotate: [0, 6, -4, 0] }}
+            transition={{ duration: 24 + i * 4, repeat: Infinity, ease: "easeInOut", delay: i * 1.2 }}
             className="absolute"
-            style={{ left: pos.left }}
-            initial={{ y: 0, rotate: 0 }}
-            animate={{ y: [-4, 2, -4], rotate: [0, 1.5, 0] }}
-            transition={{ duration: 3.8 + i * 0.4, repeat: Infinity, ease: "easeInOut" }}
+            style={{ top: `${8 + i * 10}%` }}
           >
-            {/* Stem */}
-            <div
-              className="mx-auto"
-              style={{
-                width: 4,
-                height: 42,
-                backgroundColor: "#5F9595",
-                borderRadius: 4,
-                boxShadow: "0 0 0 1px rgba(0,0,0,0.04) inset",
-              }}
-            />
-            {/* Flower head */}
-            <div
-              className="mx-auto grid place-items-center"
-              style={{
-                width: 56,
-                height: 56,
-                transform: "translateY(-6px)",
-                borderRadius: "9999px",
-                background:
-                  "radial-gradient(circle at 50% 50%, #E3A14C 0%, #D28934 55%, #B66D1A 56%, #F5D1C3 57%, #F5D1C3 100%)",
-                boxShadow:
-                  "0 1px 0 rgba(0,0,0,0.04), 0 6px 10px rgba(0,0,0,0.08), inset 0 -1px 0 rgba(0,0,0,0.06)",
-              }}
-            >
-              <span className="text-xl">🌻</span>
+            <div className="flex items-center gap-2">
+              {/* Leaf cluster */}
+              <span className="text-[14px]" style={{ filter: "drop-shadow(0 1px 1px rgba(0,0,0,0.1))" }}>🍃</span>
+              {/* Sunflower head */}
+              <div
+                className="grid place-items-center rounded-full"
+                style={{
+                  width: 40 + (i % 3) * 6,
+                  height: 40 + (i % 3) * 6,
+                  background:
+                    "radial-gradient(circle at 50% 50%, #E3A14C 0%, #D28934 55%, #B66D1A 56%, #F5D1C3 57%, #F5D1C3 100%)",
+                  boxShadow: "0 1px 0 rgba(0,0,0,0.06), 0 6px 12px rgba(0,0,0,0.08), inset 0 -1px 0 rgba(0,0,0,0.06)",
+                }}
+              >
+                <span className="text-lg">🌻</span>
+              </div>
             </div>
+          </motion.div>
+        ))}
+
+        {/* Petals drifting at various depths */}
+        {[...Array(12)].map((_, i) => (
+          <motion.div
+            key={`petal-${i}`}
+            initial={{ x: 120 + i * 30, y: -20 - i * 6, rotate: 0 }}
+            animate={{
+              x: ["-10%", "110%"],
+              y: [i * 4, i * 6 + 8, i * 4],
+              rotate: [0, 18, -10, 0],
+            }}
+            transition={{
+              duration: 18 + (i % 5) * 3,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: (i % 4) * 0.8,
+            }}
+            className="absolute"
+            style={{ top: `${(i * 7) % 90}%` }}
+          >
+            <span className="text-[12px]" style={{ filter: "drop-shadow(0 1px 1px rgba(0,0,0,0.1))" }}>🌼</span>
+          </motion.div>
+        ))}
+
+        {/* Occasional leaves for extra whimsy */}
+        {[...Array(8)].map((_, i) => (
+          <motion.div
+            key={`leaf-${i}`}
+            initial={{ x: -80 - i * 20, y: 6 + i * 10, rotate: -10 }}
+            animate={{
+              x: "115%",
+              y: [6 + i * 10, 10 + i * 12, 4 + i * 8, 6 + i * 10],
+              rotate: [-10, 12, -6, -10],
+            }}
+            transition={{ duration: 26 + i * 3, repeat: Infinity, ease: "easeInOut", delay: i * 0.6 }}
+            className="absolute"
+            style={{ top: `${6 + i * 9}%` }}
+          >
+            <span className="text-[14px] opacity-80" style={{ color: "#5F9595" }}>🍃</span>
           </motion.div>
         ))}
       </div>
