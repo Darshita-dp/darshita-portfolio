@@ -122,13 +122,9 @@ export default function Landing() {
           // deterministic pseudo-random per index
           const seed = Math.abs(Math.sin((i + 1) * 9876.543)) % 1;
           const r = (min: number, max: number) => min + (max - min) * seed;
-          
-          // Distribute starting Y across the full viewport (-15% to ~90%) so they don't all start at the top
-          const startYNum = -15 + ((i * 17) % 105) + r(-6, 6);
-          const y1 = `${startYNum}%`;
-          const y2 = `${Math.min(startYNum + 70 + r(-8, 8), 110)}%`;
-          const y3 = `${Math.max(startYNum + 40 + r(-8, 8), -15)}%`;
-          const y4 = `${Math.min(startYNum + 120 + r(-12, 12), 120)}%`;
+
+          // Direction: half go top -> bottom, half go bottom -> top
+          const direction: "down" | "up" = i % 2 === 0 ? "down" : "up";
 
           // Stagger initial X so they don't bunch up from the same spot
           const initialX = -260 - (i % 5) * 60 - r(0, 120);
@@ -141,6 +137,24 @@ export default function Landing() {
           const dur = prefersReducedMotion ? 0 : r(6.2, 9.2);
           const delay = prefersReducedMotion ? 0 : (i % 7) * 0.27 + r(0, 0.35);
 
+          // Compute Y path depending on direction
+          let y1: string, y2: string, y3: string, y4: string;
+          if (direction === "down") {
+            // Broadly from above viewport down past bottom
+            const startYNum = -15 + ((i * 17) % 105) + r(-6, 6);
+            y1 = `${startYNum}%`;
+            y2 = `${Math.min(startYNum + 70 + r(-8, 8), 110)}%`;
+            y3 = `${Math.max(startYNum + 40 + r(-8, 8), -15)}%`;
+            y4 = `${Math.min(startYNum + 120 + r(-12, 12), 120)}%`;
+          } else {
+            // Start below viewport and drift upward across the screen
+            const startYNum = 102 + ((i * 19) % 26) + r(0, 10); // ~102% to ~138%
+            y1 = `${startYNum}%`;
+            y2 = `${Math.max(startYNum - 70 + r(-8, 8), -25)}%`;
+            y3 = `${Math.min(startYNum - 40 + r(-8, 8), 110)}%`;
+            y4 = `${Math.max(startYNum - 120 + r(-12, 12), -35)}%`;
+          }
+
           return (
             <motion.div
               key={`sf-${i}`}
@@ -151,7 +165,7 @@ export default function Landing() {
                   : {
                       x: "115%",
                       y: [y1, y2, y3, y4],
-                      rotate: [-6, 8 + r(-2, 2), -6, -4],
+                      rotate: direction === "down" ? [-6, 8 + r(-2, 2), -6, -4] : [6, -8 + r(-2, 2), 6, 4],
                     }
               }
               transition={
