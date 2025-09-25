@@ -127,7 +127,7 @@
 .cursor-sunflower {
   width: 32px;
   height: 32px;
-  transform: translate(-50%, -50%) scale(1);
+  transform: translate(-50%, -50%) scale(1) rotate(var(--cursor-rot, 0deg));
   transition: transform 160ms ease, filter 160ms ease, opacity 160ms ease;
   will-change: transform, filter, opacity;
   background-repeat: no-repeat;
@@ -140,7 +140,7 @@
 .cursor-sunflower--hover {
   width: 32px;
   height: 32px;
-  transform: translate(-50%, -50%) scale(1);
+  transform: translate(-50%, -50%) scale(1) rotate(var(--cursor-rot, 0deg));
   transition: transform 160ms ease, filter 160ms ease, opacity 160ms ease;
   will-change: transform, filter, opacity;
   background-repeat: no-repeat;
@@ -151,16 +151,16 @@
   top: 0;
 }
 
-/* Boosted: scale + softer glow + swap to yellow layer */
+/* Boosted: scale + softer glow + swap to hover layer */
 .cursor-root[data-boost="1"] .cursor-sunflower {
-  transform: translate(-50%, -50%) scale(1.2);
-  filter: drop-shadow(0 0 6px rgba(255, 192, 103, 0.6)); /* reduced glow */
+  transform: translate(-50%, -50%) scale(1.28) rotate(var(--cursor-rot, 0deg));
+  filter: drop-shadow(0 0 5px rgba(255, 192, 103, 0.55)); /* softer glow */
   opacity: 0; /* fade out base when boosted */
 }
 
 .cursor-root[data-boost="1"] .cursor-sunflower--hover {
-  transform: translate(-50%, -50%) scale(1.2);
-  filter: drop-shadow(0 0 6px rgba(255, 192, 103, 0.6)); /* reduced glow */
+  transform: translate(-50%, -50%) scale(1.28) rotate(var(--cursor-rot, 0deg));
+  filter: drop-shadow(0 0 5px rgba(255, 192, 103, 0.55)); /* softer glow */
   opacity: 1; /* fully opaque for vivid color */
 }
 

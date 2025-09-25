@@ -761,25 +761,47 @@ function SunflowerCursor() {
     const el = ref.current;
     if (!el) return;
 
+    // Track target pointer position
     const onMove = (e: PointerEvent) => {
       state.current.x = e.clientX;
       state.current.y = e.clientY;
     };
 
+    // Universal boost: interactive elements OR explicit data-cursor-boost
+    const interactiveSel = "button, a, [role='button'], [tabindex]:not([tabindex='-1'])";
     const onOver = (e: PointerEvent) => {
       const t = e.target as HTMLElement | null;
-      state.current.boost = !!t?.closest("[data-cursor-boost='true']");
+      const isInteractive = !!t?.closest(interactiveSel);
+      const explicitBoost = !!t?.closest("[data-cursor-boost='true']");
+      state.current.boost = isInteractive || explicitBoost;
     };
 
     document.addEventListener("pointermove", onMove, { passive: true });
     document.addEventListener("pointerover", onOver, { passive: true });
 
+    // Smooth follow lag + micro-rotation wobble (boosted only)
+    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     let raf = 0;
-    function loop() {
+    let prevX = -100;
+    let prevY = -100;
+    const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
+    const ease = 0.18; // subtle lag
+
+    function loop(now: number) {
       const node = ref.current;
       if (!node) return;
-      node.style.transform = `translate3d(${state.current.x}px, ${state.current.y}px, 0)`;
+
+      // Smoothly follow pointer
+      prevX = lerp(prevX, state.current.x, ease);
+      prevY = lerp(prevY, state.current.y, ease);
+
+      node.style.transform = `translate3d(${prevX}px, ${prevY}px, 0)`;
       node.setAttribute("data-boost", state.current.boost ? "1" : "0");
+
+      // Micro wobble when boosted (disabled for reduced motion)
+      const wobble = state.current.boost && !prefersReduced ? Math.sin(now * 0.002) * 1.2 : 0;
+      node.style.setProperty("--cursor-rot", `${wobble}deg`);
+
       raf = requestAnimationFrame(loop);
     }
     raf = requestAnimationFrame(loop);
@@ -795,7 +817,7 @@ function SunflowerCursor() {
     <div ref={ref} className="cursor-root" aria-hidden="true">
       {/* Base (yellow) layer */}
       <div className="cursor-sunflower" style={{ backgroundImage: sunflowerBg }} />
-      {/* Hover (orange) layer that crossfades on boost */}
+      {/* Hover (yellow vivid) layer that crossfades on boost */}
       <div className="cursor-sunflower cursor-sunflower--hover" style={{ backgroundImage: sunflowerBgHover }} />
       <SparkleEmitter />
     </div>
