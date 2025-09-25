@@ -634,13 +634,6 @@ export default function Landing() {
           >
             🍃
           </span>
-          <span
-            aria-hidden="true"
-            className="absolute top-1 right-1/2 translate-x-[62%] rotate-12 text-xl"
-            style={{ filter: "drop-shadow(0 2px 2px rgba(0,0,0,0.12))", opacity: 0.85 }}
-          >
-            🍃
-          </span>
           <p
             className="mt-3 text-lg md:text-xl text-slate-700/90"
             style={{
