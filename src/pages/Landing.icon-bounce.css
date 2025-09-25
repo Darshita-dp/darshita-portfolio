@@ -130,18 +130,38 @@
   transform: translate(-50%, -50%) scale(1);
   transition: transform 160ms ease, filter 160ms ease, opacity 160ms ease;
   will-change: transform, filter, opacity;
-  /* Inline SVG now applied from React via style prop */
   background-repeat: no-repeat;
   background-size: contain;
-  /* removed invalid background-image with JS template */
   filter: brightness(1) saturate(1);
   opacity: 1;
 }
 
+/* Hover (orange) sunflower layer - initially hidden, fades in on boost */
+.cursor-sunflower--hover {
+  width: 32px;
+  height: 32px;
+  transform: translate(-50%, -50%) scale(1);
+  transition: transform 160ms ease, filter 160ms ease, opacity 160ms ease;
+  will-change: transform, filter, opacity;
+  background-repeat: no-repeat;
+  background-size: contain;
+  opacity: 0; /* hidden by default */
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+/* Boosted: scale + glow + swap to orange layer */
 .cursor-root[data-boost="1"] .cursor-sunflower {
   transform: translate(-50%, -50%) scale(1.2);
   filter: drop-shadow(0 0 10px #FFC067) brightness(1.08) saturate(1.15);
-  opacity: 0.95;
+  opacity: 0; /* fade out base when boosted to reveal orange */
+}
+
+.cursor-root[data-boost="1"] .cursor-sunflower--hover {
+  transform: translate(-50%, -50%) scale(1.2);
+  filter: drop-shadow(0 0 10px #FFC067) brightness(1.08) saturate(1.15);
+  opacity: 0.95; /* fade in orange */
 }
 
 /* Sparkle particle (diamond/star illusion via rotation) */

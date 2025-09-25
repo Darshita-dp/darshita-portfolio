@@ -701,7 +701,7 @@ function SunflowerCursor() {
   const ref = useRef<HTMLDivElement | null>(null);
   const state = useRef<{ x: number; y: number; boost: boolean }>({ x: -100, y: -100, boost: false });
 
-  // Add: proper sunflower SVG background for the follower cursor
+  // Base sunflower (yellow/orange gradient)
   const sunflowerBg = useMemo(() => {
     const svg = `
       <svg xmlns='http://www.w3.org/2000/svg' width='44' height='44' viewBox='0 0 100 100'>
@@ -715,7 +715,6 @@ function SunflowerCursor() {
             <stop offset='100%' stop-color='#5A3A23'/>
           </radialGradient>
         </defs>
-        <!-- Baked shadow for reliable depth -->
         <ellipse cx='50' cy='60' rx='30' ry='30' fill='black' opacity='0.22'/>
         <g>
           ${Array.from({length: 18}).map((_,i)=>{
@@ -724,6 +723,34 @@ function SunflowerCursor() {
           }).join('')}
           <circle cx='50' cy='50' r='23' fill='url(#c)' stroke='rgba(0,0,0,0.26)' stroke-width='0.65'/>
           <circle cx='50' cy='50' r='16' fill='#5A3A23'/>
+        </g>
+      </svg>
+    `;
+    return `url("data:image/svg+xml;utf8,${encodeURIComponent(svg)}")`;
+  }, []);
+
+  // Hover sunflower (petals fully #FFC067, slightly transparent center)
+  const sunflowerBgHover = useMemo(() => {
+    const svg = `
+      <svg xmlns='http://www.w3.org/2000/svg' width='44' height='44' viewBox='0 0 100 100'>
+        <defs>
+          <linearGradient id='p2' x1='0' y1='0' x2='0' y2='1'>
+            <stop offset='0%' stop-color='#FFC067' stop-opacity='0.9'/>
+            <stop offset='100%' stop-color='#FFC067' stop-opacity='0.9'/>
+          </linearGradient>
+          <radialGradient id='c2'>
+            <stop offset='0%' stop-color='#5B311B' stop-opacity='0.9'/>
+            <stop offset='100%' stop-color='#3E2414' stop-opacity='0.9'/>
+          </radialGradient>
+        </defs>
+        <ellipse cx='50' cy='60' rx='30' ry='30' fill='black' opacity='0.22'/>
+        <g opacity='0.95'>
+          ${Array.from({length: 18}).map((_,i)=>{
+            const angle = (i*360)/18;
+            return `<ellipse cx='50' cy='22' rx='10' ry='23' fill='url(#p2)' stroke='rgba(0,0,0,0.24)' stroke-width='0.65' transform='rotate(${angle} 50 50)'/>`
+          }).join('')}
+          <circle cx='50' cy='50' r='23' fill='url(#c2)' stroke='rgba(0,0,0,0.26)' stroke-width='0.65'/>
+          <circle cx='50' cy='50' r='16' fill='#3E2414' fill-opacity='0.92'/>
         </g>
       </svg>
     `;
@@ -766,7 +793,10 @@ function SunflowerCursor() {
 
   return (
     <div ref={ref} className="cursor-root" aria-hidden="true">
+      {/* Base (yellow) layer */}
       <div className="cursor-sunflower" style={{ backgroundImage: sunflowerBg }} />
+      {/* Hover (orange) layer that crossfades on boost */}
+      <div className="cursor-sunflower cursor-sunflower--hover" style={{ backgroundImage: sunflowerBgHover }} />
       <SparkleEmitter />
     </div>
   );
