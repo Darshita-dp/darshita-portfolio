@@ -120,10 +120,11 @@ export default function Landing() {
         {[...Array(10)].map((_, i) => (
           <motion.div
             key={`sf-${i}`}
-            initial={{ x: -160 - i * 40, y: 8 + i * 7, rotate: 0 }}
+            // Make flowers traverse vertically well past halfway
+            initial={{ x: -160 - i * 40, y: "-10%", rotate: 0 }}
             animate={{
               x: "115%",
-              y: [10 + i * 6, 4 + i * 5, 12 + i * 7, 10 + i * 6],
+              y: ["-10%", "65%", "35%", "75%"],
               rotate: [-6, 8, -6, -4],
             }}
             transition={{
@@ -133,9 +134,10 @@ export default function Landing() {
               delay: i * 0.35,
             }}
             className="absolute"
-            style={{ top: `${6 + i * 7}%` }}
+            // Let y animation drive vertical travel
+            style={{ top: "0%" }}
           >
-            <SunflowerHead size={96 + (i % 3) * 24} />
+            <SunflowerHead size={128 + (i % 3) * 32} />
           </motion.div>
         ))}
 
