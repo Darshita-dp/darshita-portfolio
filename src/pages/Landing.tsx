@@ -637,7 +637,7 @@ export default function Landing() {
 
       {/* Gentle cloud puffs (ensure clouds above flowers/leaves) */}
       <div className="pointer-events-none absolute inset-0 z-10">
-        {[...Array(6)].map((_, i) => (
+        {[...Array(10)].map((_, i) => (
           <motion.div
             key={i}
             initial={{ x: -200 }}
