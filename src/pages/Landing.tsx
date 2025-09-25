@@ -1,7 +1,9 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { useNavigate } from "react-router";
+import { useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import "./Landing.icon-bounce.css";
 
 const modes = [
   {
@@ -79,6 +81,254 @@ function SunflowerHead({ size = 96 }: { size: number }) {
   );
 }
 
+function FlowerField() {
+  const prefersReducedMotion = useReducedMotion();
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const spritesRef = useRef<Array<{
+    el: HTMLDivElement;
+    x: number;
+    baseY: number;
+    speed: number;
+    amp: number;
+    freq: number;
+    phase: number;
+    scale: number;
+  }>>([]);
+  const rafRef = useRef<number | null>(null);
+  const lastTsRef = useRef<number>(0);
+  const hiddenRef = useRef<boolean>(false);
+
+  useEffect(() => {
+    const onVis = () => {
+      hiddenRef.current = document.hidden;
+    };
+    document.addEventListener("visibilitychange", onVis);
+    return () => document.removeEventListener("visibilitychange", onVis);
+  }, []);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+
+    const clamp = (n: number, a: number, b: number) => Math.min(Math.max(n, a), b);
+    const count = prefersReducedMotion ? 4 : clamp(Math.round(vw / 120), 8, 14);
+
+    // helper to create randomized sprite params
+    const newParams = () => ({
+      x: -140 - Math.random() * 100, // [-240, -140]
+      baseY: Math.random() * vh, // [0, vh]
+      speed: 20 + Math.random() * 40, // [20, 60] px/s
+      amp: 10 + Math.random() * 35, // [10, 45]
+      freq: 0.6 + Math.random() * 1.2, // [0.6, 1.8]
+      phase: Math.random() * Math.PI * 2, // [0, 2π]
+      scale: 0.7 + Math.random() * 0.45, // [0.7, 1.15]
+    });
+
+    // initialize sprites
+    spritesRef.current = [];
+    container.innerHTML = "";
+    for (let i = 0; i < count; i++) {
+      const el = document.createElement("div");
+      el.style.position = "absolute";
+      el.style.left = "0px";
+      el.style.top = "0px";
+      el.style.willChange = "transform";
+      el.style.pointerEvents = "none";
+      el.style.filter = "drop-shadow(0 2px 2px rgba(0,0,0,0.12))";
+
+      const wrap = document.createElement("div");
+      // render SVG once per sprite
+      // scale applied via transform on wrapper for better perf
+      wrap.innerHTML = "";
+      el.appendChild(wrap);
+
+      container.appendChild(el);
+
+      const p = newParams();
+      spritesRef.current.push({ el, ...p });
+    }
+
+    // mount SVGs after elements exist
+    spritesRef.current.forEach((s: {
+  el: HTMLDivElement;
+  x: number;
+  baseY: number;
+  speed: number;
+  amp: number;
+  freq: number;
+  phase: number;
+  scale: number;
+}) => {
+      const size = 96; // base size, scale via transform
+      const svg = (function makeSvg() {
+        const petalCount = 18;
+        const cx = 50;
+        const cy = 50;
+        // build SVG element
+        const ns = "http://www.w3.org/2000/svg";
+        const svg = document.createElementNS(ns, "svg");
+        svg.setAttribute("width", String(size));
+        svg.setAttribute("height", String(size));
+        svg.setAttribute("viewBox", "0 0 100 100");
+        svg.setAttribute("aria-hidden", "true");
+        // petals with gentle gradient
+        const defs = document.createElementNS(ns, "defs");
+        const gPetal = document.createElementNS(ns, "linearGradient");
+        gPetal.setAttribute("id", "petalGrad");
+        gPetal.setAttribute("x1", "0%");
+        gPetal.setAttribute("y1", "0%");
+        gPetal.setAttribute("x2", "0%");
+        gPetal.setAttribute("y2", "100%");
+        const stop1 = document.createElementNS(ns, "stop");
+        stop1.setAttribute("offset", "0%");
+        stop1.setAttribute("stop-color", "#FFE07B");
+        const stop2 = document.createElementNS(ns, "stop");
+        stop2.setAttribute("offset", "100%");
+        stop2.setAttribute("stop-color", "#FFC94A");
+        gPetal.appendChild(stop1);
+        gPetal.appendChild(stop2);
+
+        const gCenter = document.createElementNS(ns, "radialGradient");
+        gCenter.setAttribute("id", "centerGrad");
+        const c1 = document.createElementNS(ns, "stop");
+        c1.setAttribute("offset", "0%");
+        c1.setAttribute("stop-color", "#7A4A2B");
+        const c2 = document.createElementNS(ns, "stop");
+        c2.setAttribute("offset", "100%");
+        c2.setAttribute("stop-color", "#5A3A23");
+        gCenter.appendChild(c1);
+        gCenter.appendChild(c2);
+
+        defs.appendChild(gPetal);
+        defs.appendChild(gCenter);
+        svg.appendChild(defs);
+
+        for (let i = 0; i < petalCount; i++) {
+          const angle = (i * 360) / petalCount;
+          const ellipse = document.createElementNS(ns, "ellipse");
+          ellipse.setAttribute("cx", String(cx));
+          ellipse.setAttribute("cy", String(cy - 28));
+          ellipse.setAttribute("rx", "9.5");
+          ellipse.setAttribute("ry", "23");
+          ellipse.setAttribute("fill", "url(#petalGrad)");
+          ellipse.setAttribute("stroke", "rgba(0,0,0,0.06)");
+          ellipse.setAttribute("stroke-width", "0.5");
+          ellipse.setAttribute("transform", `rotate(${angle} ${cx} ${cy})`);
+          svg.appendChild(ellipse);
+        }
+        const ring = document.createElementNS(ns, "circle");
+        ring.setAttribute("cx", String(cx));
+        ring.setAttribute("cy", String(cy));
+        ring.setAttribute("r", "22");
+        ring.setAttribute("fill", "url(#centerGrad)");
+        svg.appendChild(ring);
+        const center = document.createElementNS(ns, "circle");
+        center.setAttribute("cx", String(cx));
+        center.setAttribute("cy", String(cy));
+        center.setAttribute("r", "16");
+        center.setAttribute("fill", "#5A3A23");
+        svg.appendChild(center);
+        return svg;
+      })();
+      s.el.firstChild as HTMLDivElement;
+      (s.el.firstChild as HTMLDivElement).appendChild(svg);
+    });
+
+    const step = (ts: number) => {
+      if (hiddenRef.current || prefersReducedMotion) {
+        lastTsRef.current = ts;
+        rafRef.current = requestAnimationFrame(step);
+        return;
+      }
+      const last = lastTsRef.current || ts;
+      const dt = (ts - last) / 1000; // seconds
+      lastTsRef.current = ts;
+
+      const vwNow = window.innerWidth;
+      const vhNow = window.innerHeight;
+
+      for (const s of spritesRef.current) {
+        s.x += s.speed * dt;
+        const y = s.baseY + s.amp * Math.sin(s.freq * ts / 1000 + s.phase);
+        s.el.style.transform = `translate(${s.x}px, ${y}px) scale(${s.scale})`;
+
+        if (s.x > vwNow + 80) {
+          // recycle with fresh params
+          const p = newParams();
+          s.x = p.x;
+          s.baseY = Math.random() * vhNow;
+          s.speed = p.speed;
+          s.amp = p.amp;
+          s.freq = p.freq;
+          s.phase = p.phase;
+          s.scale = p.scale;
+        }
+      }
+
+      rafRef.current = requestAnimationFrame(step);
+    };
+
+    if (!prefersReducedMotion) {
+      lastTsRef.current = performance.now();
+      rafRef.current = requestAnimationFrame(step);
+    } else {
+      // Static placement for reduced motion
+      spritesRef.current.forEach((s: {
+  el: HTMLDivElement;
+  x: number;
+  baseY: number;
+  speed: number;
+  amp: number;
+  freq: number;
+  phase: number;
+  scale: number;
+}) => {
+        s.x = Math.random() * vw - 60;
+        const y = Math.random() * vh;
+        s.el.style.transform = `translate(${s.x}px, ${y}px) scale(${s.scale})`;
+      });
+    }
+
+    const onResize = () => {
+      // reposition to keep within new viewport
+      const vwN = window.innerWidth;
+      const vhN = window.innerHeight;
+      spritesRef.current.forEach((s: {
+  el: HTMLDivElement;
+  x: number;
+  baseY: number;
+  speed: number;
+  amp: number;
+  freq: number;
+  phase: number;
+  scale: number;
+}) => {
+        s.baseY = Math.min(Math.max(s.baseY, 0), vhN);
+        if (s.x > vwN + 80) s.x = -100;
+      });
+    };
+    window.addEventListener("resize", onResize);
+
+    return () => {
+      window.removeEventListener("resize", onResize);
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      spritesRef.current = [];
+      if (container) container.innerHTML = "";
+    };
+  }, [prefersReducedMotion]);
+
+  return (
+    <div
+      ref={containerRef}
+      className="pointer-events-none absolute inset-0 overflow-hidden"
+      aria-hidden="true"
+    />
+  );
+}
+
 export default function Landing() {
   const navigate = useNavigate();
   const prefersReducedMotion = useReducedMotion();
@@ -113,185 +363,8 @@ export default function Landing() {
         ))}
       </div>
 
-      
-
-      {/* Flying sunflowers and petals in the wind */}
-      <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        {/* Big sunflower heads drifting in a breeze (custom SVG heads only) */}
-        {[...Array(6)].map((_, i) => {
-          // use fresh randomness per element (prevents stacked lanes)
-          const rand = () => Math.random();
-          const r = (min: number, max: number) => min + (max - min) * rand();
-
-          // Wide random left offset and full-viewport vertical lanes
-          const initialX = -400 - r(0, 260); // spread their entry on the far left
-          const baseY = `${r(4, 92)}%`; // true random lanes across the viewport
-          const size = r(120, 200);
-          const scale = r(0.9, 1.15);
-          const depthOpacity = r(0.65, 1);
-          const swayAmp = r(8, 18);
-          const dur = prefersReducedMotion ? 0 : r(6.2, 9.2);
-          const delay = prefersReducedMotion ? 0 : r(0, 0.7); // fully desync starts
-          const repeatDelay = prefersReducedMotion ? 0 : r(0.4, 2.0);
-
-          return (
-            <motion.div
-              key={`sf-${i}`}
-              initial={{ x: initialX, y: 0, rotate: 0 }}
-              animate={
-                prefersReducedMotion
-                  ? { x: initialX, y: 0, rotate: 0 }
-                  : {
-                      x: "115%",
-                      y: 0,
-                      rotate: [-4, 4 + r(-1, 1), -2, -4],
-                    }
-              }
-              transition={
-                prefersReducedMotion
-                  ? { duration: 0 }
-                  : {
-                      duration: dur,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                      delay,
-                      repeatDelay,
-                    }
-              }
-              className="absolute"
-              style={{ top: baseY }}
-            >
-              {/* inner sway + depth */}
-              <motion.div
-                initial={{ x: 0, scale, opacity: depthOpacity }}
-                animate={
-                  prefersReducedMotion
-                    ? { x: 0 }
-                    : { x: [-swayAmp, swayAmp, -swayAmp], y: [-2, 2, -2] }
-                }
-                transition={
-                  prefersReducedMotion
-                    ? { duration: 0 }
-                    : { duration: r(3.0, 5.2), repeat: Infinity, ease: "easeInOut" }
-                }
-              >
-                <SunflowerHead size={size} />
-              </motion.div>
-            </motion.div>
-          );
-        })}
-
-        {/* Petals drifting at various depths (faster to match breeze) */}
-        {[...Array(12)].map((_, i) => {
-          const rand = () => Math.random();
-          const r = (min: number, max: number) => min + (max - min) * rand();
-
-          const sway = r(6, 14);
-          const dur = prefersReducedMotion ? 0 : r(7.8, 10.5);
-          const delay = prefersReducedMotion ? 0 : r(0, 1.0);
-          const repeatDelay = prefersReducedMotion ? 0 : r(0.5, 2.2);
-          const scale = r(0.85, 1.15);
-          const opacity = r(0.6, 0.95);
-          const baseY = `${r(3, 95)}%`;
-          const initialX = -240 - r(0, 180);
-
-          return (
-            <motion.div
-              key={`petal-${i}`}
-              initial={{ x: initialX, y: 0, rotate: 0 }}
-              animate={
-                prefersReducedMotion
-                  ? { x: initialX, y: 0, rotate: 0 }
-                  : {
-                      x: ["-15%", "115%"],
-                      y: [0, r(-14, 14), 0],
-                      rotate: [0, 24 + r(-8, 8), -12 + r(-6, 6), 0],
-                    }
-              }
-              transition={
-                prefersReducedMotion
-                  ? { duration: 0 }
-                  : {
-                      duration: dur,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                      delay,
-                      repeatDelay,
-                    }
-              }
-              className="absolute"
-              style={{ top: baseY }}
-            >
-              <motion.span
-                className="text-[16px]"
-                style={{
-                  filter: "drop-shadow(0 1px 1px rgba(0,0,0,0.12))",
-                  opacity,
-                }}
-                animate={prefersReducedMotion ? { x: 0 } : { x: [-sway, sway, -sway] }}
-                transition={
-                  prefersReducedMotion
-                    ? { duration: 0 }
-                    : { duration: r(2.0, 3.2), repeat: Infinity, ease: "easeInOut" }
-                }
-              >
-                <span style={{ display: "inline-block", transform: `scale(${scale})` }}>🌼</span>
-              </motion.span>
-            </motion.div>
-          )
-        })}
-
-        {/* Leaves for extra whimsy (increase size, keep count) */}
-        {[...Array(8)].map((_, i) => {
-          const rand = () => Math.random();
-          const r = (min: number, max: number) => min + (max - min) * rand();
-
-          const sway = r(10, 22);
-          const dur = prefersReducedMotion ? 0 : r(9.5, 12.5);
-          const delay = prefersReducedMotion ? 0 : r(0, 0.8);
-          const repeatDelay = prefersReducedMotion ? 0 : r(0.4, 1.8);
-          const scale = r(1.1, 1.6);
-          const opacity = r(0.7, 0.95);
-          const baseY = `${r(5, 90)}%`;
-
-          return (
-            <motion.div
-              key={`leaf-${i}`}
-              initial={{ x: "115%", y: 0, rotate: 10 }}
-              animate={
-                prefersReducedMotion
-                  ? { x: "115%", y: 0, rotate: 10 }
-                  : {
-                      x: "-15%",
-                      y: [0, r(-12, 12), 0],
-                      rotate: [10, -14 + r(-4, 4), 8 + r(-4, 4), 10],
-                    }
-              }
-              transition={
-                prefersReducedMotion
-                  ? { duration: 0 }
-                  : { duration: dur, repeat: Infinity, ease: "easeInOut", delay, repeatDelay }
-              }
-              className="absolute"
-              style={{ top: baseY }}
-            >
-              <motion.span
-                className="text-[28px] opacity-85"
-                style={{ color: "#5F9595", opacity }}
-                initial={{ x: 0, scale }}
-                animate={prefersReducedMotion ? { x: 0 } : { x: [sway, -sway, sway] }}
-                transition={
-                  prefersReducedMotion
-                    ? { duration: 0 }
-                    : { duration: r(2.6, 3.6), repeat: Infinity, ease: "easeInOut" }
-                }
-              >
-                🍃
-              </motion.span>
-            </motion.div>
-          )
-        })}
-      </div>
+      {/* Flower field layer behind content (lightweight, rAF-powered) */}
+      <FlowerField />
 
       {/* Content container */}
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4">
@@ -320,7 +393,7 @@ export default function Landing() {
               letterSpacing: "0.2px",
             }}
           >
-            — a soul where logic and creativity hold hands
+            — where data finds its story in pastel hues
           </p>
         </motion.div>
 
@@ -332,15 +405,17 @@ export default function Landing() {
           className="grid grid-cols-1 md:grid-cols-2 gap-5 max-w-4xl w-full"
         >
           {modes.map((mode, index) => (
-            <motion.div
+            <motion.button
               key={mode.id}
+              type="button"
               initial={{ opacity: 0, scale: 0.96 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.45, delay: 0.08 * index }}
               whileHover={{ y: -4, scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="group cursor-pointer"
               onClick={() => navigate(mode.path)}
+              className="group cursor-pointer w-full text-left rounded-2xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+              style={{ outlineColor: "#BAE1FF" }}
             >
               <Card
                 className="border-[1.5px] transition-all duration-300 h-full"
@@ -356,6 +431,7 @@ export default function Landing() {
                     style={{
                       backgroundColor: mode.color,
                       boxShadow: "inset 0 -2px 0 rgba(0,0,0,0.06), 0 6px 12px rgba(0,0,0,0.06)",
+                      animation: "icon-bounce 2s infinite",
                     }}
                   >
                     <span className="text-2xl">{mode.symbol}</span>
@@ -368,23 +444,9 @@ export default function Landing() {
                   <CardDescription className="text-slate-700/80 text-base">
                     {mode.description}
                   </CardDescription>
-                  <div className="mt-4">
-                    <Button
-                      size="sm"
-                      className="rounded-full"
-                      style={{
-                        backgroundColor: mode.color,
-                        color: "#1f2937",
-                        borderColor: "rgba(0,0,0,0.08)",
-                      }}
-                      variant="outline"
-                    >
-                      Open
-                    </Button>
-                  </div>
                 </CardContent>
               </Card>
-            </motion.div>
+            </motion.button>
           ))}
         </motion.div>
 
