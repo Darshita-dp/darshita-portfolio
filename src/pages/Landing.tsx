@@ -118,7 +118,7 @@ export default function Landing() {
       {/* Flying sunflowers and petals in the wind */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         {/* Big sunflower heads drifting in a breeze (custom SVG heads only) */}
-        {[...Array(10)].map((_, i) => {
+        {[...Array(6)].map((_, i) => {
           // use fresh randomness per element (prevents stacked lanes)
           const rand = () => Math.random();
           const r = (min: number, max: number) => min + (max - min) * rand();
@@ -241,7 +241,7 @@ export default function Landing() {
           )
         })}
 
-        {/* Leaves for extra whimsy (sped up) */}
+        {/* Leaves for extra whimsy (increase size, keep count) */}
         {[...Array(8)].map((_, i) => {
           const rand = () => Math.random();
           const r = (min: number, max: number) => min + (max - min) * rand();
@@ -250,14 +250,13 @@ export default function Landing() {
           const dur = prefersReducedMotion ? 0 : r(9.5, 12.5);
           const delay = prefersReducedMotion ? 0 : r(0, 0.8);
           const repeatDelay = prefersReducedMotion ? 0 : r(0.4, 1.8);
-          const scale = r(0.9, 1.2);
+          const scale = r(1.1, 1.6);
           const opacity = r(0.7, 0.95);
           const baseY = `${r(5, 90)}%`;
 
           return (
             <motion.div
               key={`leaf-${i}`}
-              // Start from the right edge and drift to the left
               initial={{ x: "115%", y: 0, rotate: 10 }}
               animate={
                 prefersReducedMotion
@@ -277,7 +276,7 @@ export default function Landing() {
               style={{ top: baseY }}
             >
               <motion.span
-                className="text-[18px] opacity-85"
+                className="text-[28px] opacity-85"
                 style={{ color: "#5F9595", opacity }}
                 initial={{ x: 0, scale }}
                 animate={prefersReducedMotion ? { x: 0 } : { x: [sway, -sway, sway] }}
