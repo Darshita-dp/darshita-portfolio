@@ -261,7 +261,7 @@ export default function Classic() {
             <div className="shrink-0 relative">
               <div className="w-28 h-28 md:w-32 md:h-32 rounded-full overflow-hidden ring-4 ring-white/40 shadow-xl">
                 <img
-                  src="/logo.png"
+                  src="https://harmless-tapir-303.convex.cloud/api/storage/fbbcab3e-d3b1-4639-99b4-311c5e1ab7ca"
                   alt="Profile"
                   className="w-full h-full object-cover"
                 />
