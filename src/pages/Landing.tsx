@@ -593,6 +593,157 @@ function LeavesField({ densityScale = 1 }: { densityScale?: number }) {
   );
 }
 
+function SparkleEmitter() {
+  const ref = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
+    const root = ref.current?.parentElement as HTMLElement | null;
+    if (!ref.current || !root) return;
+
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduced) return;
+
+    type P = {
+      el: HTMLElement;
+      alive: boolean;
+      life: number;
+      x: number;
+      y: number;
+      vx: number;
+      vy: number;
+      scale: number;
+    };
+
+    const pool: Array<P> = [];
+    const poolSize = 80;
+    for (let i = 0; i < poolSize; i++) {
+      const el = document.createElement("i");
+      el.className = "sparkle";
+      el.style.opacity = "0";
+      el.style.left = "0px";
+      el.style.top = "0px";
+      ref.current.appendChild(el);
+      pool.push({ el, alive: false, life: 0, x: 0, y: 0, vx: 0, vy: 0, scale: 1 });
+    }
+
+    let rate = 0; // particles per second
+    const updateRate = () => {
+      const boosted = root.getAttribute("data-boost") === "1";
+      rate = boosted ? 12 : 1.5; // 8–14/s boosted, ~0–2/s idle
+    };
+    const mo = new MutationObserver(updateRate);
+    mo.observe(root, { attributes: true, attributeFilter: ["data-boost"] });
+    updateRate();
+
+    let last = performance.now();
+    let acc = 0;
+    let raf = 0;
+
+    function loop(now: number) {
+      const dt = (now - last) / 1000;
+      last = now;
+
+      acc += dt * rate;
+      while (acc > 1) {
+        const p = pool.find((pp) => !pp.alive);
+        if (!p) break;
+        acc -= 1;
+
+        // Init particle
+        p.alive = true;
+        p.life = 0;
+        p.x = 0;
+        p.y = 0;
+        p.vx = (Math.random() - 0.5) * 28; // slight horizontal jitter
+        p.vy = 70 + Math.random() * 70; // downward velocity (waterfall)
+        p.scale = 0.8 + Math.random() * 0.4;
+
+        const r = Math.random();
+        const color = r < 0.6 ? "#FFC067" : r < 0.85 ? "#FFF6C5" : "#FFFFFF";
+        p.el.style.background = color;
+        p.el.style.opacity = "1";
+        p.el.style.transform = `translate3d(0, 0, 0) scale(${p.scale}) rotate(45deg)`;
+      }
+
+      // Animate particles
+      for (const p of pool) {
+        if (!p.alive) continue;
+        p.life += dt;
+
+        p.x += p.vx * dt;
+        p.y += p.vy * dt;
+
+        const fade = Math.max(0, 1 - p.life / 0.85); // 600–900ms approx.
+        p.el.style.opacity = fade.toString();
+        p.el.style.transform = `translate3d(${p.x}px, ${p.y}px, 0) scale(${p.scale}) rotate(45deg)`;
+
+        if (p.life > 0.9) {
+          p.alive = false;
+          p.el.style.opacity = "0";
+        }
+      }
+
+      raf = requestAnimationFrame(loop);
+    }
+
+    raf = requestAnimationFrame(loop);
+    return () => {
+      cancelAnimationFrame(raf);
+      mo.disconnect();
+      // cleanup children
+      if (ref.current) ref.current.innerHTML = "";
+    };
+  }, []);
+
+  return <div ref={ref} className="absolute left-0 top-0 -translate-x-1/2 -translate-y-1/2" aria-hidden="true" />;
+}
+
+function SunflowerCursor() {
+  const ref = useRef<HTMLDivElement | null>(null);
+  const state = useRef<{ x: number; y: number; boost: boolean }>({ x: -100, y: -100, boost: false });
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    const onMove = (e: PointerEvent) => {
+      state.current.x = e.clientX;
+      state.current.y = e.clientY;
+    };
+
+    const onOver = (e: PointerEvent) => {
+      const t = e.target as HTMLElement | null;
+      // Toggle boost based on nearest element with data-cursor-boost="true"
+      state.current.boost = !!t?.closest("[data-cursor-boost='true']");
+    };
+
+    document.addEventListener("pointermove", onMove, { passive: true });
+    document.addEventListener("pointerover", onOver, { passive: true });
+
+    let raf = 0;
+    function loop() {
+      const node = ref.current;
+      if (!node) return;
+      node.style.transform = `translate3d(${state.current.x}px, ${state.current.y}px, 0)`;
+      node.setAttribute("data-boost", state.current.boost ? "1" : "0");
+      raf = requestAnimationFrame(loop);
+    }
+    raf = requestAnimationFrame(loop);
+
+    return () => {
+      cancelAnimationFrame(raf);
+      document.removeEventListener("pointermove", onMove);
+      document.removeEventListener("pointerover", onOver);
+    };
+  }, []);
+
+  return (
+    <div ref={ref} className="cursor-root" aria-hidden="true">
+      <div className="cursor-sunflower" />
+      <SparkleEmitter />
+    </div>
+  );
+}
+
 export default function Landing() {
   const navigate = useNavigate();
   const prefersReducedMotion = useReducedMotion();
@@ -688,7 +839,11 @@ export default function Landing() {
   }, []);
 
   return (
-    <div className="relative min-h-screen overflow-hidden" style={{ cursor: sunflowerCursor }}>
+    <div
+      className="relative min-h-screen overflow-hidden"
+      // Replace image cursor with hidden native cursor so follower is the only cursor
+      style={{ cursor: "none" }}
+    >
       {/* Kawaii Sky Gradient */}
       <div
         className="absolute inset-0"
@@ -830,6 +985,7 @@ export default function Landing() {
             <motion.button
               key={mode.id}
               type="button"
+              data-cursor-boost="true"
               title={`Open ${mode.title} mode`}
               aria-label={`Open ${mode.title} mode — ${mode.description}`}
               initial={{ opacity: 0, scale: 0.96 }}
@@ -940,6 +1096,9 @@ export default function Landing() {
           </p>
         </motion.div>
       </div>
+
+      {/* Global follower cursor for this page */}
+      <SunflowerCursor />
     </div>
   );
 }

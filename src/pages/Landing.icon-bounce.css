@@ -113,3 +113,59 @@
 .group:hover .sparkle-overlay {
   opacity: 1;
 }
+
+/* Sunflower follower cursor */
+.cursor-root {
+  position: fixed;
+  left: 0;
+  top: 0;
+  transform: translate3d(-100px, -100px, 0);
+  pointer-events: none;
+  z-index: 9999;
+}
+
+.cursor-sunflower {
+  width: 32px;
+  height: 32px;
+  transform: translate(-50%, -50%) scale(1);
+  transition: transform 160ms ease, filter 160ms ease, opacity 160ms ease;
+  will-change: transform, filter, opacity;
+  /* Inline SVG as background, baked shadow + outlines for reliable rendering */
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='44' height='44' viewBox='0 0 100 100'><defs><linearGradient id='p2' x1='0' y1='0' x2='0' y2='1'><stop offset='0%' stop-color='%23FFC067' stop-opacity='0.88'/><stop offset='100%' stop-color='%23FFC067' stop-opacity='0.88'/></linearGradient><radialGradient id='c2'><stop offset='0%' stop-color='%235B311B' stop-opacity='0.9'/><stop offset='100%' stop-color='%233E2414' stop-opacity='0.9'/></radialGradient></defs><ellipse cx='50' cy='60' rx='30' ry='30' fill='black' opacity='0.22'/><g opacity='0.86'>${Array.from({length:18}).map((_,i)=>{const a=(i*360)/18;return `<ellipse cx='50' cy='22' rx='10' ry='23' fill='url(%23p2)' stroke='rgba(0,0,0,0.24)' stroke-width='0.65' transform='rotate(${a} 50 50)'/>`;}).join('')}<circle cx='50' cy='50' r='23' fill='url(%23c2)' stroke='rgba(0,0,0,0.26)' stroke-width='0.65'/><circle cx='50' cy='50' r='16' fill='%233E2414' fill-opacity='0.92'/></g></svg>");
+  filter: brightness(1) saturate(1);
+  opacity: 1;
+}
+
+.cursor-root[data-boost="1"] .cursor-sunflower {
+  transform: translate(-50%, -50%) scale(1.2);
+  filter: drop-shadow(0 0 10px #FFC067) brightness(1.08) saturate(1.15);
+  opacity: 0.95;
+}
+
+/* Sparkle particle (diamond/star illusion via rotation) */
+.sparkle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 2px; /* soft diamond */
+  transform: translate3d(0, 0, 0) rotate(45deg);
+  will-change: transform, opacity;
+  box-shadow: 0 0 6px rgba(255, 192, 103, 0.65);
+  filter: saturate(1.15);
+}
+
+/* Hide on touch devices */
+@media (pointer: coarse) {
+  .cursor-root {
+    display: none;
+  }
+}
+
+/* Motion safety */
+@media (prefers-reduced-motion: reduce) {
+  .cursor-sunflower {
+    transition: none;
+  }
+}
