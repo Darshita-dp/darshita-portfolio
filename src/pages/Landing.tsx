@@ -1,6 +1,6 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { useNavigate } from "react-router";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { api } from "@/convex/_generated/api";
@@ -629,8 +629,35 @@ export default function Landing() {
 
   const modeCounts = useQuery(api.analytics.getOpenModeCounts, {}); // realtime counts
 
+  // Sunflower cursor (Landing page only)
+  const sunflowerCursor = useMemo(() => {
+    const svg = `
+      <svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 100 100'>
+        <defs>
+          <linearGradient id='p' x1='0' y1='0' x2='0' y2='1'>
+            <stop offset='0%' stop-color='#FFE07B'/>
+            <stop offset='100%' stop-color='#FFC94A'/>
+          </linearGradient>
+          <radialGradient id='c'>
+            <stop offset='0%' stop-color='#7A4A2B'/>
+            <stop offset='100%' stop-color='#5A3A23'/>
+          </radialGradient>
+        </defs>
+        <!-- petals -->
+        ${Array.from({length: 18}).map((_,i)=>{
+          const angle = (i*360)/18;
+          return `<ellipse cx='50' cy='22' rx='9' ry='22' fill='url(#p)' stroke='rgba(0,0,0,0.06)' stroke-width='0.5' transform='rotate(${angle} 50 50)'/>`
+        }).join('')}
+        <!-- center -->
+        <circle cx='50' cy='50' r='22' fill='url(#c)'/>
+        <circle cx='50' cy='50' r='15' fill='#5A3A23'/>
+      </svg>
+    `;
+    return `url("data:image/svg+xml;utf8,${encodeURIComponent(svg)}") 16 16, auto`;
+  }, []);
+
   return (
-    <div className="relative min-h-screen overflow-hidden">
+    <div className="relative min-h-screen overflow-hidden" style={{ cursor: sunflowerCursor }}>
       {/* Kawaii Sky Gradient */}
       <div
         className="absolute inset-0"
