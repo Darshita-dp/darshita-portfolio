@@ -664,23 +664,23 @@ export default function Landing() {
       <svg xmlns='http://www.w3.org/2000/svg' width='44' height='44' viewBox='0 0 100 100'>
         <defs>
           <linearGradient id='p2' x1='0' y1='0' x2='0' y2='1'>
-            <stop offset='0%' stop-color='#FF9F1C'/>
-            <stop offset='100%' stop-color='#FB8C00'/>
+            <stop offset='0%' stop-color='#FFB74D' stop-opacity='0.9'/>
+            <stop offset='100%' stop-color='#FFA726' stop-opacity='0.9'/>
           </linearGradient>
           <radialGradient id='c2'>
-            <stop offset='0%' stop-color='#5B311B'/>
-            <stop offset='100%' stop-color='#3E2414'/>
+            <stop offset='0%' stop-color='#5B311B' stop-opacity='0.9'/>
+            <stop offset='100%' stop-color='#3E2414' stop-opacity='0.9'/>
           </radialGradient>
         </defs>
-        <!-- Baked shadow (no filters) -->
-        <ellipse cx='50' cy='60' rx='30' ry='30' fill='black' opacity='0.28'/>
-        <g>
+        <!-- Softer baked shadow -->
+        <ellipse cx='50' cy='60' rx='30' ry='30' fill='black' opacity='0.22'/>
+        <g opacity='0.86'>
           ${Array.from({length: 18}).map((_,i)=>{
             const angle = (i*360)/18;
-            return `<ellipse cx='50' cy='22' rx='10' ry='23' fill='url(#p2)' stroke='rgba(0,0,0,0.28)' stroke-width='0.7' transform='rotate(${angle} 50 50)'/>`
+            return `<ellipse cx='50' cy='22' rx='10' ry='23' fill='url(#p2)' stroke='rgba(0,0,0,0.24)' stroke-width='0.65' transform='rotate(${angle} 50 50)'/>`
           }).join('')}
-          <circle cx='50' cy='50' r='23' fill='url(#c2)' stroke='rgba(0,0,0,0.3)' stroke-width='0.7'/>
-          <circle cx='50' cy='50' r='16' fill='#3E2414'/>
+          <circle cx='50' cy='50' r='23' fill='url(#c2)' stroke='rgba(0,0,0,0.26)' stroke-width='0.65'/>
+          <circle cx='50' cy='50' r='16' fill='#3E2414' fill-opacity='0.92'/>
         </g>
       </svg>
     `;
