@@ -656,6 +656,31 @@ export default function Landing() {
     return `url("data:image/svg+xml;utf8,${encodeURIComponent(svg)}") 16 16, auto`;
   }, []);
 
+  // Add a larger, darker sunflower cursor for hover over interactive elements
+  const sunflowerCursorHover = useMemo(() => {
+    const svg = `
+      <svg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 100 100'>
+        <defs>
+          <linearGradient id='p2' x1='0' y1='0' x2='0' y2='1'>
+            <stop offset='0%' stop-color='#FFA726'/>
+            <stop offset='100%' stop-color='#FB8C00'/>
+          </linearGradient>
+          <radialGradient id='c2'>
+            <stop offset='0%' stop-color='#6B3A1F'/>
+            <stop offset='100%' stop-color='#4A2A17'/>
+          </radialGradient>
+        </defs>
+        ${Array.from({length: 18}).map((_,i)=>{
+          const angle = (i*360)/18;
+          return `<ellipse cx='50' cy='22' rx='10' ry='23' fill='url(#p2)' stroke='rgba(0,0,0,0.12)' stroke-width='0.6' transform='rotate(${angle} 50 50)'/>`
+        }).join('')}
+        <circle cx='50' cy='50' r='23' fill='url(#c2)'/>
+        <circle cx='50' cy='50' r='16' fill='#4A2A17'/>
+      </svg>
+    `;
+    return `url("data:image/svg+xml;utf8,${encodeURIComponent(svg)}") 20 20, auto`;
+  }, []);
+
   return (
     <div className="relative min-h-screen overflow-hidden" style={{ cursor: sunflowerCursor }}>
       {/* Kawaii Sky Gradient */}
@@ -725,15 +750,17 @@ export default function Landing() {
 
         {/* Top-right small control: reduce visuals toggle */}
         <div className="absolute top-4 right-4 z-30">
-          <button
+          <motion.button
             onClick={() => setReduced((v) => !v)}
             className="text-xs rounded-full px-3 py-1 border bg-white/70 backdrop-blur hover:bg-white/90 transition"
             aria-pressed={reduced}
             aria-label={reduced ? "Background visuals: Reduced" : "Background visuals: Full"}
             title="Toggle background visuals"
+            style={{ cursor: sunflowerCursor }}
+            whileHover={{ cursor: sunflowerCursorHover }}
           >
             {reduced ? "Background: Reduced" : "Background: Full"}
-          </button>
+          </motion.button>
         </div>
 
         {/* Name & Tagline */}
@@ -803,7 +830,7 @@ export default function Landing() {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.45, delay: 0.08 * index }}
               // Replace tilt hover with lift + glow (no rotate)
-              whileHover={{ y: -6, scale: 1.03 }}
+              whileHover={{ y: -6, scale: 1.03, cursor: sunflowerCursorHover }}
               whileTap={{ scale: 0.98 }}
               onClick={() => {
                 // Track mode open event, then navigate
@@ -823,6 +850,7 @@ export default function Landing() {
                 transform:
                   "translate3d(calc(var(--dx) * 6px), calc(var(--dy) * 6px), 0)",
                 transition: "transform 120ms ease",
+                cursor: sunflowerCursor,
               }}
             >
               <Card
