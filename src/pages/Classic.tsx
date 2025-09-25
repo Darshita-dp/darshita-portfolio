@@ -15,7 +15,7 @@ type Project = {
   image: string;
   tags: Array<string>;
   link?: string;
-  metrics?: Array<{ icon: React.ReactNode; label: string }>;
+  metrics?: Array<{ icon: React.ReactNode; label: string; value?: number; suffix?: string }>;
 };
 
 const BLUE = {
@@ -34,8 +34,8 @@ const featuredProjects: Array<Project> = [
     tags: ["SwiftUI", "Core Data", "MVVM"],
     link: "#",
     metrics: [
-      { icon: <Star className="w-3.5 h-3.5" />, label: "Polished UX" },
-      { icon: <Smartphone className="w-3.5 h-3.5" />, label: "iOS" },
+      { icon: <Star className="w-3.5 h-3.5" />, label: "Ratings", value: 120, suffix: "+" },
+      { icon: <Smartphone className="w-3.5 h-3.5" />, label: "iOS", value: 1 },
     ],
   },
   {
@@ -46,7 +46,8 @@ const featuredProjects: Array<Project> = [
     tags: ["React", "TypeScript", "UI"],
     link: "#",
     metrics: [
-      { icon: <Database className="w-3.5 h-3.5" />, label: "Data Driven" },
+      { icon: <Database className="w-3.5 h-3.5" />, label: "Titles Indexed", value: 8_500, suffix: "+" },
+      { icon: <Star className="w-3.5 h-3.5" />, label: "Pages", value: 24 },
     ],
   },
   {
@@ -56,7 +57,10 @@ const featuredProjects: Array<Project> = [
     image: "/logo_bg.png",
     tags: ["React", "UX", "State"],
     link: "#",
-    metrics: [{ icon: <Star className="w-3.5 h-3.5" />, label: "Reliable" }],
+    metrics: [
+      { icon: <Star className="w-3.5 h-3.5" />, label: "Reliability", value: 99, suffix: "%" },
+      { icon: <Database className="w-3.5 h-3.5" />, label: "Courses Tracked", value: 32 },
+    ],
   },
 ];
 
@@ -70,6 +74,47 @@ const techSkills: Array<{ name: string; level: number; icon?: React.ReactNode }>
 ];
 
 const softSkills: Array<string> = ["Communication", "Problem‑Solving", "Teamwork"];
+
+function CountUpNumber({
+  to,
+  duration = 1200,
+  suffix = "",
+  className = "",
+}: {
+  to: number;
+  duration?: number;
+  suffix?: string;
+  className?: string;
+}) {
+  const ref = useRef<HTMLSpanElement | null>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const inView = useInView(containerRef, { once: true, margin: "-80px" });
+
+  useEffect(() => {
+    if (!inView || !ref.current) return;
+    let start: number | null = null;
+    const from = 0;
+    const target = to;
+    const step = (ts: number) => {
+      if (start === null) start = ts;
+      const elapsed = ts - start;
+      const t = Math.min(1, elapsed / duration);
+      const eased = 1 - Math.pow(1 - t, 3);
+      const val = Math.floor(from + (target - from) * eased);
+      if (ref.current) ref.current.textContent = val.toLocaleString();
+      if (t < 1) requestAnimationFrame(step);
+    };
+    const r = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(r);
+  }, [inView, to, duration]);
+
+  return (
+    <div ref={containerRef} className={className}>
+      <span ref={ref} />
+      {suffix ? <span className="ml-0.5">{suffix}</span> : null}
+    </div>
+  );
+}
 
 function SectionTitle({ id, children }: { id: string; children: React.ReactNode }) {
   return (
@@ -202,10 +247,14 @@ export default function Classic() {
       <StickyNav />
 
       {/* Hero / Profile */}
-      <section
+      <motion.section
         id="profile"
         className="border-b"
         style={headerGradient}
+        initial={{ opacity: 0, y: 14 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-80px" }}
+        transition={{ duration: 0.5 }}
       >
         <div className="container mx-auto max-w-6xl px-4 py-10 md:py-14 text-white">
           <div className="flex flex-col md:flex-row items-center gap-6 md:gap-10">
@@ -249,10 +298,17 @@ export default function Classic() {
             </div>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Projects */}
-      <section id="projects" className="container mx-auto max-w-6xl px-4 py-10">
+      <motion.section
+        id="projects"
+        className="container mx-auto max-w-6xl px-4 py-10"
+        initial={{ opacity: 0, y: 14 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-80px" }}
+        transition={{ duration: 0.5, delay: 0.05 }}
+      >
         <SectionTitle id="projects-title">Projects</SectionTitle>
 
         <div className="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -292,12 +348,23 @@ export default function Classic() {
                     ))}
                   </div>
                   {p.metrics && p.metrics.length > 0 && (
-                    <div className="pt-1 flex flex-wrap gap-3 text-xs text-slate-600">
+                    <div className="pt-1 grid grid-cols-2 gap-3 text-xs text-slate-700">
                       {p.metrics.map((m, idx) => (
-                        <span key={idx} className="inline-flex items-center gap-1.5">
+                        <div key={idx} className="inline-flex items-center gap-1.5">
                           <span className="text-blue-700">{m.icon}</span>
-                          {m.label}
-                        </span>
+                          {typeof m.value === "number" ? (
+                            <>
+                              <CountUpNumber
+                                to={m.value}
+                                suffix={m.suffix}
+                                className="font-semibold text-slate-900"
+                              />
+                              <span className="opacity-70">{m.label}</span>
+                            </>
+                          ) : (
+                            <span>{m.label}</span>
+                          )}
+                        </div>
                       ))}
                     </div>
                   )}
@@ -306,10 +373,18 @@ export default function Classic() {
             </motion.a>
           ))}
         </div>
-      </section>
+      </motion.section>
 
       {/* Skills */}
-      <section id="skills" className="py-10" style={{ background: BLUE.bgTint }}>
+      <motion.section
+        id="skills"
+        className="py-10"
+        style={{ background: BLUE.bgTint }}
+        initial={{ opacity: 0, y: 14 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-80px" }}
+        transition={{ duration: 0.5 }}
+      >
         <div className="container mx-auto max-w-6xl px-4">
           <SectionTitle id="skills-title">Skills & Expertise</SectionTitle>
 
@@ -346,10 +421,17 @@ export default function Classic() {
             </Card>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Experience */}
-      <section id="experience" className="container mx-auto max-w-6xl px-4 py-10">
+      <motion.section
+        id="experience"
+        className="container mx-auto max-w-6xl px-4 py-10"
+        initial={{ opacity: 0, y: 14 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-80px" }}
+        transition={{ duration: 0.5 }}
+      >
         <SectionTitle id="experience-title">Experience Highlights</SectionTitle>
         <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-5">
           <Card className="shadow-sm">
@@ -371,10 +453,16 @@ export default function Classic() {
             </CardContent>
           </Card>
         </div>
-      </section>
+      </motion.section>
 
       {/* Extras */}
-      <section className="container mx-auto max-w-6xl px-4 pb-6">
+      <motion.section
+        className="container mx-auto max-w-6xl px-4 pb-6"
+        initial={{ opacity: 0, y: 14 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-80px" }}
+        transition={{ duration: 0.5 }}
+      >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {extras.map((x, i) => (
             <Card key={i} className="shadow-sm">
@@ -399,10 +487,17 @@ export default function Classic() {
             </CardContent>
           </Card>
         </div>
-      </section>
+      </motion.section>
 
       {/* Contact */}
-      <section id="contact" className="bg-white border-t">
+      <motion.section
+        id="contact"
+        className="bg-white border-t"
+        initial={{ opacity: 0, y: 14 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-80px" }}
+        transition={{ duration: 0.5 }}
+      >
         <div className="container mx-auto max-w-6xl px-4 py-10">
           <SectionTitle id="contact-title">Contact</SectionTitle>
           <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -449,7 +544,7 @@ export default function Classic() {
             </Card>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Footer */}
       <footer className="mt-6">
