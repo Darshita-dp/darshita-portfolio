@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { useNavigate } from "react-router";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -81,6 +81,7 @@ function SunflowerHead({ size = 96 }: { size: number }) {
 
 export default function Landing() {
   const navigate = useNavigate();
+  const prefersReducedMotion = useReducedMotion();
 
   return (
     <div className="relative min-h-screen overflow-hidden">
@@ -118,83 +119,177 @@ export default function Landing() {
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         {/* Big sunflower heads drifting in a breeze (custom SVG heads only) */}
         {[...Array(10)].map((_, i) => {
+          // deterministic pseudo-random per index
+          const seed = Math.abs(Math.sin((i + 1) * 9876.543)) % 1;
+          const r = (min: number, max: number) => min + (max - min) * seed;
+          
           // Distribute starting Y across the full viewport (-15% to ~90%) so they don't all start at the top
-          const startYNum = -15 + ((i * 17) % 105);
+          const startYNum = -15 + ((i * 17) % 105) + r(-6, 6);
           const y1 = `${startYNum}%`;
-          const y2 = `${Math.min(startYNum + 70, 110)}%`;
-          const y3 = `${Math.max(startYNum + 40, -15)}%`;
-          const y4 = `${Math.min(startYNum + 120, 120)}%`;
+          const y2 = `${Math.min(startYNum + 70 + r(-8, 8), 110)}%`;
+          const y3 = `${Math.max(startYNum + 40 + r(-8, 8), -15)}%`;
+          const y4 = `${Math.min(startYNum + 120 + r(-12, 12), 120)}%`;
 
           // Stagger initial X so they don't bunch up from the same spot
-          const initialX = -220 - (i % 5) * 90;
+          const initialX = -260 - (i % 5) * 60 - r(0, 120);
 
           // Slightly vary size for depth
-          const size = 136 + (i % 3) * 36;
+          const size = 136 + (i % 3) * 36 + r(-10, 24);
+          const scale = r(0.9, 1.15);
+          const depthOpacity = r(0.65, 1);
+          const swayAmp = r(8, 18); // horizontal sway amplitude (px)
+          const dur = prefersReducedMotion ? 0 : r(6.2, 9.2);
+          const delay = prefersReducedMotion ? 0 : (i % 7) * 0.27 + r(0, 0.35);
 
           return (
             <motion.div
               key={`sf-${i}`}
               initial={{ x: initialX, y: y1, rotate: 0 }}
-              animate={{
-                x: "115%",
-                // Traverse fully through the viewport vertically with individual offsets
-                y: [y1, y2, y3, y4],
-                rotate: [-6, 8, -6, -4],
-              }}
-              transition={{
-                duration: 7 + (i % 3), // faster, varied
-                repeat: Infinity,
-                ease: "easeInOut",
-                delay: (i % 7) * 0.27, // stagger entries
-              }}
+              animate={
+                prefersReducedMotion
+                  ? { x: initialX, y: y1, rotate: 0 }
+                  : {
+                      x: "115%",
+                      y: [y1, y2, y3, y4],
+                      rotate: [-6, 8 + r(-2, 2), -6, -4],
+                    }
+              }
+              transition={
+                prefersReducedMotion
+                  ? { duration: 0 }
+                  : {
+                      duration: dur,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                      delay,
+                    }
+              }
               className="absolute"
               style={{ top: "0%" }}
             >
-              <SunflowerHead size={size} />
+              {/* inner sway + depth */}
+              <motion.div
+                initial={{ x: 0, scale, opacity: depthOpacity }}
+                animate={prefersReducedMotion ? { x: 0 } : { x: [-swayAmp, swayAmp, -swayAmp] }}
+                transition={
+                  prefersReducedMotion
+                    ? { duration: 0 }
+                    : { duration: r(3.2, 5.0), repeat: Infinity, ease: "easeInOut" }
+                }
+              >
+                <SunflowerHead size={size} />
+              </motion.div>
             </motion.div>
           );
         })}
 
         {/* Petals drifting at various depths (faster to match breeze) */}
-        {[...Array(12)].map((_, i) => (
-          <motion.div
-            key={`petal-${i}`}
-            initial={{ x: 120 + i * 30, y: -20 - i * 6, rotate: 0 }}
-            animate={{
-              x: ["-10%", "115%"],
-              y: [i * 4, i * 6 + 10, i * 4],
-              rotate: [0, 24, -12, 0],
-            }}
-            transition={{
-              duration: 9 + (i % 5), // sped up
-              repeat: Infinity,
-              ease: "easeInOut",
-              delay: (i % 4) * 0.4,
-            }}
-            className="absolute"
-            style={{ top: `${(i * 7) % 90}%` }}
-          >
-            <span className="text-[16px]" style={{ filter: "drop-shadow(0 1px 1px rgba(0,0,0,0.12))" }}>🌼</span>
-          </motion.div>
-        ))}
+        {[...Array(12)].map((_, i) => {
+          const seed = Math.abs(Math.sin((i + 3) * 3456.789)) % 1;
+          const r = (min: number, max: number) => min + (max - min) * seed;
+          const sway = r(6, 14);
+          const dur = prefersReducedMotion ? 0 : 8.5 + (i % 5) + r(-1, 1.2);
+          const delay = prefersReducedMotion ? 0 : (i % 4) * 0.4 + r(0, 0.4);
+          const scale = r(0.85, 1.15);
+          const opacity = r(0.6, 0.95);
+          
+          return (
+            <motion.div
+              key={`petal-${i}`}
+              initial={{ x: 120 + i * 30, y: -20 - i * 6, rotate: 0 }}
+              animate={
+                prefersReducedMotion
+                  ? { x: 120 + i * 30, y: -20 - i * 6, rotate: 0 }
+                  : {
+                      x: ["-10%", "115%"],
+                      y: [i * 4, i * 6 + 10 + r(-8, 6), i * 4],
+                      rotate: [0, 24 + r(-8, 8), -12 + r(-6, 6), 0],
+                    }
+              }
+              transition={
+                prefersReducedMotion
+                  ? { duration: 0 }
+                  : {
+                      duration: dur,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                      delay,
+                    }
+              }
+              className="absolute"
+              style={{ top: `${(i * 7) % 90}%` }}
+            >
+              <motion.span
+                className="text-[16px]"
+                style={{
+                  filter: "drop-shadow(0 1px 1px rgba(0,0,0,0.12))",
+                  opacity,
+                }}
+                animate={prefersReducedMotion ? { x: 0 } : { x: [-sway, sway, -sway] }}
+                transition={
+                  prefersReducedMotion
+                    ? { duration: 0 }
+                    : { duration: 2.6 + r(-0.6, 0.6), repeat: Infinity, ease: "easeInOut" }
+                }
+              >
+                <span style={{ display: "inline-block", transform: `scale(${scale})` }}>🌼</span>
+              </motion.span>
+            </motion.div>
+          )
+        })}
 
         {/* Leaves for extra whimsy (sped up) */}
-        {[...Array(8)].map((_, i) => (
-          <motion.div
-            key={`leaf-${i}`}
-            initial={{ x: -100 - i * 30, y: 6 + i * 10, rotate: -10 }}
-            animate={{
-              x: "120%",
-              y: [6 + i * 10, 10 + i * 12, 4 + i * 8, 6 + i * 10],
-              rotate: [-10, 14, -8, -10],
-            }}
-            transition={{ duration: 11 + i * 1.5, repeat: Infinity, ease: "easeInOut", delay: i * 0.4 }}
-            className="absolute"
-            style={{ top: `${6 + i * 9}%` }}
-          >
-            <span className="text-[18px] opacity-85" style={{ color: "#5F9595" }}>🍃</span>
-          </motion.div>
-        ))}
+        {[...Array(8)].map((_, i) => {
+          const seed = Math.abs(Math.sin((i + 5) * 2222.111)) % 1;
+          const r = (min: number, max: number) => min + (max - min) * seed;
+          const sway = r(10, 22);
+          const dur = prefersReducedMotion ? 0 : 10.5 + i * 1.4 + r(-1, 1);
+          const delay = prefersReducedMotion ? 0 : i * 0.35 + r(0, 0.3);
+          const scale = r(0.9, 1.2);
+          const opacity = r(0.7, 0.95);
+          
+          return (
+            <motion.div
+              key={`leaf-${i}`}
+              initial={{ x: -100 - i * 30, y: 6 + i * 10, rotate: -10 }}
+              animate={
+                prefersReducedMotion
+                  ? { x: -100 - i * 30, y: 6 + i * 10, rotate: -10 }
+                  : {
+                      x: "120%",
+                      y: [
+                        6 + i * 10,
+                        10 + i * 12 + r(-6, 6),
+                        4 + i * 8 + r(-6, 6),
+                        6 + i * 10,
+                      ],
+                      rotate: [-10, 14 + r(-4, 4), -8 + r(-4, 4), -10],
+                    }
+              }
+              transition={
+                prefersReducedMotion
+                  ? { duration: 0 }
+                  : { duration: dur, repeat: Infinity, ease: "easeInOut", delay }
+              }
+              className="absolute"
+              style={{ top: `${6 + i * 9}%` }}
+            >
+              <motion.span
+                className="text-[18px] opacity-85"
+                style={{ color: "#5F9595", opacity }}
+                initial={{ x: 0, scale }}
+                animate={prefersReducedMotion ? { x: 0 } : { x: [-sway, sway, -sway] }}
+                transition={
+                  prefersReducedMotion
+                    ? { duration: 0 }
+                    : { duration: 3.2 + r(-0.6, 0.8), repeat: Infinity, ease: "easeInOut" }
+                }
+              >
+                🍃
+              </motion.span>
+            </motion.div>
+          )
+        })}
       </div>
 
       {/* Content container */}
