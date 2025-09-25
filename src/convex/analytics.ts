@@ -27,3 +27,24 @@ export const getEventCounts = query({
     return counts;
   },
 });
+
+export const getOpenModeCounts = query({
+  args: {},
+  handler: async (ctx) => {
+    const events = await ctx.db.query("analytics").collect();
+    const counts: Record<string, number> = {};
+    for (const e of events) {
+      if (e.event === "open_mode" && e.mode) {
+        counts[e.mode] = (counts[e.mode] || 0) + 1;
+      }
+    }
+    // Ensure all modes exist in the object (default 0)
+    const result: Record<string, number> = {
+      classic: counts.classic ?? 0,
+      story: counts.story ?? 0,
+      play: counts.play ?? 0,
+      ai: counts.ai ?? 0,
+    };
+    return result;
+  },
+});
