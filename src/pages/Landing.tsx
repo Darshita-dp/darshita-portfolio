@@ -775,7 +775,8 @@ export default function Landing() {
               initial={{ opacity: 0, scale: 0.96 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.45, delay: 0.08 * index }}
-              whileHover={{ y: -4, scale: 1.02, rotate: index % 2 === 0 ? 1.5 : -1.5 }}
+              // Replace tilt hover with lift + glow (no rotate)
+              whileHover={{ y: -6, scale: 1.03 }}
               whileTap={{ scale: 0.98 }}
               onClick={() => {
                 // Track mode open event, then navigate
@@ -798,7 +799,8 @@ export default function Landing() {
               }}
             >
               <Card
-                className="border-[1.5px] transition-all duration-300 h-full"
+                // Add subtle hover glow via group-hover
+                className="border-[1.5px] transition-all duration-300 h-full shadow-sm group-hover:shadow-xl group-hover:border-primary/30"
                 style={{
                   backgroundColor: "rgba(255,255,255,0.7)",
                   backdropFilter: "blur(8px)",
