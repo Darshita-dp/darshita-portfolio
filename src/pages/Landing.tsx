@@ -38,6 +38,47 @@ const modes = [
   },
 ];
 
+function SunflowerHead({ size = 96 }: { size: number }) {
+  // Pure flower face (no stem), kawaii style: yellow petals + warm center
+  const petalCount = 12;
+  const petals = Array.from({ length: petalCount });
+  const cx = 50;
+  const cy = 50;
+
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 100 100"
+      aria-hidden="true"
+      focusable="false"
+      style={{ filter: "drop-shadow(0 2px 2px rgba(0,0,0,0.12))" }}
+    >
+      {/* Petals */}
+      {petals.map((_, i) => {
+        const angle = (i * 360) / petalCount;
+        return (
+          <ellipse
+            key={i}
+            cx={cx}
+            cy={cy - 28}
+            rx="10"
+            ry="24"
+            fill="#FDE68A"
+            stroke="rgba(0,0,0,0.06)"
+            strokeWidth="0.5"
+            transform={`rotate(${angle} ${cx} ${cy})`}
+          />
+        );
+      })}
+      {/* Inner ring */}
+      <circle cx={cx} cy={cy} r="22" fill="#A16207" />
+      {/* Center */}
+      <circle cx={cx} cy={cy} r="16" fill="#8B5E34" />
+    </svg>
+  );
+}
+
 export default function Landing() {
   const navigate = useNavigate();
 
@@ -75,75 +116,67 @@ export default function Landing() {
 
       {/* Flying sunflowers and petals in the wind */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        {/* Big sunflower heads drifting in a breeze (no stems or circular base) */}
-        {[...Array(9)].map((_, i) => (
+        {/* Big sunflower heads drifting in a breeze (custom SVG heads only) */}
+        {[...Array(10)].map((_, i) => (
           <motion.div
             key={`sf-${i}`}
-            initial={{ x: -140 - i * 30, y: 6 + i * 9, rotate: 0 }}
+            initial={{ x: -160 - i * 40, y: 8 + i * 7, rotate: 0 }}
             animate={{
-              x: "110%",
-              y: [8 + i * 8, 4 + i * 7, 10 + i * 9, 8 + i * 8],
-              rotate: [-3, 5, -4, -3],
+              x: "115%",
+              y: [10 + i * 6, 4 + i * 5, 12 + i * 7, 10 + i * 6],
+              rotate: [-6, 8, -6, -4],
             }}
             transition={{
-              duration: 12 + (i % 4) * 2, // faster
+              duration: 7 + (i % 3), // faster movement
               repeat: Infinity,
               ease: "easeInOut",
-              delay: i * 0.6,
+              delay: i * 0.35,
             }}
             className="absolute"
-            style={{ top: `${6 + i * 8}%` }}
+            style={{ top: `${6 + i * 7}%` }}
           >
-            <span
-              className="drop-shadow"
-              style={{
-                fontSize: `${44 + (i % 3) * 10}px`, // bigger flower heads
-                filter: "drop-shadow(0 2px 2px rgba(0,0,0,0.12))",
-              }}
-            >
-              🌻
-            </span>
+            <SunflowerHead size={96 + (i % 3) * 24} />
           </motion.div>
         ))}
 
-        {/* Petals drifting at various depths (slightly faster to match breeze) */}
+        {/* Petals drifting at various depths (faster to match breeze) */}
         {[...Array(12)].map((_, i) => (
           <motion.div
             key={`petal-${i}`}
             initial={{ x: 120 + i * 30, y: -20 - i * 6, rotate: 0 }}
             animate={{
-              x: ["-10%", "110%"],
-              y: [i * 4, i * 6 + 8, i * 4],
-              rotate: [0, 18, -10, 0],
+              x: ["-10%", "115%"],
+              y: [i * 4, i * 6 + 10, i * 4],
+              rotate: [0, 24, -12, 0],
             }}
             transition={{
-              duration: 14 + (i % 5) * 2, // faster
+              duration: 9 + (i % 5), // sped up
               repeat: Infinity,
               ease: "easeInOut",
-              delay: (i % 4) * 0.6,
+              delay: (i % 4) * 0.4,
             }}
             className="absolute"
             style={{ top: `${(i * 7) % 90}%` }}
           >
-            <span className="text-[14px]" style={{ filter: "drop-shadow(0 1px 1px rgba(0,0,0,0.12))" }}>🌼</span>
+            <span className="text-[16px]" style={{ filter: "drop-shadow(0 1px 1px rgba(0,0,0,0.12))" }}>🌼</span>
           </motion.div>
         ))}
 
-        {/* Leaves for extra whimsy (slightly faster) */}
+        {/* Leaves for extra whimsy (sped up) */}
         {[...Array(8)].map((_, i) => (
           <motion.div
             key={`leaf-${i}`}
-            initial={{ x: -80 - i * 20, y: 6 + i * 10, rotate: -10 }}
+            initial={{ x: -100 - i * 30, y: 6 + i * 10, rotate: -10 }}
             animate={{
-              x: "115%",
+              x: "120%",
               y: [6 + i * 10, 10 + i * 12, 4 + i * 8, 6 + i * 10],
-              rotate: [-8, 12, -6, -8],
+              rotate: [-10, 14, -8, -10],
             }}
-            transition={{ duration: 18 + i * 2, repeat: Infinity, ease: "easeInOut", delay: i * 0.5 }}
+            transition={{ duration: 11 + i * 1.5, repeat: Infinity, ease: "easeInOut", delay: i * 0.4 }}
             className="absolute"
             style={{ top: `${6 + i * 9}%` }}
           >
-            <span className="text-[16px] opacity-80" style={{ color: "#5F9595" }}>🍃</span>
+            <span className="text-[18px] opacity-85" style={{ color: "#5F9595" }}>🍃</span>
           </motion.div>
         ))}
       </div>
