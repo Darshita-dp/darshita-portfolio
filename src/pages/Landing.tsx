@@ -253,19 +253,19 @@ export default function Landing() {
           const scale = r(0.9, 1.2);
           const opacity = r(0.7, 0.95);
           const baseY = `${r(5, 90)}%`;
-          const initialX = -260 - r(0, 220);
 
           return (
             <motion.div
               key={`leaf-${i}`}
-              initial={{ x: initialX, y: 0, rotate: -10 }}
+              // Start from the right edge and drift to the left
+              initial={{ x: "115%", y: 0, rotate: 10 }}
               animate={
                 prefersReducedMotion
-                  ? { x: initialX, y: 0, rotate: -10 }
+                  ? { x: "115%", y: 0, rotate: 10 }
                   : {
-                      x: "120%",
+                      x: "-15%",
                       y: [0, r(-12, 12), 0],
-                      rotate: [-10, 14 + r(-4, 4), -8 + r(-4, 4), -10],
+                      rotate: [10, -14 + r(-4, 4), 8 + r(-4, 4), 10],
                     }
               }
               transition={
@@ -280,7 +280,7 @@ export default function Landing() {
                 className="text-[18px] opacity-85"
                 style={{ color: "#5F9595", opacity }}
                 initial={{ x: 0, scale }}
-                animate={prefersReducedMotion ? { x: 0 } : { x: [-sway, sway, -sway] }}
+                animate={prefersReducedMotion ? { x: 0 } : { x: [sway, -sway, sway] }}
                 transition={
                   prefersReducedMotion
                     ? { duration: 0 }
