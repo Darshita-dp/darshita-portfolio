@@ -431,7 +431,7 @@ function LeavesField() {
       spritesRef.current.push({ el, ...p });
     }
 
-    // Mount SVG leafs
+    // Mount emoji leaves (🍃) instead of SVGs
     spritesRef.current.forEach((s: {
       el: HTMLDivElement;
       x: number;
@@ -445,45 +445,16 @@ function LeavesField() {
       rotPhase: number;
       rotAmp: number;
     }) => {
-      const size = 72;
-      const ns = "http://www.w3.org/2000/svg";
-      const svg = document.createElementNS(ns, "svg");
-      svg.setAttribute("width", String(size));
-      svg.setAttribute("height", String(size));
-      svg.setAttribute("viewBox", "0 0 100 100");
-      svg.setAttribute("aria-hidden", "true");
-
-      const defs = document.createElementNS(ns, "defs");
-      const grad = document.createElementNS(ns, "linearGradient");
-      grad.setAttribute("id", "leafGrad");
-      grad.setAttribute("x1", "0%");
-      grad.setAttribute("y1", "0%");
-      grad.setAttribute("x2", "0%");
-      grad.setAttribute("y2", "100%");
-      const gs1 = document.createElementNS(ns, "stop");
-      gs1.setAttribute("offset", "0%");
-      gs1.setAttribute("stop-color", "#9FE870");
-      const gs2 = document.createElementNS(ns, "stop");
-      gs2.setAttribute("offset", "100%");
-      gs2.setAttribute("stop-color", "#64C466");
-      grad.appendChild(gs1);
-      grad.appendChild(gs2);
-      defs.appendChild(grad);
-      svg.appendChild(defs);
-
-      // Simple leaf shape (path)
-      const leaf = document.createElementNS(ns, "path");
-      leaf.setAttribute(
-        "d",
-        "M50 12 C68 22, 78 40, 70 58 C62 76, 40 86, 24 74 C8 62, 18 40, 32 28 C40 20, 46 14, 50 12 Z"
-      );
-      leaf.setAttribute("fill", "url(#leafGrad)");
-      leaf.setAttribute("stroke", "rgba(0,0,0,0.06)");
-      leaf.setAttribute("stroke-width", "0.5");
-      svg.appendChild(leaf);
-
-      svg.style.opacity = String(s.opacity);
-      (s.el.firstChild as HTMLDivElement).appendChild(svg);
+      const size = 84; // slightly larger than before for visibility
+      const span = document.createElement("span");
+      span.textContent = "🍃";
+      span.setAttribute("aria-hidden", "true");
+      span.style.display = "block";
+      span.style.fontSize = `${size}px`;
+      span.style.lineHeight = `${size}px`;
+      span.style.opacity = String(s.opacity); // match flower transparency behavior
+      // Wrapper already has drop-shadow matching flowers
+      (s.el.firstChild as HTMLDivElement).appendChild(span);
     });
 
     const step = (ts: number) => {
@@ -522,8 +493,8 @@ function LeavesField() {
           s.rotAmp = p.rotAmp;
 
           const wrap = s.el.firstChild as HTMLDivElement | null;
-          const svg = wrap?.firstChild as SVGElement | null;
-          if (svg) svg.style.opacity = String(s.opacity);
+          const emoji = wrap?.firstChild as HTMLElement | null;
+          if (emoji) emoji.style.opacity = String(s.opacity);
         }
       }
 
