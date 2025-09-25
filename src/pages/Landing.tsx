@@ -1095,8 +1095,6 @@ export default function Landing() {
                       ["--shine-delay" as any]: `${120 + ((index * 90) % 260)}ms`,
                     }}
                   >
-                    <div className="sparkle-overlay" aria-hidden="true" />
-
                     <span
                       className="text-3xl"
                       style={{
