@@ -81,6 +81,223 @@ function SunflowerHead({ size = 96 }: { size: number }) {
   );
 }
 
+function LeavesField() {
+  const prefersReducedMotion = useReducedMotion();
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const spritesRef = useRef<Array<{
+    el: HTMLDivElement;
+    x: number;
+    baseY: number;
+    speed: number;
+    amp: number;
+    freq: number;
+    phase: number;
+    scale: number;
+  }>>([]);
+  const rafRef = useRef<number | null>(null);
+  const lastTsRef = useRef<number>(0);
+  const hiddenRef = useRef<boolean>(false);
+
+  useEffect(() => {
+    const onVis = () => {
+      hiddenRef.current = document.hidden;
+    };
+    document.addEventListener("visibilitychange", onVis);
+    return () => document.removeEventListener("visibilitychange", onVis);
+  }, []);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+
+    const clamp = (n: number, a: number, b: number) => Math.min(Math.max(n, a), b);
+    // More leaves than flowers; scales up gently with width
+    const count = prefersReducedMotion ? 4 : clamp(Math.round(vw / 70), 14, 28);
+
+    const newParams = () => ({
+      x: vw + 140 + Math.random() * 120, // start offscreen right
+      baseY: Math.random() * vh,
+      speed: 22 + Math.random() * 38, // 22–60 px/s
+      amp: 8 + Math.random() * 28,    // 8–36
+      freq: 0.5 + Math.random() * 1.1, // 0.5–1.6
+      phase: Math.random() * Math.PI * 2,
+      scale: 1.1 + Math.random() * 0.7, // 1.1–1.8 (bigger leaves)
+    });
+
+    spritesRef.current = [];
+    container.innerHTML = "";
+    for (let i = 0; i < count; i++) {
+      const el = document.createElement("div");
+      el.style.position = "absolute";
+      el.style.left = "0px";
+      el.style.top = "0px";
+      el.style.willChange = "transform";
+      el.style.pointerEvents = "none";
+      el.style.filter = "drop-shadow(0 2px 2px rgba(0,0,0,0.10))";
+
+      const wrap = document.createElement("div");
+      wrap.innerHTML = "";
+      el.appendChild(wrap);
+      container.appendChild(el);
+
+      const p = newParams();
+      spritesRef.current.push({ el, ...p });
+    }
+
+    // mount leaf SVGs
+    spritesRef.current.forEach((s: {
+      el: HTMLDivElement;
+      x: number;
+      baseY: number;
+      speed: number;
+      amp: number;
+      freq: number;
+      phase: number;
+      scale: number;
+    }) => {
+      const size = 40; // base size; actual size via scale
+      const ns = "http://www.w3.org/2000/svg";
+      const svg = document.createElementNS(ns, "svg");
+      svg.setAttribute("width", String(size));
+      svg.setAttribute("height", String(size));
+      svg.setAttribute("viewBox", "0 0 64 64");
+      svg.setAttribute("aria-hidden", "true");
+
+      const defs = document.createElementNS(ns, "defs");
+      const grad = document.createElementNS(ns, "linearGradient");
+      grad.setAttribute("id", "leafGrad");
+      grad.setAttribute("x1", "0%");
+      grad.setAttribute("y1", "0%");
+      grad.setAttribute("x2", "0%");
+      grad.setAttribute("y2", "100%");
+      const g1 = document.createElementNS(ns, "stop");
+      g1.setAttribute("offset", "0%");
+      g1.setAttribute("stop-color", "#8CD867");
+      const g2 = document.createElementNS(ns, "stop");
+      g2.setAttribute("offset", "100%");
+      g2.setAttribute("stop-color", "#4CAF50");
+      grad.appendChild(g1);
+      grad.appendChild(g2);
+      defs.appendChild(grad);
+      svg.appendChild(defs);
+
+      // simple leaf path with a mid vein
+      const leaf = document.createElementNS(ns, "path");
+      leaf.setAttribute(
+        "d",
+        "M32 4 C18 10,8 24,8 36 C8 50,22 58,32 60 C42 58,56 50,56 36 C56 24,46 10,32 4 Z"
+      );
+      leaf.setAttribute("fill", "url(#leafGrad)");
+      leaf.setAttribute("stroke", "rgba(0,0,0,0.08)");
+      leaf.setAttribute("stroke-width", "0.6");
+      svg.appendChild(leaf);
+
+      const vein = document.createElementNS(ns, "path");
+      vein.setAttribute("d", "M32 8 L32 56");
+      vein.setAttribute("stroke", "rgba(255,255,255,0.5)");
+      vein.setAttribute("stroke-width", "1.2");
+      vein.setAttribute("stroke-linecap", "round");
+      svg.appendChild(vein);
+
+      (s.el.firstChild as HTMLDivElement).appendChild(svg);
+    });
+
+    const step = (ts: number) => {
+      if (hiddenRef.current || prefersReducedMotion) {
+        lastTsRef.current = ts;
+        rafRef.current = requestAnimationFrame(step);
+        return;
+      }
+      const last = lastTsRef.current || ts;
+      const dt = (ts - last) / 1000;
+      lastTsRef.current = ts;
+
+      const vwNow = window.innerWidth;
+      const vhNow = window.innerHeight;
+
+      for (const s of spritesRef.current) {
+        s.x -= s.speed * dt;
+        // Slight upward or downward drift with sine wave sway
+        const y = s.baseY + s.amp * Math.sin((s.freq * ts) / 1000 + s.phase);
+        // Add subtle rotation wobble
+        const rot = Math.sin((ts / 1000) * 0.8 + s.phase) * 8;
+        s.el.style.transform = `translate(${s.x}px, ${y}px) scale(${s.scale}) rotate(${rot}deg)`;
+
+        if (s.x < -80) {
+          const p = newParams();
+          s.x = vwNow + 120 + Math.random() * 120;
+          s.baseY = Math.random() * vhNow;
+          s.speed = p.speed;
+          s.amp = p.amp;
+          s.freq = p.freq;
+          s.phase = p.phase;
+          s.scale = p.scale;
+        }
+      }
+
+      rafRef.current = requestAnimationFrame(step);
+    };
+
+    if (!prefersReducedMotion) {
+      lastTsRef.current = performance.now();
+      rafRef.current = requestAnimationFrame(step);
+    } else {
+      // Static for reduced motion
+      spritesRef.current.forEach((s: {
+        el: HTMLDivElement;
+        x: number;
+        baseY: number;
+        speed: number;
+        amp: number;
+        freq: number;
+        phase: number;
+        scale: number;
+      }) => {
+        s.x = Math.random() * vw;
+        const y = Math.random() * vh;
+        s.el.style.transform = `translate(${s.x}px, ${y}px) scale(${s.scale})`;
+      });
+    }
+
+    const onResize = () => {
+      const vwN = window.innerWidth;
+      const vhN = window.innerHeight;
+      spritesRef.current.forEach((s: {
+        el: HTMLDivElement;
+        x: number;
+        baseY: number;
+        speed: number;
+        amp: number;
+        freq: number;
+        phase: number;
+        scale: number;
+      }) => {
+        s.baseY = Math.min(Math.max(s.baseY, 0), vhN);
+        if (s.x < -80) s.x = vwN + 100;
+      });
+    };
+    window.addEventListener("resize", onResize);
+
+    return () => {
+      window.removeEventListener("resize", onResize);
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      spritesRef.current = [];
+      if (container) container.innerHTML = "";
+    };
+  }, [prefersReducedMotion]);
+
+  return (
+    <div
+      ref={containerRef}
+      className="pointer-events-none absolute inset-0 overflow-hidden"
+      aria-hidden="true"
+    />
+  );
+}
+
 function FlowerField() {
   const prefersReducedMotion = useReducedMotion();
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -114,7 +331,8 @@ function FlowerField() {
     const vh = window.innerHeight;
 
     const clamp = (n: number, a: number, b: number) => Math.min(Math.max(n, a), b);
-    const count = prefersReducedMotion ? 4 : clamp(Math.round(vw / 120), 8, 14);
+    // Increase flower count for richer scene (still fewer on narrow screens)
+    const count = prefersReducedMotion ? 4 : clamp(Math.round(vw / 90), 12, 22);
 
     // helper to create randomized sprite params
     const newParams = () => ({
@@ -364,6 +582,7 @@ export default function Landing() {
       </div>
 
       {/* Flower field layer behind content (lightweight, rAF-powered) */}
+      <LeavesField />
       <FlowerField />
 
       {/* Content container */}
