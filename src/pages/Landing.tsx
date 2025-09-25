@@ -701,6 +701,35 @@ function SunflowerCursor() {
   const ref = useRef<HTMLDivElement | null>(null);
   const state = useRef<{ x: number; y: number; boost: boolean }>({ x: -100, y: -100, boost: false });
 
+  // Add: proper sunflower SVG background for the follower cursor
+  const sunflowerBg = useMemo(() => {
+    const svg = `
+      <svg xmlns='http://www.w3.org/2000/svg' width='44' height='44' viewBox='0 0 100 100'>
+        <defs>
+          <linearGradient id='p' x1='0' y1='0' x2='0' y2='1'>
+            <stop offset='0%' stop-color='#FFE07B'/>
+            <stop offset='100%' stop-color='#FFC94A'/>
+          </linearGradient>
+          <radialGradient id='c'>
+            <stop offset='0%' stop-color='#7A4A2B'/>
+            <stop offset='100%' stop-color='#5A3A23'/>
+          </radialGradient>
+        </defs>
+        <!-- Baked shadow for reliable depth -->
+        <ellipse cx='50' cy='60' rx='30' ry='30' fill='black' opacity='0.22'/>
+        <g>
+          ${Array.from({length: 18}).map((_,i)=>{
+            const angle = (i*360)/18;
+            return `<ellipse cx='50' cy='22' rx='10' ry='23' fill='url(#p)' stroke='rgba(0,0,0,0.24)' stroke-width='0.65' transform='rotate(${angle} 50 50)'/>`
+          }).join('')}
+          <circle cx='50' cy='50' r='23' fill='url(#c)' stroke='rgba(0,0,0,0.26)' stroke-width='0.65'/>
+          <circle cx='50' cy='50' r='16' fill='#5A3A23'/>
+        </g>
+      </svg>
+    `;
+    return `url("data:image/svg+xml;utf8,${encodeURIComponent(svg)}")`;
+  }, []);
+
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
@@ -712,7 +741,6 @@ function SunflowerCursor() {
 
     const onOver = (e: PointerEvent) => {
       const t = e.target as HTMLElement | null;
-      // Toggle boost based on nearest element with data-cursor-boost="true"
       state.current.boost = !!t?.closest("[data-cursor-boost='true']");
     };
 
@@ -738,7 +766,7 @@ function SunflowerCursor() {
 
   return (
     <div ref={ref} className="cursor-root" aria-hidden="true">
-      <div className="cursor-sunflower" />
+      <div className="cursor-sunflower" style={{ backgroundImage: sunflowerBg }} />
       <SparkleEmitter />
     </div>
   );
