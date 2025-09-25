@@ -1,6 +1,6 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { useNavigate } from "react-router";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import "./Landing.icon-bounce.css";
@@ -81,7 +81,7 @@ function SunflowerHead({ size = 96 }: { size: number }) {
   );
 }
 
-function FlowerField() {
+function FlowerField({ densityScale = 1 }: { densityScale?: number }) {
   const prefersReducedMotion = useReducedMotion();
   const containerRef = useRef<HTMLDivElement | null>(null);
   const spritesRef = useRef<Array<{
@@ -100,6 +100,7 @@ function FlowerField() {
   const rafRef = useRef<number | null>(null);
   const lastTsRef = useRef<number>(0);
   const hiddenRef = useRef<boolean>(false);
+  const resizeRafRef = useRef<number | null>(null);
 
   useEffect(() => {
     const onVis = () => {
@@ -117,13 +118,15 @@ function FlowerField() {
     const vh = window.innerHeight;
 
     const clamp = (n: number, a: number, b: number) => Math.min(Math.max(n, a), b);
-    // Increase flower count for richer scene (still fewer on narrow screens)
-    const count = prefersReducedMotion ? 4 : clamp(Math.round(vw / 90), 12, 22);
+    // [EDIT] count scaled by density and still respecting reduced motion
+    const baseCount = prefersReducedMotion ? 4 : clamp(Math.round(vw / 90), 12, 22);
+    const count = Math.max(1, Math.floor(baseCount * densityScale));
 
     // helper to create randomized sprite params
     const newParams = () => ({
-      x: -140 - Math.random() * 100, // [-240, -140]
-      baseY: Math.random() * vh, // [0, vh]
+      x: -140 - Math.random() * 100,
+      // [EDIT] baseY staggered using index injection later, here as placeholder
+      baseY: Math.random() * vh,
       speed: 20 + Math.random() * 40, // [20, 60] px/s
       amp: 10 + Math.random() * 35, // [10, 45]
       freq: 0.6 + Math.random() * 1.2, // [0.6, 1.8]
@@ -155,6 +158,10 @@ function FlowerField() {
       container.appendChild(el);
 
       const p = newParams();
+      // [EDIT] stagger baseY by index to avoid clustering
+      const band = vh / count;
+      p.baseY = Math.max(0, Math.min(vh, band * i + (band * 0.2 + Math.random() * band * 0.6)));
+
       spritesRef.current.push({ el, ...p });
     }
 
@@ -317,25 +324,32 @@ function FlowerField() {
       });
     }
 
+    // [EDIT] z-index behind clouds, stays behind content
+    container.style.zIndex = "0";
+
+    // [EDIT] rAF-throttled resize handler
     const onResize = () => {
-      // reposition to keep within new viewport
-      const vwN = window.innerWidth;
-      const vhN = window.innerHeight;
-      spritesRef.current.forEach((s: {
-        el: HTMLDivElement;
-        x: number;
-        baseY: number;
-        speed: number;
-        amp: number;
-        freq: number;
-        phase: number;
-        scale: number;
-        opacity: number;
-        rotPhase: number;
-        rotAmp: number;
-      }) => {
-        s.baseY = Math.min(Math.max(s.baseY, 0), vhN);
-        if (s.x > vwN + 80) s.x = -100;
+      if (resizeRafRef.current) return;
+      resizeRafRef.current = requestAnimationFrame(() => {
+        resizeRafRef.current = null;
+        const vwN = window.innerWidth;
+        const vhN = window.innerHeight;
+        spritesRef.current.forEach((s: {
+          el: HTMLDivElement;
+          x: number;
+          baseY: number;
+          speed: number;
+          amp: number;
+          freq: number;
+          phase: number;
+          scale: number;
+          opacity: number;
+          rotPhase: number;
+          rotAmp: number;
+        }) => {
+          s.baseY = Math.min(Math.max(s.baseY, 0), vhN);
+          if (s.x > vwN + 80) s.x = -100;
+        });
       });
     };
     window.addEventListener("resize", onResize);
@@ -346,7 +360,7 @@ function FlowerField() {
       spritesRef.current = [];
       if (container) container.innerHTML = "";
     };
-  }, [prefersReducedMotion]);
+  }, [prefersReducedMotion, densityScale]);
 
   return (
     <div
@@ -357,7 +371,7 @@ function FlowerField() {
   );
 }
 
-function LeavesField() {
+function LeavesField({ densityScale = 1 }: { densityScale?: number }) {
   const prefersReducedMotion = useReducedMotion();
   const containerRef = useRef<HTMLDivElement | null>(null);
   const spritesRef = useRef<Array<{
@@ -376,6 +390,7 @@ function LeavesField() {
   const rafRef = useRef<number | null>(null);
   const lastTsRef = useRef<number>(0);
   const hiddenRef = useRef<boolean>(false);
+  const resizeRafRef = useRef<number | null>(null);
 
   useEffect(() => {
     const onVis = () => {
@@ -393,8 +408,8 @@ function LeavesField() {
     const vh = window.innerHeight;
 
     const clamp = (n: number, a: number, b: number) => Math.min(Math.max(n, a), b);
-    // Slightly fewer than flowers to avoid crowding
-    const count = prefersReducedMotion ? 3 : clamp(Math.round(vw / 90), 12, 26);
+    const baseCount = prefersReducedMotion ? 3 : clamp(Math.round(vw / 90), 12, 26);
+    const count = Math.max(1, Math.floor(baseCount * densityScale));
 
     // Randomized params, matching opacity & shadow vibe of flowers
     const newParams = () => ({
@@ -428,6 +443,10 @@ function LeavesField() {
       container.appendChild(el);
 
       const p = newParams();
+      // [EDIT] stagger baseY by index to avoid clustering
+      const band = vh / count;
+      p.baseY = Math.max(0, Math.min(vh, band * i + (band * 0.2 + Math.random() * band * 0.6)));
+
       spritesRef.current.push({ el, ...p });
     }
 
@@ -525,24 +544,32 @@ function LeavesField() {
       });
     }
 
+    // [EDIT] z-index behind clouds
+    container.style.zIndex = "0";
+
+    // [EDIT] rAF-throttled resize handler
     const onResize = () => {
-      const vhN = window.innerHeight;
-      const vwN = window.innerWidth;
-      spritesRef.current.forEach((s: {
-        el: HTMLDivElement;
-        x: number;
-        baseY: number;
-        speed: number;
-        amp: number;
-        freq: number;
-        phase: number;
-        scale: number;
-        opacity: number;
-        rotPhase: number;
-        rotAmp: number;
-      }) => {
-        s.baseY = Math.min(Math.max(s.baseY, 0), vhN);
-        if (s.x > vwN + 80) s.x = -100;
+      if (resizeRafRef.current) return;
+      resizeRafRef.current = requestAnimationFrame(() => {
+        resizeRafRef.current = null;
+        const vhN = window.innerHeight;
+        const vwN = window.innerWidth;
+        spritesRef.current.forEach((s: {
+          el: HTMLDivElement;
+          x: number;
+          baseY: number;
+          speed: number;
+          amp: number;
+          freq: number;
+          phase: number;
+          scale: number;
+          opacity: number;
+          rotPhase: number;
+          rotAmp: number;
+        }) => {
+          s.baseY = Math.min(Math.max(s.baseY, 0), vhN);
+          if (s.x > vwN + 80) s.x = -100;
+        });
       });
     };
     window.addEventListener("resize", onResize);
@@ -553,7 +580,7 @@ function LeavesField() {
       spritesRef.current = [];
       if (container) container.innerHTML = "";
     };
-  }, [prefersReducedMotion]);
+  }, [prefersReducedMotion, densityScale]);
 
   return (
     <div
@@ -567,6 +594,35 @@ function LeavesField() {
 export default function Landing() {
   const navigate = useNavigate();
   const prefersReducedMotion = useReducedMotion();
+  // [EDIT] local toggle to reduce visuals (persisted)
+  const [reduced, setReduced] = useState<boolean>(() => {
+    const v = localStorage.getItem("landing_reduce_visuals");
+    return v === "1";
+  });
+  useEffect(() => {
+    localStorage.setItem("landing_reduce_visuals", reduced ? "1" : "0");
+  }, [reduced]);
+  const densityScale = prefersReducedMotion ? 0.25 : reduced ? 0.5 : 1;
+
+  // [EDIT] lightweight parallax state via CSS variables
+  const gridRef = useRef<HTMLDivElement | null>(null);
+  const onGridMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const el = gridRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    const dx = (e.clientX - cx) / rect.width; // -0.5..0.5
+    const dy = (e.clientY - cy) / rect.height;
+    el.style.setProperty("--dx", String(dx));
+    el.style.setProperty("--dy", String(dy));
+  };
+  const onGridMouseLeave = () => {
+    const el = gridRef.current;
+    if (!el) return;
+    el.style.setProperty("--dx", "0");
+    el.style.setProperty("--dy", "0");
+  };
 
   return (
     <div className="relative min-h-screen overflow-hidden">
@@ -579,8 +635,8 @@ export default function Landing() {
         }}
       />
 
-      {/* Gentle cloud puffs */}
-      <div className="pointer-events-none absolute inset-0">
+      {/* Gentle cloud puffs (ensure clouds above flowers/leaves) */}
+      <div className="pointer-events-none absolute inset-0 z-10">
         {[...Array(6)].map((_, i) => (
           <motion.div
             key={i}
@@ -599,12 +655,45 @@ export default function Landing() {
       </div>
 
       {/* Flower and Leaves layers behind content */}
-      <FlowerField />
-      <LeavesField />
+      <FlowerField densityScale={densityScale} />
+      <LeavesField densityScale={densityScale} />
+
+      {/* Skip link for keyboard users */}
+      <a
+        href="#modes-grid"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 bg-white text-slate-900 px-3 py-2 rounded"
+      >
+        Skip to modes
+      </a>
 
       {/* Content container */}
-      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 pt-32 md:pt-44">
-        {/* Name & Tagline (Studio Ghibli–inspired) */}
+      <div className="relative z-20 flex flex-col items-center justify-center min-h-screen px-4 pt-40 md:pt-48">
+        {/* Subtle vignette behind content */}
+        <div
+          className="absolute -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
+          style={{
+            width: "min(1000px, 90vw)",
+            height: "min(700px, 70vh)",
+            borderRadius: "28px",
+            background:
+              "radial-gradient(ellipse at center, rgba(255,255,255,0.45), rgba(255,255,255,0.18) 55%, rgba(255,255,255,0) 75%)",
+            filter: "blur(2px)",
+          }}
+        />
+
+        {/* Top-right small control: reduce visuals toggle */}
+        <div className="absolute top-4 right-4 z-30">
+          <button
+            onClick={() => setReduced((v) => !v)}
+            className="text-xs rounded-full px-3 py-1 border bg-white/70 backdrop-blur hover:bg-white/90 transition"
+            aria-pressed={reduced}
+            title="Toggle background visuals"
+          >
+            {reduced ? "Background: Reduced" : "Background: Full"}
+          </button>
+        </div>
+
+        {/* Name & Tagline */}
         <motion.div
           initial={{ opacity: 0, y: -24 }}
           animate={{ opacity: 1, y: 0 }}
@@ -614,19 +703,17 @@ export default function Landing() {
           <h1
             className="tracking-tight text-6xl md:text-8xl"
             style={{
-              // Leafy display font stack
               fontFamily:
                 '"Great Vibes", "Gwendolyn", ui-serif, Georgia, Cambria, "Times New Roman", Times, serif',
               letterSpacing: "0.4px",
               color: "oklch(20% 0.04 150)",
-              // Layered shadow for soft embossed + glow
               textShadow:
                 "0 2px 0 rgba(248,203,166,0.85), 0 10px 24px rgba(34, 85, 54, 0.18), 0 1px 0 rgba(0,0,0,0.05)",
             }}
           >
             <span className="inline-block select-none">Darshita Patel</span>
           </h1>
-          {/* Decorative tiny leaves around the name for a leafy vibe */}
+          {/* Single decorative tiny leaf */}
           <span
             aria-hidden="true"
             className="absolute -top-2 left-1/2 -translate-x-[56%] text-2xl"
@@ -645,17 +732,28 @@ export default function Landing() {
           </p>
         </motion.div>
 
-        {/* Mode Selection Grid (kawaii cards) */}
+        {/* Mode Selection Grid with light parallax */}
         <motion.div
+          id="modes-grid"
+          ref={gridRef}
+          onMouseMove={onGridMouseMove}
+          onMouseLeave={onGridMouseLeave}
           initial={{ opacity: 0, y: 26 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.1 }}
           className="grid grid-cols-1 md:grid-cols-2 gap-5 max-w-4xl w-full"
+          style={{
+            // base values
+            // @ts-ignore - CSS var used inline
+            "--dx": 0,
+            "--dy": 0,
+          } as React.CSSProperties}
         >
           {modes.map((mode, index) => (
             <motion.button
               key={mode.id}
               type="button"
+              title={`Open ${mode.title} mode`}
               initial={{ opacity: 0, scale: 0.96 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.45, delay: 0.08 * index }}
@@ -663,7 +761,12 @@ export default function Landing() {
               whileTap={{ scale: 0.98 }}
               onClick={() => navigate(mode.path)}
               className="group cursor-pointer w-full text-left rounded-2xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
-              style={{ outlineColor: "#BAE1FF" }}
+              style={{
+                outlineColor: "#BAE1FF",
+                transform:
+                  "translate3d(calc(var(--dx) * 6px), calc(var(--dy) * 6px), 0)",
+                transition: "transform 120ms ease",
+              }}
             >
               <Card
                 className="border-[1.5px] transition-all duration-300 h-full"
@@ -675,10 +778,11 @@ export default function Landing() {
               >
                 <CardHeader className="text-center pb-3">
                   <div
-                    className="w-16 h-16 mx-auto mb-4 rounded-full grid place-items-center transition-transform duration-300"
+                    className="w-16 h-16 mx-auto mb-4 rounded-full grid place-items-center transition-transform duration-300 shine-once"
                     style={{
                       backgroundColor: mode.color,
-                      boxShadow: "inset 0 -2px 0 rgba(0,0,0,0.06), 0 6px 12px rgba(0,0,0,0.06)",
+                      boxShadow:
+                        "inset 0 -2px 0 rgba(0,0,0,0.06), 0 6px 12px rgba(0,0,0,0.06)",
                       animation: "icon-bounce 2s infinite",
                     }}
                   >
@@ -696,6 +800,18 @@ export default function Landing() {
               </Card>
             </motion.button>
           ))}
+        </motion.div>
+
+        {/* CTA under grid */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="mt-4"
+        >
+          <Button onClick={() => navigate("/classic")} className="rounded-full">
+            Explore Classic Mode
+          </Button>
         </motion.div>
 
         {/* Footer */}

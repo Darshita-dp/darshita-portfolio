@@ -2,3 +2,31 @@
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-3px); }
 }
+
+/* One-time subtle shine sweep for emoji badge */
+@keyframes shine-sweep {
+  0% { background-position: -120% 0; }
+  100% { background-position: 220% 0; }
+}
+.shine-once {
+  position: relative;
+  overflow: hidden;
+}
+.shine-once::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(
+    120deg,
+    transparent 0%,
+    rgba(255,255,255,0.65) 35%,
+    rgba(255,255,255,0.85) 50%,
+    rgba(255,255,255,0.65) 65%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  transform: translateZ(0);
+  animation: shine-sweep 1200ms ease-out 300ms 1 both;
+  pointer-events: none;
+  mix-blend-mode: soft-light;
+}
