@@ -793,14 +793,24 @@ export default function Landing() {
                   <div
                     className="w-16 h-16 mx-auto mb-4 rounded-full grid place-items-center transition-transform duration-300 shine-once"
                     style={{
-                      backgroundColor: mode.color,
+                      // subtle inner highlight over the base pastel color
+                      background: `radial-gradient(circle at 35% 30%, rgba(255,255,255,0.9), rgba(255,255,255,0) 42%), ${mode.color}`,
                       boxShadow:
-                        "inset 0 -2px 0 rgba(0,0,0,0.06), 0 6px 12px rgba(0,0,0,0.06)",
+                        "inset 0 -4px 0 rgba(0,0,0,0.08), 0 10px 18px rgba(0,0,0,0.10)",
+                      border: "1px solid rgba(0,0,0,0.06)",
                       animation: "icon-bounce 2s infinite",
                       ["--shine-delay" as any]: `${120 + ((index * 90) % 260)}ms`,
                     }}
                   >
-                    <span className="text-2xl">{mode.symbol}</span>
+                    <span
+                      className="text-3xl"
+                      style={{
+                        textShadow:
+                          "0 1px 0 rgba(0,0,0,0.15), 0 6px 12px rgba(0,0,0,0.12)",
+                      }}
+                    >
+                      {mode.symbol}
+                    </span>
                   </div>
                   <CardTitle className="text-2xl text-slate-900 tracking-tight">
                     {mode.title}
