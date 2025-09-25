@@ -667,7 +667,7 @@ export default function Landing() {
       </a>
 
       {/* Content container */}
-      <div className="relative z-20 flex flex-col items-center justify-center min-h-screen px-4 pt-40 md:pt-48">
+      <div className="relative z-20 flex flex-col items-center justify-center min-h-screen px-4 pt-36 md:pt-44">
         {/* Subtle vignette behind content */}
         <div
           className="absolute -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
