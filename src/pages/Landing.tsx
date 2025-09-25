@@ -123,15 +123,16 @@ export default function Landing() {
           const seed = Math.abs(Math.sin((i + 1) * 9876.543)) % 1;
           const r = (min: number, max: number) => min + (max - min) * seed;
 
-          // FLOW HORIZONTALLY: remove vertical traversal; distribute Y across viewport
-          const initialX = -260 - (i % 5) * 60 - r(0, 120);
-          const baseY = `${r(6, 90)}%`; // random vertical lane
+          // Spread entries across the full left side and full vertical range
+          const initialX = -320 - r(0, 240) - (i % 4) * 40; // wider random band so they don't stack
+          const baseY = `${r(4, 92)}%`; // random vertical lane across full viewport
           const size = 136 + (i % 3) * 36 + r(-10, 24);
           const scale = r(0.9, 1.15);
           const depthOpacity = r(0.65, 1);
           const swayAmp = r(8, 18); // horizontal micro-sway remains
           const dur = prefersReducedMotion ? 0 : r(6.2, 9.2);
           const delay = prefersReducedMotion ? 0 : (i % 7) * 0.27 + r(0, 0.35);
+          const repeatDelay = prefersReducedMotion ? 0 : r(0.4, 2.0); // desync after each cycle
 
           return (
             <motion.div
@@ -154,6 +155,7 @@ export default function Landing() {
                       repeat: Infinity,
                       ease: "easeInOut",
                       delay,
+                      repeatDelay, // break re-grouping on the left edge
                     }
               }
               className="absolute"
@@ -182,19 +184,22 @@ export default function Landing() {
           const sway = r(6, 14);
           const dur = prefersReducedMotion ? 0 : 8.5 + (i % 5) + r(-1, 1.2);
           const delay = prefersReducedMotion ? 0 : (i % 4) * 0.4 + r(0, 0.4);
+          const repeatDelay = prefersReducedMotion ? 0 : r(0.5, 2.2);
           const scale = r(0.85, 1.15);
           const opacity = r(0.6, 0.95);
-          
+          const baseY = `${r(3, 95)}%`; // randomized lanes instead of patterned modulo
+          const initialX = -200 - r(0, 160) - i * 6;
+
           return (
             <motion.div
               key={`petal-${i}`}
-              initial={{ x: 120 + i * 30, y: -20 - i * 6, rotate: 0 }}
+              initial={{ x: initialX, y: 0, rotate: 0 }}
               animate={
                 prefersReducedMotion
-                  ? { x: 120 + i * 30, y: -20 - i * 6, rotate: 0 }
+                  ? { x: initialX, y: 0, rotate: 0 }
                   : {
-                      x: ["-10%", "115%"],
-                      y: [i * 4, i * 6 + 10 + r(-8, 6), i * 4],
+                      x: ["-15%", "115%"],
+                      y: [0, r(-12, 12), 0],
                       rotate: [0, 24 + r(-8, 8), -12 + r(-6, 6), 0],
                     }
               }
@@ -206,10 +211,11 @@ export default function Landing() {
                       repeat: Infinity,
                       ease: "easeInOut",
                       delay,
+                      repeatDelay, // avoid vertical stacking at the left edge
                     }
               }
               className="absolute"
-              style={{ top: `${(i * 7) % 90}%` }}
+              style={{ top: baseY }}
             >
               <motion.span
                 className="text-[16px]"
@@ -237,34 +243,32 @@ export default function Landing() {
           const sway = r(10, 22);
           const dur = prefersReducedMotion ? 0 : 10.5 + i * 1.4 + r(-1, 1);
           const delay = prefersReducedMotion ? 0 : i * 0.35 + r(0, 0.3);
+          const repeatDelay = prefersReducedMotion ? 0 : r(0.4, 1.8);
           const scale = r(0.9, 1.2);
           const opacity = r(0.7, 0.95);
-          
+          const baseY = `${r(5, 90)}%`;
+          const initialX = -220 - r(0, 200) - i * 10;
+
           return (
             <motion.div
               key={`leaf-${i}`}
-              initial={{ x: -100 - i * 30, y: 6 + i * 10, rotate: -10 }}
+              initial={{ x: initialX, y: 0, rotate: -10 }}
               animate={
                 prefersReducedMotion
-                  ? { x: -100 - i * 30, y: 6 + i * 10, rotate: -10 }
+                  ? { x: initialX, y: 0, rotate: -10 }
                   : {
                       x: "120%",
-                      y: [
-                        6 + i * 10,
-                        10 + i * 12 + r(-6, 6),
-                        4 + i * 8 + r(-6, 6),
-                        6 + i * 10,
-                      ],
+                      y: [0, r(-10, 10), 0],
                       rotate: [-10, 14 + r(-4, 4), -8 + r(-4, 4), -10],
                     }
               }
               transition={
                 prefersReducedMotion
                   ? { duration: 0 }
-                  : { duration: dur, repeat: Infinity, ease: "easeInOut", delay }
+                  : { duration: dur, repeat: Infinity, ease: "easeInOut", delay, repeatDelay }
               }
               className="absolute"
-              style={{ top: `${6 + i * 9}%` }}
+              style={{ top: baseY }}
             >
               <motion.span
                 className="text-[18px] opacity-85"
