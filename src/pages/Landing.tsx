@@ -117,30 +117,43 @@ export default function Landing() {
       {/* Flying sunflowers and petals in the wind */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         {/* Big sunflower heads drifting in a breeze (custom SVG heads only) */}
-        {[...Array(10)].map((_, i) => (
-          <motion.div
-            key={`sf-${i}`}
-            // Make flowers traverse vertically well past halfway
-            initial={{ x: -160 - i * 40, y: "-10%", rotate: 0 }}
-            animate={{
-              x: "115%",
-              // Extend vertical travel fully through the viewport to exit bottom
-              y: ["-15%", "85%", "60%", "110%"],
-              rotate: [-6, 8, -6, -4],
-            }}
-            transition={{
-              duration: 7 + (i % 3), // faster movement
-              repeat: Infinity,
-              ease: "easeInOut",
-              delay: i * 0.35,
-            }}
-            className="absolute"
-            // Let y animation drive vertical travel
-            style={{ top: "0%" }}
-          >
-            <SunflowerHead size={128 + (i % 3) * 32} />
-          </motion.div>
-        ))}
+        {[...Array(10)].map((_, i) => {
+          // Distribute starting Y across the full viewport (-15% to ~90%) so they don't all start at the top
+          const startYNum = -15 + ((i * 17) % 105);
+          const y1 = `${startYNum}%`;
+          const y2 = `${Math.min(startYNum + 70, 110)}%`;
+          const y3 = `${Math.max(startYNum + 40, -15)}%`;
+          const y4 = `${Math.min(startYNum + 120, 120)}%`;
+
+          // Stagger initial X so they don't bunch up from the same spot
+          const initialX = -220 - (i % 5) * 90;
+
+          // Slightly vary size for depth
+          const size = 136 + (i % 3) * 36;
+
+          return (
+            <motion.div
+              key={`sf-${i}`}
+              initial={{ x: initialX, y: y1, rotate: 0 }}
+              animate={{
+                x: "115%",
+                // Traverse fully through the viewport vertically with individual offsets
+                y: [y1, y2, y3, y4],
+                rotate: [-6, 8, -6, -4],
+              }}
+              transition={{
+                duration: 7 + (i % 3), // faster, varied
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: (i % 7) * 0.27, // stagger entries
+              }}
+              className="absolute"
+              style={{ top: "0%" }}
+            >
+              <SunflowerHead size={size} />
+            </motion.div>
+          );
+        })}
 
         {/* Petals drifting at various depths (faster to match breeze) */}
         {[...Array(12)].map((_, i) => (
