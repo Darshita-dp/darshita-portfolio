@@ -394,7 +394,7 @@ function LeavesField() {
 
     const clamp = (n: number, a: number, b: number) => Math.min(Math.max(n, a), b);
     // Slightly fewer than flowers to avoid crowding
-    const count = prefersReducedMotion ? 3 : clamp(Math.round(vw / 120), 8, 16);
+    const count = prefersReducedMotion ? 3 : clamp(Math.round(vw / 90), 12, 26);
 
     // Randomized params, matching opacity & shadow vibe of flowers
     const newParams = () => ({
@@ -445,7 +445,7 @@ function LeavesField() {
       rotPhase: number;
       rotAmp: number;
     }) => {
-      const size = 84; // slightly larger than before for visibility
+      const size = 60; // reduced size for subtler leaves while adding more overall
       const span = document.createElement("span");
       span.textContent = "🍃";
       span.setAttribute("aria-hidden", "true");
