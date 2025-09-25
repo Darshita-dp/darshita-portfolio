@@ -816,18 +816,6 @@ export default function Landing() {
           ))}
         </motion.div>
 
-        {/* CTA under grid */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="mt-4"
-        >
-          <Button onClick={() => navigate("/classic")} className="rounded-full">
-            Explore Classic Mode
-          </Button>
-        </motion.div>
-
         {/* Footer */}
         <motion.div
           initial={{ opacity: 0 }}
