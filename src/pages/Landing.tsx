@@ -357,6 +357,242 @@ function FlowerField() {
   );
 }
 
+function LeavesField() {
+  const prefersReducedMotion = useReducedMotion();
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const spritesRef = useRef<Array<{
+    el: HTMLDivElement;
+    x: number;
+    baseY: number;
+    speed: number;
+    amp: number;
+    freq: number;
+    phase: number;
+    scale: number;
+    opacity: number;
+    rotPhase: number;
+    rotAmp: number;
+  }>>([]);
+  const rafRef = useRef<number | null>(null);
+  const lastTsRef = useRef<number>(0);
+  const hiddenRef = useRef<boolean>(false);
+
+  useEffect(() => {
+    const onVis = () => {
+      hiddenRef.current = document.hidden;
+    };
+    document.addEventListener("visibilitychange", onVis);
+    return () => document.removeEventListener("visibilitychange", onVis);
+  }, []);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+
+    const clamp = (n: number, a: number, b: number) => Math.min(Math.max(n, a), b);
+    // Slightly fewer than flowers to avoid crowding
+    const count = prefersReducedMotion ? 3 : clamp(Math.round(vw / 120), 8, 16);
+
+    // Randomized params, matching opacity & shadow vibe of flowers
+    const newParams = () => ({
+      x: -140 - Math.random() * 120,
+      baseY: Math.random() * vh,
+      speed: 15 + Math.random() * 30, // a bit calmer than flowers
+      amp: 8 + Math.random() * 26,
+      freq: 0.5 + Math.random() * 1.1,
+      phase: Math.random() * Math.PI * 2,
+      scale: 0.6 + Math.random() * 0.6,
+      opacity: 0.35 + Math.random() * 0.35, // match flower transparency range
+      rotPhase: Math.random() * Math.PI * 2,
+      rotAmp: 2 + Math.random() * 3,
+    });
+
+    spritesRef.current = [];
+    container.innerHTML = "";
+    for (let i = 0; i < count; i++) {
+      const el = document.createElement("div");
+      el.style.position = "absolute";
+      el.style.left = "0px";
+      el.style.top = "0px";
+      el.style.willChange = "transform";
+      el.style.pointerEvents = "none";
+      el.style.filter = "drop-shadow(0 2px 2px rgba(0,0,0,0.12))"; // same shadow as flowers
+
+      const wrap = document.createElement("div");
+      wrap.innerHTML = "";
+      el.appendChild(wrap);
+
+      container.appendChild(el);
+
+      const p = newParams();
+      spritesRef.current.push({ el, ...p });
+    }
+
+    // Mount SVG leafs
+    spritesRef.current.forEach((s: {
+      el: HTMLDivElement;
+      x: number;
+      baseY: number;
+      speed: number;
+      amp: number;
+      freq: number;
+      phase: number;
+      scale: number;
+      opacity: number;
+      rotPhase: number;
+      rotAmp: number;
+    }) => {
+      const size = 72;
+      const ns = "http://www.w3.org/2000/svg";
+      const svg = document.createElementNS(ns, "svg");
+      svg.setAttribute("width", String(size));
+      svg.setAttribute("height", String(size));
+      svg.setAttribute("viewBox", "0 0 100 100");
+      svg.setAttribute("aria-hidden", "true");
+
+      const defs = document.createElementNS(ns, "defs");
+      const grad = document.createElementNS(ns, "linearGradient");
+      grad.setAttribute("id", "leafGrad");
+      grad.setAttribute("x1", "0%");
+      grad.setAttribute("y1", "0%");
+      grad.setAttribute("x2", "0%");
+      grad.setAttribute("y2", "100%");
+      const gs1 = document.createElementNS(ns, "stop");
+      gs1.setAttribute("offset", "0%");
+      gs1.setAttribute("stop-color", "#9FE870");
+      const gs2 = document.createElementNS(ns, "stop");
+      gs2.setAttribute("offset", "100%");
+      gs2.setAttribute("stop-color", "#64C466");
+      grad.appendChild(gs1);
+      grad.appendChild(gs2);
+      defs.appendChild(grad);
+      svg.appendChild(defs);
+
+      // Simple leaf shape (path)
+      const leaf = document.createElementNS(ns, "path");
+      leaf.setAttribute(
+        "d",
+        "M50 12 C68 22, 78 40, 70 58 C62 76, 40 86, 24 74 C8 62, 18 40, 32 28 C40 20, 46 14, 50 12 Z"
+      );
+      leaf.setAttribute("fill", "url(#leafGrad)");
+      leaf.setAttribute("stroke", "rgba(0,0,0,0.06)");
+      leaf.setAttribute("stroke-width", "0.5");
+      svg.appendChild(leaf);
+
+      svg.style.opacity = String(s.opacity);
+      (s.el.firstChild as HTMLDivElement).appendChild(svg);
+    });
+
+    const step = (ts: number) => {
+      if (hiddenRef.current || prefersReducedMotion) {
+        lastTsRef.current = ts;
+        rafRef.current = requestAnimationFrame(step);
+        return;
+      }
+      const last = lastTsRef.current || ts;
+      const dt = (ts - last) / 1000;
+      lastTsRef.current = ts;
+
+      const vwNow = window.innerWidth;
+      const vhNow = window.innerHeight;
+
+      for (const s of spritesRef.current) {
+        s.x += s.speed * dt;
+        const y = s.baseY + s.amp * Math.sin((s.freq * ts) / 1000 + s.phase);
+        const rot = Math.sin((ts / 1000) * 0.6 + s.rotPhase) * s.rotAmp;
+
+        s.el.style.transform = `translate(${s.x}px, ${y}px) scale(${s.scale}) rotate(${rot}deg)`;
+
+        // Recycle halfway across screen (match flowers)
+        const limitX = vwNow * 0.5 + 60;
+        if (s.x > limitX) {
+          const p = newParams();
+          s.x = p.x;
+          s.baseY = Math.random() * vhNow;
+          s.speed = p.speed;
+          s.amp = p.amp;
+          s.freq = p.freq;
+          s.phase = p.phase;
+          s.scale = p.scale;
+          s.opacity = p.opacity;
+          s.rotPhase = p.rotPhase;
+          s.rotAmp = p.rotAmp;
+
+          const wrap = s.el.firstChild as HTMLDivElement | null;
+          const svg = wrap?.firstChild as SVGElement | null;
+          if (svg) svg.style.opacity = String(s.opacity);
+        }
+      }
+
+      rafRef.current = requestAnimationFrame(step);
+    };
+
+    if (!prefersReducedMotion) {
+      lastTsRef.current = performance.now();
+      rafRef.current = requestAnimationFrame(step);
+    } else {
+      // Static layout for reduced motion
+      spritesRef.current.forEach((s: {
+        el: HTMLDivElement;
+        x: number;
+        baseY: number;
+        speed: number;
+        amp: number;
+        freq: number;
+        phase: number;
+        scale: number;
+        opacity: number;
+        rotPhase: number;
+        rotAmp: number;
+      }) => {
+        s.x = Math.random() * vw - 60;
+        const y = Math.random() * vh;
+        s.el.style.transform = `translate(${s.x}px, ${y}px) scale(${s.scale})`;
+      });
+    }
+
+    const onResize = () => {
+      const vhN = window.innerHeight;
+      const vwN = window.innerWidth;
+      spritesRef.current.forEach((s: {
+        el: HTMLDivElement;
+        x: number;
+        baseY: number;
+        speed: number;
+        amp: number;
+        freq: number;
+        phase: number;
+        scale: number;
+        opacity: number;
+        rotPhase: number;
+        rotAmp: number;
+      }) => {
+        s.baseY = Math.min(Math.max(s.baseY, 0), vhN);
+        if (s.x > vwN + 80) s.x = -100;
+      });
+    };
+    window.addEventListener("resize", onResize);
+
+    return () => {
+      window.removeEventListener("resize", onResize);
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      spritesRef.current = [];
+      if (container) container.innerHTML = "";
+    };
+  }, [prefersReducedMotion]);
+
+  return (
+    <div
+      ref={containerRef}
+      className="pointer-events-none absolute inset-0 overflow-hidden"
+      aria-hidden="true"
+    />
+  );
+}
+
 export default function Landing() {
   const navigate = useNavigate();
   const prefersReducedMotion = useReducedMotion();
@@ -391,8 +627,9 @@ export default function Landing() {
         ))}
       </div>
 
-      {/* Flower field layer behind content (lightweight, rAF-powered) */}
+      {/* Flower and Leaves layers behind content */}
       <FlowerField />
+      <LeavesField />
 
       {/* Content container */}
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4">
