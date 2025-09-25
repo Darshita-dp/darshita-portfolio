@@ -658,14 +658,14 @@ export default function Landing() {
     return `url("data:image/svg+xml;utf8,${encodeURIComponent(svg)}") 16 16, auto`;
   }, []);
 
-  // Larger, darker sunflower cursor for hover with baked shadow
+  // Larger, hover sunflower cursor with #FFC067 petals and subtle transparency
   const sunflowerCursorHover = useMemo(() => {
     const svg = `
       <svg xmlns='http://www.w3.org/2000/svg' width='44' height='44' viewBox='0 0 100 100'>
         <defs>
           <linearGradient id='p2' x1='0' y1='0' x2='0' y2='1'>
-            <stop offset='0%' stop-color='#FFB74D' stop-opacity='0.9'/>
-            <stop offset='100%' stop-color='#FFA726' stop-opacity='0.9'/>
+            <stop offset='0%' stop-color='#FFC067' stop-opacity='0.88'/>
+            <stop offset='100%' stop-color='#FFC067' stop-opacity='0.88'/>
           </linearGradient>
           <radialGradient id='c2'>
             <stop offset='0%' stop-color='#5B311B' stop-opacity='0.9'/>
@@ -868,12 +868,9 @@ export default function Landing() {
                   borderColor: "rgba(0,0,0,0.06)",
                 }}
               >
-                {/* Sparkle overlay on hover */}
-                <div className="sparkle-overlay" aria-hidden="true" />
-
                 <CardHeader className="text-center pb-3">
                   <div
-                    className="w-16 h-16 mx-auto mb-4 rounded-full grid place-items-center transition-transform duration-300 shine-once"
+                    className="relative w-16 h-16 mx-auto mb-4 rounded-full grid place-items-center transition-transform duration-300 shine-once"
                     style={{
                       // subtle inner highlight over the base pastel color
                       background: `radial-gradient(circle at 35% 30%, rgba(255,255,255,0.9), rgba(255,255,255,0) 42%), ${mode.color}`,
@@ -884,6 +881,8 @@ export default function Landing() {
                       ["--shine-delay" as any]: `${120 + ((index * 90) % 260)}ms`,
                     }}
                   >
+                    <div className="sparkle-overlay" aria-hidden="true" />
+
                     <span
                       className="text-3xl"
                       style={{
