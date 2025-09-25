@@ -603,7 +603,7 @@ export default function Landing() {
       <LeavesField />
 
       {/* Content container */}
-      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4">
+      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 pt-32 md:pt-44">
         {/* Name & Tagline (Studio Ghibli–inspired) */}
         <motion.div
           initial={{ opacity: 0, y: -24 }}
