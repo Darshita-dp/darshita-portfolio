@@ -805,8 +805,10 @@ export default function Landing() {
                     <span
                       className="text-3xl"
                       style={{
+                        // Darken and add a touch more richness to the emoji icon
+                        filter: "brightness(0.88) contrast(1.1) saturate(1.15)",
                         textShadow:
-                          "0 1px 0 rgba(0,0,0,0.15), 0 6px 12px rgba(0,0,0,0.12)",
+                          "0 1px 0 rgba(0,0,0,0.18), 0 6px 12px rgba(0,0,0,0.14)",
                       }}
                     >
                       {mode.symbol}
