@@ -151,17 +151,17 @@
   top: 0;
 }
 
-/* Boosted: scale + glow + swap to orange layer */
+/* Boosted: scale + softer glow + swap to yellow layer */
 .cursor-root[data-boost="1"] .cursor-sunflower {
   transform: translate(-50%, -50%) scale(1.2);
-  filter: drop-shadow(0 0 10px #FFC067) brightness(1.08) saturate(1.15);
-  opacity: 0; /* fade out base when boosted to reveal orange */
+  filter: drop-shadow(0 0 6px rgba(255, 192, 103, 0.6)); /* reduced glow */
+  opacity: 0; /* fade out base when boosted */
 }
 
 .cursor-root[data-boost="1"] .cursor-sunflower--hover {
   transform: translate(-50%, -50%) scale(1.2);
-  filter: drop-shadow(0 0 10px #FFC067) brightness(1.08) saturate(1.15);
-  opacity: 1; /* fully opaque for vivid orange */
+  filter: drop-shadow(0 0 6px rgba(255, 192, 103, 0.6)); /* reduced glow */
+  opacity: 1; /* fully opaque for vivid color */
 }
 
 /* Sparkle particle (diamond/star illusion via rotation) */

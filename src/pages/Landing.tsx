@@ -715,7 +715,7 @@ function SunflowerCursor() {
             <stop offset='100%' stop-color='#5A3A23'/>
           </radialGradient>
         </defs>
-        <ellipse cx='50' cy='60' rx='30' ry='30' fill='black' opacity='0.22'/>
+        <ellipse cx='50' cy='60' rx='30' ry='30' fill='black' opacity='0.12'/>
         <g>
           ${Array.from({length: 18}).map((_,i)=>{
             const angle = (i*360)/18;
@@ -729,7 +729,7 @@ function SunflowerCursor() {
     return `url("data:image/svg+xml;utf8,${encodeURIComponent(svg)}")`;
   }, []);
 
-  // Hover sunflower (switch to vivid yellow gradient like base, fully opaque)
+  // Hover sunflower (vivid yellow, fully opaque)
   const sunflowerBgHover = useMemo(() => {
     const svg = `
       <svg xmlns='http://www.w3.org/2000/svg' width='44' height='44' viewBox='0 0 100 100'>
@@ -743,7 +743,7 @@ function SunflowerCursor() {
             <stop offset='100%' stop-color='#5A3A23' stop-opacity='1'/>
           </radialGradient>
         </defs>
-        <ellipse cx='50' cy='60' rx='30' ry='30' fill='black' opacity='0.22'/>
+        <ellipse cx='50' cy='60' rx='30' ry='30' fill='black' opacity='0.12'/>
         <g opacity='1'>
           ${Array.from({length: 18}).map((_,i)=>{
             const angle = (i*360)/18;
