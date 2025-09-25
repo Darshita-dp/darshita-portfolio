@@ -161,7 +161,7 @@
 .cursor-root[data-boost="1"] .cursor-sunflower--hover {
   transform: translate(-50%, -50%) scale(1.2);
   filter: drop-shadow(0 0 10px #FFC067) brightness(1.08) saturate(1.15);
-  opacity: 0.95; /* fade in orange */
+  opacity: 1; /* fully opaque for vivid orange */
 }
 
 /* Sparkle particle (diamond/star illusion via rotation) */
