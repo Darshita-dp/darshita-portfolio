@@ -1,202 +1,465 @@
-import { motion } from "framer-motion";
-import { ArrowLeft, ExternalLink, Github, Linkedin, Mail } from "lucide-react";
+import { useMemo, useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router";
+import { motion, useInView } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { projects, skills } from "@/lib/projects";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { ArrowRight, Award, Briefcase, Database, Github, Linkedin, Mail, Phone, Smartphone, Star } from "lucide-react";
 
-export default function Classic() {
-  const navigate = useNavigate();
+type Project = {
+  id: string;
+  title: string;
+  summary: string;
+  image: string;
+  tags: Array<string>;
+  link?: string;
+  metrics?: Array<{ icon: React.ReactNode; label: string }>;
+};
+
+const BLUE = {
+  headerFrom: "#0D47A1",
+  headerTo: "#1976D2",
+  accent: "#64B5F6",
+  bgTint: "#F7FAFF",
+};
+
+const featuredProjects: Array<Project> = [
+  {
+    id: "smartplanner",
+    title: "SmartPlanner (iOS)",
+    summary: "SwiftUI • Core Data • MVVM — planning app with clean mobile UX.",
+    image: "/logo_bg.png",
+    tags: ["SwiftUI", "Core Data", "MVVM"],
+    link: "#",
+    metrics: [
+      { icon: <Star className="w-3.5 h-3.5" />, label: "Polished UX" },
+      { icon: <Smartphone className="w-3.5 h-3.5" />, label: "iOS" },
+    ],
+  },
+  {
+    id: "film-fusion",
+    title: "Film‑Fusion (Web)",
+    summary: "Movie discovery site showcasing routing, search, and structured UI.",
+    image: "/logo_bg.png",
+    tags: ["React", "TypeScript", "UI"],
+    link: "#",
+    metrics: [
+      { icon: <Database className="w-3.5 h-3.5" />, label: "Data Driven" },
+    ],
+  },
+  {
+    id: "course-manager",
+    title: "Course Manager",
+    summary: "Organize courses, assignments, and progress with clarity.",
+    image: "/logo_bg.png",
+    tags: ["React", "UX", "State"],
+    link: "#",
+    metrics: [{ icon: <Star className="w-3.5 h-3.5" />, label: "Reliable" }],
+  },
+];
+
+const techSkills: Array<{ name: string; level: number; icon?: React.ReactNode }> = [
+  { name: "TypeScript/React", level: 86 },
+  { name: "Swift/SwiftUI", level: 78, icon: <Smartphone className="w-3.5 h-3.5" /> },
+  { name: "Python", level: 74 },
+  { name: "SQL", level: 72, icon: <Database className="w-3.5 h-3.5" /> },
+  { name: "PHP/MySQL", level: 70 },
+  { name: "C/C++/Java", level: 68 },
+];
+
+const softSkills: Array<string> = ["Communication", "Problem‑Solving", "Teamwork"];
+
+function SectionTitle({ id, children }: { id: string; children: React.ReactNode }) {
+  return (
+    <div id={id} className="scroll-mt-24">
+      <h2
+        className="text-2xl md:text-3xl font-semibold tracking-wide"
+        style={{
+          fontFamily: '"Montserrat", "Inter", ui-sans-serif, system-ui',
+          letterSpacing: "0.02em",
+          background: `linear-gradient(90deg, ${BLUE.headerFrom}, ${BLUE.headerTo})`,
+          WebkitBackgroundClip: "text",
+          color: "transparent",
+        }}
+      >
+        {children}
+      </h2>
+      <div className="mt-2 h-[3px] w-20 rounded-full" style={{ background: BLUE.accent }} />
+    </div>
+  );
+}
+
+function SkillBar({ label, value, delay = 0 }: { label: string; value: number; delay?: number }) {
+  const ref = useRef<HTMLDivElement | null>(null);
+  const inView = useInView(ref, { once: true, margin: "-80px" });
+
+  // varying shades of blue
+  const shades = ["#BBDEFB", "#90CAF9", "#64B5F6", "#42A5F5", "#1E88E5", "#1976D2"];
+  const shade = shades[Math.min(Math.floor((value / 100) * shades.length), shades.length - 1)];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
-      {/* Header */}
-      <header className="sticky top-0 z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => navigate("/")}
-            className="flex items-center gap-2"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Back to Modes
-          </Button>
-          <div className="flex items-center gap-4">
-            <Button variant="ghost" size="sm">
-              <Mail className="w-4 h-4" />
-            </Button>
-            <Button variant="ghost" size="sm">
-              <Github className="w-4 h-4" />
-            </Button>
-            <Button variant="ghost" size="sm">
-              <Linkedin className="w-4 h-4" />
-            </Button>
-          </div>
-        </div>
-      </header>
+    <div ref={ref} className="space-y-1">
+      <div className="flex items-center justify-between text-sm">
+        <span className="font-medium">{label}</span>
+        <span className="opacity-70">{value}%</span>
+      </div>
+      <div className="h-2 w-full rounded-full bg-slate-200/60 overflow-hidden">
+        <motion.div
+          initial={{ width: 0 }}
+          animate={{ width: inView ? `${value}%` : 0 }}
+          transition={{ duration: 0.8, delay }}
+          className="h-full rounded-full"
+          style={{ background: `linear-gradient(90deg, ${shade}, ${BLUE.headerTo})` }}
+        />
+      </div>
+    </div>
+  );
+}
 
-      <div className="container mx-auto px-4 py-8">
-        {/* Hero Section */}
-        <motion.section
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+function StickyNav() {
+  const navigate = useNavigate();
+  const items = [
+    { id: "profile", label: "Profile" },
+    { id: "projects", label: "Projects" },
+    { id: "skills", label: "Skills" },
+    { id: "experience", label: "Experience" },
+    { id: "contact", label: "Contact" },
+  ];
+  const go = (id: string) => {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+  return (
+    <header className="sticky top-0 z-40 border-b bg-white/85 backdrop-blur supports-[backdrop-filter]:bg-white/60">
+      <div className="container mx-auto max-w-6xl px-4 py-3 flex items-center justify-between">
+        <button
+          className="text-sm font-semibold"
+          onClick={() => navigate("/")}
+          style={{ color: BLUE.headerTo }}
         >
-          <div className="mb-8">
-            <img
-              src="./logo.svg"
-              alt="Darshita Patel"
-              width={120}
-              height={120}
-              className="mx-auto rounded-full border-4 border-primary/20"
-            />
-          </div>
-          <h1 className="text-4xl md:text-6xl font-bold mb-4 tracking-tight">
-            Darshita Patel
-          </h1>
-          <p className="text-xl text-muted-foreground mb-6 max-w-2xl mx-auto">
-            Full-Stack Developer passionate about creating efficient, user-centered solutions 
-            with expertise in React, SwiftUI, and modern web technologies.
-          </p>
-          <div className="flex flex-wrap justify-center gap-2 mb-8">
-            <Badge variant="secondary">React</Badge>
-            <Badge variant="secondary">SwiftUI</Badge>
-            <Badge variant="secondary">WordPress</Badge>
-            <Badge variant="secondary">PHP/MySQL</Badge>
-            <Badge variant="secondary">Systems Thinking</Badge>
-          </div>
-        </motion.section>
+          ← Modes
+        </button>
+        <nav className="flex gap-2 md:gap-4">
+          {items.map((it) => (
+            <button
+              key={it.id}
+              onClick={() => go(it.id)}
+              className="px-3 py-1.5 rounded-full text-sm border hover:shadow-sm transition"
+              style={{
+                borderColor: "rgba(13, 71, 161, 0.18)",
+                color: "#0D47A1",
+              }}
+            >
+              {it.label}
+            </button>
+          ))}
+        </nav>
+      </div>
+    </header>
+  );
+}
 
-        {/* Projects Section */}
-        <motion.section
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="mb-16"
-        >
-          <h2 className="text-3xl font-bold mb-8 text-center">Featured Projects</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {projects.map((project, index) => (
-              <motion.div
-                key={project.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.1 * index }}
-                whileHover={{ y: -5 }}
+export default function Classic() {
+  const [sending, setSending] = useState(false);
+
+  const onSubmitContact = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const fd = new FormData(e.currentTarget);
+    const name = String(fd.get("name") || "");
+    const email = String(fd.get("email") || "");
+    const message = String(fd.get("message") || "");
+    setSending(true);
+    setTimeout(() => {
+      setSending(false);
+      const subject = encodeURIComponent(`Portfolio contact from ${name}`);
+      const body = encodeURIComponent(`${message}\n\n— ${name}\n${email}`);
+      window.location.href = `mailto:darshitaa2001@gmail.com?subject=${subject}&body=${body}`;
+    }, 450);
+  };
+
+  const headerGradient = { background: `linear-gradient(90deg, ${BLUE.headerFrom}, ${BLUE.headerTo})` };
+
+  const extras = useMemo(
+    () => [
+      {
+        icon: <Award className="w-4 h-4" />,
+        title: "Outstanding Graduate Student Award (Nom.)",
+        desc: "Recognized for academic excellence and impact.",
+      },
+      {
+        icon: <Briefcase className="w-4 h-4" />,
+        title: "Certifications",
+        desc: "Foundations in SQL, Agile practices; exploring AWS.",
+      },
+    ],
+    [],
+  );
+
+  return (
+    <div className="min-h-screen bg-white">
+      <StickyNav />
+
+      {/* Hero / Profile */}
+      <section
+        id="profile"
+        className="border-b"
+        style={headerGradient}
+      >
+        <div className="container mx-auto max-w-6xl px-4 py-10 md:py-14 text-white">
+          <div className="flex flex-col md:flex-row items-center gap-6 md:gap-10">
+            <div className="shrink-0 relative">
+              <div className="w-28 h-28 md:w-32 md:h-32 rounded-full overflow-hidden ring-4 ring-white/40 shadow-xl">
+                <img
+                  src="/logo.png"
+                  alt="Profile"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="absolute inset-0 rounded-full blur-2xl opacity-50" style={{ background: BLUE.accent }} />
+            </div>
+
+            <div className="text-center md:text-left">
+              <h1
+                className="text-3xl md:text-4xl font-bold tracking-tight"
+                style={{ fontFamily: '"Montserrat","Inter",ui-sans-serif,system-ui' }}
               >
-                <Card className="h-full hover:shadow-lg transition-all duration-300">
-                  <CardHeader>
-                    <div className="aspect-video bg-gradient-to-br from-primary/20 to-secondary/20 rounded-lg mb-4 flex items-center justify-center">
-                      <span className="text-2xl font-bold text-primary">
-                        {project.title.charAt(0)}
-                      </span>
-                    </div>
-                    <CardTitle className="flex items-center justify-between">
-                      {project.title}
-                      <Button variant="ghost" size="sm" asChild>
-                        <a href={project.link} target="_blank" rel="noopener noreferrer">
-                          <ExternalLink className="w-4 h-4" />
-                        </a>
-                      </Button>
-                    </CardTitle>
-                    <CardDescription>{project.summary}</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="flex flex-wrap gap-1 mb-4">
-                      {project.tags.map((tag) => (
-                        <Badge key={tag} variant="outline" className="text-xs">
-                          {tag}
-                        </Badge>
-                      ))}
-                    </div>
-                    <div className="text-sm text-muted-foreground">
-                      {Object.entries(project.metrics).map(([key, value]) => (
-                        <div key={key} className="flex justify-between">
-                          <span>{key.replace('_', ' ')}:</span>
-                          <span>{value}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
-        </motion.section>
+                Darshita Patel
+              </h1>
+              <p className="mt-2 text-sm md:text-base opacity-95">
+                Turning data into impactful solutions | Full‑Stack Developer & Analyst
+              </p>
 
-        {/* Skills Section */}
-        <motion.section
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          className="mb-16"
-        >
-          <h2 className="text-3xl font-bold mb-8 text-center">Skills & Expertise</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {Object.entries(skills).map(([category, skillSet]) => (
-              <Card key={category}>
-                <CardHeader>
-                  <CardTitle className="capitalize">{category}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-3">
-                    {Object.entries(skillSet).map(([skill, level]) => (
-                      <div key={skill}>
-                        <div className="flex justify-between text-sm mb-1">
-                          <span>{skill}</span>
-                          <span>{level}/5</span>
-                        </div>
-                        <div className="w-full bg-secondary rounded-full h-2">
-                          <div
-                            className="bg-primary h-2 rounded-full transition-all duration-300"
-                            style={{ width: `${(level / 5) * 100}%` }}
-                          />
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </motion.section>
-
-        {/* Contact Section */}
-        <motion.section
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.6 }}
-          className="text-center"
-        >
-          <Card className="max-w-2xl mx-auto">
-            <CardHeader>
-              <CardTitle>Let's Connect</CardTitle>
-              <CardDescription>
-                Interested in collaborating or learning more about my work?
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="flex justify-center gap-4">
-                <Button variant="default">
-                  <Mail className="w-4 h-4 mr-2" />
-                  Email Me
+              <div className="mt-4 flex flex-wrap items-center justify-center md:justify-start gap-2">
+                <Button asChild variant="secondary" className="bg-white text-slate-900 hover:bg-white/90">
+                  <a href="#contact"><Mail className="w-4 h-4 mr-2" /> Let's Connect</a>
                 </Button>
-                <Button variant="outline">
-                  <Github className="w-4 h-4 mr-2" />
-                  GitHub
+                <Button asChild variant="outline" className="border-white/60 text-white hover:bg-white/10">
+                  <a href="https://www.linkedin.com/" target="_blank" rel="noreferrer">
+                    <Linkedin className="w-4 h-4 mr-2" /> LinkedIn
+                  </a>
                 </Button>
-                <Button variant="outline">
-                  <Linkedin className="w-4 h-4 mr-2" />
-                  LinkedIn
+                <Button asChild variant="outline" className="border-white/60 text-white hover:bg-white/10">
+                  <a href="https://github.com/" target="_blank" rel="noreferrer">
+                    <Github className="w-4 h-4 mr-2" /> GitHub
+                  </a>
                 </Button>
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Projects */}
+      <section id="projects" className="container mx-auto max-w-6xl px-4 py-10">
+        <SectionTitle id="projects-title">Projects</SectionTitle>
+
+        <div className="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {featuredProjects.map((p, i) => (
+            <motion.a
+              key={p.id}
+              href={p.link || "#"}
+              whileHover={{ y: -6, scale: 1.01 }}
+              transition={{ type: "spring", stiffness: 250, damping: 20 }}
+              className="group"
+              aria-label={`Open project ${p.title}`}
+            >
+              <Card className="overflow-hidden border-slate-200 hover:border-blue-300 transition-all shadow-sm hover:shadow-lg">
+                <div className="relative h-40 w-full overflow-hidden">
+                  <img
+                    src={p.image}
+                    alt={p.title}
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.06]"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                </div>
+                <CardHeader className="pb-2">
+                  <CardTitle
+                    className="text-lg"
+                    style={{ letterSpacing: "0.3px", fontFamily: '"Montserrat","Inter",ui-sans-serif' }}
+                  >
+                    {p.title}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <p className="text-sm text-slate-600">{p.summary}</p>
+                  <div className="flex flex-wrap gap-2">
+                    {p.tags.map((t) => (
+                      <Badge key={t} variant="secondary" className="bg-[#E8F2FF] text-[#0D47A1] border-blue-200">
+                        {t}
+                      </Badge>
+                    ))}
+                  </div>
+                  {p.metrics && p.metrics.length > 0 && (
+                    <div className="pt-1 flex flex-wrap gap-3 text-xs text-slate-600">
+                      {p.metrics.map((m, idx) => (
+                        <span key={idx} className="inline-flex items-center gap-1.5">
+                          <span className="text-blue-700">{m.icon}</span>
+                          {m.label}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </motion.a>
+          ))}
+        </div>
+      </section>
+
+      {/* Skills */}
+      <section id="skills" className="py-10" style={{ background: BLUE.bgTint }}>
+        <div className="container mx-auto max-w-6xl px-4">
+          <SectionTitle id="skills-title">Skills & Expertise</SectionTitle>
+
+          <div className="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <Card className="border-blue-100 shadow-sm">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-lg">Technical</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {techSkills.map((s, idx) => (
+                  <div key={s.name} className="space-y-1">
+                    <div className="flex items-center gap-2">
+                      {s.icon ? <span className="text-blue-700">{s.icon}</span> : null}
+                      <span className="font-medium">{s.name}</span>
+                    </div>
+                    <SkillBar label="" value={s.level} delay={0.1 + idx * 0.06} />
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+
+            <Card className="border-blue-100 shadow-sm">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-lg">Professional</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                {softSkills.map((s, i) => (
+                  <div key={s} className="flex items-center gap-2 text-sm">
+                    <Star className="w-4 h-4 text-blue-700" />
+                    <span>{s}</span>
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Experience */}
+      <section id="experience" className="container mx-auto max-w-6xl px-4 py-10">
+        <SectionTitle id="experience-title">Experience Highlights</SectionTitle>
+        <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-5">
+          <Card className="shadow-sm">
+            <CardHeader className="pb-2 flex flex-row items-center gap-2">
+              <Briefcase className="w-4 h-4 text-blue-700" />
+              <CardTitle className="text-lg">Graduate Teaching Assistant, ISU</CardTitle>
+            </CardHeader>
+            <CardContent className="text-sm text-slate-600">
+              Assisted 120+ students in IT‑150 labs; reinforced fundamentals and practical computing.
             </CardContent>
           </Card>
-        </motion.section>
-      </div>
+          <Card className="shadow-sm">
+            <CardHeader className="pb-2 flex flex-row items-center gap-2">
+              <Briefcase className="w-4 h-4 text-blue-700" />
+              <CardTitle className="text-lg">NGO Web Internships</CardTitle>
+            </CardHeader>
+            <CardContent className="text-sm text-slate-600">
+              Built accessible sites/dashboards for CIIWAS & ORANGES; boosted engagement and clarity.
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+
+      {/* Extras */}
+      <section className="container mx-auto max-w-6xl px-4 pb-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          {extras.map((x, i) => (
+            <Card key={i} className="shadow-sm">
+              <CardHeader className="pb-2 flex items-center gap-2">
+                <span className="text-blue-700">{x.icon}</span>
+                <CardTitle className="text-lg">{x.title}</CardTitle>
+              </CardHeader>
+              <CardContent className="text-sm text-slate-600">{x.desc}</CardContent>
+            </Card>
+          ))}
+          <Card className="shadow-sm">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-lg">Resume</CardTitle>
+            </CardHeader>
+            <CardContent className="flex items-center gap-3">
+              <Button variant="outline" asChild>
+                <a href="#" onClick={(e) => e.preventDefault()}>
+                  Download Resume
+                </a>
+              </Button>
+              <span className="text-xs text-slate-500">Add your resume link later.</span>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+
+      {/* Contact */}
+      <section id="contact" className="bg-white border-t">
+        <div className="container mx-auto max-w-6xl px-4 py-10">
+          <SectionTitle id="contact-title">Contact</SectionTitle>
+          <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+            <Card className="shadow-sm">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-lg">Let's talk</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <form onSubmit={onSubmitContact} className="space-y-3">
+                  <Input name="name" placeholder="Your name" required />
+                  <Input type="email" name="email" placeholder="Email" required />
+                  <Textarea name="message" placeholder="Message" required className="min-h-[120px]" />
+                  <Button type="submit" disabled={sending}>
+                    {sending ? "Preparing…" : "Send"}
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Button>
+                </form>
+                <div className="mt-4 flex flex-wrap items-center gap-3 text-sm">
+                  <a href="mailto:darshitaa2001@gmail.com" className="inline-flex items-center gap-1 text-blue-700 hover:underline">
+                    <Mail className="w-4 h-4" /> Email
+                  </a>
+                  <a href="tel:+1" className="inline-flex items-center gap-1 text-blue-700 hover:underline">
+                    <Phone className="w-4 h-4" /> Phone
+                  </a>
+                </div>
+              </CardContent>
+            </Card>
+            <Card className="shadow-sm">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-lg">Social</CardTitle>
+              </CardHeader>
+              <CardContent className="flex gap-3">
+                <Button asChild variant="outline">
+                  <a href="https://www.linkedin.com/" target="_blank" rel="noreferrer">
+                    <Linkedin className="w-4 h-4 mr-2" /> LinkedIn
+                  </a>
+                </Button>
+                <Button asChild variant="outline">
+                  <a href="https://github.com/" target="_blank" rel="noreferrer">
+                    <Github className="w-4 h-4 mr-2" /> GitHub
+                  </a>
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="mt-6">
+        <div
+          className="py-6 text-center text-xs text-white"
+          style={{ background: `linear-gradient(90deg, ${BLUE.headerFrom}, ${BLUE.headerTo})` }}
+        >
+          © {new Date().getFullYear()} Darshita Patel — All rights reserved.
+        </div>
+      </footer>
     </div>
   );
 }
