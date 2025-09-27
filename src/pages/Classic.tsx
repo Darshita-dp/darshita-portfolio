@@ -132,7 +132,7 @@ function SectionTitle({ id, children }: { id: string; children: React.ReactNode 
       >
         {children}
       </h2>
-      <div className="mt-2 h-[3px] w-20 rounded-full" style={{ background: BLUE.accent }} />
+      <div className="mt-2 h-[4px] w-20 rounded-full" style={{ background: BLUE.accent }} />
     </div>
   );
 }
@@ -225,66 +225,109 @@ function BubblesBackground() {
         {`
         @keyframes bubble-rise {
           0%   { transform: translate3d(var(--bx, 0), 100%, 0) scale(var(--bs, 1)); opacity: 0; }
-          10%  { opacity: 0.7; }
-          90%  { opacity: 0.7; }
+          10%  { opacity: 0.85; }
+          90%  { opacity: 0.85; }
           100% { transform: translate3d(calc(var(--bx, 0) + var(--bshift, 0px)), -20%, 0) scale(var(--bs, 1)); opacity: 0; }
         }
       `}
       </style>
-      {bubbles.map((_, i) => {
-        // Updated: broader, more visible sizes
-        const size = 14 + Math.random() * 42; // 14–56px
-        const left = Math.random() * 100; // vw %
+      {(() => {
+        const reduced =
+          typeof window !== "undefined" &&
+          window.matchMedia &&
+          window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        const count = reduced ? 10 : 34;
+        const bubbles = Array.from({ length: count });
+        return bubbles.map((_, i) => {
+          const size = 14 + Math.random() * 42; // 14–56px
+          const left = Math.random() * 100; // vw %
+          const norm = (size - 14) / 42;
+          const dur = 26 + norm * 22 + Math.random() * 8; // larger = slower
+          const delay = Math.random() * 8;
+          const scale = 0.9 + Math.random() * 0.5;
+          const shift = (Math.random() * 90 - 45).toFixed(1) + "px";
 
-        // Larger bubbles rise slower; preserve smoothness
-        const norm = (size - 14) / 42; // 0 (small) -> 1 (large)
-        const dur = 26 + norm * 22 + Math.random() * 8; // ~26–56s, larger = slower
-        const delay = Math.random() * 8; // 0–8s
-        const scale = 0.9 + Math.random() * 0.5; // subtle size variation
-        const shift = (Math.random() * 90 - 45).toFixed(1) + "px"; // -45..45px drift
+          // Enriched palette: increase average opacity for visibility on pastel bg
+          const palette = [
+            "rgba(255,255,255,0.98)", // brighter white
+            "rgba(255,255,255,0.90)", // soft white
+            "rgba(230,244,255,0.92)", // very light blue
+            "rgba(189,222,255,0.86)", // light blue
+            "rgba(120,169,255,0.50)", // soft navy tint
+          ];
+          const bg = palette[i % palette.length];
 
-        // Enriched palette: brighter whites + clearer blues for contrast on pastel bg
-        const palette = [
-          "rgba(255,255,255,0.95)", // bright white
-          "rgba(255,255,255,0.80)", // soft white
-          "rgba(230,244,255,0.85)", // very light blue
-          "rgba(189,222,255,0.80)", // light blue
-          "rgba(120,169,255,0.40)", // soft navy tint
-        ];
-        const bg = palette[i % palette.length];
-
-        return (
-          <span
-            key={i}
-            aria-hidden="true"
-            className="absolute rounded-full backdrop-blur-[1px]"
-            style={{
-              width: `${size}px`,
-              height: `${size}px`,
-              left: `${left}%`,
-              bottom: "-10%",
-              background: bg,
-              // Slightly stronger border for visibility
-              border: "1px solid rgba(255,255,255,0.5)",
-              // Slightly stronger shadow for separation from bg
-              boxShadow: "0 3px 10px rgba(13,71,161,0.12)",
-              // Motion
-              animation: reduced ? undefined : `bubble-rise ${dur}s linear ${delay}s infinite`,
-              // Per-bubble CSS vars
-              // @ts-ignore custom properties
-              "--bx": "0px",
-              "--bs": scale,
-              "--bshift": shift,
-            } as React.CSSProperties}
-          />
-        );
-      })}
+          return (
+            <span
+              key={i}
+              aria-hidden="true"
+              className="absolute rounded-full backdrop-blur-[1px]"
+              style={{
+                width: `${size}px`,
+                height: `${size}px`,
+                left: `${left}%`,
+                bottom: "-10%",
+                // Layer a faint inner highlight over the base color
+                background: `radial-gradient(circle at 35% 30%, rgba(255,255,255,0.35), rgba(255,255,255,0) 60%), ${bg}`,
+                // Slightly stronger border/shadow for contrast
+                border: "1.25px solid rgba(255,255,255,0.6)",
+                boxShadow: "0 4px 14px rgba(13,71,161,0.16)",
+                animation: reduced ? undefined : `bubble-rise ${dur}s linear ${delay}s infinite`,
+                // @ts-ignore custom properties
+                "--bx": "0px",
+                "--bs": scale,
+                "--bshift": shift,
+              } as React.CSSProperties}
+            />
+          );
+        });
+      })()}
     </div>
   );
 }
 
 export default function Classic() {
   const [sending, setSending] = useState(false);
+
+  // Auto-scroll for Certificates carousel (setup once; respects reduced motion)
+  useEffect(() => {
+    const reduced =
+      typeof window !== "undefined" &&
+      window.matchMedia &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduced) return;
+
+    const wrap = document.getElementById("certs-auto-scroll-wrap");
+    if (!wrap) return;
+    const scroller = wrap.querySelector<HTMLDivElement>(".auto-scroll-certs");
+    if (!scroller) return;
+
+    let paused = false;
+    const onEnter = () => (paused = true);
+    const onLeave = () => (paused = false);
+    wrap.addEventListener("mouseenter", onEnter);
+    wrap.addEventListener("mouseleave", onLeave);
+
+    let raf = 0;
+    const speed = 0.6; // px per frame approx.
+    const loop = () => {
+      if (!paused) {
+        scroller.scrollLeft += speed;
+        const max = scroller.scrollWidth - scroller.clientWidth - 2;
+        if (scroller.scrollLeft >= max) {
+          scroller.scrollTo({ left: 0, behavior: "instant" as ScrollBehavior });
+        }
+      }
+      raf = requestAnimationFrame(loop);
+    };
+    raf = requestAnimationFrame(loop);
+
+    return () => {
+      cancelAnimationFrame(raf);
+      wrap.removeEventListener("mouseenter", onEnter);
+      wrap.removeEventListener("mouseleave", onLeave);
+    };
+  }, []);
 
   const onSubmitContact = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -367,16 +410,32 @@ export default function Classic() {
               </motion.p>
 
               <div className="mt-4 flex flex-wrap items-center justify-center md:justify-start gap-2">
-                <Button asChild variant="secondary" className="bg-white text-black hover:bg-white/90">
+                <Button
+                  asChild
+                  variant="secondary"
+                  className="bg-white text-black hover:bg-white/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
+                >
                   <a href="#" onClick={(e) => e.preventDefault()}>📄 Resume</a>
                 </Button>
-                <Button asChild variant="outline" className="bg-white text-black border-white/60 hover:bg-white/90">
+                <Button
+                  asChild
+                  variant="outline"
+                  className="bg-white text-black border-white/60 hover:bg-white/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
+                >
                   <a href="https://www.linkedin.com/" target="_blank" rel="noreferrer">🔗 LinkedIn</a>
                 </Button>
-                <Button asChild variant="outline" className="bg-white text-black border-white/60 hover:bg-white/90">
+                <Button
+                  asChild
+                  variant="outline"
+                  className="bg-white text-black border-white/60 hover:bg-white/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
+                >
                   <a href="https://github.com/" target="_blank" rel="noreferrer">🖥️ GitHub</a>
                 </Button>
-                <Button asChild variant="outline" className="bg-white text-black border-white/60 hover:bg-white/90">
+                <Button
+                  asChild
+                  variant="outline"
+                  className="bg-white text-black border-white/60 hover:bg-white/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
+                >
                   <a href="#contact">📬 Contact</a>
                 </Button>
               </div>
@@ -388,7 +447,7 @@ export default function Classic() {
       {/* About Me */}
       <motion.section
         id="about"
-        className="container mx-auto max-w-6xl px-4 py-10"
+        className="container mx-auto max-w-6xl px-4 py-8 md:py-10"
         initial={{ opacity: 0, y: 14 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-80px" }}
@@ -434,7 +493,7 @@ export default function Classic() {
               className="group"
               aria-label={`Open project ${p.title}`}
             >
-              <Card className="overflow-hidden border-slate-200 hover:border-blue-300 transition-all shadow-sm hover:shadow-lg">
+              <Card className="overflow-hidden border-slate-200 hover:border-blue-300 transition-all shadow-sm hover:shadow-lg hover:-translate-y-0.5">
                 <div className="relative h-40 w-full overflow-hidden">
                   <img
                     src={p.image}
@@ -505,7 +564,7 @@ export default function Classic() {
           */}
           <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Data Skills */}
-            <Card className="border-blue-100 shadow-sm">
+            <Card className="border-blue-100 shadow-sm transition-transform transition-shadow duration-200 hover:-translate-y-0.5 hover:shadow-md">
               <CardHeader className="pb-2"><CardTitle className="text-lg">📊 Data Skills</CardTitle></CardHeader>
               <CardContent className="flex flex-wrap gap-2">
                 {[
@@ -526,7 +585,7 @@ export default function Classic() {
               </CardContent>
             </Card>
             {/* Development Skills */}
-            <Card className="border-blue-100 shadow-sm">
+            <Card className="border-blue-100 shadow-sm transition-transform transition-shadow duration-200 hover:-translate-y-0.5 hover:shadow-md">
               <CardHeader className="pb-2"><CardTitle className="text-lg">💻 Development Skills</CardTitle></CardHeader>
               <CardContent className="flex flex-wrap gap-2">
                 {[
@@ -547,7 +606,7 @@ export default function Classic() {
               </CardContent>
             </Card>
             {/* Interpersonal */}
-            <Card className="border-blue-100 shadow-sm">
+            <Card className="border-blue-100 shadow-sm transition-transform transition-shadow duration-200 hover:-translate-y-0.5 hover:shadow-md">
               <CardHeader className="pb-2"><CardTitle className="text-lg">🧠 Interpersonal</CardTitle></CardHeader>
               <CardContent className="flex flex-wrap gap-2">
                 {[
@@ -565,7 +624,7 @@ export default function Classic() {
               </CardContent>
             </Card>
             {/* Tools & Others */}
-            <Card className="border-blue-100 shadow-sm">
+            <Card className="border-blue-100 shadow-sm transition-transform transition-shadow duration-200 hover:-translate-y-0.5 hover:shadow-md">
               <CardHeader className="pb-2"><CardTitle className="text-lg">🌐 Tools & Others</CardTitle></CardHeader>
               <CardContent className="flex flex-wrap gap-2">
                 {[
@@ -600,30 +659,35 @@ export default function Classic() {
           <div className="space-y-6">
             {[
               {
+                icon: <Briefcase className="w-4 h-4 text-blue-700" />,
                 title: "Graduate Teaching Assistant | Illinois State University",
                 period: "Aug 2024 – May 2025",
                 desc:
                   "Instructed and supported 120+ students in IT productivity tools; developed lab content and guided students in Microsoft Office Suite and data tools.",
               },
               {
+                icon: <Briefcase className="w-4 h-4 text-blue-700" />,
                 title: "Product Supervisor | Chaudhary Tea Processors & Packets Pvt. Ltd.",
                 period: "2023",
                 desc:
                   "Oversaw product information management systems; ensured data accuracy and coordinated smooth workflows.",
               },
               {
+                icon: <Database className="w-4 h-4 text-blue-700" />,
                 title: "Web Development Intern | CIIWAS NGO",
                 period: "Aug 2024 – Dec 2024",
                 desc:
                   "Maintained NGO website; processed community datasets to improve reporting accuracy.",
               },
               {
+                icon: <Database className="w-4 h-4 text-blue-700" />,
                 title: "IT Analyst Intern | ORANGES NGO",
                 period: "Apr 2022 – Dec 2022",
                 desc:
                   "Processed and cleansed donor/beneficiary datasets from 80+ regions; automated workflows to improve governance and reporting.",
               },
               {
+                icon: <Award className="w-4 h-4 text-blue-700" />,
                 title: "Capstone & Project Work | ISU",
                 period: "2023 – 2025",
                 desc:
@@ -640,9 +704,12 @@ export default function Classic() {
                 style={{ paddingLeft: "2.5rem" }}
               >
                 <span className="absolute left-4 md:left-1/2 -translate-x-1/2 top-3 w-3.5 h-3.5 rounded-full bg-blue-600 ring-4 ring-blue-200" />
-                <Card className="shadow-sm">
+                <Card className="shadow-sm transition-transform transition-shadow duration-200 hover:-translate-y-0.5 hover:shadow-md">
                   <CardHeader className="pb-1">
-                    <CardTitle className="text-base md:text-lg text-slate-900">{item.title}</CardTitle>
+                    <CardTitle className="text-base md:text-lg text-slate-900 inline-flex items-center gap-2">
+                      <span className="shrink-0">{item.icon}</span>
+                      <span>{item.title}</span>
+                    </CardTitle>
                     <p className="text-xs text-slate-500 mt-1">{item.period}</p>
                   </CardHeader>
                   <CardContent className="text-sm text-slate-700">{item.desc}</CardContent>
@@ -655,16 +722,16 @@ export default function Classic() {
 
       {/* Certificates & Achievements - NEW */}
       <motion.section
-        className="container mx-auto max-w-6xl px-4 py-10"
+        className="container mx-auto max-w-6xl px-4 py-8 md:py-10"
         initial={{ opacity: 0, y: 14 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-80px" }}
         transition={{ duration: 0.5 }}
       >
         <SectionTitle id="certs-title">Certificates & Achievements</SectionTitle>
-        <div className="mt-6">
+        <div className="mt-6" id="certs-auto-scroll-wrap">
           <Carousel className="w-full">
-            <CarouselContent className="flex gap-4">
+            <CarouselContent className="flex gap-4 auto-scroll-certs">
               {[
                 "AWS Cloud Practitioner (In Progress)",
                 "Tableau Desktop Specialist (In Progress)",
@@ -673,7 +740,7 @@ export default function Classic() {
                 "ISU Research Symposium Poster (AI in Banking, 2025)",
               ].map((c) => (
                 <CarouselItem key={c} className="basis-5/6 md:basis-1/3">
-                  <Card className="h-full shadow-sm">
+                  <Card className="h-full shadow-sm transition-transform transition-shadow duration-200 hover:-translate-y-0.5 hover:shadow-md">
                     <CardHeader className="pb-2">
                       <CardTitle className="text-sm md:text-base">{c}</CardTitle>
                     </CardHeader>
@@ -687,6 +754,8 @@ export default function Classic() {
           </Carousel>
         </div>
       </motion.section>
+
+      {/* Auto-scroll handled by top-level useEffect in Classic component */}
 
       {/* Education - NEW */}
       <motion.section
@@ -710,10 +779,10 @@ export default function Classic() {
           ].map((ed) => (
             <div key={ed.front} className="group [perspective:1000px]">
               <div className="relative h-40 w-full transition-transform duration-500 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]">
-                <Card className="absolute inset-0 grid place-items-center backface-hidden shadow-sm">
+                <Card className="absolute inset-0 grid place-items-center backface-hidden shadow-sm transition-transform transition-shadow duration-200 hover:-translate-y-0.5 hover:shadow-md">
                   <CardHeader><CardTitle className="text-center">{ed.front}</CardTitle></CardHeader>
                 </Card>
-                <Card className="absolute inset-0 grid place-items-center backface-hidden [transform:rotateY(180deg)] shadow-sm">
+                <Card className="absolute inset-0 grid place-items-center backface-hidden [transform:rotateY(180deg)] shadow-sm transition-transform transition-shadow duration-200 hover:-translate-y-0.5 hover:shadow-md">
                   <CardContent className="text-center whitespace-pre-line text-sm text-slate-700">{ed.back}</CardContent>
                 </Card>
               </div>
@@ -816,7 +885,7 @@ export default function Classic() {
         viewport={{ once: true, margin: "-80px" }}
         transition={{ duration: 0.5 }}
       >
-        <div className="container mx-auto max-w-6xl px-4 py-10">
+        <div className="container mx-auto max-w-6xl px-4 py-8 md:py-10">
           <SectionTitle id="contact-title">Contact</SectionTitle>
           <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
             <Card className="shadow-sm">
