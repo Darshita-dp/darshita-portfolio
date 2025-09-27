@@ -739,6 +739,7 @@ export default function Classic() {
                 "Tableau Desktop Specialist (In Progress)",
                 "LinkedIn Learning – Data Analysis & SQL",
                 "Outstanding Graduate Student Award – ISU (2025)",
+                "Outstanding Graduate Student Award – ISU (Nom.)",
                 "ISU Research Symposium Poster (AI in Banking, 2025)",
               ].map((c) => (
                 <CarouselItem key={c} className="basis-5/6 md:basis-1/3">
