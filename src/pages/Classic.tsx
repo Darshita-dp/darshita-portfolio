@@ -213,7 +213,8 @@ function BubblesBackground() {
     window.matchMedia &&
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  const count = reduced ? 8 : 26;
+  // Increase density slightly for better presence on desktop
+  const count = reduced ? 10 : 34;
   const bubbles = Array.from({ length: count });
 
   return (
@@ -223,29 +224,31 @@ function BubblesBackground() {
         {`
         @keyframes bubble-rise {
           0%   { transform: translate3d(var(--bx, 0), 100%, 0) scale(var(--bs, 1)); opacity: 0; }
-          10%  { opacity: 0.6; }
-          90%  { opacity: 0.6; }
+          10%  { opacity: 0.7; }
+          90%  { opacity: 0.7; }
           100% { transform: translate3d(calc(var(--bx, 0) + var(--bshift, 0px)), -20%, 0) scale(var(--bs, 1)); opacity: 0; }
         }
       `}
       </style>
       {bubbles.map((_, i) => {
-        // Randomize per-bubble vars
-        const size = 10 + Math.random() * 34; // 10–44px
+        // Updated: broader, more visible sizes
+        const size = 14 + Math.random() * 42; // 14–56px
         const left = Math.random() * 100; // vw %
-        // Refined: larger bubbles rise slower; broadened range for smoother feel
-        const norm = (size - 10) / 34; // 0 (small) -> 1 (large)
-        const dur = 24 + norm * 20 + Math.random() * 8; // ~24–52s, larger = slower
+
+        // Larger bubbles rise slower; preserve smoothness
+        const norm = (size - 14) / 42; // 0 (small) -> 1 (large)
+        const dur = 26 + norm * 22 + Math.random() * 8; // ~26–56s, larger = slower
         const delay = Math.random() * 8; // 0–8s
         const scale = 0.9 + Math.random() * 0.5; // subtle size variation
-        const shift = (Math.random() * 80 - 40).toFixed(1) + "px"; // -40..40px drift
-        // Color mix: whites + soft blues
+        const shift = (Math.random() * 90 - 45).toFixed(1) + "px"; // -45..45px drift
+
+        // Enriched palette: brighter whites + clearer blues for contrast on pastel bg
         const palette = [
-          "rgba(255,255,255,0.9)",
-          "rgba(255,255,255,0.7)",
-          "rgba(210,233,255,0.65)",
-          "rgba(163,208,255,0.55)",
-          "rgba(13,71,161,0.08)",
+          "rgba(255,255,255,0.95)", // bright white
+          "rgba(255,255,255,0.80)", // soft white
+          "rgba(230,244,255,0.85)", // very light blue
+          "rgba(189,222,255,0.80)", // light blue
+          "rgba(120,169,255,0.40)", // soft navy tint
         ];
         const bg = palette[i % palette.length];
 
@@ -260,8 +263,10 @@ function BubblesBackground() {
               left: `${left}%`,
               bottom: "-10%",
               background: bg,
-              border: "1px solid rgba(255,255,255,0.35)",
-              boxShadow: "0 2px 8px rgba(13,71,161,0.08)",
+              // Slightly stronger border for visibility
+              border: "1px solid rgba(255,255,255,0.5)",
+              // Slightly stronger shadow for separation from bg
+              boxShadow: "0 3px 10px rgba(13,71,161,0.12)",
               // Motion
               animation: reduced ? undefined : `bubble-rise ${dur}s linear ${delay}s infinite`,
               // Per-bubble CSS vars
