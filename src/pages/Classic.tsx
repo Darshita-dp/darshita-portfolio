@@ -20,9 +20,9 @@ type Project = {
 
 const BLUE = {
   headerFrom: "#0D47A1",
-  headerTo: "#1976D2",
-  accent: "#64B5F6",
-  bgTint: "#F7FAFF",
+  headerTo: "#0D47A1",
+  accent: "#A3D0FF",
+  bgTint: "#EAF4FF",
 };
 
 const featuredProjects: Array<Project> = [
@@ -206,6 +206,75 @@ function StickyNav() {
   );
 }
 
+function BubblesBackground() {
+  // Lightweight, CSS-driven bubbles; respects reduced motion
+  const reduced =
+    typeof window !== "undefined" &&
+    window.matchMedia &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const count = reduced ? 8 : 26;
+  const bubbles = Array.from({ length: count });
+
+  return (
+    <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+      {/* Keyframes local to this page */}
+      <style>
+        {`
+        @keyframes bubble-rise {
+          0%   { transform: translate3d(var(--bx, 0), 100%, 0) scale(var(--bs, 1)); opacity: 0; }
+          10%  { opacity: 0.6; }
+          90%  { opacity: 0.6; }
+          100% { transform: translate3d(calc(var(--bx, 0) + var(--bshift, 0px)), -20%, 0) scale(var(--bs, 1)); opacity: 0; }
+        }
+      `}
+      </style>
+      {bubbles.map((_, i) => {
+        // Randomize per-bubble vars
+        const size = 10 + Math.random() * 34; // 10–44px
+        const left = Math.random() * 100; // vw %
+        const dur = 18 + Math.random() * 18; // 18–36s
+        const delay = Math.random() * 8; // 0–8s
+        const scale = 0.9 + Math.random() * 0.5; // subtle size variation
+        const shift = (Math.random() * 80 - 40).toFixed(1) + "px"; // -40..40px drift
+        // Color mix: whites + soft blues
+        const palette = [
+          "rgba(255,255,255,0.9)",
+          "rgba(255,255,255,0.7)",
+          "rgba(210,233,255,0.65)",
+          "rgba(163,208,255,0.55)",
+          "rgba(13,71,161,0.08)",
+        ];
+        const bg = palette[i % palette.length];
+
+        return (
+          <span
+            key={i}
+            aria-hidden="true"
+            className="absolute rounded-full backdrop-blur-[1px]"
+            style={{
+              width: `${size}px`,
+              height: `${size}px`,
+              left: `${left}%`,
+              bottom: "-10%",
+              background: bg,
+              border: "1px solid rgba(255,255,255,0.35)",
+              boxShadow: "0 2px 8px rgba(13,71,161,0.08)",
+              // Motion
+              animation: reduced ? undefined : `bubble-rise ${dur}s linear ${delay}s infinite`,
+              // Per-bubble CSS vars
+              // @ts-ignore custom properties
+              "--bx": "0px",
+              "--bs": scale,
+              "--bshift": shift,
+            } as React.CSSProperties}
+          />
+        );
+      })}
+    </div>
+  );
+}
+
 export default function Classic() {
   const [sending, setSending] = useState(false);
 
@@ -243,7 +312,8 @@ export default function Classic() {
   );
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen relative" style={{ background: BLUE.bgTint }}>
+      <BubblesBackground />
       <StickyNav />
 
       {/* Hero / Profile */}
