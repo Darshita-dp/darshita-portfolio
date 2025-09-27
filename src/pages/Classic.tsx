@@ -862,19 +862,6 @@ export default function Classic() {
               <CardContent className="text-sm text-slate-600">{x.desc}</CardContent>
             </Card>
           ))}
-          <Card className="shadow-sm">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-lg">Resume</CardTitle>
-            </CardHeader>
-            <CardContent className="flex items-center gap-3">
-              <Button variant="outline" asChild>
-                <a href="#" onClick={(e) => e.preventDefault()}>
-                  Download Resume
-                </a>
-              </Button>
-              <span className="text-xs text-slate-500">Add your resume link later.</span>
-            </CardContent>
-          </Card>
         </div>
       </motion.section>
 
