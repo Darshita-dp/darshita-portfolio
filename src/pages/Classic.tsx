@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
 import { ArrowRight, Award, Briefcase, Database, Github, Linkedin, Mail, Phone, Smartphone, Star } from "lucide-react";
 
 type Project = {
@@ -28,38 +29,38 @@ const BLUE = {
 const featuredProjects: Array<Project> = [
   {
     id: "smartplanner",
-    title: "SmartPlanner (iOS)",
-    summary: "SwiftUI • Core Data • MVVM — planning app with clean mobile UX.",
+    title: "SmartPlanner (SwiftUI)",
+    summary: "iOS task manager with AI-inspired priority, week view, drag-to-reschedule, Core Data.",
     image: "/logo_bg.png",
     tags: ["SwiftUI", "Core Data", "MVVM"],
     link: "#",
     metrics: [
-      { icon: <Star className="w-3.5 h-3.5" />, label: "Ratings", value: 120, suffix: "+" },
-      { icon: <Smartphone className="w-3.5 h-3.5" />, label: "iOS", value: 1 },
+      { icon: <Star className="w-3.5 h-3.5" />, label: "Impact", value: 100, suffix: "%" },
+      { icon: <Smartphone className="w-3.5 h-3.5" />, label: "Platform", value: 1 },
     ],
   },
   {
     id: "film-fusion",
-    title: "Film‑Fusion (Web)",
-    summary: "Movie discovery site showcasing routing, search, and structured UI.",
+    title: "Film‑Fusion",
+    summary: "Interactive movie reviews with search, reviews, login; PHP + JSON/AJAX.",
     image: "/logo_bg.png",
-    tags: ["React", "TypeScript", "UI"],
+    tags: ["HTML/CSS/JS", "PHP", "AJAX"],
     link: "#",
     metrics: [
-      { icon: <Database className="w-3.5 h-3.5" />, label: "Titles Indexed", value: 8_500, suffix: "+" },
-      { icon: <Star className="w-3.5 h-3.5" />, label: "Pages", value: 24 },
+      { icon: <Database className="w-3.5 h-3.5" />, label: "APIs", value: 2 },
+      { icon: <Star className="w-3.5 h-3.5" />, label: "Features", value: 12, suffix: "+" },
     ],
   },
   {
-    id: "course-manager",
-    title: "Course Manager",
-    summary: "Organize courses, assignments, and progress with clarity.",
+    id: "scholarship-automation",
+    title: "Scholarship Automation",
+    summary: "Process analysis with RFP & BPMN; vendor comparison and automation framework.",
     image: "/logo_bg.png",
-    tags: ["React", "UX", "State"],
+    tags: ["Process", "BPMN", "RFP"],
     link: "#",
     metrics: [
-      { icon: <Star className="w-3.5 h-3.5" />, label: "Reliability", value: 99, suffix: "%" },
-      { icon: <Database className="w-3.5 h-3.5" />, label: "Courses Tracked", value: 32 },
+      { icon: <Star className="w-3.5 h-3.5" />, label: "Efficiency", value: 40, suffix: "%" },
+      { icon: <Database className="w-3.5 h-3.5" />, label: "Docs", value: 8, suffix: "+" },
     ],
   },
 ];
@@ -353,27 +354,79 @@ export default function Classic() {
               >
                 Darshita Patel
               </h1>
-              <p className="mt-2 text-sm md:text-base opacity-95">
-                Turning data into impactful solutions | Full‑Stack Developer & Analyst
+              <p className="mt-1 text-base md:text-lg opacity-95">
+                Data Analyst & Developer
               </p>
+              <motion.p
+                className="mt-2 text-sm md:text-base opacity-95"
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.15 }}
+              >
+                "Transforming data into insights 📊 | Building solutions through code 💻"
+              </motion.p>
 
               <div className="mt-4 flex flex-wrap items-center justify-center md:justify-start gap-2">
                 <Button asChild variant="secondary" className="bg-white text-slate-900 hover:bg-white/90">
-                  <a href="#contact"><Mail className="w-4 h-4 mr-2" /> Let's Connect</a>
+                  <a href="#" onClick={(e) => e.preventDefault()}>📄 Resume</a>
                 </Button>
                 <Button asChild variant="outline" className="border-white/60 text-white hover:bg-white/10">
-                  <a href="https://www.linkedin.com/" target="_blank" rel="noreferrer">
-                    <Linkedin className="w-4 h-4 mr-2" /> LinkedIn
-                  </a>
+                  <a href="https://www.linkedin.com/" target="_blank" rel="noreferrer">🔗 LinkedIn</a>
                 </Button>
                 <Button asChild variant="outline" className="border-white/60 text-white hover:bg-white/10">
-                  <a href="https://github.com/" target="_blank" rel="noreferrer">
-                    <Github className="w-4 h-4 mr-2" /> GitHub
-                  </a>
+                  <a href="https://github.com/" target="_blank" rel="noreferrer">🖥️ GitHub</a>
+                </Button>
+                <Button asChild variant="outline" className="border-white/60 text-white hover:bg-white/10">
+                  <a href="#contact">📬 Contact</a>
                 </Button>
               </div>
             </div>
           </div>
+        </div>
+      </motion.section>
+
+      {/* About Me */}
+      <motion.section
+        id="about"
+        className="container mx-auto max-w-6xl px-4 py-10"
+        initial={{ opacity: 0, y: 14 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-80px" }}
+        transition={{ duration: 0.5 }}
+      >
+        <SectionTitle id="about-title">About Me</SectionTitle>
+        <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+          <motion.div
+            className="md:col-span-2 text-slate-700"
+            initial={{ x: -24, opacity: 0 }}
+            whileInView={{ x: 0, opacity: 1 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.5 }}
+          >
+            <p>
+              I am a Master's in Information Systems graduate (GPA 4.0) from Illinois State University with a strong focus on
+              data analysis, system design, and web/mobile development. I enjoy exploring datasets to uncover insights and
+              building innovative solutions that merge creativity with technology. My journey combines analytical thinking,
+              teaching, and project management with hands-on experience in IT systems.
+            </p>
+          </motion.div>
+          <motion.div
+            className="md:col-span-1"
+            initial={{ x: 24, opacity: 0 }}
+            whileInView={{ x: 0, opacity: 1 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.5 }}
+          >
+            <Card className="overflow-hidden shadow-md">
+              <CardContent className="p-0">
+                <img
+                  src="https://harmless-tapir-303.convex.cloud/api/storage/fbbcab3e-d3b1-4639-99b4-311c5e1ab7ca"
+                  alt="Darshita - About"
+                  className="w-full h-48 object-cover"
+                />
+              </CardContent>
+            </Card>
+          </motion.div>
         </div>
       </motion.section>
 
@@ -452,7 +505,7 @@ export default function Classic() {
         </div>
       </motion.section>
 
-      {/* Skills */}
+      {/* Skills – 4 categories as bubble cards */}
       <motion.section
         id="skills"
         className="py-10"
@@ -463,36 +516,85 @@ export default function Classic() {
         transition={{ duration: 0.5 }}
       >
         <div className="container mx-auto max-w-6xl px-4">
-          <SectionTitle id="skills-title">Skills & Expertise</SectionTitle>
-
-          <div className="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <SectionTitle id="skills-title">Skills</SectionTitle>
+          {/*
+            Bubble cards per category; enlarge on hover
+          */}
+          <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Data Skills */}
             <Card className="border-blue-100 shadow-sm">
-              <CardHeader className="pb-2">
-                <CardTitle className="text-lg">Technical</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {techSkills.map((s, idx) => (
-                  <div key={s.name} className="space-y-1">
-                    <div className="flex items-center gap-2">
-                      {s.icon ? <span className="text-blue-700">{s.icon}</span> : null}
-                      <span className="font-medium">{s.name}</span>
-                    </div>
-                    <SkillBar label="" value={s.level} delay={0.1 + idx * 0.06} />
-                  </div>
+              <CardHeader className="pb-2"><CardTitle className="text-lg">📊 Data Skills</CardTitle></CardHeader>
+              <CardContent className="flex flex-wrap gap-2">
+                {[
+                  "SQL (MySQL, Oracle)",
+                  "Python (Pandas, NumPy)",
+                  "Tableau",
+                  "Power BI",
+                  "Excel (Pivots/Lookups)",
+                  "Data Cleaning",
+                  "Data Visualization",
+                  "Reporting",
+                ].map((s) => (
+                  <span key={s} className="px-3 py-1.5 rounded-full text-sm bg-white hover:shadow transition transform hover:scale-105 border"
+                    style={{ borderColor: "rgba(13,71,161,0.18)", color: "#0D47A1" }}>
+                    {s}
+                  </span>
                 ))}
               </CardContent>
             </Card>
-
+            {/* Development Skills */}
             <Card className="border-blue-100 shadow-sm">
-              <CardHeader className="pb-2">
-                <CardTitle className="text-lg">Professional</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                {softSkills.map((s, i) => (
-                  <div key={s} className="flex items-center gap-2 text-sm">
-                    <Star className="w-4 h-4 text-blue-700" />
-                    <span>{s}</span>
-                  </div>
+              <CardHeader className="pb-2"><CardTitle className="text-lg">💻 Development Skills</CardTitle></CardHeader>
+              <CardContent className="flex flex-wrap gap-2">
+                {[
+                  "React",
+                  "SwiftUI",
+                  "PHP",
+                  "HTML/CSS/JS",
+                  "Java",
+                  "C/C++",
+                  "Node.js (basics)",
+                  "Git & GitHub",
+                ].map((s) => (
+                  <span key={s} className="px-3 py-1.5 rounded-full text-sm bg-white hover:shadow transition transform hover:scale-105 border"
+                    style={{ borderColor: "rgba(13,71,161,0.18)", color: "#0D47A1" }}>
+                    {s}
+                  </span>
+                ))}
+              </CardContent>
+            </Card>
+            {/* Interpersonal */}
+            <Card className="border-blue-100 shadow-sm">
+              <CardHeader className="pb-2"><CardTitle className="text-lg">🧠 Interpersonal</CardTitle></CardHeader>
+              <CardContent className="flex flex-wrap gap-2">
+                {[
+                  "Leadership & Teamwork",
+                  "Communication & Mentorship",
+                  "Problem‑Solving",
+                  "Time Management",
+                  "Critical Thinking",
+                ].map((s) => (
+                  <span key={s} className="px-3 py-1.5 rounded-full text-sm bg-white hover:shadow transition transform hover:scale-105 border"
+                    style={{ borderColor: "rgba(13,71,161,0.18)", color: "#0D47A1" }}>
+                    {s}
+                  </span>
+                ))}
+              </CardContent>
+            </Card>
+            {/* Tools & Others */}
+            <Card className="border-blue-100 shadow-sm">
+              <CardHeader className="pb-2"><CardTitle className="text-lg">🌐 Tools & Others</CardTitle></CardHeader>
+              <CardContent className="flex flex-wrap gap-2">
+                {[
+                  "AWS (EC2, RDS, S3, VPC)",
+                  "Jira & Confluence",
+                  "Docker (basics)",
+                  "Microsoft Office Suite",
+                ].map((s) => (
+                  <span key={s} className="px-3 py-1.5 rounded-full text-sm bg-white hover:shadow transition transform hover:scale-105 border"
+                    style={{ borderColor: "rgba(13,71,161,0.18)", color: "#0D47A1" }}>
+                    {s}
+                  </span>
                 ))}
               </CardContent>
             </Card>
@@ -500,7 +602,7 @@ export default function Classic() {
         </div>
       </motion.section>
 
-      {/* Experience */}
+      {/* Experience Timeline - replaces previous Experience grid content */}
       <motion.section
         id="experience"
         className="container mx-auto max-w-6xl px-4 py-10"
@@ -509,24 +611,180 @@ export default function Classic() {
         viewport={{ once: true, margin: "-80px" }}
         transition={{ duration: 0.5 }}
       >
-        <SectionTitle id="experience-title">Experience Highlights</SectionTitle>
-        <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-5">
-          <Card className="shadow-sm">
-            <CardHeader className="pb-2 flex flex-row items-center gap-2">
-              <Briefcase className="w-4 h-4 text-blue-700" />
-              <CardTitle className="text-lg">Graduate Teaching Assistant, ISU</CardTitle>
-            </CardHeader>
-            <CardContent className="text-sm text-slate-600">
-              Assisted 120+ students in IT‑150 labs; reinforced fundamentals and practical computing.
+        <SectionTitle id="experience-title">Experience Timeline</SectionTitle>
+        <div className="mt-6 relative">
+          <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-[3px] bg-blue-200/70 rounded" />
+          <div className="space-y-6">
+            {[
+              {
+                title: "Graduate Teaching Assistant | Illinois State University",
+                period: "Aug 2024 – May 2025",
+                desc:
+                  "Instructed and supported 120+ students in IT productivity tools; developed lab content and guided students in Microsoft Office Suite and data tools.",
+              },
+              {
+                title: "Product Supervisor | Chaudhary Tea Processors & Packets Pvt. Ltd.",
+                period: "2023",
+                desc:
+                  "Oversaw product information management systems; ensured data accuracy and coordinated smooth workflows.",
+              },
+              {
+                title: "Web Development Intern | CIIWAS NGO",
+                period: "Aug 2024 – Dec 2024",
+                desc:
+                  "Maintained NGO website; processed community datasets to improve reporting accuracy.",
+              },
+              {
+                title: "IT Analyst Intern | ORANGES NGO",
+                period: "Apr 2022 – Dec 2022",
+                desc:
+                  "Processed and cleansed donor/beneficiary datasets from 80+ regions; automated workflows to improve governance and reporting.",
+              },
+              {
+                title: "Capstone & Project Work | ISU",
+                period: "2023 – 2025",
+                desc:
+                  "Revamped Courtside Leadership WordPress site; delivered Managed IT Services RFP (Hazel Crest) with data analysis & strategy.",
+              },
+            ].map((item, i) => (
+              <motion.div
+                key={item.title}
+                initial={{ opacity: 0, x: i % 2 === 0 ? -20 : 20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, margin: "-80px" }}
+                transition={{ duration: 0.45 }}
+                className={`relative md:w-1/2 ${i % 2 === 0 ? "md:pr-8 md:ml-auto" : "md:pl-8"}`}
+                style={{ paddingLeft: "2.5rem" }}
+              >
+                <span className="absolute left-4 md:left-1/2 -translate-x-1/2 top-3 w-3.5 h-3.5 rounded-full bg-blue-600 ring-4 ring-blue-200" />
+                <Card className="shadow-sm">
+                  <CardHeader className="pb-1">
+                    <CardTitle className="text-base md:text-lg text-slate-900">{item.title}</CardTitle>
+                    <p className="text-xs text-slate-500 mt-1">{item.period}</p>
+                  </CardHeader>
+                  <CardContent className="text-sm text-slate-700">{item.desc}</CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </motion.section>
+
+      {/* Certificates & Achievements - NEW */}
+      <motion.section
+        className="container mx-auto max-w-6xl px-4 py-10"
+        initial={{ opacity: 0, y: 14 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-80px" }}
+        transition={{ duration: 0.5 }}
+      >
+        <SectionTitle id="certs-title">Certificates & Achievements</SectionTitle>
+        <div className="mt-6">
+          <Carousel className="w-full">
+            <CarouselContent className="flex gap-4">
+              {[
+                "AWS Cloud Practitioner (In Progress)",
+                "Tableau Desktop Specialist (In Progress)",
+                "LinkedIn Learning – Data Analysis & SQL",
+                "Outstanding Graduate Student Award – ISU (2025)",
+                "ISU Research Symposium Poster (AI in Banking, 2025)",
+              ].map((c) => (
+                <CarouselItem key={c} className="basis-5/6 md:basis-1/3">
+                  <Card className="h-full shadow-sm">
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-sm md:text-base">{c}</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="h-20 grid place-items-center text-4xl">🏅</div>
+                    </CardContent>
+                  </Card>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+          </Carousel>
+        </div>
+      </motion.section>
+
+      {/* Education - NEW */}
+      <motion.section
+        className="container mx-auto max-w-6xl px-4 py-10"
+        initial={{ opacity: 0, y: 14 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-80px" }}
+        transition={{ duration: 0.5 }}
+      >
+        <SectionTitle id="education-title">Education</SectionTitle>
+        <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+          {[
+            {
+              front: "Illinois State University (ISU)",
+              back: "M.S. in Information Systems | GPA: 4.0 | 2025\nInternet Application Development Sequence",
+            },
+            {
+              front: "Devi Ahilya Vishwavidyalaya (DAVV), India",
+              back: "B.C.A. (Hons.) | GPA: 3.5 | 2022",
+            },
+          ].map((ed) => (
+            <div key={ed.front} className="group [perspective:1000px]">
+              <div className="relative h-40 w-full transition-transform duration-500 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]">
+                <Card className="absolute inset-0 grid place-items-center backface-hidden shadow-sm">
+                  <CardHeader><CardTitle className="text-center">{ed.front}</CardTitle></CardHeader>
+                </Card>
+                <Card className="absolute inset-0 grid place-items-center backface-hidden [transform:rotateY(180deg)] shadow-sm">
+                  <CardContent className="text-center whitespace-pre-line text-sm text-slate-700">{ed.back}</CardContent>
+                </Card>
+              </div>
+            </div>
+          ))}
+        </div>
+      </motion.section>
+
+      {/* Hobbies & Interests - NEW */}
+      <motion.section
+        className="container mx-auto max-w-6xl px-4 py-10"
+        initial={{ opacity: 0, y: 14 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-80px" }}
+        transition={{ duration: 0.5 }}
+      >
+        <SectionTitle id="hobbies-title">Hobbies & Interests</SectionTitle>
+        <div className="mt-6 grid grid-cols-2 md:grid-cols-5 gap-4">
+          {[
+            ["📸", "Photography & Visual Design"],
+            ["🎨", "Creative Designing & Posters"],
+            ["✍️", "Blogging & Storytelling"],
+            ["💡", "Exploring AI & Tech Trends"],
+            ["👭", "Time with sisters"],
+          ].map(([icon, label]) => (
+            <div key={label} className="rounded-xl bg-white p-4 border hover:shadow-md transition transform hover:scale-105 text-center">
+              <div className="text-3xl">{icon}</div>
+              <div className="mt-2 text-xs text-slate-700">{label}</div>
+            </div>
+          ))}
+        </div>
+      </motion.section>
+
+      {/* Testimonials & Career Goal - NEW */}
+      <motion.section
+        className="container mx-auto max-w-6xl px-4 py-10"
+        initial={{ opacity: 0, y: 14 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-80px" }}
+        transition={{ duration: 0.5 }}
+      >
+        <SectionTitle id="extras-title">Testimonials & Goals</SectionTitle>
+        <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-5">
+          <Card className="shadow-sm md:col-span-2">
+            <CardHeader className="pb-2"><CardTitle className="text-lg">Testimonials</CardTitle></CardHeader>
+            <CardContent className="space-y-3 text-sm text-slate-700">
+              <p>“Darshita is a dedicated and resourceful professional who blends analytical precision with creativity.” – Professor, ISU</p>
+              <p>“Her ability to simplify complex data into actionable insights is impressive." – Supervisor, NGO Internship</p>
             </CardContent>
           </Card>
           <Card className="shadow-sm">
-            <CardHeader className="pb-2 flex flex-row items-center gap-2">
-              <Briefcase className="w-4 h-4 text-blue-700" />
-              <CardTitle className="text-lg">NGO Web Internships</CardTitle>
-            </CardHeader>
-            <CardContent className="text-sm text-slate-600">
-              Built accessible sites/dashboards for CIIWAS & ORANGES; boosted engagement and clarity.
+            <CardHeader className="pb-2"><CardTitle className="text-lg">Career Goal</CardTitle></CardHeader>
+            <CardContent className="text-sm text-slate-700">
+              To combine my data analysis expertise with development skills to solve real-world business problems and create impactful IT solutions.
             </CardContent>
           </Card>
         </div>
