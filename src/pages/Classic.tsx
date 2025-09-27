@@ -217,7 +217,7 @@ function BubblesBackground() {
   const bubbles = Array.from({ length: count });
 
   return (
-    <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+    <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
       {/* Keyframes local to this page */}
       <style>
         {`
