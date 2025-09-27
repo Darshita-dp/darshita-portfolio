@@ -367,16 +367,16 @@ export default function Classic() {
               </motion.p>
 
               <div className="mt-4 flex flex-wrap items-center justify-center md:justify-start gap-2">
-                <Button asChild variant="secondary" className="bg-white text-slate-900 hover:bg-white/90">
+                <Button asChild variant="secondary" className="bg-white text-black hover:bg-white/90">
                   <a href="#" onClick={(e) => e.preventDefault()}>📄 Resume</a>
                 </Button>
-                <Button asChild variant="outline" className="border-white/60 text-white hover:bg-white/10">
+                <Button asChild variant="outline" className="bg-white text-black border-white/60 hover:bg-white/90">
                   <a href="https://www.linkedin.com/" target="_blank" rel="noreferrer">🔗 LinkedIn</a>
                 </Button>
-                <Button asChild variant="outline" className="border-white/60 text-white hover:bg-white/10">
+                <Button asChild variant="outline" className="bg-white text-black border-white/60 hover:bg-white/90">
                   <a href="https://github.com/" target="_blank" rel="noreferrer">🖥️ GitHub</a>
                 </Button>
-                <Button asChild variant="outline" className="border-white/60 text-white hover:bg-white/10">
+                <Button asChild variant="outline" className="bg-white text-black border-white/60 hover:bg-white/90">
                   <a href="#contact">📬 Contact</a>
                 </Button>
               </div>
@@ -395,9 +395,9 @@ export default function Classic() {
         transition={{ duration: 0.5 }}
       >
         <SectionTitle id="about-title">About Me</SectionTitle>
-        <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+        <div className="mt-6 grid grid-cols-1 md:grid-cols-1 gap-6 items-center">
           <motion.div
-            className="md:col-span-2 text-slate-700"
+            className="text-slate-700"
             initial={{ x: -24, opacity: 0 }}
             whileInView={{ x: 0, opacity: 1 }}
             viewport={{ once: true, margin: "-80px" }}
@@ -409,23 +409,6 @@ export default function Classic() {
               building innovative solutions that merge creativity with technology. My journey combines analytical thinking,
               teaching, and project management with hands-on experience in IT systems.
             </p>
-          </motion.div>
-          <motion.div
-            className="md:col-span-1"
-            initial={{ x: 24, opacity: 0 }}
-            whileInView={{ x: 0, opacity: 1 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.5 }}
-          >
-            <Card className="overflow-hidden shadow-md">
-              <CardContent className="p-0">
-                <img
-                  src="https://harmless-tapir-303.convex.cloud/api/storage/fbbcab3e-d3b1-4639-99b4-311c5e1ab7ca"
-                  alt="Darshita - About"
-                  className="w-full h-48 object-cover"
-                />
-              </CardContent>
-            </Card>
           </motion.div>
         </div>
       </motion.section>
@@ -777,7 +760,7 @@ export default function Classic() {
           <Card className="shadow-sm md:col-span-2">
             <CardHeader className="pb-2"><CardTitle className="text-lg">Testimonials</CardTitle></CardHeader>
             <CardContent className="space-y-3 text-sm text-slate-700">
-              <p>“Darshita is a dedicated and resourceful professional who blends analytical precision with creativity.” – Professor, ISU</p>
+              <p>“Darshita is a dedicated and resourceful professional who blends analytical precision with creativity." – Professor, ISU</p>
               <p>“Her ability to simplify complex data into actionable insights is impressive." – Supervisor, NGO Internship</p>
             </CardContent>
           </Card>
