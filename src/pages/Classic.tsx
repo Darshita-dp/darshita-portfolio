@@ -233,7 +233,9 @@ function BubblesBackground() {
         // Randomize per-bubble vars
         const size = 10 + Math.random() * 34; // 10–44px
         const left = Math.random() * 100; // vw %
-        const dur = 18 + Math.random() * 18; // 18–36s
+        // Refined: larger bubbles rise slower; broadened range for smoother feel
+        const norm = (size - 10) / 34; // 0 (small) -> 1 (large)
+        const dur = 24 + norm * 20 + Math.random() * 8; // ~24–52s, larger = slower
         const delay = Math.random() * 8; // 0–8s
         const scale = 0.9 + Math.random() * 0.5; // subtle size variation
         const shift = (Math.random() * 80 - 40).toFixed(1) + "px"; // -40..40px drift
