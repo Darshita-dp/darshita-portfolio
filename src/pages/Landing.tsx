@@ -767,8 +767,9 @@ function SunflowerCursor() {
       state.current.y = e.clientY;
     };
 
-    // Universal boost: interactive elements OR explicit data-cursor-boost
-    const interactiveSel = "button, a, [role='button'], [tabindex]:not([tabindex='-1'])";
+    // Universal boost: any interactive element OR explicit data-cursor-boost
+    const interactiveSel =
+      "button, a, input, select, textarea, label, summary, details, [role='button'], [role='link'], [tabindex]:not([tabindex='-1']), [contenteditable='true']";
     const onOver = (e: PointerEvent) => {
       const t = e.target as HTMLElement | null;
       const isInteractive = !!t?.closest(interactiveSel);
@@ -776,8 +777,33 @@ function SunflowerCursor() {
       state.current.boost = isInteractive || explicitBoost;
     };
 
+    // Ensure boost is cleared when pointer leaves the window
+    const onLeave = () => {
+      state.current.boost = false;
+    };
+
+    // Also support keyboard focus for accessibility
+    const onFocusIn = () => {
+      const active = document.activeElement as HTMLElement | null;
+      const isInteractive = !!active?.closest(interactiveSel);
+      const explicitBoost = !!active?.closest("[data-cursor-boost='true']");
+      state.current.boost = isInteractive || explicitBoost;
+    };
+    const onFocusOut = () => {
+      // Defer to next frame so focus change can settle
+      requestAnimationFrame(() => {
+        const active = document.activeElement as HTMLElement | null;
+        const isInteractive = !!active?.closest(interactiveSel);
+        const explicitBoost = !!active?.closest("[data-cursor-boost='true']");
+        state.current.boost = isInteractive || explicitBoost;
+      });
+    };
+
     document.addEventListener("pointermove", onMove, { passive: true });
     document.addEventListener("pointerover", onOver, { passive: true });
+    document.addEventListener("pointerleave", onLeave, { passive: true });
+    document.addEventListener("focusin", onFocusIn, { passive: true });
+    document.addEventListener("focusout", onFocusOut, { passive: true });
 
     // Smooth follow lag + micro-rotation wobble (boosted only)
     const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -810,6 +836,9 @@ function SunflowerCursor() {
       cancelAnimationFrame(raf);
       document.removeEventListener("pointermove", onMove);
       document.removeEventListener("pointerover", onOver);
+      document.removeEventListener("pointerleave", onLeave);
+      document.removeEventListener("focusin", onFocusIn);
+      document.removeEventListener("focusout", onFocusOut);
     };
   }, []);
 
