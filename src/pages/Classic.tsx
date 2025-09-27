@@ -472,80 +472,7 @@ export default function Classic() {
         </div>
       </motion.section>
 
-      {/* Projects */}
-      <motion.section
-        id="projects"
-        className="container mx-auto max-w-6xl px-4 py-10"
-        initial={{ opacity: 0, y: 14 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-80px" }}
-        transition={{ duration: 0.5, delay: 0.05 }}
-      >
-        <SectionTitle id="projects-title">Projects</SectionTitle>
-
-        <div className="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {featuredProjects.map((p, i) => (
-            <motion.a
-              key={p.id}
-              href={p.link || "#"}
-              whileHover={{ y: -6, scale: 1.01 }}
-              transition={{ type: "spring", stiffness: 250, damping: 20 }}
-              className="group"
-              aria-label={`Open project ${p.title}`}
-            >
-              <Card className="overflow-hidden border-slate-200 hover:border-blue-300 transition-all shadow-sm hover:shadow-lg hover:-translate-y-0.5">
-                <div className="relative h-40 w-full overflow-hidden">
-                  <img
-                    src={p.image}
-                    alt={p.title}
-                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.06]"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                </div>
-                <CardHeader className="pb-2">
-                  <CardTitle
-                    className="text-lg"
-                    style={{ letterSpacing: "0.3px", fontFamily: '"Montserrat","Inter",ui-sans-serif' }}
-                  >
-                    {p.title}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <p className="text-sm text-slate-600">{p.summary}</p>
-                  <div className="flex flex-wrap gap-2">
-                    {p.tags.map((t) => (
-                      <Badge key={t} variant="secondary" className="bg-[#E8F2FF] text-[#0D47A1] border-blue-200">
-                        {t}
-                      </Badge>
-                    ))}
-                  </div>
-                  {p.metrics && p.metrics.length > 0 && (
-                    <div className="pt-1 grid grid-cols-2 gap-3 text-xs text-slate-700">
-                      {p.metrics.map((m, idx) => (
-                        <div key={idx} className="inline-flex items-center gap-1.5">
-                          <span className="text-blue-700">{m.icon}</span>
-                          {typeof m.value === "number" ? (
-                            <>
-                              <CountUpNumber
-                                to={m.value}
-                                suffix={m.suffix}
-                                className="font-semibold text-slate-900"
-                              />
-                              <span className="opacity-70">{m.label}</span>
-                            </>
-                          ) : (
-                            <span>{m.label}</span>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-            </motion.a>
-          ))}
-        </div>
-      </motion.section>
+      {/* Projects moved below Experience section */}
 
       {/* Skills – 4 categories as bubble cards */}
       <motion.section
@@ -717,6 +644,81 @@ export default function Classic() {
               </motion.div>
             ))}
           </div>
+        </div>
+      </motion.section>
+
+      {/* Projects */}
+      <motion.section
+        id="projects"
+        className="container mx-auto max-w-6xl px-4 py-10"
+        initial={{ opacity: 0, y: 14 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-80px" }}
+        transition={{ duration: 0.5, delay: 0.05 }}
+      >
+        <SectionTitle id="projects-title">Projects</SectionTitle>
+
+        <div className="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {featuredProjects.map((p, i) => (
+            <motion.a
+              key={p.id}
+              href={p.link || "#"}
+              whileHover={{ y: -6, scale: 1.01 }}
+              transition={{ type: "spring", stiffness: 250, damping: 20 }}
+              className="group"
+              aria-label={`Open project ${p.title}`}
+            >
+              <Card className="overflow-hidden border-slate-200 hover:border-blue-300 transition-all shadow-sm hover:shadow-lg hover:-translate-y-0.5">
+                <div className="relative h-40 w-full overflow-hidden">
+                  <img
+                    src={p.image}
+                    alt={p.title}
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.06]"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                </div>
+                <CardHeader className="pb-2">
+                  <CardTitle
+                    className="text-lg"
+                    style={{ letterSpacing: "0.3px", fontFamily: '"Montserrat","Inter",ui-sans-serif' }}
+                  >
+                    {p.title}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <p className="text-sm text-slate-600">{p.summary}</p>
+                  <div className="flex flex-wrap gap-2">
+                    {p.tags.map((t) => (
+                      <Badge key={t} variant="secondary" className="bg-[#E8F2FF] text-[#0D47A1] border-blue-200">
+                        {t}
+                      </Badge>
+                    ))}
+                  </div>
+                  {p.metrics && p.metrics.length > 0 && (
+                    <div className="pt-1 grid grid-cols-2 gap-3 text-xs text-slate-700">
+                      {p.metrics.map((m, idx) => (
+                        <div key={idx} className="inline-flex items-center gap-1.5">
+                          <span className="text-blue-700">{m.icon}</span>
+                          {typeof m.value === "number" ? (
+                            <>
+                              <CountUpNumber
+                                to={m.value}
+                                suffix={m.suffix}
+                                className="font-semibold text-slate-900"
+                              />
+                              <span className="opacity-70">{m.label}</span>
+                            </>
+                          ) : (
+                            <span>{m.label}</span>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </motion.a>
+          ))}
         </div>
       </motion.section>
 
