@@ -1012,20 +1012,28 @@ export default function Classic() {
                 { title: "Microsoft Power BI Data Analyst Associate (Future)", year: "", icon: "📈" },
                 { title: "Snowflake SnowPro Core Certification (Future)", year: "", icon: "❄️" },
               ].map((c) => (
-                <CarouselItem key={c.title} className="basis-5/6 md:basis-1/3">
-                  <Card className="h-full shadow-sm transition-transform transition-shadow duration-200 hover:-translate-y-0.5 hover:shadow-md">
-                    <CardHeader className="pb-2">
-                      <CardTitle className="text-sm md:text-base inline-flex items-center gap-2">
-                        <span className="text-2xl" aria-hidden="true">{c.icon}</span>
-                        <span>
+                <CarouselItem
+                  key={c.title}
+                  // Responsive widths: 1–2 on mobile, 2–3 on tablet, 3–4 on desktop
+                  className="basis-3/4 sm:basis-1/2 md:basis-1/3 lg:basis-1/4"
+                >
+                  <Card className="h-[150px] max-w-[260px] mx-auto rounded-xl shadow-sm transition-transform transition-shadow duration-200 hover:-translate-y-0.5 hover:shadow-md border-slate-200">
+                    <div className="h-full p-3 flex flex-col items-center justify-between text-center">
+                      <div className="text-xl" aria-hidden="true">{c.icon}</div>
+                      <div className="px-1">
+                        <div
+                          className="font-medium text-[14px] sm:text-[15px] leading-snug text-slate-900"
+                          style={{ fontFamily: '"Montserrat","Inter",ui-sans-serif' }}
+                        >
                           {c.title}
-                          {c.year ? ` (${c.year})` : ""}
-                        </span>
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="h-16 grid place-items-center text-slate-600">Blue & white theme</div>
-                    </CardContent>
+                        </div>
+                      </div>
+                      {c.year ? (
+                        <div className="text-[12px] text-slate-500">{c.year}</div>
+                      ) : (
+                        <div className="h-[14px]" aria-hidden="true" />
+                      )}
+                    </div>
                   </Card>
                 </CarouselItem>
               ))}
