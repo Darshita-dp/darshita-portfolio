@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { ArrowRight, Award, Briefcase, Database, Github, Linkedin, Mail, Phone, Smartphone, Star } from "lucide-react";
 
 type Project = {
@@ -474,7 +475,7 @@ export default function Classic() {
 
       {/* Projects moved below Experience section */}
 
-      {/* Skills – 4 categories as bubble cards */}
+      {/* Skills – Blue/White circular chips with radial progress, legends, averages */}
       <motion.section
         id="skills"
         className="py-10"
@@ -486,88 +487,254 @@ export default function Classic() {
       >
         <div className="container mx-auto max-w-6xl px-4">
           <SectionTitle id="skills-title">Skills</SectionTitle>
-          {/*
-            Bubble cards per category; enlarge on hover
-          */}
-          <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Data Skills */}
-            <Card className="border-blue-100 shadow-sm transition-transform transition-shadow duration-200 hover:-translate-y-0.5 hover:shadow-md">
-              <CardHeader className="pb-2"><CardTitle className="text-lg">📊 Data Skills</CardTitle></CardHeader>
-              <CardContent className="flex flex-wrap gap-2">
-                {[
-                  "SQL (MySQL, Oracle)",
-                  "Python (Pandas, NumPy)",
-                  "Tableau",
-                  "Power BI",
-                  "Excel (Pivots/Lookups)",
-                  "Data Cleaning",
-                  "Data Visualization",
-                  "Reporting",
-                ].map((s) => (
-                  <span key={s} className="px-3 py-1.5 rounded-full text-sm bg-white hover:shadow transition transform hover:scale-105 border"
-                    style={{ borderColor: "rgba(13,71,161,0.18)", color: "#0D47A1" }}>
-                    {s}
-                  </span>
-                ))}
-              </CardContent>
-            </Card>
-            {/* Development Skills */}
-            <Card className="border-blue-100 shadow-sm transition-transform transition-shadow duration-200 hover:-translate-y-0.5 hover:shadow-md">
-              <CardHeader className="pb-2"><CardTitle className="text-lg">💻 Development Skills</CardTitle></CardHeader>
-              <CardContent className="flex flex-wrap gap-2">
-                {[
-                  "React",
-                  "SwiftUI",
-                  "PHP",
-                  "HTML/CSS/JS",
-                  "Java",
-                  "C/C++",
-                  "Node.js (basics)",
-                  "Git & GitHub",
-                ].map((s) => (
-                  <span key={s} className="px-3 py-1.5 rounded-full text-sm bg-white hover:shadow transition transform hover:scale-105 border"
-                    style={{ borderColor: "rgba(13,71,161,0.18)", color: "#0D47A1" }}>
-                    {s}
-                  </span>
-                ))}
-              </CardContent>
-            </Card>
-            {/* Interpersonal */}
-            <Card className="border-blue-100 shadow-sm transition-transform transition-shadow duration-200 hover:-translate-y-0.5 hover:shadow-md">
-              <CardHeader className="pb-2"><CardTitle className="text-lg">🧠 Interpersonal</CardTitle></CardHeader>
-              <CardContent className="flex flex-wrap gap-2">
-                {[
-                  "Leadership & Teamwork",
-                  "Communication & Mentorship",
-                  "Problem‑Solving",
-                  "Time Management",
-                  "Critical Thinking",
-                ].map((s) => (
-                  <span key={s} className="px-3 py-1.5 rounded-full text-sm bg-white hover:shadow transition transform hover:scale-105 border"
-                    style={{ borderColor: "rgba(13,71,161,0.18)", color: "#0D47A1" }}>
-                    {s}
-                  </span>
-                ))}
-              </CardContent>
-            </Card>
-            {/* Tools & Others */}
-            <Card className="border-blue-100 shadow-sm transition-transform transition-shadow duration-200 hover:-translate-y-0.5 hover:shadow-md">
-              <CardHeader className="pb-2"><CardTitle className="text-lg">🌐 Tools & Others</CardTitle></CardHeader>
-              <CardContent className="flex flex-wrap gap-2">
-                {[
-                  "AWS (EC2, RDS, S3, VPC)",
-                  "Jira & Confluence",
-                  "Docker (basics)",
-                  "Microsoft Office Suite",
-                ].map((s) => (
-                  <span key={s} className="px-3 py-1.5 rounded-full text-sm bg-white hover:shadow transition transform hover:scale-105 border"
-                    style={{ borderColor: "rgba(13,71,161,0.18)", color: "#0D47A1" }}>
-                    {s}
-                  </span>
-                ))}
-              </CardContent>
-            </Card>
-          </div>
+
+          {(() => {
+            type Skill = {
+              category: string;
+              name: string;
+              level: "Beginner" | "Intermediate" | "Advanced";
+              percent: number;
+              notes?: string;
+            };
+
+            // Source-of-truth skills per category
+            const data: Array<{ title: string; icon: string; items: Array<Skill> }> = [
+              {
+                title: "📊 Data Skills",
+                icon: "📊",
+                items: [
+                  { category: "Data", name: "SQL", percent: 85, level: "Advanced", notes: "MySQL, Oracle; complex joins, window funcs, tuning" },
+                  { category: "Data", name: "Python", percent: 65, level: "Intermediate", notes: "Pandas, NumPy, data wrangling" },
+                  { category: "Data", name: "Tableau", percent: 60, level: "Intermediate", notes: "Dashboards, storytelling, parameters" },
+                  { category: "Data", name: "Power BI", percent: 55, level: "Intermediate", notes: "Reports, DAX basics" },
+                  { category: "Data", name: "Excel", percent: 80, level: "Advanced", notes: "Pivots, VLOOKUP/XLOOKUP, formulas" },
+                  { category: "Data", name: "Data Cleaning", percent: 80, level: "Advanced" },
+                  { category: "Data", name: "Data Viz", percent: 60, level: "Intermediate", notes: "Best practices, layouts" },
+                  { category: "Data", name: "Reporting", percent: 75, level: "Advanced" },
+                ],
+              },
+              {
+                title: "💻 Development Skills",
+                icon: "💻",
+                items: [
+                  { category: "Dev", name: "React", percent: 55, level: "Intermediate", notes: "Hooks, components, state" },
+                  { category: "Dev", name: "SwiftUI", percent: 60, level: "Intermediate", notes: "MVVM, Core Data basics" },
+                  { category: "Dev", name: "PHP", percent: 50, level: "Intermediate" },
+                  { category: "Dev", name: "HTML/CSS/JS", percent: 80, level: "Advanced", notes: "Semantic HTML, accessible UI" },
+                  { category: "Dev", name: "Java", percent: 50, level: "Intermediate" },
+                  { category: "Dev", name: "C/C++", percent: 35, level: "Beginner" },
+                  { category: "Dev", name: "Node.js", percent: 30, level: "Beginner" },
+                  { category: "Dev", name: "Git & GitHub", percent: 75, level: "Advanced" },
+                ],
+              },
+              {
+                title: "🧠 Interpersonal",
+                icon: "🧠",
+                items: [
+                  { category: "Interpersonal", name: "Leadership", percent: 80, level: "Advanced" },
+                  { category: "Interpersonal", name: "Communication", percent: 80, level: "Advanced" },
+                  { category: "Interpersonal", name: "Problem‑Solving", percent: 75, level: "Advanced" },
+                  { category: "Interpersonal", name: "Time Management", percent: 75, level: "Advanced" },
+                  { category: "Interpersonal", name: "Critical Thinking", percent: 70, level: "Advanced" },
+                ],
+              },
+              {
+                title: "🌐 Tools & Others",
+                icon: "🌐",
+                items: [
+                  { category: "Tools", name: "AWS", percent: 55, level: "Intermediate", notes: "EC2, RDS, S3, VPC basics" },
+                  { category: "Tools", name: "Jira/Confluence", percent: 75, level: "Advanced" },
+                  { category: "Tools", name: "Docker", percent: 30, level: "Beginner" },
+                  { category: "Tools", name: "MS Office", percent: 85, level: "Advanced" },
+                ],
+              },
+            ];
+
+            const prefersReduced =
+              typeof window !== "undefined" &&
+              window.matchMedia &&
+              window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+            const Brand = {
+              track: "oklch(94% 0.02 240 / 0.75)", // very light blue track
+              fill: "#0D47A1", // brand/navy fill
+              text: "#0D47A1",
+              cardBorder: "rgba(13,71,161,0.16)",
+              glow: "0 0 0 6px rgba(13,71,161,0.10), 0 10px 18px rgba(13,71,161,0.18)",
+            };
+
+            function Legend() {
+              const item = (label: string, color: string) => (
+                <span className="inline-flex items-center gap-1 text-[10px] md:text-xs text-slate-600">
+                  <i className="inline-block w-2.5 h-2.5 rounded-full" style={{ background: color }} />
+                  {label}
+                </span>
+              );
+              return (
+                <div className="flex flex-wrap gap-2 mt-1">
+                  {item("Beginner (0–39%)", "oklch(92% 0.02 240)")}
+                  {item("Intermediate (40–69%)", "oklch(85% 0.03 240)")}
+                  {item("Advanced (70–100%)", "oklch(75% 0.05 240)")}
+                </div>
+              );
+            }
+
+            function avg(arr: Array<Skill>): number {
+              if (!arr.length) return 0;
+              return Math.round(arr.reduce((a, b) => a + b.percent, 0) / arr.length);
+            }
+
+            function CategoryAverage({ value }: { value: number }) {
+              return (
+                <div className="mt-2">
+                  <div className="flex items-center justify-between text-xs text-slate-600 mb-1">
+                    <span>Category average</span>
+                    <span className="font-medium" style={{ color: Brand.text }}>{value}%</span>
+                  </div>
+                  <div className="h-1.5 w-full rounded-full bg-slate-200/60 overflow-hidden">
+                    <div
+                      className="h-full rounded-full transition-[width] duration-700"
+                      style={{ width: `${value}%`, background: Brand.fill }}
+                    />
+                  </div>
+                </div>
+              );
+            }
+
+            function SkillCircle({ skill, index }: { skill: Skill; index: number }) {
+              const [active, setActive] = useState(prefersReduced);
+              const [open, setOpen] = useState(false);
+
+              const pct = Math.max(0, Math.min(skill.percent, 100));
+              const delay = prefersReduced ? 0 : 60 + (index % 8) * 40;
+
+              const label = `${skill.level} · ${pct}%`;
+              const aria = `${skill.name}: ${skill.level}, ${pct}%`;
+
+              const sizeMobile = 60; // 56–64px
+              const sizeTablet = 72; // 64–72px
+              const sizeDesktop = 84; // 72–88px
+
+              return (
+                <Popover open={open} onOpenChange={setOpen}>
+                  <PopoverTrigger asChild>
+                    <button
+                      type="button"
+                      onMouseEnter={() => setActive(true)}
+                      onMouseLeave={() => setActive(prefersReduced)}
+                      onFocus={() => setActive(true)}
+                      onBlur={() => setActive(prefersReduced)}
+                      onClick={() => skill.notes ? setOpen((v) => !v) : void 0}
+                      aria-label={aria}
+                      className="relative grid place-items-center rounded-full select-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+                      style={{
+                        outlineColor: "#BAE1FF",
+                        width: sizeMobile,
+                        height: sizeMobile,
+                        background:
+                          `conic-gradient(${Brand.fill} ${active ? pct : 0}%, ${Brand.track} ${active ? pct : 0}%)`,
+                        transition: prefersReduced ? undefined : "background 800ms ease",
+                        boxShadow: active ? Brand.glow : "0 4px 12px rgba(13,71,161,0.08)",
+                      }}
+                    >
+                      {/* responsive sizes */}
+                      <span
+                        className="absolute inset-0 rounded-full"
+                        aria-hidden="true"
+                        style={{ border: `1px solid ${Brand.cardBorder}` }}
+                      />
+                      <span
+                        className="absolute inset-[6%] rounded-full bg-white"
+                        aria-hidden="true"
+                        style={{ border: `1px solid ${Brand.cardBorder}` }}
+                      />
+                      <span
+                        className="relative text-[11px] md:text-xs font-medium text-center"
+                        style={{ color: Brand.text, lineHeight: 1.1 }}
+                      >
+                        {active ? label : skill.name}
+                      </span>
+
+                      {/* Responsive inline styles for size at breakpoints */}
+                      <style>
+                        {`
+                          @media (min-width: 768px) {
+                            button[aria-label="${aria}"] { width: ${sizeTablet}px !important; height: ${sizeTablet}px !important; }
+                          }
+                          @media (min-width: 1024px) {
+                            button[aria-label="${aria}"] { width: ${sizeDesktop}px !important; height: ${sizeDesktop}px !important; }
+                          }
+                        `}
+                      </style>
+                    </button>
+                  </PopoverTrigger>
+                  {skill.notes ? (
+                    <PopoverContent side="top" align="center" className="p-2 text-xs max-w-[220px]">
+                      <div className="font-medium mb-1" style={{ color: Brand.text }}>
+                        {skill.name} — {label}
+                      </div>
+                      <div className="text-slate-700">{skill.notes}</div>
+                    </PopoverContent>
+                  ) : null}
+                </Popover>
+              );
+            }
+
+            return (
+              <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                {data.map((cat, ci) => {
+                  const average = avg(cat.items);
+                  return (
+                    <Card
+                      key={cat.title}
+                      className="border-blue-100 shadow-sm transition-transform transition-shadow duration-200 hover:-translate-y-0.5 hover:shadow-md"
+                      style={{ borderColor: Brand.cardBorder }}
+                    >
+                      <CardHeader className="pb-2">
+                        <CardTitle className="text-lg text-slate-900 inline-flex items-center gap-2">
+                          <span>{cat.title}</span>
+                        </CardTitle>
+                        <Legend />
+                        <CategoryAverage value={average} />
+                      </CardHeader>
+                      <CardContent>
+                        <div
+                          className="grid gap-3"
+                          style={{
+                            gridTemplateColumns:
+                              "repeat(2, minmax(0,1fr))",
+                          }}
+                        >
+                          <style>
+                            {`
+                              @media (min-width: 640px) { /* sm */
+                                #cat-grid-${ci} { grid-template-columns: repeat(3, minmax(0,1fr)); }
+                              }
+                              @media (min-width: 768px) { /* md */
+                                #cat-grid-${ci} { grid-template-columns: repeat(4, minmax(0,1fr)); }
+                              }
+                              @media (min-width: 1024px) { /* lg */
+                                #cat-grid-${ci} { grid-template-columns: repeat(6, minmax(0,1fr)); }
+                              }
+                              @media (min-width: 1280px) { /* xl */
+                                #cat-grid-${ci} { grid-template-columns: repeat(8, minmax(0,1fr)); }
+                              }
+                            `}
+                          </style>
+                          <div id={`cat-grid-${ci}`} className="contents" />
+                          {cat.items.map((skill, i) => (
+                            <div key={skill.name} className="flex items-center justify-center">
+                              <SkillCircle skill={skill} index={i} />
+                            </div>
+                          ))}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  );
+                })}
+              </div>
+            );
+          })()}
         </div>
       </motion.section>
 
