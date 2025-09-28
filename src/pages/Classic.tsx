@@ -306,7 +306,8 @@ export default function Classic() {
 
     for (const wrap of wraps) {
       const scroller = wrap.querySelector<HTMLDivElement>(".auto-scroll-certs");
-      if (!scroller) continue;
+      // NEW: use the carousel's Next button if available for reliable advancing
+      const nextBtn = wrap.querySelector<HTMLButtonElement>('[data-autoscroll-next="1"]');
 
       let paused = false;
       const onEnter = () => (paused = true);
@@ -317,6 +318,15 @@ export default function Classic() {
       const stepEveryMs = 3200;
       const timer = setInterval(() => {
         if (paused) return;
+
+        // Prefer using the carousel Next control (works with Embla-based carousels)
+        if (nextBtn) {
+          nextBtn.click();
+          return;
+        }
+
+        // Fallback: native horizontal scroll if applicable
+        if (!scroller) return;
         const stepAmount = Math.round(scroller.clientWidth * 0.9);
         const nextLeft = scroller.scrollLeft + stepAmount;
         const max = scroller.scrollWidth - scroller.clientWidth - 2;
@@ -1039,7 +1049,7 @@ export default function Classic() {
               ))}
             </CarouselContent>
             <CarouselPrevious />
-            <CarouselNext />
+            <CarouselNext data-autoscroll-next="1" />
           </Carousel>
         </div>
       </motion.section>
