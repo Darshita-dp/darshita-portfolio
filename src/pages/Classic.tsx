@@ -290,7 +290,7 @@ function BubblesBackground() {
 export default function Classic() {
   const [sending, setSending] = useState(false);
 
-  // Auto-scroll for Certificates carousel (setup once; respects reduced motion)
+  // Auto-scroll for Certificates carousels (supports multiple rows; respects reduced motion)
   useEffect(() => {
     const reduced =
       typeof window !== "undefined" &&
@@ -298,39 +298,43 @@ export default function Classic() {
       window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduced) return;
 
-    const wrap = document.getElementById("certs-auto-scroll-wrap");
-    if (!wrap) return;
-    const scroller = wrap.querySelector<HTMLDivElement>(".auto-scroll-certs");
-    if (!scroller) return;
+    // Handle multiple carousels by class
+    const wraps = Array.from(document.querySelectorAll<HTMLDivElement>(".certs-auto-scroll-wrap"));
+    if (!wraps.length) return;
 
-    let paused = false;
-    const onEnter = () => (paused = true);
-    const onLeave = () => (paused = false);
-    wrap.addEventListener("mouseenter", onEnter);
-    wrap.addEventListener("mouseleave", onLeave);
+    const cleanups: Array<() => void> = [];
 
-    // Replace continuous rAF with discrete step every ~3.2s
-    const stepEveryMs = 3200;
-    const step = () => {
-      if (paused) return;
-      const stepAmount = Math.round(scroller.clientWidth * 0.9);
-      const nextLeft = scroller.scrollLeft + stepAmount;
-      const max = scroller.scrollWidth - scroller.clientWidth - 2;
+    for (const wrap of wraps) {
+      const scroller = wrap.querySelector<HTMLDivElement>(".auto-scroll-certs");
+      if (!scroller) continue;
 
-      if (nextLeft >= max) {
-        scroller.scrollTo({ left: 0, behavior: "instant" as ScrollBehavior });
-      } else {
-        scroller.scrollTo({ left: nextLeft, behavior: "smooth" });
-      }
-    };
+      let paused = false;
+      const onEnter = () => (paused = true);
+      const onLeave = () => (paused = false);
+      wrap.addEventListener("mouseenter", onEnter);
+      wrap.addEventListener("mouseleave", onLeave);
 
-    const id = setInterval(step, stepEveryMs);
+      const stepEveryMs = 3200;
+      const timer = setInterval(() => {
+        if (paused) return;
+        const stepAmount = Math.round(scroller.clientWidth * 0.9);
+        const nextLeft = scroller.scrollLeft + stepAmount;
+        const max = scroller.scrollWidth - scroller.clientWidth - 2;
+        if (nextLeft >= max) {
+          scroller.scrollTo({ left: 0, behavior: "instant" as ScrollBehavior });
+        } else {
+          scroller.scrollTo({ left: nextLeft, behavior: "smooth" });
+        }
+      }, stepEveryMs);
 
-    return () => {
-      clearInterval(id);
-      wrap.removeEventListener("mouseenter", onEnter);
-      wrap.removeEventListener("mouseleave", onLeave);
-    };
+      cleanups.push(() => {
+        clearInterval(timer);
+        wrap.removeEventListener("mouseenter", onEnter);
+        wrap.removeEventListener("mouseleave", onLeave);
+      });
+    }
+
+    return () => cleanups.forEach((fn) => fn());
   }, []);
 
   const onSubmitContact = (e: React.FormEvent<HTMLFormElement>) => {
@@ -985,7 +989,7 @@ export default function Classic() {
         </div>
       </motion.section>
 
-      {/* Certificates & Achievements - NEW */}
+      {/* Certificates & Achievements - CATEGORIZED ROWS */}
       <motion.section
         className="container mx-auto max-w-6xl px-4 py-8 md:py-10"
         initial={{ opacity: 0, y: 14 }}
@@ -994,37 +998,102 @@ export default function Classic() {
         transition={{ duration: 0.5 }}
       >
         <SectionTitle id="certs-title">Certificates & Achievements</SectionTitle>
-        <div className="mt-6" id="certs-auto-scroll-wrap">
-          <Carousel className="w-full">
-            <CarouselContent className="flex gap-4 auto-scroll-certs">
-              {[
-                "AWS Cloud Practitioner (In Progress)",
-                "Tableau Desktop Specialist (In Progress)",
-                "LinkedIn Learning – Data Analysis & SQL",
-                "Outstanding Graduate Student Award – ISU (2025)",
-                "ISU Research Symposium Poster – AI in Banking (2025)",
-                "Graduate Teaching Assistant – IT 150 Instructor (taught 120+ students)",
-                "Capstone Project – Managed IT Services RFP, Village of Hazel Crest (Team Lead, 2025)",
-              ].map((c) => (
-                <CarouselItem key={c} className="basis-5/6 md:basis-1/3">
-                  <Card className="h-full shadow-sm transition-transform transition-shadow duration-200 hover:-translate-y-0.5 hover:shadow-md">
-                    <CardHeader className="pb-2">
-                      <CardTitle className="text-sm md:text-base">{c}</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="h-20 grid place-items-center text-4xl">🏅</div>
-                    </CardContent>
-                  </Card>
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            <CarouselPrevious />
-            <CarouselNext />
-          </Carousel>
+
+        {/* Completed */}
+        <div className="mt-6">
+          <div className="mb-2 text-sm font-medium text-slate-700">Completed</div>
+          <div className="certs-auto-scroll-wrap">
+            <Carousel className="w-full">
+              <CarouselContent className="flex gap-4 auto-scroll-certs">
+                {[
+                  { title: "Outstanding Graduate Student Award – ISU", year: "2025", icon: "🏅" },
+                  { title: "ISU Research Symposium Poster – AI in Banking", year: "2025", icon: "📜" },
+                  { title: "LinkedIn Learning – Data Analysis & SQL", year: "", icon: "📘" },
+                ].map((c) => (
+                  <CarouselItem key={c.title} className="basis-5/6 md:basis-1/3">
+                    <Card className="h-full shadow-sm transition-transform transition-shadow duration-200 hover:-translate-y-0.5 hover:shadow-md">
+                      <CardHeader className="pb-2">
+                        <CardTitle className="text-sm md:text-base inline-flex items-center gap-2">
+                          <span className="text-2xl" aria-hidden="true">{c.icon}</span>
+                          <span>{c.title}{c.year ? ` (${c.year})` : ""}</span>
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="h-16 grid place-items-center text-slate-600">Blue & white theme</div>
+                      </CardContent>
+                    </Card>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious />
+              <CarouselNext />
+            </Carousel>
+          </div>
+        </div>
+
+        {/* In Progress */}
+        <div className="mt-6">
+          <div className="mb-2 text-sm font-medium text-slate-700">In Progress</div>
+          <div className="certs-auto-scroll-wrap">
+            <Carousel className="w-full">
+              <CarouselContent className="flex gap-4 auto-scroll-certs">
+                {[
+                  { title: "AWS Cloud Practitioner", year: "", icon: "☁️" },
+                  { title: "Tableau Desktop Specialist", year: "", icon: "📊" },
+                ].map((c) => (
+                  <CarouselItem key={c.title} className="basis-5/6 md:basis-1/3">
+                    <Card className="h-full shadow-sm transition-transform transition-shadow duration-200 hover:-translate-y-0.5 hover:shadow-md">
+                      <CardHeader className="pb-2">
+                        <CardTitle className="text-sm md:text-base inline-flex items-center gap-2">
+                          <span className="text-2xl" aria-hidden="true">{c.icon}</span>
+                          <span>{c.title} (In Progress)</span>
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="h-16 grid place-items-center text-slate-600">Blue & white theme</div>
+                      </CardContent>
+                    </Card>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious />
+              <CarouselNext />
+            </Carousel>
+          </div>
+        </div>
+
+        {/* Future Possibility */}
+        <div className="mt-6">
+          <div className="mb-2 text-sm font-medium text-slate-700">Future Possibility</div>
+          <div className="certs-auto-scroll-wrap">
+            <Carousel className="w-full">
+              <CarouselContent className="flex gap-4 auto-scroll-certs">
+                {[
+                  { title: "Google Data Analytics Professional Certificate", year: "", icon: "🎓" },
+                  { title: "Microsoft Power BI Data Analyst Associate", year: "", icon: "📈" },
+                  { title: "Snowflake SnowPro Core Certification", year: "", icon: "❄️" },
+                ].map((c) => (
+                  <CarouselItem key={c.title} className="basis-5/6 md:basis-1/3">
+                    <Card className="h-full shadow-sm transition-transform transition-shadow duration-200 hover:-translate-y-0.5 hover:shadow-md">
+                      <CardHeader className="pb-2">
+                        <CardTitle className="text-sm md:text-base inline-flex items-center gap-2">
+                          <span className="text-2xl" aria-hidden="true">{c.icon}</span>
+                          <span>{c.title}</span>
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="h-16 grid place-items-center text-slate-600">Blue & white theme</div>
+                      </CardContent>
+                    </Card>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious />
+              <CarouselNext />
+            </Carousel>
+          </div>
         </div>
       </motion.section>
-
-      {/* Auto-scroll handled by top-level useEffect in Classic component */}
 
       {/* Education - NEW */}
       <motion.section
