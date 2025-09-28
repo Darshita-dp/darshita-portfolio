@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
+import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { ArrowRight, Award, Briefcase, Database, Github, Linkedin, Mail, Phone, Smartphone, Star } from "lucide-react";
 
@@ -309,22 +309,25 @@ export default function Classic() {
     wrap.addEventListener("mouseenter", onEnter);
     wrap.addEventListener("mouseleave", onLeave);
 
-    let raf = 0;
-    const speed = 0.6; // px per frame approx.
-    const loop = () => {
-      if (!paused) {
-        scroller.scrollLeft += speed;
-        const max = scroller.scrollWidth - scroller.clientWidth - 2;
-        if (scroller.scrollLeft >= max) {
-          scroller.scrollTo({ left: 0, behavior: "instant" as ScrollBehavior });
-        }
+    // Replace continuous rAF with discrete step every ~3.2s
+    const stepEveryMs = 3200;
+    const step = () => {
+      if (paused) return;
+      const stepAmount = Math.round(scroller.clientWidth * 0.9);
+      const nextLeft = scroller.scrollLeft + stepAmount;
+      const max = scroller.scrollWidth - scroller.clientWidth - 2;
+
+      if (nextLeft >= max) {
+        scroller.scrollTo({ left: 0, behavior: "instant" as ScrollBehavior });
+      } else {
+        scroller.scrollTo({ left: nextLeft, behavior: "smooth" });
       }
-      raf = requestAnimationFrame(loop);
     };
-    raf = requestAnimationFrame(loop);
+
+    const id = setInterval(step, stepEveryMs);
 
     return () => {
-      cancelAnimationFrame(raf);
+      clearInterval(id);
       wrap.removeEventListener("mouseenter", onEnter);
       wrap.removeEventListener("mouseleave", onLeave);
     };
@@ -511,6 +514,8 @@ export default function Classic() {
                   { category: "Data", name: "Data Cleaning", percent: 80, level: "Advanced" },
                   { category: "Data", name: "Data Viz", percent: 60, level: "Intermediate", notes: "Best practices, layouts" },
                   { category: "Data", name: "Reporting", percent: 75, level: "Advanced" },
+                  { category: "Data", name: "Snowflake", percent: 55, level: "Intermediate", notes: "Cloud DW, SQL, performance basics" },
+                  { category: "Data", name: "Data Concepts", percent: 75, level: "Advanced", notes: "Modeling, normalization, ETL, governance" },
                 ],
               },
               {
@@ -525,6 +530,8 @@ export default function Classic() {
                   { category: "Dev", name: "C/C++", percent: 35, level: "Beginner" },
                   { category: "Dev", name: "Node.js", percent: 30, level: "Beginner" },
                   { category: "Dev", name: "Git & GitHub", percent: 75, level: "Advanced" },
+                  { category: "Dev", name: "WordPress", percent: 65, level: "Intermediate", notes: "Themes, plugins, content workflows" },
+                  { category: "Dev", name: "Shopify", percent: 55, level: "Intermediate", notes: "Store setup, Liquid basics" },
                 ],
               },
               {
@@ -536,6 +543,11 @@ export default function Classic() {
                   { category: "Interpersonal", name: "Problem‑Solving", percent: 75, level: "Advanced" },
                   { category: "Interpersonal", name: "Time Management", percent: 75, level: "Advanced" },
                   { category: "Interpersonal", name: "Critical Thinking", percent: 70, level: "Advanced" },
+                  { category: "Interpersonal", name: "Collaboration", percent: 80, level: "Advanced" },
+                  { category: "Interpersonal", name: "Adaptability", percent: 75, level: "Advanced" },
+                  { category: "Interpersonal", name: "Analytical Thinking", percent: 78, level: "Advanced" },
+                  { category: "Interpersonal", name: "Creativity", percent: 72, level: "Advanced" },
+                  { category: "Interpersonal", name: "Project Coordination", percent: 70, level: "Advanced" },
                 ],
               },
               {
@@ -546,6 +558,10 @@ export default function Classic() {
                   { category: "Tools", name: "Jira/Confluence", percent: 75, level: "Advanced" },
                   { category: "Tools", name: "Docker", percent: 30, level: "Beginner" },
                   { category: "Tools", name: "MS Office", percent: 85, level: "Advanced" },
+                  { category: "Tools", name: "Snowflake", percent: 55, level: "Intermediate" },
+                  { category: "Tools", name: "Power Query/Tableau Prep", percent: 60, level: "Intermediate", notes: "Data shaping and prep" },
+                  { category: "Tools", name: "Figma", percent: 55, level: "Intermediate", notes: "Wireframes, handoff" },
+                  { category: "Tools", name: "MS Project/Trello", percent: 62, level: "Intermediate", notes: "Plans, boards, tracking" },
                 ],
               },
             ];
@@ -986,8 +1002,9 @@ export default function Classic() {
                 "Tableau Desktop Specialist (In Progress)",
                 "LinkedIn Learning – Data Analysis & SQL",
                 "Outstanding Graduate Student Award – ISU (2025)",
-                "Outstanding Graduate Student Award – ISU (Nom.)",
-                "ISU Research Symposium Poster (AI in Banking, 2025)",
+                "ISU Research Symposium Poster – AI in Banking (2025)",
+                "Graduate Teaching Assistant – IT 150 Instructor (taught 120+ students)",
+                "Capstone Project – Managed IT Services RFP, Village of Hazel Crest (Team Lead, 2025)",
               ].map((c) => (
                 <CarouselItem key={c} className="basis-5/6 md:basis-1/3">
                   <Card className="h-full shadow-sm transition-transform transition-shadow duration-200 hover:-translate-y-0.5 hover:shadow-md">
@@ -1001,6 +1018,8 @@ export default function Classic() {
                 </CarouselItem>
               ))}
             </CarouselContent>
+            <CarouselPrevious />
+            <CarouselNext />
           </Carousel>
         </div>
       </motion.section>
