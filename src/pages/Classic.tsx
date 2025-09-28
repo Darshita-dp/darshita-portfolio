@@ -563,6 +563,13 @@ export default function Classic() {
               glow: "0 0 0 6px rgba(13,71,161,0.10), 0 10px 18px rgba(13,71,161,0.18)",
             };
 
+            // Add level-based ring colors
+            const levelRing: Record<"Beginner" | "Intermediate" | "Advanced", string> = {
+              Beginner: "#A7C7E7",      // light blue
+              Intermediate: "#4682B4",  // medium blue
+              Advanced: "#004AAD",      // deep professional blue
+            };
+
             function Legend() {
               const item = (label: string, color: string) => (
                 <span className="inline-flex items-center gap-1 text-[10px] md:text-xs text-slate-600">
@@ -572,9 +579,9 @@ export default function Classic() {
               );
               return (
                 <div className="flex flex-wrap gap-2 mt-1">
-                  {item("Beginner (0–39%)", "oklch(92% 0.02 240)")}
-                  {item("Intermediate (40–69%)", "oklch(85% 0.03 240)")}
-                  {item("Advanced (70–100%)", "oklch(75% 0.05 240)")}
+                  {item("Beginner (0–39%)", levelRing.Beginner)}
+                  {item("Intermediate (40–69%)", levelRing.Intermediate)}
+                  {item("Advanced (70–100%)", levelRing.Advanced)}
                 </div>
               );
             }
@@ -584,9 +591,12 @@ export default function Classic() {
               return Math.round(arr.reduce((a, b) => a + b.percent, 0) / arr.length);
             }
 
+            // Animate Category Average width from 0 when in view
             function CategoryAverage({ value }: { value: number }) {
+              const ref = useRef<HTMLDivElement | null>(null);
+              const inView = useInView(ref, { once: true, margin: "-80px" });
               return (
-                <div className="mt-2">
+                <div ref={ref} className="mt-2">
                   <div className="flex items-center justify-between text-xs text-slate-600 mb-1">
                     <span>Category average</span>
                     <span className="font-medium" style={{ color: Brand.text }}>{value}%</span>
@@ -594,7 +604,7 @@ export default function Classic() {
                   <div className="h-1.5 w-full rounded-full bg-slate-200/60 overflow-hidden">
                     <div
                       className="h-full rounded-full transition-[width] duration-700"
-                      style={{ width: `${value}%`, background: Brand.fill }}
+                      style={{ width: inView ? `${value}%` : "0%", background: Brand.fill }}
                     />
                   </div>
                 </div>
@@ -602,62 +612,124 @@ export default function Classic() {
             }
 
             function SkillCircle({ skill, index }: { skill: Skill; index: number }) {
+              const prefersReduced =
+                typeof window !== "undefined" &&
+                window.matchMedia &&
+                window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
               const [active, setActive] = useState(prefersReduced);
               const [open, setOpen] = useState(false);
 
+              // Smooth animated progress with synced count-up
               const pct = Math.max(0, Math.min(skill.percent, 100));
-              const delay = prefersReduced ? 0 : 60 + (index % 8) * 40;
+              const [progress, setProgress] = useState(prefersReduced ? pct : 0);
+              const [pulse, setPulse] = useState(false);
+
+              const btnRef = useRef<HTMLButtonElement | null>(null);
+              const inView = useInView(btnRef, { once: true, margin: "-80px" });
+
+              // Animate when entering viewport or when hovered/focused
+              useEffect(() => {
+                if (prefersReduced) {
+                  setProgress(pct);
+                  return;
+                }
+                const shouldAnimate = inView || active;
+                if (!shouldAnimate) return;
+
+                let raf = 0;
+                let start: number | null = null;
+                const from = progress;
+                const to = pct;
+                if (from >= to) return;
+
+                const duration = 800; // ms
+                const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
+
+                const step = (ts: number) => {
+                  if (start === null) start = ts;
+                  const elapsed = ts - start;
+                  const t = Math.min(1, elapsed / duration);
+                  const eased = easeOutCubic(t);
+                  const val = from + (to - from) * eased;
+                  setProgress(val);
+                  if (t < 1) {
+                    raf = requestAnimationFrame(step);
+                  } else {
+                    // trigger a subtle pulse once on completion
+                    setPulse(true);
+                    const id = setTimeout(() => setPulse(false), 400);
+                    return () => clearTimeout(id);
+                  }
+                };
+                raf = requestAnimationFrame(step);
+                return () => cancelAnimationFrame(raf);
+                // eslint-disable-next-line react-hooks/exhaustive-deps
+              }, [inView, active, pct, prefersReduced]);
 
               const label = `${skill.level} · ${pct}%`;
               const aria = `${skill.name}: ${skill.level}, ${pct}%`;
 
-              const sizeMobile = 60; // 56–64px
-              const sizeTablet = 72; // 64–72px
-              const sizeDesktop = 84; // 72–88px
+              const sizeMobile = 60;
+              const sizeTablet = 72;
+              const sizeDesktop = 84;
+
+              const ringColor = levelRing[skill.level];
+              const ringTrack = Brand.track;
+
+              // Blue pulse keyframes (scoped)
+              const pulseShadow = pulse
+                ? `0 0 0 0 rgba(13,71,161,0.18), 0 10px 18px rgba(13,71,161,0.18)`
+                : active
+                  ? Brand.glow
+                  : "0 4px 12px rgba(13,71,161,0.08)";
 
               return (
                 <Popover open={open} onOpenChange={setOpen}>
                   <PopoverTrigger asChild>
                     <button
+                      ref={btnRef}
                       type="button"
                       onMouseEnter={() => setActive(true)}
                       onMouseLeave={() => setActive(prefersReduced)}
                       onFocus={() => setActive(true)}
                       onBlur={() => setActive(prefersReduced)}
-                      onClick={() => skill.notes ? setOpen((v) => !v) : void 0}
+                      onClick={() => (skill.notes ? setOpen((v) => !v) : void 0)}
                       aria-label={aria}
-                      className="relative grid place-items-center rounded-full select-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+                      className="relative grid place-items-center rounded-full select-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 transition-transform duration-200 hover:scale-[1.06]"
                       style={{
                         outlineColor: "#BAE1FF",
                         width: sizeMobile,
                         height: sizeMobile,
-                        background:
-                          `conic-gradient(${Brand.fill} ${active ? pct : 0}%, ${Brand.track} ${active ? pct : 0}%)`,
+                        background: `conic-gradient(${ringColor} ${progress}%, ${ringTrack} ${progress}%)`,
                         transition: prefersReduced ? undefined : "background 800ms ease",
-                        boxShadow: active ? Brand.glow : "0 4px 12px rgba(13,71,161,0.08)",
+                        boxShadow: pulseShadow,
                       }}
                     >
-                      {/* responsive sizes */}
+                      {/* border ring */}
                       <span
                         className="absolute inset-0 rounded-full"
                         aria-hidden="true"
                         style={{ border: `1px solid ${Brand.cardBorder}` }}
                       />
+                      {/* inner white circle */}
                       <span
-                        className="absolute inset-[6%] rounded-full bg-white"
+                        className="absolute inset-[6%] rounded-full bg-white shadow-sm"
                         aria-hidden="true"
                         style={{ border: `1px solid ${Brand.cardBorder}` }}
                       />
+                      {/* content: name (idle) or counting percent (active/animating) */}
                       <span
                         className="relative text-[11px] md:text-xs font-medium text-center"
                         style={{ color: Brand.text, lineHeight: 1.1 }}
                       >
-                        {active ? label : skill.name}
+                        {active || inView ? `${Math.round(progress)}%` : skill.name}
                       </span>
 
-                      {/* Responsive inline styles for size at breakpoints */}
+                      {/* stronger hover shadow */}
                       <style>
                         {`
+                          button[aria-label="${aria}"]:hover { box-shadow: 0 6px 18px rgba(13,71,161,0.18) !important; }
                           @media (min-width: 768px) {
                             button[aria-label="${aria}"] { width: ${sizeTablet}px !important; height: ${sizeTablet}px !important; }
                           }
