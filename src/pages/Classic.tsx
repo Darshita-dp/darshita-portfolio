@@ -307,8 +307,6 @@ export default function Classic() {
     for (const wrap of wraps) {
       const scroller = wrap.querySelector<HTMLDivElement>(".auto-scroll-certs");
       const nextBtn = wrap.querySelector<HTMLButtonElement>('[data-autoscroll-next="1"]');
-      // NEW: capture Prev button too
-      const prevBtn = wrap.querySelector<HTMLButtonElement>('[data-autoscroll-prev="1"]');
 
       let paused = false;
       const onEnter = () => (paused = true);
@@ -316,42 +314,27 @@ export default function Classic() {
       wrap.addEventListener("mouseenter", onEnter);
       wrap.addEventListener("mouseleave", onLeave);
 
-      // NEW: track direction: 1 => forward (to the right), -1 => backward (to the left)
-      let dir: 1 | -1 = 1;
-
+      // Looping behavior (always forward, wrap to start at the end)
       const stepEveryMs = 3200;
       const timer = setInterval(() => {
         if (paused) return;
 
-        // Prefer native horizontal scroll to enable ping-pong edges
         if (scroller) {
           const stepAmount = Math.round(scroller.clientWidth * 0.9);
           const max = scroller.scrollWidth - scroller.clientWidth - 2;
+          const nextLeft = scroller.scrollLeft + stepAmount;
 
-          let nextLeft = scroller.scrollLeft + (dir === 1 ? stepAmount : -stepAmount);
-
-          // Bounce at edges
           if (nextLeft >= max) {
-            dir = -1;
-            nextLeft = max;
-          } else if (nextLeft <= 0) {
-            dir = 1;
-            nextLeft = 0;
+            // Jump back to start without animation to avoid long reverse scroll
+            scroller.scrollTo({ left: 0, behavior: "auto" });
+          } else {
+            scroller.scrollTo({ left: nextLeft, behavior: "smooth" });
           }
-
-          scroller.scrollTo({ left: nextLeft, behavior: "smooth" });
           return;
         }
 
-        // Fallback: use carousel buttons if available (no edge awareness; still alternates visually via Embla)
-        if (dir === 1 && nextBtn) {
-          nextBtn.click();
-        } else if (dir === -1 && prevBtn) {
-          prevBtn.click();
-        } else if (nextBtn) {
-          // If prev not available, keep moving forward
-          nextBtn.click();
-        }
+        // Fallback: click "next" (may not loop depending on underlying carousel settings)
+        if (nextBtn) nextBtn.click();
       }, stepEveryMs);
 
       cleanups.push(() => {
