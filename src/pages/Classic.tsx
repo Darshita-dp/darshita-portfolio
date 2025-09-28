@@ -398,14 +398,14 @@ export default function Classic() {
         <div className="container mx-auto max-w-6xl px-4 py-10 md:py-14 text-white">
           <div className="flex flex-col md:flex-row items-center gap-6 md:gap-10">
             <div className="shrink-0 relative">
-              <div className="w-28 h-28 md:w-32 md:h-32 rounded-full overflow-hidden ring-4 ring-white/40 shadow-xl">
+              <div className="w-36 h-36 md:w-40 md:h-40 rounded-full overflow-hidden ring-4 ring-white/40 shadow-xl">
                 <img
                   src="https://harmless-tapir-303.convex.cloud/api/storage/fbbcab3e-d3b1-4639-99b4-311c5e1ab7ca"
                   alt="Profile"
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover opacity-100"
                 />
               </div>
-              <div className="absolute inset-0 rounded-full blur-2xl opacity-50" style={{ background: BLUE.accent }} />
+              <div className="absolute inset-0 rounded-full blur-2xl opacity-50 -z-10" style={{ background: BLUE.accent }} />
             </div>
 
             <div className="text-center md:text-left">
