@@ -812,13 +812,13 @@ export default function Classic() {
                           className="grid gap-3"
                           style={{
                             gridTemplateColumns:
-                              "repeat(3, minmax(0,1fr))",
+                              "repeat(4, minmax(0,1fr))",
                           }}
                         >
                           <style>
                             {`
                               @media (min-width: 640px) { /* sm */
-                                #cat-grid-${ci} { grid-template-columns: repeat(3, minmax(0,1fr)); }
+                                #cat-grid-${ci} { grid-template-columns: repeat(4, minmax(0,1fr)); }
                               }
                               @media (min-width: 768px) { /* md */
                                 #cat-grid-${ci} { grid-template-columns: repeat(4, minmax(0,1fr)); }
