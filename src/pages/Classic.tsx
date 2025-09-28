@@ -989,7 +989,7 @@ export default function Classic() {
         </div>
       </motion.section>
 
-      {/* Certificates & Achievements - CATEGORIZED ROWS */}
+      {/* Certificates & Achievements - SINGLE HORIZONTAL CAROUSEL */}
       <motion.section
         className="container mx-auto max-w-6xl px-4 py-8 md:py-10"
         initial={{ opacity: 0, y: 14 }}
@@ -999,99 +999,40 @@ export default function Classic() {
       >
         <SectionTitle id="certs-title">Certificates & Achievements</SectionTitle>
 
-        {/* Completed */}
-        <div className="mt-6">
-          <div className="mb-2 text-sm font-medium text-slate-700">Completed</div>
-          <div className="certs-auto-scroll-wrap">
-            <Carousel className="w-full">
-              <CarouselContent className="flex gap-4 auto-scroll-certs">
-                {[
-                  { title: "Outstanding Graduate Student Award – ISU", year: "2025", icon: "🏅" },
-                  { title: "ISU Research Symposium Poster – AI in Banking", year: "2025", icon: "📜" },
-                  { title: "LinkedIn Learning – Data Analysis & SQL", year: "", icon: "📘" },
-                ].map((c) => (
-                  <CarouselItem key={c.title} className="basis-5/6 md:basis-1/3">
-                    <Card className="h-full shadow-sm transition-transform transition-shadow duration-200 hover:-translate-y-0.5 hover:shadow-md">
-                      <CardHeader className="pb-2">
-                        <CardTitle className="text-sm md:text-base inline-flex items-center gap-2">
-                          <span className="text-2xl" aria-hidden="true">{c.icon}</span>
-                          <span>{c.title}{c.year ? ` (${c.year})` : ""}</span>
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="h-16 grid place-items-center text-slate-600">Blue & white theme</div>
-                      </CardContent>
-                    </Card>
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-              <CarouselPrevious />
-              <CarouselNext />
-            </Carousel>
-          </div>
-        </div>
-
-        {/* In Progress */}
-        <div className="mt-6">
-          <div className="mb-2 text-sm font-medium text-slate-700">In Progress</div>
-          <div className="certs-auto-scroll-wrap">
-            <Carousel className="w-full">
-              <CarouselContent className="flex gap-4 auto-scroll-certs">
-                {[
-                  { title: "AWS Cloud Practitioner", year: "", icon: "☁️" },
-                  { title: "Tableau Desktop Specialist", year: "", icon: "📊" },
-                ].map((c) => (
-                  <CarouselItem key={c.title} className="basis-5/6 md:basis-1/3">
-                    <Card className="h-full shadow-sm transition-transform transition-shadow duration-200 hover:-translate-y-0.5 hover:shadow-md">
-                      <CardHeader className="pb-2">
-                        <CardTitle className="text-sm md:text-base inline-flex items-center gap-2">
-                          <span className="text-2xl" aria-hidden="true">{c.icon}</span>
-                          <span>{c.title} (In Progress)</span>
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="h-16 grid place-items-center text-slate-600">Blue & white theme</div>
-                      </CardContent>
-                    </Card>
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-              <CarouselPrevious />
-              <CarouselNext />
-            </Carousel>
-          </div>
-        </div>
-
-        {/* Future Possibility */}
-        <div className="mt-6">
-          <div className="mb-2 text-sm font-medium text-slate-700">Future Possibility</div>
-          <div className="certs-auto-scroll-wrap">
-            <Carousel className="w-full">
-              <CarouselContent className="flex gap-4 auto-scroll-certs">
-                {[
-                  { title: "Google Data Analytics Professional Certificate", year: "", icon: "🎓" },
-                  { title: "Microsoft Power BI Data Analyst Associate", year: "", icon: "📈" },
-                  { title: "Snowflake SnowPro Core Certification", year: "", icon: "❄️" },
-                ].map((c) => (
-                  <CarouselItem key={c.title} className="basis-5/6 md:basis-1/3">
-                    <Card className="h-full shadow-sm transition-transform transition-shadow duration-200 hover:-translate-y-0.5 hover:shadow-md">
-                      <CardHeader className="pb-2">
-                        <CardTitle className="text-sm md:text-base inline-flex items-center gap-2">
-                          <span className="text-2xl" aria-hidden="true">{c.icon}</span>
-                          <span>{c.title}</span>
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="h-16 grid place-items-center text-slate-600">Blue & white theme</div>
-                      </CardContent>
-                    </Card>
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-              <CarouselPrevious />
-              <CarouselNext />
-            </Carousel>
-          </div>
+        <div className="mt-6 certs-auto-scroll-wrap">
+          <Carousel className="w-full">
+            <CarouselContent className="flex gap-4 auto-scroll-certs">
+              {[
+                { title: "Outstanding Graduate Student Award – ISU", year: "2025", icon: "🏅" },
+                { title: "ISU Research Symposium Poster – AI in Banking", year: "2025", icon: "📜" },
+                { title: "LinkedIn Learning – Data Analysis & SQL", year: "", icon: "📘" },
+                { title: "AWS Cloud Practitioner (In Progress)", year: "", icon: "☁️" },
+                { title: "Tableau Desktop Specialist (In Progress)", year: "", icon: "📊" },
+                { title: "Google Data Analytics Professional Certificate (Future)", year: "", icon: "🎓" },
+                { title: "Microsoft Power BI Data Analyst Associate (Future)", year: "", icon: "📈" },
+                { title: "Snowflake SnowPro Core Certification (Future)", year: "", icon: "❄️" },
+              ].map((c) => (
+                <CarouselItem key={c.title} className="basis-5/6 md:basis-1/3">
+                  <Card className="h-full shadow-sm transition-transform transition-shadow duration-200 hover:-translate-y-0.5 hover:shadow-md">
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-sm md:text-base inline-flex items-center gap-2">
+                        <span className="text-2xl" aria-hidden="true">{c.icon}</span>
+                        <span>
+                          {c.title}
+                          {c.year ? ` (${c.year})` : ""}
+                        </span>
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="h-16 grid place-items-center text-slate-600">Blue & white theme</div>
+                    </CardContent>
+                  </Card>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <CarouselPrevious />
+            <CarouselNext />
+          </Carousel>
         </div>
       </motion.section>
 
