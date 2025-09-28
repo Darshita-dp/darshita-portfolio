@@ -617,32 +617,37 @@ export default function Classic() {
                 window.matchMedia &&
                 window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-              const [active, setActive] = useState(prefersReduced);
+              // Animate only on hover/focus/tap
+              const [active, setActive] = useState(false);
               const [open, setOpen] = useState(false);
 
-              // Smooth animated progress with synced count-up
               const pct = Math.max(0, Math.min(skill.percent, 100));
-              const [progress, setProgress] = useState(prefersReduced ? pct : 0);
+              const [progress, setProgress] = useState(0);
               const [pulse, setPulse] = useState(false);
 
               const btnRef = useRef<HTMLButtonElement | null>(null);
-              const inView = useInView(btnRef, { once: true, margin: "-80px" });
 
-              // Animate when entering viewport or when hovered/focused
+              // Hover-only animation logic
               useEffect(() => {
-                if (prefersReduced) {
-                  setProgress(pct);
+                if (!active) {
+                  // reset when leaving
+                  setProgress(0);
+                  setPulse(false);
                   return;
                 }
-                const shouldAnimate = inView || active;
-                if (!shouldAnimate) return;
+
+                if (prefersReduced) {
+                  setProgress(pct);
+                  // brief emphasis without motion
+                  setPulse(true);
+                  const id = setTimeout(() => setPulse(false), 300);
+                  return () => clearTimeout(id);
+                }
 
                 let raf = 0;
                 let start: number | null = null;
-                const from = progress;
+                const from = 0;
                 const to = pct;
-                if (from >= to) return;
-
                 const duration = 800; // ms
                 const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
 
@@ -656,16 +661,20 @@ export default function Classic() {
                   if (t < 1) {
                     raf = requestAnimationFrame(step);
                   } else {
-                    // trigger a subtle pulse once on completion
                     setPulse(true);
                     const id = setTimeout(() => setPulse(false), 400);
-                    return () => clearTimeout(id);
+                    // store timeout cleanup in closure
+                    (step as any)._tid = id;
                   }
                 };
                 raf = requestAnimationFrame(step);
-                return () => cancelAnimationFrame(raf);
-                // eslint-disable-next-line react-hooks/exhaustive-deps
-              }, [inView, active, pct, prefersReduced]);
+
+                return () => {
+                  cancelAnimationFrame(raf);
+                  const tid = (step as any)?._tid;
+                  if (tid) clearTimeout(tid);
+                };
+              }, [active, pct, prefersReduced]);
 
               const label = `${skill.level} · ${pct}%`;
               const aria = `${skill.name}: ${skill.level}, ${pct}%`;
@@ -677,7 +686,6 @@ export default function Classic() {
               const ringColor = levelRing[skill.level];
               const ringTrack = Brand.track;
 
-              // Blue pulse keyframes (scoped)
               const pulseShadow = pulse
                 ? `0 0 0 0 rgba(13,71,161,0.18), 0 10px 18px rgba(13,71,161,0.18)`
                 : active
@@ -691,9 +699,9 @@ export default function Classic() {
                       ref={btnRef}
                       type="button"
                       onMouseEnter={() => setActive(true)}
-                      onMouseLeave={() => setActive(prefersReduced)}
+                      onMouseLeave={() => setActive(false)}
                       onFocus={() => setActive(true)}
-                      onBlur={() => setActive(prefersReduced)}
+                      onBlur={() => setActive(false)}
                       onClick={() => (skill.notes ? setOpen((v) => !v) : void 0)}
                       aria-label={aria}
                       className="relative grid place-items-center rounded-full select-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 transition-transform duration-200 hover:scale-[1.06]"
@@ -718,22 +726,22 @@ export default function Classic() {
                         aria-hidden="true"
                         style={{ border: `1px solid ${Brand.cardBorder}` }}
                       />
-                      {/* content: name (idle) or counting percent (active/animating) */}
+                      {/* content: name (idle) or counting percent (active) */}
                       <span
                         className="relative text-[11px] md:text-xs font-medium text-center"
                         style={{ color: Brand.text, lineHeight: 1.1 }}
                       >
-                        {active || inView ? `${Math.round(progress)}%` : skill.name}
+                        {active ? `${Math.round(progress)}%` : skill.name}
                       </span>
 
-                      {/* stronger hover shadow */}
+                      {/* stronger hover shadow and responsive sizing */}
                       <style>
                         {`
                           button[aria-label="${aria}"]:hover { box-shadow: 0 6px 18px rgba(13,71,161,0.18) !important; }
-                          @media (min-width: 768px) {
+                          @media (min-width: 768px) { /* md */
                             button[aria-label="${aria}"] { width: ${sizeTablet}px !important; height: ${sizeTablet}px !important; }
                           }
-                          @media (min-width: 1024px) {
+                          @media (min-width: 1024px) { /* lg */
                             button[aria-label="${aria}"] { width: ${sizeDesktop}px !important; height: ${sizeDesktop}px !important; }
                           }
                         `}
