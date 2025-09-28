@@ -306,8 +306,9 @@ export default function Classic() {
 
     for (const wrap of wraps) {
       const scroller = wrap.querySelector<HTMLDivElement>(".auto-scroll-certs");
-      // NEW: use the carousel's Next button if available for reliable advancing
       const nextBtn = wrap.querySelector<HTMLButtonElement>('[data-autoscroll-next="1"]');
+      // NEW: capture Prev button too
+      const prevBtn = wrap.querySelector<HTMLButtonElement>('[data-autoscroll-prev="1"]');
 
       let paused = false;
       const onEnter = () => (paused = true);
@@ -315,25 +316,41 @@ export default function Classic() {
       wrap.addEventListener("mouseenter", onEnter);
       wrap.addEventListener("mouseleave", onLeave);
 
+      // NEW: track direction: 1 => forward (to the right), -1 => backward (to the left)
+      let dir: 1 | -1 = 1;
+
       const stepEveryMs = 3200;
       const timer = setInterval(() => {
         if (paused) return;
 
-        // Prefer using the carousel Next control (works with Embla-based carousels)
-        if (nextBtn) {
-          nextBtn.click();
+        // Prefer native horizontal scroll to enable ping-pong edges
+        if (scroller) {
+          const stepAmount = Math.round(scroller.clientWidth * 0.9);
+          const max = scroller.scrollWidth - scroller.clientWidth - 2;
+
+          let nextLeft = scroller.scrollLeft + (dir === 1 ? stepAmount : -stepAmount);
+
+          // Bounce at edges
+          if (nextLeft >= max) {
+            dir = -1;
+            nextLeft = max;
+          } else if (nextLeft <= 0) {
+            dir = 1;
+            nextLeft = 0;
+          }
+
+          scroller.scrollTo({ left: nextLeft, behavior: "smooth" });
           return;
         }
 
-        // Fallback: native horizontal scroll if applicable
-        if (!scroller) return;
-        const stepAmount = Math.round(scroller.clientWidth * 0.9);
-        const nextLeft = scroller.scrollLeft + stepAmount;
-        const max = scroller.scrollWidth - scroller.clientWidth - 2;
-        if (nextLeft >= max) {
-          scroller.scrollTo({ left: 0, behavior: "instant" as ScrollBehavior });
-        } else {
-          scroller.scrollTo({ left: nextLeft, behavior: "smooth" });
+        // Fallback: use carousel buttons if available (no edge awareness; still alternates visually via Embla)
+        if (dir === 1 && nextBtn) {
+          nextBtn.click();
+        } else if (dir === -1 && prevBtn) {
+          prevBtn.click();
+        } else if (nextBtn) {
+          // If prev not available, keep moving forward
+          nextBtn.click();
         }
       }, stepEveryMs);
 
@@ -1048,7 +1065,7 @@ export default function Classic() {
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious />
+            <CarouselPrevious data-autoscroll-prev="1" />
             <CarouselNext data-autoscroll-next="1" />
           </Carousel>
         </div>
