@@ -892,20 +892,6 @@ export default function Classic() {
 • Queried and modeled SQL datasets to uncover donation trends and community needs, delivering insights that boosted donor participation by 25% in 2 months
 • Automated cross-regional reporting by converting manual records into structured datasets, enabling leadership to track 2,000+ beneficiaries and optimize resource allocation in partnership with organizations like Smile Train`,
               },
-              {
-                icon: <Briefcase className="w-4 h-4 text-blue-700" />,
-                title: "Product Supervisor | Chaudhary Tea Processors & Packets Pvt. Ltd.",
-                period: "2023",
-                desc:
-                  "Oversaw product information management systems; ensured data accuracy and coordinated smooth workflows.",
-              },
-              {
-                icon: <Award className="w-4 h-4 text-blue-700" />,
-                title: "Capstone & Project Work | ISU",
-                period: "2023 – 2025",
-                desc:
-                  "Revamped Courtside Leadership WordPress site; delivered Managed IT Services RFP (Hazel Crest) with data analysis & strategy.",
-              },
             ].map((item, i) => (
               <motion.div
                 key={item.title}
