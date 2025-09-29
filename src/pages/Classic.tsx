@@ -1365,9 +1365,17 @@ export default function Classic() {
             ["🎹", "Piano"],
             ["🏸", "Badminton"],
           ].map(([icon, label]) => (
-            <div key={label} className="rounded-lg bg-white p-3 border hover:shadow-sm transition text-center">
-              <div className="text-2xl">{icon}</div>
-              <div className="mt-1 text-[11px] text-slate-700 truncate">{label}</div>
+            <div
+              key={label}
+              className="group rounded-lg bg-white p-3 border border-slate-200 text-center transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md hover:border-blue-200 hover:bg-blue-50/40 focus-within:-translate-y-0.5 focus-within:shadow-md focus-within:border-blue-200"
+              role="group"
+            >
+              <div className="text-2xl transition-transform duration-200 group-hover:scale-110 group-focus-within:scale-110">
+                {icon}
+              </div>
+              <div className="mt-1 text-[11px] text-slate-700 truncate group-hover:text-slate-900 group-focus-within:text-slate-900">
+                {label}
+              </div>
             </div>
           ))}
         </div>
