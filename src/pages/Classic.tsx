@@ -58,10 +58,40 @@ const featuredProjects: Array<Project> = [
     summary: "Process analysis with RFP & BPMN; vendor comparison and automation framework.",
     image: "https://harmless-tapir-303.convex.cloud/api/storage/3311862a-8472-4130-b2bd-0ac148ef9aad",
     tags: ["Process", "BPMN", "RFP"],
-    // link removed per request (no link for now)
+    // link intentionally omitted
     metrics: [
       { icon: <Star className="w-3.5 h-3.5" />, label: "Efficiency", value: 40, suffix: "%" },
       { icon: <Database className="w-3.5 h-3.5" />, label: "Docs", value: 8, suffix: "+" },
+    ],
+  },
+  {
+    id: "ai-predictive-analytics",
+    title: "AI-Driven Predictive Analytics",
+    summary:
+      "Designed regression and classification models on an open dataset, achieving 92% accuracy in predicting behavior. Built an interactive Python dashboard showcasing how AI improves demand forecasting, customer targeting, and strategic decisions.",
+    image: "https://harmless-tapir-303.convex.cloud/api/storage/a60d0701-4fc7-4749-b411-f961e8bc541d",
+    tags: ["AI", "Python", "Regression", "Classification", "Dashboard"],
+    metrics: [{ icon: <Star className="w-3.5 h-3.5" />, label: "Accuracy", value: 92, suffix: "%" }],
+  },
+  {
+    id: "it-services-optimization",
+    title: "IT Services Optimization",
+    summary:
+      "Partnered with an external IT stakeholder to capture requirements and define KPIs (avg. resolution time, backlog volume). Delivered visualization reports and recommendations that streamlined operations and reduced ticket resolution times by 15%.",
+    image: "https://harmless-tapir-303.convex.cloud/api/storage/82c04e8b-0353-48ae-9a5f-d1b0feb70e08",
+    tags: ["KPIs", "Process", "Dashboards"],
+    metrics: [{ icon: <Star className="w-3.5 h-3.5" />, label: "Faster resolution", value: 15, suffix: "%" }],
+  },
+  {
+    id: "retail-analytics-candles",
+    title: "Retail Analytics for Local Candle Business",
+    summary:
+      "Aggregated two years of POS data to segment purchase patterns, identify seasonal trends and underperforming inventory. Built Tableau dashboards guiding pricing and stocking—reduced overstock by 18% and improved revenue forecast accuracy by 20%.",
+    image: "https://harmless-tapir-303.convex.cloud/api/storage/87a95311-cb32-42a7-976c-1074b87d4be5",
+    tags: ["Retail", "Tableau", "POS Data", "Forecasting"],
+    metrics: [
+      { icon: <Star className="w-3.5 h-3.5" />, label: "Less overstock", value: 18, suffix: "%" },
+      { icon: <Star className="w-3.5 h-3.5" />, label: "Forecast ↑", value: 20, suffix: "%" },
     ],
   },
 ];
