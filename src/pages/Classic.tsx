@@ -1382,32 +1382,6 @@ export default function Classic() {
         </div>
       </motion.section>
 
-      {/* Testimonials & Career Goal - NEW */}
-      <motion.section
-        className="container mx-auto max-w-6xl px-4 py-10"
-        initial={{ opacity: 0, y: 14 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-80px" }}
-        transition={{ duration: 0.5 }}
-      >
-        <SectionTitle id="extras-title">Testimonials & Goals</SectionTitle>
-        <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-5">
-          <Card className="shadow-sm md:col-span-2">
-            <CardHeader className="pb-2"><CardTitle className="text-lg">Testimonials</CardTitle></CardHeader>
-            <CardContent className="space-y-3 text-sm text-slate-700">
-              <p>“Darshita is a dedicated and resourceful professional who blends analytical precision with creativity." – Professor, ISU</p>
-              <p>“Her ability to simplify complex data into actionable insights is impressive." – Supervisor, NGO Internship</p>
-            </CardContent>
-          </Card>
-          <Card className="shadow-sm">
-            <CardHeader className="pb-2"><CardTitle className="text-lg">Career Goal</CardTitle></CardHeader>
-            <CardContent className="text-sm text-slate-700">
-              To combine my data analysis expertise with development skills to solve real-world business problems and create impactful IT solutions.
-            </CardContent>
-          </Card>
-        </div>
-      </motion.section>
-
       {/* Extras */}
       <motion.section
         className="container mx-auto max-w-6xl px-4 pb-6"
