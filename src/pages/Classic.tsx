@@ -1365,9 +1365,20 @@ export default function Classic() {
             ["🎹", "Piano"],
             ["🏸", "Badminton"],
           ].map(([icon, label]) => (
-            <div key={label} className="rounded-lg bg-white p-3 border hover:shadow-sm transition text-center">
-              <div className="text-2xl">{icon}</div>
-              <div className="mt-1 text-[11px] text-slate-700 truncate">{label}</div>
+            <div
+              key={label}
+              className="rounded-lg bg-white p-3 border border-slate-200 shadow-sm transition-all text-center hover:-translate-y-0.5 hover:shadow-md"
+            >
+              <div className="text-2xl leading-none">{icon}</div>
+              <div
+                className="mt-1 text-[12px] md:text-sm font-medium text-slate-900 tracking-wide truncate"
+                title={label}
+              >
+                {label}
+              </div>
+              <div className="mt-0.5 text-[11px] text-slate-500 hidden md:block">
+                Hobby
+              </div>
             </div>
           ))}
         </div>
