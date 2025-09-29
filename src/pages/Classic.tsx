@@ -42,7 +42,7 @@ const featuredProjects: Array<Project> = [
   },
   {
     id: "film-fusion",
-    title: "Film‑Fusion",
+    title: "Movie Lens",
     summary: "Interactive movie reviews with search, reviews, login; PHP + JSON/AJAX.",
     image: "https://harmless-tapir-303.convex.cloud/api/storage/c9475219-276b-4120-a971-bd75d2fa117d",
     tags: ["HTML/CSS/JS", "PHP", "AJAX"],
