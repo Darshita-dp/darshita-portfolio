@@ -1303,10 +1303,7 @@ export default function Classic() {
                   style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)" }}
                 >
                   <CardContent className="text-center text-slate-700">
-                    <div className="text-lg md:text-xl text-black text-slate-900 font-semibold whitespace-nowrap overflow-hidden text-ellipsis max-w-[90%] mx-auto leading-tight">
-                      {ed.front}
-                    </div>
-                    <div className="mt-2 whitespace-pre-line text-sm">{ed.back}</div>
+                    <div className="whitespace-pre-line text-sm">{ed.back}</div>
                   </CardContent>
                 </Card>
               </div>
