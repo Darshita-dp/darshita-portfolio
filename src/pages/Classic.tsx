@@ -401,19 +401,8 @@ export default function Classic() {
 
   const headerGradient = { background: `linear-gradient(90deg, ${BLUE.headerFrom}, ${BLUE.headerTo})` };
 
-  const extras = useMemo(
-    () => [
-      {
-        icon: <Award className="w-4 h-4" />,
-        title: "Outstanding Graduate Student Award (Nom.)",
-        desc: "Recognized for academic excellence and impact.",
-      },
-      {
-        icon: <Briefcase className="w-4 h-4" />,
-        title: "Certifications",
-        desc: "Foundations in SQL, Agile practices; exploring AWS.",
-      },
-    ],
+  const extras = useMemo<Array<{ icon: React.ReactNode; title: string; desc: string }>>(
+    () => [],
     [],
   );
 
@@ -1409,25 +1398,27 @@ export default function Classic() {
       </motion.section>
 
       {/* Extras */}
-      <motion.section
-        className="container mx-auto max-w-6xl px-4 pb-6"
-        initial={{ opacity: 0, y: 14 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-80px" }}
-        transition={{ duration: 0.5 }}
-      >
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-          {extras.map((x, i) => (
-            <Card key={i} className="shadow-sm">
-              <CardHeader className="pb-2 flex items-center gap-2">
-                <span className="text-blue-700">{x.icon}</span>
-                <CardTitle className="text-lg">{x.title}</CardTitle>
-              </CardHeader>
-              <CardContent className="text-sm text-slate-600">{x.desc}</CardContent>
-            </Card>
-          ))}
-        </div>
-      </motion.section>
+      {extras.length > 0 && (
+        <motion.section
+          className="container mx-auto max-w-6xl px-4 pb-6"
+          initial={{ opacity: 0, y: 14 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.5 }}
+        >
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            {extras.map((x, i) => (
+              <Card key={i} className="shadow-sm">
+                <CardHeader className="pb-2 flex items-center gap-2">
+                  <span className="text-blue-700">{x.icon}</span>
+                  <CardTitle className="text-lg">{x.title}</CardTitle>
+                </CardHeader>
+                <CardContent className="text-sm text-slate-600">{x.desc}</CardContent>
+              </Card>
+            ))}
+          </div>
+        </motion.section>
+      )}
 
       {/* Contact */}
       <motion.section
