@@ -1278,10 +1278,16 @@ export default function Classic() {
               back: "B.C.A. (Hons.) | GPA: 3.5 | 2022",
             },
           ].map((ed) => (
-            <div key={ ed.front } className="group [perspective:1000px]">
-              <div className="relative h-40 w-full transition-transform duration-500 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]">
+            <div key={ ed.front } className="group [perspective:1000px]" style={{ perspective: "1000px" }}>
+              <div
+                className="relative h-40 w-full transition-transform duration-500 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]"
+                style={{ transformStyle: "preserve-3d" }}
+              >
                 {/* FRONT: top-centered, single-line, ellipsis */}
-                <Card className="absolute inset-0 flex items-start justify-center pt-3 [backface-visibility:hidden] shadow-sm transition-transform transition-shadow duration-200 hover:-translate-y-0.5 hover:shadow-md">
+                <Card
+                  className="absolute inset-0 flex items-start justify-center pt-3 [backface-visibility:hidden] shadow-sm transition-transform transition-shadow duration-200 hover:-translate-y-0.5 hover:shadow-md"
+                  style={{ backfaceVisibility: "hidden" }}
+                >
                   <CardHeader className="p-0">
                     <CardTitle
                       className="text-center text-lg md:text-xl text-black text-slate-900 font-semibold whitespace-nowrap overflow-hidden text-ellipsis max-w-[90%] mx-auto leading-tight"
@@ -1292,7 +1298,10 @@ export default function Classic() {
                 </Card>
 
                 {/* BACK: unchanged */}
-                <Card className="absolute inset-0 grid place-items-center [backface-visibility:hidden] [transform:rotateY(180deg)] shadow-sm transition-transform transition-shadow duration-200 hover:-translate-y-0.5 hover:shadow-md">
+                <Card
+                  className="absolute inset-0 grid place-items-center [backface-visibility:hidden] [transform:rotateY(180deg)] shadow-sm transition-transform transition-shadow duration-200 hover:-translate-y-0.5 hover:shadow-md"
+                  style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)" }}
+                >
                   <CardContent className="text-center whitespace-pre-line text-sm text-slate-700">{ed.back}</CardContent>
                 </Card>
               </div>
