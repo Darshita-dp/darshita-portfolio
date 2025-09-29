@@ -969,136 +969,136 @@ export default function Classic() {
                     const descId = `exp-desc-${idx}`;
 
                     return (
-                      <motion.div
-                        key={item.title}
-                        initial={{ opacity: 0, x: idx % 2 === 0 ? -20 : 20 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true, margin: "-80px" }}
-                        transition={{ duration: 0.45 }}
-                        className={`md:w-1/2 ${idx % 2 === 0 ? "md:pr-8 md:ml-auto" : "md:pl-8"}`}
-                        style={{ paddingLeft: "2.5rem" }}
-                      >
-                        {/* Timeline dot placed on the vertical line; not on the card */}
+                      <div key={item.title} className="relative">
+                        {/* Timeline dot placed on the vertical line; one per item */}
                         <span
                           className={`pointer-events-none absolute left-4 md:left-1/2 -translate-x-1/2 top-3 w-3.5 h-3.5 rounded-full bg-blue-600 ring-4 ${
                             isOpen ? "ring-blue-300" : "ring-blue-200"
                           } transition-shadow shadow-[0_0_12px_rgba(37,99,235,0.25)] z-10`}
                           aria-hidden="true"
                         />
-
-                        <Card
-                          className="group cursor-pointer shadow-sm transition-transform transition-shadow duration-200 hover:-translate-y-0.5 hover:shadow-md outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
-                          role="button"
-                          tabIndex={0}
-                          aria-expanded={isOpen}
-                          aria-controls={descId}
-                          onClick={() => setOpenIdx(isOpen ? null : idx)}
-                          onKeyDown={(e) => {
-                            if (e.key === "Enter" || e.key === " ") {
-                              e.preventDefault();
-                              setOpenIdx(isOpen ? null : idx);
-                            }
-                          }}
+                        <motion.div
+                          initial={{ opacity: 0, x: idx % 2 === 0 ? -20 : 20 }}
+                          whileInView={{ opacity: 1, x: 0 }}
+                          viewport={{ once: true, margin: "-80px" }}
+                          transition={{ duration: 0.45 }}
+                          className={`md:w-1/2 ${idx % 2 === 0 ? "md:pr-8 md:ml-auto" : "md:pl-8"}`}
+                          style={{ paddingLeft: "2.5rem" }}
                         >
-                          <CardHeader className="pb-1">
-                            <CardTitle className="text-base md:text-lg text-slate-900 inline-flex items-center gap-2">
-                              <span className="shrink-0">{item.icon}</span>
-                              {/* org color cue */}
-                              <span
-                                className="inline-block w-2.5 h-2.5 rounded-full"
-                                style={{ background: item.orgColor }}
-                                aria-hidden="true"
-                              />
-                              <span className="flex-1">{item.title}</span>
-                              {/* deep link if available */}
-                              {item.title.startsWith("CIIWAS NGO") ? (
-                                <span className="flex items-center gap-2">
+                          <Card
+                            className="group cursor-pointer shadow-sm transition-transform transition-shadow duration-200 hover:-translate-y-0.5 hover:shadow-md outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
+                            role="button"
+                            tabIndex={0}
+                            aria-expanded={isOpen}
+                            aria-controls={descId}
+                            onClick={() => setOpenIdx(isOpen ? null : idx)}
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter" || e.key === " ") {
+                                e.preventDefault();
+                                setOpenIdx(isOpen ? null : idx);
+                              }
+                            }}
+                          >
+                            <CardHeader className="pb-1">
+                              <CardTitle className="text-base md:text-lg text-slate-900 inline-flex items-center gap-2">
+                                <span className="shrink-0">{item.icon}</span>
+                                {/* org color cue */}
+                                <span
+                                  className="inline-block w-2.5 h-2.5 rounded-full"
+                                  style={{ background: item.orgColor }}
+                                  aria-hidden="true"
+                                />
+                                <span className="flex-1">{item.title}</span>
+                                {/* deep link if available */}
+                                {item.title.startsWith("CIIWAS NGO") ? (
+                                  <span className="flex items-center gap-2">
+                                    <a
+                                      href="https://www.linkedin.com/in/mehtaakanksha/"
+                                      target="_blank"
+                                      rel="noreferrer"
+                                      className="text-blue-700 hover:underline text-xs inline-flex items-center gap-1"
+                                      onClick={(e) => e.stopPropagation()}
+                                    >
+                                      Akanksha <ExternalLink className="w-3 h-3" />
+                                    </a>
+                                    <a
+                                      href="https://www.linkedin.com/in/vanithagiriprakash/"
+                                      target="_blank"
+                                      rel="noreferrer"
+                                      className="text-blue-700 hover:underline text-xs inline-flex items-center gap-1"
+                                      onClick={(e) => e.stopPropagation()}
+                                    >
+                                      Vanitha <ExternalLink className="w-3 h-3" />
+                                    </a>
+                                  </span>
+                                ) : item.link ? (
                                   <a
-                                    href="https://www.linkedin.com/in/mehtaakanksha/"
+                                    href={item.link}
                                     target="_blank"
                                     rel="noreferrer"
-                                    className="text-blue-700 hover:underline text-xs inline-flex items-center gap-1"
+                                    className="text-blue-700 hover:underline inline-flex items-center gap-1 text-xs"
                                     onClick={(e) => e.stopPropagation()}
+                                    aria-label="Open organization link"
                                   >
-                                    Akanksha <ExternalLink className="w-3 h-3" />
+                                    Visit <ExternalLink className="w-3 h-3" />
                                   </a>
-                                  <a
-                                    href="https://www.linkedin.com/in/vanithagiriprakash/"
-                                    target="_blank"
-                                    rel="noreferrer"
-                                    className="text-blue-700 hover:underline text-xs inline-flex items-center gap-1"
-                                    onClick={(e) => e.stopPropagation()}
-                                  >
-                                    Vanitha <ExternalLink className="w-3 h-3" />
-                                  </a>
-                                </span>
-                              ) : item.link ? (
-                                <a
-                                  href={item.link}
-                                  target="_blank"
-                                  rel="noreferrer"
-                                  className="text-blue-700 hover:underline inline-flex items-center gap-1 text-xs"
-                                  onClick={(e) => e.stopPropagation()}
-                                  aria-label="Open organization link"
-                                >
-                                  Visit <ExternalLink className="w-3 h-3" />
-                                </a>
+                                ) : null}
+                              </CardTitle>
+                              <p className="text-xs text-slate-500 mt-1">{item.period}</p>
+
+                              {/* Metrics row */}
+                              {item.metrics && item.metrics.length > 0 ? (
+                                <div className="mt-2 flex flex-wrap gap-1.5">
+                                  {item.metrics.map((m, k) => (
+                                    <span
+                                      key={k}
+                                      className="px-2 py-0.5 rounded-full text-[10px] bg-blue-50 text-blue-700 border border-blue-200"
+                                    >
+                                      {m}
+                                    </span>
+                                  ))}
+                                </div>
                               ) : null}
-                            </CardTitle>
-                            <p className="text-xs text-slate-500 mt-1">{item.period}</p>
 
-                            {/* Metrics row */}
-                            {item.metrics && item.metrics.length > 0 ? (
-                              <div className="mt-2 flex flex-wrap gap-1.5">
-                                {item.metrics.map((m, k) => (
-                                  <span
-                                    key={k}
-                                    className="px-2 py-0.5 rounded-full text-[10px] bg-blue-50 text-blue-700 border border-blue-200"
-                                  >
-                                    {m}
-                                  </span>
-                                ))}
+                              {/* Tech/topic tags */}
+                              {item.tags && item.tags.length > 0 ? (
+                                <div className="mt-1 flex flex-wrap gap-1.5">
+                                  {item.tags.map((t) => (
+                                    <span
+                                      key={t}
+                                      className="px-2 py-0.5 rounded-full text-[10px] bg-slate-50 text-slate-700 border border-slate-200"
+                                    >
+                                      {t}
+                                    </span>
+                                  ))}
+                                </div>
+                              ) : null}
+                            </CardHeader>
+
+                            <CardContent>
+                              {/* Description: hidden by default, reveal on hover/focus or when expanded; supports line breaks */}
+                              <div
+                                id={descId}
+                                className={`text-sm text-slate-700 whitespace-pre-line transition-all duration-300 ease-out ${
+                                  isOpen
+                                    ? "max-h-[700px] opacity-100"
+                                    : "max-h-0 opacity-0"
+                                }`}
+                              >
+                                {item.desc}
                               </div>
-                            ) : null}
 
-                            {/* Tech/topic tags */}
-                            {item.tags && item.tags.length > 0 ? (
-                              <div className="mt-1 flex flex-wrap gap-1.5">
-                                {item.tags.map((t) => (
-                                  <span
-                                    key={t}
-                                    className="px-2 py-0.5 rounded-full text-[10px] bg-slate-50 text-slate-700 border border-slate-200"
-                                  >
-                                    {t}
-                                  </span>
-                                ))}
-                              </div>
-                            ) : null}
-                          </CardHeader>
-
-                          <CardContent>
-                            {/* Description: hidden by default, reveal on hover/focus or when expanded; supports line breaks */}
-                            <div
-                              id={descId}
-                              className={`text-sm text-slate-700 whitespace-pre-line transition-all duration-300 ease-out ${
-                                isOpen
-                                  ? "max-h-[700px] opacity-100"
-                                  : "max-h-0 opacity-0"
-                              }`}
-                            >
-                              {item.desc}
-                            </div>
-
-                            {/* Compact Read more affordance (visible when not expanded) */}
-                            {!isOpen && (
-                              <div className="mt-2 text-xs text-blue-700 opacity-80 group-hover:opacity-100 transition flex items-center gap-1">
-                                <span>Read more</span>
-                                <span aria-hidden="true">▾</span>
-                              </div>
-                            )}
-                          </CardContent>
-                        </Card>
-                      </motion.div>
+                              {/* Compact Read more affordance (visible when not expanded) */}
+                              {!isOpen && (
+                                <div className="mt-2 text-xs text-blue-700 opacity-80 group-hover:opacity-100 transition flex items-center gap-1">
+                                  <span>Read more</span>
+                                  <span aria-hidden="true">▾</span>
+                                </div>
+                              )}
+                            </CardContent>
+                          </Card>
+                        </motion.div>
+                      </div>
                     );
                   })}
                 </div>
