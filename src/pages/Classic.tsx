@@ -903,7 +903,7 @@ export default function Classic() {
                 style={{ paddingLeft: "2.5rem" }}
               >
                 <span className="absolute left-4 md:left-1/2 -translate-x-1/2 top-3 w-3.5 h-3.5 rounded-full bg-blue-600 ring-4 ring-blue-200" />
-                <Card className="shadow-sm transition-transform transition-shadow duration-200 hover:-translate-y-0.5 hover:shadow-md">
+                <Card className="group cursor-pointer shadow-sm transition-transform transition-shadow duration-200 hover:-translate-y-0.5 hover:shadow-md">
                   <CardHeader className="pb-1">
                     <CardTitle className="text-base md:text-lg text-slate-900 inline-flex items-center gap-2">
                       <span className="shrink-0">{item.icon}</span>
@@ -911,7 +911,13 @@ export default function Classic() {
                     </CardTitle>
                     <p className="text-xs text-slate-500 mt-1">{item.period}</p>
                   </CardHeader>
-                  <CardContent className="text-sm text-slate-700">{item.desc}</CardContent>
+                  <CardContent>
+                    <div
+                      className="text-sm text-slate-700 max-h-0 opacity-0 group-hover:max-h-[700px] group-hover:opacity-100 group-focus-within:max-h-[700px] group-focus-within:opacity-100 transition-all duration-300 ease-out"
+                    >
+                      {item.desc}
+                    </div>
+                  </CardContent>
                 </Card>
               </motion.div>
             ))}
