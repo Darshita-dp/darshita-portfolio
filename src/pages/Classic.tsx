@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { ArrowRight, Award, Briefcase, Database, Github, Linkedin, Mail, Smartphone, Star, ExternalLink } from "lucide-react";
+import { ArrowRight, Award, Briefcase, Database, Github, Linkedin, Mail, Phone, Smartphone, Star, ExternalLink } from "lucide-react";
 
 type Project = {
   id: string;
@@ -350,9 +350,6 @@ export default function Classic() {
       const onLeave = () => (paused = false);
       wrap.addEventListener("mouseenter", onEnter);
       wrap.addEventListener("mouseleave", onLeave);
-      // Pause auto-scroll when any element inside gains keyboard focus, resume on focus out
-      wrap.addEventListener("focusin", onEnter);
-      wrap.addEventListener("focusout", onLeave);
 
       // Looping behavior (always forward, wrap to start at the end)
       const stepEveryMs = 3200;
@@ -381,9 +378,6 @@ export default function Classic() {
         clearInterval(timer);
         wrap.removeEventListener("mouseenter", onEnter);
         wrap.removeEventListener("mouseleave", onLeave);
-        // cleanup focus listeners
-        wrap.removeEventListener("focusin", onEnter);
-        wrap.removeEventListener("focusout", onLeave);
       });
     }
 
@@ -434,10 +428,8 @@ export default function Classic() {
               <div className="w-36 h-36 md:w-40 md:h-40 rounded-full overflow-hidden ring-4 ring-white/40 shadow-xl">
                 <img
                   src="https://harmless-tapir-303.convex.cloud/api/storage/fbbcab3e-d3b1-4639-99b4-311c5e1ab7ca"
-                  alt="Profile photo of Darshita Patel"
+                  alt="Profile"
                   className="w-full h-full object-cover opacity-100"
-                  loading="lazy"
-                  decoding="async"
                 />
               </div>
               <div className="absolute inset-0 rounded-full blur-2xl opacity-50 -z-10" style={{ background: BLUE.accent }} />
@@ -1181,10 +1173,8 @@ export default function Classic() {
                         <div className="relative h-40 w-full overflow-hidden">
                           <img
                             src={p.image}
-                            alt={`Project: ${p.title}`}
+                            alt={p.title}
                             className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.06]"
-                            loading="lazy"
-                            decoding="async"
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                         </div>
@@ -1261,8 +1251,8 @@ export default function Classic() {
                     );
                   })}
                 </CarouselContent>
-                <CarouselPrevious data-autoscroll-prev="1" aria-label="Previous projects" />
-                <CarouselNext data-autoscroll-next="1" aria-label="Next projects" />
+                <CarouselPrevious data-autoscroll-prev="1" />
+                <CarouselNext data-autoscroll-next="1" />
               </Carousel>
             </div>
           );
@@ -1291,23 +1281,11 @@ export default function Classic() {
           ].map((ed) => (
             <div key={ ed.front } className="group [perspective:1000px]">
               <div className="relative h-40 w-full transition-transform duration-500 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]">
-                <Card
-                  className="absolute inset-0 grid place-items-center backface-hidden shadow-sm transition-transform transition-shadow duration-200 hover:-translate-y-0.5 hover:shadow-md"
-                  style={{ backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden" }}
-                >
-                  <CardHeader>
-                    <CardTitle className="text-center text-black text-slate-900 font-bold text-lg md:text-xl truncate">
-                      {ed.front}
-                    </CardTitle>
-                  </CardHeader>
+                <Card className="absolute inset-0 grid place-items-center backface-hidden shadow-sm transition-transform transition-shadow duration-200 hover:-translate-y-0.5 hover:shadow-md">
+                  <CardHeader><CardTitle className="text-center">{ed.front}</CardTitle></CardHeader>
                 </Card>
-                <Card
-                  className="absolute inset-0 grid place-items-center backface-hidden [transform:rotateY(180deg)] shadow-sm transition-transform transition-shadow duration-200 hover:-translate-y-0.5 hover:shadow-md"
-                  style={{ backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden" }}
-                >
-                  <CardContent className="text-center whitespace-pre-line text-sm text-slate-700">
-                    {ed.back}
-                  </CardContent>
+                <Card className="absolute inset-0 grid place-items-center backface-hidden [transform:rotateY(180deg)] shadow-sm transition-transform transition-shadow duration-200 hover:-translate-y-0.5 hover:shadow-md">
+                  <CardContent className="text-center whitespace-pre-line text-sm text-slate-700">{ed.back}</CardContent>
                 </Card>
               </div>
             </div>
@@ -1363,8 +1341,8 @@ export default function Classic() {
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious data-autoscroll-prev="1" aria-label="Previous achievement" />
-            <CarouselNext data-autoscroll-next="1" aria-label="Next achievement" />
+            <CarouselPrevious data-autoscroll-prev="1" />
+            <CarouselNext data-autoscroll-next="1" />
           </Carousel>
         </div>
       </motion.section>
