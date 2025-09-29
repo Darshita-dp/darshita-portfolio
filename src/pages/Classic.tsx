@@ -1247,22 +1247,20 @@ export default function Classic() {
           ].map((ed) => (
             <div key={ ed.front } className="group [perspective:1000px]">
               <div className="relative h-40 w-full transition-transform duration-500 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]">
-                {/* FRONT FACE: ensure always visible */}
+                {/* FRONT FACE: ensure always visible and on top */}
                 <Card
-                  className="absolute inset-0 grid place-items-start content-start [backface-visibility:hidden] shadow-sm transition-transform transition-shadow duration-200 hover:-translate-y-0.5 hover:shadow-md p-4"
-                  // Add explicit backface visibility for broader browser support
-                  style={{ backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden" }}
+                  className="absolute inset-0 grid place-items-start content-start [backface-visibility:hidden] shadow-sm transition-transform transition-shadow duration-200 hover:-translate-y-0.5 hover:shadow-md p-4 z-20 bg-white"
+                  style={{ backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden", transform: "translateZ(1px)" }}
                 >
                   <CardHeader className="p-0">
-                    <CardTitle className="text-left text-black text-slate-900 font-bold text-lg md:text-xl whitespace-nowrap overflow-hidden text-ellipsis relative z-10">
+                    <CardTitle className="text-left text-black text-slate-900 font-bold text-lg md:text-xl whitespace-nowrap overflow-hidden text-ellipsis relative z-20">
                       {ed.front}
                     </CardTitle>
                   </CardHeader>
                 </Card>
                 {/* BACK FACE */}
                 <Card
-                  className="absolute inset-0 grid place-items-center [backface-visibility:hidden] [transform:rotateY(180deg)] shadow-sm transition-transform transition-shadow duration-200 hover:-translate-y-0.5 hover:shadow-md"
-                  // Add explicit backface visibility for broader browser support
+                  className="absolute inset-0 grid place-items-center [backface-visibility:hidden] [transform:rotateY(180deg)] shadow-sm transition-transform transition-shadow duration-200 hover:-translate-y-0.5 hover:shadow-md z-10"
                   style={{ backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden" }}
                 >
                   <CardContent className="text-center whitespace-pre-line text-sm text-slate-700">
