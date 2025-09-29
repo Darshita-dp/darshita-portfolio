@@ -1131,6 +1131,9 @@ export default function Classic() {
             <motion.a
               key={p.id}
               href={p.link || "#"}
+              // Open external project links in a new tab
+              target={p.link ? "_blank" : undefined}
+              rel={p.link ? "noreferrer" : undefined}
               whileHover={{ y: -6, scale: 1.01 }}
               transition={{ type: "spring", stiffness: 250, damping: 20 }}
               className="group"
