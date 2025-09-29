@@ -1292,7 +1292,7 @@ export default function Classic() {
             <div key={ ed.front } className="group [perspective:1000px]">
               <div className="relative h-40 w-full transition-transform duration-500 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]">
                 <Card className="absolute inset-0 grid place-items-center backface-hidden shadow-sm transition-transform transition-shadow duration-200 hover:-translate-y-0.5 hover:shadow-md">
-                  <CardHeader><CardTitle className="text-center">{ed.front}</CardTitle></CardHeader>
+                  <CardHeader><CardTitle className="text-center text-base md:text-lg whitespace-nowrap">{ed.front}</CardTitle></CardHeader>
                 </Card>
                 <Card className="absolute inset-0 grid place-items-center backface-hidden [transform:rotateY(180deg)] shadow-sm transition-transform transition-shadow duration-200 hover:-translate-y-0.5 hover:shadow-md">
                   <CardContent className="text-center whitespace-pre-line text-sm text-slate-700">{ed.back}</CardContent>
