@@ -961,9 +961,9 @@ export default function Classic() {
               </div>
 
               <div className="mt-6 relative">
-                {/* Style the vertical line: blue gradient + subtle glow that intensifies on hover/focus */}
+                {/* Style the vertical line: dark blue gradient + subtle glow */}
                 <div
-                  className="absolute left-4 md:left-1/2 top-0 bottom-0 w-[3px] rounded-full bg-gradient-to-b from-blue-200/80 via-blue-300/60 to-blue-200/80 shadow-[0_0_18px_rgba(59,130,246,0.15)] transition-shadow"
+                  className="absolute left-4 md:left-1/2 top-0 bottom-0 w-[3px] rounded-full bg-gradient-to-b from-blue-700 via-blue-800 to-blue-700 shadow-[0_0_20px_rgba(30,58,138,0.25)] transition-shadow"
                   aria-hidden="true"
                   style={{ willChange: "filter" }}
                 />
@@ -990,8 +990,7 @@ export default function Classic() {
                           whileInView={{ opacity: 1, x: 0 }}
                           viewport={{ once: true, margin: "-80px" }}
                           transition={{ duration: 0.45 }}
-                          className={`md:w-1/2 ${idx % 2 === 0 ? "md:pr-8 md:ml-auto" : "md:pl-8"}`}
-                          style={{ paddingLeft: "2.5rem" }}
+                          className={`pl-10 md:w-1/2 ${idx % 2 === 0 ? "md:pl-10 md:ml-auto" : "md:pr-10"}`}
                         >
                           <Card
                             className="group cursor-pointer shadow-sm transition-transform transition-shadow duration-200 hover:-translate-y-0.5 hover:shadow-md outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
