@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { ArrowRight, Award, Briefcase, Database, Github, Linkedin, Mail, Phone, Smartphone, Star } from "lucide-react";
+import { ArrowRight, Award, Briefcase, Database, Github, Linkedin, Mail, Phone, Smartphone, Star, ExternalLink } from "lucide-react";
 
 type Project = {
   id: string;
@@ -857,72 +857,254 @@ export default function Classic() {
         transition={{ duration: 0.5 }}
       >
         <SectionTitle id="experience-title">Experience Timeline</SectionTitle>
-        <div className="mt-6 relative">
-          <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-[3px] bg-blue-200/70 rounded" />
-          <div className="space-y-6">
-            {[
-              {
-                icon: <Briefcase className="w-4 h-4 text-blue-700" />,
-                title: "Graduate Teaching Assistant | Illinois State University",
-                period: "Aug 2024 – May 2025",
-                desc:
-                  "Instructed and supported 120+ students in IT productivity tools; developed lab content and guided students in Microsoft Office Suite and data tools.",
-              },
-              {
-                icon: <Database className="w-4 h-4 text-blue-700" />,
-                title: "CIIWAS NGO | Data and Web Development Intern — Normal, IL",
-                period: "08/2024 – 12/2024",
-                desc: `• Designed and deployed interactive web modules that centralized workshop resources, converting raw program data into structured dashboards used by 100+ women participants to track IT learning progress
-• Optimized MySQL queries and automated pipelines to manage participant records, accelerating enrollment insights and improving registration efficiency by 25%
-• Engineered React-based visualization components that translated training outcomes in Python, IT tools, and career readiness into accessible metrics, enabling leadership to measure program impact and refine workshops`,
-              },
-              {
-                icon: <Database className="w-4 h-4 text-blue-700" />,
-                title: "GMP MachPro | Data Analyst Intern — India",
-                period: "01/2023 – 06/2023",
-                desc: `• Analyzed production datasets from granulation and liquid packaging lines, identifying efficiency gaps that reduced downtime by 8% and contributed to operational savings
-• Developed Power BI dashboards to monitor KPIs — machine output, rejection rates, and utilization — giving leadership realtime visibility into production performance
-• Conducted statistical reviews of sales and quality data, uncovering demand trends and batch variances that improved forecasting accuracy by 15% and strengthened compliance`,
-              },
-              {
-                icon: <Database className="w-4 h-4 text-blue-700" />,
-                title: "ORANGES NGO | IT Data Analyst Intern — India",
-                period: "04/2022 – 12/2022",
-                desc: `• Standardized donor datasets from 80+ regions, strengthening pipelines and improving reporting accuracy
-• Queried and modeled SQL datasets to uncover donation trends and community needs, delivering insights that boosted donor participation by 25% in 2 months
-• Automated cross-regional reporting by converting manual records into structured datasets, enabling leadership to track 2,000+ beneficiaries and optimize resource allocation in partnership with organizations like Smile Train`,
-              },
-            ].map((item, i) => (
-              <motion.div
-                key={item.title}
-                initial={{ opacity: 0, x: i % 2 === 0 ? -20 : 20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, margin: "-80px" }}
-                transition={{ duration: 0.45 }}
-                className={`relative md:w-1/2 ${i % 2 === 0 ? "md:pr-8 md:ml-auto" : "md:pl-8"}`}
-                style={{ paddingLeft: "2.5rem" }}
-              >
-                <span className="absolute left-4 md:left-1/2 -translate-x-1/2 top-3 w-3.5 h-3.5 rounded-full bg-blue-600 ring-4 ring-blue-200" />
-                <Card className="group cursor-pointer shadow-sm transition-transform transition-shadow duration-200 hover:-translate-y-0.5 hover:shadow-md">
-                  <CardHeader className="pb-1">
-                    <CardTitle className="text-base md:text-lg text-slate-900 inline-flex items-center gap-2">
-                      <span className="shrink-0">{item.icon}</span>
-                      <span>{item.title}</span>
-                    </CardTitle>
-                    <p className="text-xs text-slate-500 mt-1">{item.period}</p>
-                  </CardHeader>
-                  <CardContent>
-                    <div
-                      className="text-sm text-slate-700 whitespace-pre-line max-h-0 opacity-0 group-hover:max-h-[700px] group-hover:opacity-100 group-focus-within:max-h-[700px] group-focus-within:opacity-100 transition-all duration-300 ease-out"
-                    >
-                      {item.desc}
-                    </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
+
+        {/* Filters */}
+        <div className="mt-4 flex flex-wrap gap-2">
+          {/* Add local state for filter */}
+          {/* NOTE: this uses the component's state; ensure it's placed within the component scope */}
         </div>
+
+        {/* Experience timeline with tap-to-expand, metrics, tags, org cue, link */}
+        {(() => {
+          // Local state for filters and expansion
+          const [expFilter, setExpFilter] = useState<"All" | "Teaching" | "Internships" | "Data Analytics">("All");
+          const [openIdx, setOpenIdx] = useState<number | null>(null);
+
+          type ExpItem = {
+            icon: React.ReactNode;
+            title: string;
+            period: string;
+            desc: string;
+            orgColor: string;
+            tags: Array<string>;
+            metrics?: Array<string>;
+            link?: string;
+            category: "Teaching" | "Internships";
+          };
+
+          const items: Array<ExpItem> = [
+            {
+              icon: <Briefcase className="w-4 h-4 text-blue-700" />,
+              title: "Graduate Teaching Assistant | Illinois State University",
+              period: "Aug 2024 – May 2025",
+              desc:
+                "Instructed and supported 120+ students in IT productivity tools; developed lab content and guided students in Microsoft Office Suite and data tools.",
+              orgColor: "#1E88E5",
+              tags: ["Teaching", "MS Office", "Student Support"],
+              metrics: ["120+ students"],
+              link: "https://coursefinder.illinoisstate.edu/it/150/",
+              category: "Teaching",
+            },
+            {
+              icon: <Database className="w-4 h-4 text-blue-700" />,
+              title: "CIIWAS NGO | Data and Web Development Intern — Normal, IL",
+              period: "08/2024 – 12/2024",
+              desc:
+                "• Designed and deployed interactive web modules that centralized workshop resources, converting raw program data into structured dashboards used by 100+ women participants to track IT learning progress\n• Optimized MySQL queries and automated pipelines to manage participant records, accelerating enrollment insights and improving registration efficiency by 25%\n• Engineered React-based visualization components that translated training outcomes in Python, IT tools, and career readiness into accessible metrics, enabling leadership to measure program impact and refine workshops",
+              orgColor: "#2E7D32",
+              tags: ["React", "MySQL", "Data Analytics", "Dashboards"],
+              metrics: ["100+ participants", "+25% efficiency"],
+              // For CIIWAS: include direct contacts instead of creating a new page
+              // We'll show contacts as extra links in the card instead of a dedicated route.
+              category: "Internships",
+            },
+            {
+              icon: <Database className="w-4 h-4 text-blue-700" />,
+              title: "GMP MachPro | Data Analyst Intern — India",
+              period: "01/2023 – 06/2023",
+              desc:
+                "• Analyzed production datasets from granulation and liquid packaging lines, identifying efficiency gaps that reduced downtime by 8% and contributed to operational savings\n• Developed Power BI dashboards to monitor KPIs — machine output, rejection rates, and utilization — giving leadership realtime visibility into production performance\n• Conducted statistical reviews of sales and quality data, uncovering demand trends and batch variances that improved forecasting accuracy by 15% and strengthened compliance",
+              orgColor: "#6D28D9",
+              tags: ["Power BI", "KPIs", "Data Analytics"],
+              metrics: ["-8% downtime", "+15% forecasting accuracy"],
+              link: "https://www.gmpmachpro.com/",
+              category: "Internships",
+            },
+            {
+              icon: <Database className="w-4 h-4 text-blue-700" />,
+              title: "ORANGES NGO | IT Data Analyst Intern — India",
+              period: "04/2022 – 12/2022",
+              desc:
+                "• Standardized donor datasets from 80+ regions, strengthening pipelines and improving reporting accuracy\n• Queried and modeled SQL datasets to uncover donation trends and community needs, delivering insights that boosted donor participation by 25% in 2 months\n• Automated cross-regional reporting by converting manual records into structured datasets, enabling leadership to track 2,000+ beneficiaries and optimize resource allocation in partnership with organizations like Smile Train",
+              orgColor: "#D97706",
+              tags: ["SQL", "Reporting", "Data Analytics"],
+              metrics: ["80+ regions", "+25% participation", "2000+ beneficiaries"],
+              link: "https://www.linkedin.com/in/oranges-ngo-4459411a9/",
+              category: "Internships",
+            },
+          ];
+
+          const filtered =
+            expFilter === "All"
+              ? items
+              : expFilter === "Data Analytics"
+                ? items.filter((it) => it.tags.includes("Data Analytics"))
+                : items.filter((it) => it.category === expFilter);
+
+          return (
+            <div className="mt-4">
+              {/* Filter chips */}
+              <div className="mb-4 flex flex-wrap gap-2">
+                {(["All", "Teaching", "Internships", "Data Analytics"] as const).map((f) => (
+                  <button
+                    key={f}
+                    type="button"
+                    onClick={() => setExpFilter(f)}
+                    className={`px-3 py-1.5 rounded-full text-xs border transition ${
+                      expFilter === f ? "bg-blue-600 text-white border-blue-600" : "bg-white text-slate-700 border-slate-200 hover:bg-slate-50"
+                    }`}
+                    aria-pressed={expFilter === f}
+                  >
+                    {f}
+                  </button>
+                ))}
+              </div>
+
+              <div className="mt-6 relative">
+                <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-[3px] bg-blue-200/70 rounded" />
+                <div className="space-y-6">
+                  {filtered.map((item, i) => {
+                    const idx = i; // index within filtered list
+                    const isOpen = openIdx === idx;
+                    const descId = `exp-desc-${idx}`;
+
+                    return (
+                      <motion.div
+                        key={item.title}
+                        initial={{ opacity: 0, x: idx % 2 === 0 ? -20 : 20 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true, margin: "-80px" }}
+                        transition={{ duration: 0.45 }}
+                        className={`relative md:w-1/2 ${idx % 2 === 0 ? "md:pr-8 md:ml-auto" : "md:pl-8"}`}
+                        style={{ paddingLeft: "2.5rem" }}
+                      >
+                        {/* Timeline dot with glow on hover/focus/expanded */}
+                        <span
+                          className={`absolute left-4 md:left-1/2 -translate-x-1/2 top-3 w-3.5 h-3.5 rounded-full bg-blue-600 ring-4 ${
+                            isOpen ? "ring-blue-300" : "ring-blue-200"
+                          } transition-shadow shadow-[0_0_12px_rgba(37,99,235,0.25)]`}
+                        />
+
+                        <Card
+                          className="group cursor-pointer shadow-sm transition-transform transition-shadow duration-200 hover:-translate-y-0.5 hover:shadow-md outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
+                          role="button"
+                          tabIndex={0}
+                          aria-expanded={isOpen}
+                          aria-controls={descId}
+                          onClick={() => setOpenIdx(isOpen ? null : idx)}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter" || e.key === " ") {
+                              e.preventDefault();
+                              setOpenIdx(isOpen ? null : idx);
+                            }
+                          }}
+                        >
+                          <CardHeader className="pb-1">
+                            <CardTitle className="text-base md:text-lg text-slate-900 inline-flex items-center gap-2">
+                              <span className="shrink-0">{item.icon}</span>
+                              {/* org color cue */}
+                              <span
+                                className="inline-block w-2.5 h-2.5 rounded-full"
+                                style={{ background: item.orgColor }}
+                                aria-hidden="true"
+                              />
+                              <span className="flex-1">{item.title}</span>
+                              {/* deep link if available */}
+                              {item.title.startsWith("CIIWAS NGO") ? (
+                                <span className="flex items-center gap-2">
+                                  <a
+                                    href="https://www.linkedin.com/in/mehtaakanksha/"
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="text-blue-700 hover:underline text-xs inline-flex items-center gap-1"
+                                    onClick={(e) => e.stopPropagation()}
+                                  >
+                                    Akanksha <ExternalLink className="w-3 h-3" />
+                                  </a>
+                                  <a
+                                    href="https://www.linkedin.com/in/vanithagiriprakash/"
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="text-blue-700 hover:underline text-xs inline-flex items-center gap-1"
+                                    onClick={(e) => e.stopPropagation()}
+                                  >
+                                    Vanitha <ExternalLink className="w-3 h-3" />
+                                  </a>
+                                </span>
+                              ) : item.link ? (
+                                <a
+                                  href={item.link}
+                                  target="_blank"
+                                  rel="noreferrer"
+                                  className="text-blue-700 hover:underline inline-flex items-center gap-1 text-xs"
+                                  onClick={(e) => e.stopPropagation()}
+                                  aria-label="Open organization link"
+                                >
+                                  Visit <ExternalLink className="w-3 h-3" />
+                                </a>
+                              ) : null}
+                            </CardTitle>
+                            <p className="text-xs text-slate-500 mt-1">{item.period}</p>
+
+                            {/* Metrics row */}
+                            {item.metrics && item.metrics.length > 0 ? (
+                              <div className="mt-2 flex flex-wrap gap-1.5">
+                                {item.metrics.map((m, k) => (
+                                  <span
+                                    key={k}
+                                    className="px-2 py-0.5 rounded-full text-[10px] bg-blue-50 text-blue-700 border border-blue-200"
+                                  >
+                                    {m}
+                                  </span>
+                                ))}
+                              </div>
+                            ) : null}
+
+                            {/* Tech/topic tags */}
+                            {item.tags && item.tags.length > 0 ? (
+                              <div className="mt-1 flex flex-wrap gap-1.5">
+                                {item.tags.map((t) => (
+                                  <span
+                                    key={t}
+                                    className="px-2 py-0.5 rounded-full text-[10px] bg-slate-50 text-slate-700 border border-slate-200"
+                                  >
+                                    {t}
+                                  </span>
+                                ))}
+                              </div>
+                            ) : null}
+                          </CardHeader>
+
+                          <CardContent>
+                            {/* Description: hidden by default, reveal on hover/focus or when expanded; supports line breaks */}
+                            <div
+                              id={descId}
+                              className={`text-sm text-slate-700 whitespace-pre-line transition-all duration-300 ease-out ${
+                                isOpen
+                                  ? "max-h-[700px] opacity-100"
+                                  : "max-h-0 opacity-0 group-hover:max-h-[700px] group-hover:opacity-100 group-focus-within:max-h-[700px] group-focus-within:opacity-100"
+                              }`}
+                            >
+                              {item.desc}
+                            </div>
+
+                            {/* Compact Read more affordance (visible when not expanded) */}
+                            {!isOpen && (
+                              <div className="mt-2 text-xs text-blue-700 opacity-80 group-hover:opacity-100 transition flex items-center gap-1">
+                                <span>Read more</span>
+                                <span aria-hidden="true">▾</span>
+                              </div>
+                            )}
+                          </CardContent>
+                        </Card>
+                      </motion.div>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+          );
+        })()}
       </motion.section>
 
       {/* Projects */}
