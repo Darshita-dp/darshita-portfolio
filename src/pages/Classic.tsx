@@ -1415,7 +1415,7 @@ export default function Classic() {
       >
         <div className="container mx-auto max-w-6xl px-4 py-7">
           <SectionTitle id="contact-title">Contact</SectionTitle>
-          <div className="mt-5 grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div className="mt-5 grid grid-cols-1 md:grid-cols-1 gap-5">
             <Card className="shadow-sm bg-[#EAF4FF] border-blue-100">
               <CardHeader className="pb-1">
                 <CardTitle className="text-lg">Let's talk</CardTitle>
@@ -1570,51 +1570,7 @@ export default function Classic() {
               </CardContent>
             </Card>
 
-            {/* Social as circular icon buttons */}
-            <Card className="shadow-sm bg-[#EAF4FF] border-blue-100">
-              <CardHeader className="pb-1">
-                <CardTitle className="text-lg">Social</CardTitle>
-              </CardHeader>
-              <CardContent className="flex flex-wrap gap-3">
-                <a
-                  href="https://www.linkedin.com/"
-                  target="_blank"
-                  rel="noreferrer"
-                  aria-label="LinkedIn"
-                  className="group relative grid place-items-center w-11 h-11 rounded-full bg-white border border-slate-200 text-slate-700 hover:text-white hover:bg-blue-700 hover:border-blue-700 transition-transform duration-200 hover:scale-105 shadow-sm"
-                >
-                  <Linkedin className="w-5 h-5" />
-                </a>
-                <a
-                  href="https://github.com/"
-                  target="_blank"
-                  rel="noreferrer"
-                  aria-label="GitHub"
-                  className="group relative grid place-items-center w-11 h-11 rounded-full bg-white border border-slate-200 text-slate-700 hover:text-white hover:bg-blue-700 hover:border-blue-700 transition-transform duration-200 hover:scale-105 shadow-sm"
-                >
-                  <Github className="w-5 h-5" />
-                </a>
-                <a
-                  href="#"
-                  download
-                  onClick={(e) => {
-                    e.preventDefault();
-                    toast("Resume download not configured yet.");
-                  }}
-                  aria-label="Download Resume"
-                  className="group relative grid place-items-center w-11 h-11 rounded-full bg-white border border-slate-200 text-slate-700 hover:text-white hover:bg-blue-700 hover:border-blue-700 transition-transform duration-200 hover:scale-105 shadow-sm"
-                >
-                  <span className="text-base select-none">📄</span>
-                </a>
-                <a
-                  href="mailto:darshitapatel1506@gmail.com"
-                  aria-label="Email"
-                  className="group relative grid place-items-center w-11 h-11 rounded-full bg-white border border-slate-200 text-slate-700 hover:text-white hover:bg-blue-700 hover:border-blue-700 transition-transform duration-200 hover:scale-105 shadow-sm"
-                >
-                  <Mail className="w-5 h-5" />
-                </a>
-              </CardContent>
-            </Card>
+            {/* Social card removed as requested */}
           </div>
         </div>
       </motion.section>
