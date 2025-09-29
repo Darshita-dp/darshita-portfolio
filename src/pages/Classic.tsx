@@ -1294,7 +1294,9 @@ export default function Classic() {
                 {/* FRONT: top-centered, single-line, ellipsis */}
                 <Card className="absolute inset-0 flex items-start justify-center pt-3 [backface-visibility:hidden] shadow-sm transition-transform transition-shadow duration-200 hover:-translate-y-0.5 hover:shadow-md">
                   <CardHeader className="p-0">
-                    <CardTitle className="text-center text-base md:text-lg text-black text-slate-900 font-semibold whitespace-nowrap overflow-hidden text-ellipsis max-w-[90%] mx-auto">
+                    <CardTitle
+                      className="text-center text-lg md:text-xl text-black text-slate-900 font-semibold whitespace-nowrap overflow-hidden text-ellipsis max-w-[90%] mx-auto leading-tight"
+                    >
                       {ed.front}
                     </CardTitle>
                   </CardHeader>
