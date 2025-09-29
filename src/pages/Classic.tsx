@@ -872,9 +872,7 @@ export default function Classic() {
                 icon: <Database className="w-4 h-4 text-blue-700" />,
                 title: "CIIWAS NGO | Data and Web Development Intern — Normal, IL",
                 period: "08/2024 – 12/2024",
-                desc: `• Designed and deployed interactive web modules that centralized workshop resources, converting raw program data into structured dashboards used by 100+ women participants to track IT learning progress
-• Optimized MySQL queries and automated pipelines to manage participant records, accelerating enrollment insights and improving registration efficiency by 25%
-• Engineered React-based visualization components that translated training outcomes in Python, IT tools, and career readiness into accessible metrics, enabling leadership to measure program impact and refine workshops`,
+                desc: `1) Designed and deployed interactive web modules that centralized workshop resources, converting raw program data into structured dashboards used by 100+ women participants to track IT learning progress. 2) Optimized MySQL queries and automated pipelines to manage participant records, accelerating enrollment insights and improving registration efficiency by 25%. 3) Engineered React-based visualization components that translated training outcomes in Python, IT tools, and career readiness into accessible metrics, enabling leadership to measure program impact and refine workshops.`,
               },
               {
                 icon: <Database className="w-4 h-4 text-blue-700" />,
