@@ -402,7 +402,18 @@ export default function Classic() {
   const headerGradient = { background: `linear-gradient(90deg, ${BLUE.headerFrom}, ${BLUE.headerTo})` };
 
   const extras = useMemo(
-    () => [] as Array<{ icon: React.ReactNode; title: string; desc: string }>,
+    () => [
+      {
+        icon: <Award className="w-4 h-4" />,
+        title: "Outstanding Graduate Student Award (Nom.)",
+        desc: "Recognized for academic excellence and impact.",
+      },
+      {
+        icon: <Briefcase className="w-4 h-4" />,
+        title: "Certifications",
+        desc: "Foundations in SQL, Agile practices; exploring AWS.",
+      },
+    ],
     [],
   );
 
@@ -1278,33 +1289,13 @@ export default function Classic() {
               back: "B.C.A. (Hons.) | GPA: 3.5 | 2022",
             },
           ].map((ed) => (
-            <div key={ ed.front } className="group [perspective:1000px]" style={{ perspective: "1000px" }}>
-              <div
-                className="relative h-40 w-full transition-transform duration-500 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]"
-                style={{ transformStyle: "preserve-3d" }}
-              >
-                {/* FRONT: top-centered, single-line, ellipsis */}
-                <Card
-                  className="absolute inset-0 flex items-start justify-center pt-3 [backface-visibility:hidden] shadow-sm transition-transform transition-shadow duration-200 hover:-translate-y-0.5 hover:shadow-md"
-                  style={{ backfaceVisibility: "hidden" }}
-                >
-                  <CardHeader className="p-0">
-                    <CardTitle
-                      className="text-center text-lg md:text-xl text-black text-slate-900 font-semibold whitespace-nowrap overflow-hidden text-ellipsis max-w-[90%] mx-auto leading-tight"
-                    >
-                      {ed.front}
-                    </CardTitle>
-                  </CardHeader>
+            <div key={ ed.front } className="group [perspective:1000px]">
+              <div className="relative h-40 w-full transition-transform duration-500 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]">
+                <Card className="absolute inset-0 grid place-items-center backface-hidden shadow-sm transition-transform transition-shadow duration-200 hover:-translate-y-0.5 hover:shadow-md">
+                  <CardHeader><CardTitle className="text-center">{ed.front}</CardTitle></CardHeader>
                 </Card>
-
-                {/* BACK: add university name at top, details below */}
-                <Card
-                  className="absolute inset-0 grid place-items-center [backface-visibility:hidden] [transform:rotateY(180deg)] shadow-sm transition-transform transition-shadow duration-200 hover:-translate-y-0.5 hover:shadow-md"
-                  style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)" }}
-                >
-                  <CardContent className="text-center text-slate-700">
-                    <div className="whitespace-pre-line text-sm">{ed.back}</div>
-                  </CardContent>
+                <Card className="absolute inset-0 grid place-items-center backface-hidden [transform:rotateY(180deg)] shadow-sm transition-transform transition-shadow duration-200 hover:-translate-y-0.5 hover:shadow-md">
+                  <CardContent className="text-center whitespace-pre-line text-sm text-slate-700">{ed.back}</CardContent>
                 </Card>
               </div>
             </div>
@@ -1391,28 +1382,52 @@ export default function Classic() {
         </div>
       </motion.section>
 
+      {/* Testimonials & Career Goal - NEW */}
+      <motion.section
+        className="container mx-auto max-w-6xl px-4 py-10"
+        initial={{ opacity: 0, y: 14 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-80px" }}
+        transition={{ duration: 0.5 }}
+      >
+        <SectionTitle id="extras-title">Testimonials & Goals</SectionTitle>
+        <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-5">
+          <Card className="shadow-sm md:col-span-2">
+            <CardHeader className="pb-2"><CardTitle className="text-lg">Testimonials</CardTitle></CardHeader>
+            <CardContent className="space-y-3 text-sm text-slate-700">
+              <p>“Darshita is a dedicated and resourceful professional who blends analytical precision with creativity." – Professor, ISU</p>
+              <p>“Her ability to simplify complex data into actionable insights is impressive." – Supervisor, NGO Internship</p>
+            </CardContent>
+          </Card>
+          <Card className="shadow-sm">
+            <CardHeader className="pb-2"><CardTitle className="text-lg">Career Goal</CardTitle></CardHeader>
+            <CardContent className="text-sm text-slate-700">
+              To combine my data analysis expertise with development skills to solve real-world business problems and create impactful IT solutions.
+            </CardContent>
+          </Card>
+        </div>
+      </motion.section>
+
       {/* Extras */}
-      {extras.length > 0 ? (
-        <motion.section
-          className="container mx-auto max-w-6xl px-4 pb-6"
-          initial={{ opacity: 0, y: 14 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.5 }}
-        >
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-            {extras.map((x, i) => (
-              <Card key={i} className="shadow-sm">
-                <CardHeader className="pb-2 flex items-center gap-2">
-                  <span className="text-blue-700">{x.icon}</span>
-                  <CardTitle className="text-lg">{x.title}</CardTitle>
-                </CardHeader>
-                <CardContent className="text-sm text-slate-600">{x.desc}</CardContent>
-              </Card>
-            ))}
-          </div>
-        </motion.section>
-      ) : null}
+      <motion.section
+        className="container mx-auto max-w-6xl px-4 pb-6"
+        initial={{ opacity: 0, y: 14 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-80px" }}
+        transition={{ duration: 0.5 }}
+      >
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          {extras.map((x, i) => (
+            <Card key={i} className="shadow-sm">
+              <CardHeader className="pb-2 flex items-center gap-2">
+                <span className="text-blue-700">{x.icon}</span>
+                <CardTitle className="text-lg">{x.title}</CardTitle>
+              </CardHeader>
+              <CardContent className="text-sm text-slate-600">{x.desc}</CardContent>
+            </Card>
+          ))}
+        </div>
+      </motion.section>
 
       {/* Contact */}
       <motion.section
