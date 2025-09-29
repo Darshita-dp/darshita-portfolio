@@ -961,7 +961,12 @@ export default function Classic() {
               </div>
 
               <div className="mt-6 relative">
-                <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-[3px] bg-blue-200/70 rounded" />
+                {/* Style the vertical line: blue gradient + subtle glow that intensifies on hover/focus */}
+                <div
+                  className="absolute left-4 md:left-1/2 top-0 bottom-0 w-[3px] rounded-full bg-gradient-to-b from-blue-200/80 via-blue-300/60 to-blue-200/80 shadow-[0_0_18px_rgba(59,130,246,0.15)] transition-shadow"
+                  aria-hidden="true"
+                  style={{ willChange: "filter" }}
+                />
                 <div className="space-y-6">
                   {filtered.map((item, i) => {
                     const idx = i; // index within filtered list
@@ -969,13 +974,16 @@ export default function Classic() {
                     const descId = `exp-desc-${idx}`;
 
                     return (
-                      <div key={item.title} className="relative">
+                      // Make this a group wrapper so the line & dot can respond to hover/focus of the card
+                      <div key={item.title} className="relative group">
                         {/* Timeline dot placed on the vertical line; one per item */}
                         <span
-                          className={`pointer-events-none absolute left-4 md:left-1/2 -translate-x-1/2 top-3 w-3.5 h-3.5 rounded-full bg-blue-600 ring-4 ${
-                            isOpen ? "ring-blue-300" : "ring-blue-200"
-                          } transition-shadow shadow-[0_0_12px_rgba(37,99,235,0.25)] z-10`}
+                          className={`pointer-events-none absolute left-4 md:left-1/2 -translate-x-1/2 top-3 w-3.5 h-3.5 rounded-full ring-4 transition-all duration-300 ease-out shadow-[0_2px_10px_rgba(37,99,235,0.25)] group-hover:shadow-[0_0_14px_rgba(37,99,235,0.35)] group-focus-within:shadow-[0_0_14px_rgba(37,99,235,0.35)] ${isOpen ? "ring-blue-300 scale-[1.05]" : "ring-blue-200"}`}
                           aria-hidden="true"
+                          style={{
+                            background: "linear-gradient(135deg, #93c5fd, #3b82f6)",
+                            border: "1px solid rgba(255,255,255,0.7)",
+                          }}
                         />
                         <motion.div
                           initial={{ opacity: 0, x: idx % 2 === 0 ? -20 : 20 }}
