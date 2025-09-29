@@ -975,7 +975,7 @@ export default function Classic() {
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true, margin: "-80px" }}
                         transition={{ duration: 0.45 }}
-                        className={`relative md:w-1/2 ${idx % 2 === 0 ? "md:pr-8 md:ml-auto" : "md:pl-8"}`}
+                        className={`md:w-1/2 ${idx % 2 === 0 ? "md:pr-8 md:ml-auto" : "md:pl-8"}`}
                         style={{ paddingLeft: "2.5rem" }}
                       >
                         {/* Timeline dot placed on the vertical line; not on the card */}
