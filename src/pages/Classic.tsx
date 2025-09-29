@@ -978,11 +978,12 @@ export default function Classic() {
                         className={`relative md:w-1/2 ${idx % 2 === 0 ? "md:pr-8 md:ml-auto" : "md:pl-8"}`}
                         style={{ paddingLeft: "2.5rem" }}
                       >
-                        {/* Timeline dot with glow on hover/focus/expanded */}
+                        {/* Timeline dot placed on the vertical line; not on the card */}
                         <span
-                          className={`absolute left-4 md:left-1/2 -translate-x-1/2 top-3 w-3.5 h-3.5 rounded-full bg-blue-600 ring-4 ${
+                          className={`pointer-events-none absolute left-4 md:left-1/2 -translate-x-1/2 top-3 w-3.5 h-3.5 rounded-full bg-blue-600 ring-4 ${
                             isOpen ? "ring-blue-300" : "ring-blue-200"
-                          } transition-shadow shadow-[0_0_12px_rgba(37,99,235,0.25)]`}
+                          } transition-shadow shadow-[0_0_12px_rgba(37,99,235,0.25)] z-10`}
+                          aria-hidden="true"
                         />
 
                         <Card
