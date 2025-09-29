@@ -9,7 +9,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { toast } from "sonner";
 import { ArrowRight, Briefcase, Database, Github, Linkedin, Mail, Smartphone, Star, ExternalLink } from "lucide-react";
 
@@ -1497,75 +1496,49 @@ export default function Classic() {
                   <Separator className="my-4" />
 
                   {/* Compact Social row (icon-only) */}
-                  <TooltipProvider>
-                    <div
-                      className="flex flex-wrap items-center gap-3 sm:gap-4"
-                      aria-label="Social links"
+                  <div
+                    className="flex flex-wrap items-center gap-3 sm:gap-4"
+                    aria-label="Social links"
+                  >
+                    <a
+                      href="https://www.linkedin.com/"
+                      target="_blank"
+                      rel="noopener"
+                      aria-label="Open LinkedIn"
+                      className="grid place-items-center rounded-full w-9 h-9 sm:w-10 sm:h-10 bg-blue-50 text-blue-700 border border-blue-100 shadow-sm hover:scale-[1.05] hover:shadow-md hover:text-blue-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 transition transform duration-150 ease-out"
                     >
-                      {/* LinkedIn */}
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <a
-                            href="https://www.linkedin.com/"
-                            target="_blank"
-                            rel="noopener"
-                            aria-label="Open LinkedIn"
-                            className="grid place-items-center rounded-full w-9 h-9 sm:w-10 sm:h-10 bg-blue-50 text-blue-700 border border-blue-100 shadow-sm hover:scale-[1.05] hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 transition"
-                          >
-                            <Linkedin className="w-[18px] h-[18px]" />
-                          </a>
-                        </TooltipTrigger>
-                        <TooltipContent side="top">LinkedIn</TooltipContent>
-                      </Tooltip>
+                      <Linkedin className="w-[18px] h-[18px]" />
+                    </a>
 
-                      {/* GitHub */}
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <a
-                            href="https://github.com/"
-                            target="_blank"
-                            rel="noopener"
-                            aria-label="Open GitHub"
-                            className="grid place-items-center rounded-full w-9 h-9 sm:w-10 sm:h-10 bg-blue-50 text-blue-700 border border-blue-100 shadow-sm hover:scale-[1.05] hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 transition"
-                          >
-                            <Github className="w-[18px] h-[18px]" />
-                          </a>
-                        </TooltipTrigger>
-                        <TooltipContent side="top">GitHub</TooltipContent>
-                      </Tooltip>
+                    <a
+                      href="https://github.com/"
+                      target="_blank"
+                      rel="noopener"
+                      aria-label="Open GitHub"
+                      className="grid place-items-center rounded-full w-9 h-9 sm:w-10 sm:h-10 bg-blue-50 text-blue-700 border border-blue-100 shadow-sm hover:scale-[1.05] hover:shadow-md hover:text-blue-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 transition transform duration-150 ease-out"
+                    >
+                      <Github className="w-[18px] h-[18px]" />
+                    </a>
 
-                      {/* Resume */}
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <a
-                            href="/resume.pdf"
-                            download
-                            target="_blank"
-                            rel="noopener"
-                            aria-label="Download Resume"
-                            className="grid place-items-center rounded-full w-9 h-9 sm:w-10 sm:h-10 bg-blue-50 text-blue-700 border border-blue-100 shadow-sm hover:scale-[1.05] hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 transition"
-                          >
-                            <span className="text-[16px]" aria-hidden="true">📄</span>
-                          </a>
-                        </TooltipTrigger>
-                        <TooltipContent side="top">Resume</TooltipContent>
-                      </Tooltip>
+                    <a
+                      href="/resume.pdf"
+                      download
+                      target="_blank"
+                      rel="noopener"
+                      aria-label="Download Resume"
+                      className="grid place-items-center rounded-full w-9 h-9 sm:w-10 sm:h-10 bg-blue-50 text-blue-700 border border-blue-100 shadow-sm hover:scale-[1.05] hover:shadow-md hover:text-blue-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 transition transform duration-150 ease-out"
+                    >
+                      <span className="text-[16px]" aria-hidden="true">📄</span>
+                    </a>
 
-                      {/* Email */}
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <a
-                            href="mailto:darshitapatel1506@gmail.com"
-                            aria-label="Email Darshita"
-                            className="grid place-items-center rounded-full w-9 h-9 sm:w-10 sm:h-10 bg-blue-50 text-blue-700 border border-blue-100 shadow-sm hover:scale-[1.05] hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 transition"
-                          >
-                            <Mail className="w-[18px] h-[18px]" />
-                          </a>
-                        </TooltipTrigger>
-                        <TooltipContent side="top">Email</TooltipContent>
-                      </Tooltip>
-                    </div>
-                  </TooltipProvider>
+                    <a
+                      href="mailto:darshitapatel1506@gmail.com"
+                      aria-label="Email Darshita"
+                      className="grid place-items-center rounded-full w-9 h-9 sm:w-10 sm:h-10 bg-blue-50 text-blue-700 border border-blue-100 shadow-sm hover:scale-[1.05] hover:shadow-md hover:text-blue-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 transition transform duration-150 ease-out"
+                    >
+                      <Mail className="w-[18px] h-[18px]" />
+                    </a>
+                  </div>
                 </form>
               </CardContent>
             </Card>
