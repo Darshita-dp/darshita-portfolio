@@ -1505,7 +1505,7 @@ export default function Classic() {
                       target="_blank"
                       rel="noopener"
                       aria-label="Open LinkedIn"
-                      className="grid place-items-center rounded-full w-9 h-9 sm:w-10 sm:h-10 bg-blue-50 text-blue-700 border border-blue-100 shadow-sm hover:scale-[1.05] hover:shadow-md hover:text-blue-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 transition transform duration-150 ease-out"
+                      className="grid place-items-center rounded-full w-9 h-9 sm:w-10 sm:h-10 bg-blue-50 text-blue-700 border border-blue-100 shadow-sm hover:scale-[1.05] hover:shadow-md hover:text-blue-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 transition transform duration-150 ease-out"
                     >
                       <Linkedin className="w-[18px] h-[18px]" />
                     </a>
