@@ -1082,7 +1082,7 @@ export default function Classic() {
                               className={`text-sm text-slate-700 whitespace-pre-line transition-all duration-300 ease-out ${
                                 isOpen
                                   ? "max-h-[700px] opacity-100"
-                                  : "max-h-0 opacity-0 group-hover:max-h-[700px] group-hover:opacity-100 group-focus-within:max-h-[700px] group-focus-within:opacity-100"
+                                  : "max-h-0 opacity-0"
                               }`}
                             >
                               {item.desc}
