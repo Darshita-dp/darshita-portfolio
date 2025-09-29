@@ -1414,7 +1414,7 @@ export default function Classic() {
         <div className="container mx-auto max-w-6xl px-4 py-7">
           <SectionTitle id="contact-title">Contact</SectionTitle>
           <div className="mt-5 grid grid-cols-1 md:grid-cols-2 gap-5">
-            <Card className="shadow-sm">
+            <Card className="shadow-sm bg-[#EAF4FF] border-blue-100">
               <CardHeader className="pb-1">
                 <CardTitle className="text-lg">Let's talk</CardTitle>
               </CardHeader>
@@ -1505,7 +1505,7 @@ export default function Classic() {
             </Card>
 
             {/* Social as circular icon buttons */}
-            <Card className="shadow-sm">
+            <Card className="shadow-sm bg-[#EAF4FF] border-blue-100">
               <CardHeader className="pb-1">
                 <CardTitle className="text-lg">Social</CardTitle>
               </CardHeader>
