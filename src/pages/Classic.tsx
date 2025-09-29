@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { toast } from "sonner";
 import { ArrowRight, Briefcase, Database, Github, Linkedin, Mail, Smartphone, Star, ExternalLink } from "lucide-react";
 
 type Project = {
@@ -245,6 +246,10 @@ function BubblesBackground() {
 
 export default function Classic() {
   const [sending, setSending] = useState(false);
+  const [nameVal, setNameVal] = useState("");
+  const [emailVal, setEmailVal] = useState("");
+  const [messageVal, setMessageVal] = useState("");
+  const [errors, setErrors] = useState<{ name?: string; email?: string; message?: string }>({});
 
   // Auto-scroll for Certificates carousels (supports multiple rows; respects reduced motion)
   useEffect(() => {
@@ -310,20 +315,54 @@ export default function Classic() {
     return () => cleanups.forEach((fn) => fn());
   }, []);
 
+  const validate = () => {
+    const next: { name?: string; email?: string; message?: string } = {};
+    if (!nameVal.trim()) next.name = "Please enter your name.";
+    if (!emailVal.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal)) next.email = "Enter a valid email.";
+    if (!messageVal.trim() || messageVal.trim().length < 10) next.message = "Message must be at least 10 characters.";
+    setErrors(next);
+    return Object.keys(next).length === 0;
+  };
+
   const onSubmitContact = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const fd = new FormData(e.currentTarget);
-    const name = String(fd.get("name") || "");
-    const email = String(fd.get("email") || "");
-    const message = String(fd.get("message") || "");
+    if (!validate()) {
+      toast("Please fix the highlighted fields.");
+      return;
+    }
     setSending(true);
     setTimeout(() => {
       setSending(false);
-      const subject = encodeURIComponent(`Portfolio contact from ${name}`);
-      const body = encodeURIComponent(`${message}\n\n— ${name}\n${email}`);
-      // Update recipient to requested email
+      toast.success("Thanks! Your message has been prepared in your email app.");
+      const subject = encodeURIComponent(`Portfolio contact from ${nameVal}`);
+      const body = encodeURIComponent(`${messageVal}\n\n— ${nameVal}\n${emailVal}`);
       window.location.href = `mailto:darshitapatel1506@gmail.com?subject=${subject}&body=${body}`;
-    }, 450);
+    }, 350);
+  };
+
+  // Simple ripple effect for the send button
+  const addRipple = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const btn = e.currentTarget;
+    const rect = btn.getBoundingClientRect();
+    const circle = document.createElement("span");
+    const size = Math.max(rect.width, rect.height);
+    circle.style.position = "absolute";
+    circle.style.left = `${e.clientX - rect.left - size / 2}px`;
+    circle.style.top = `${e.clientY - rect.top - size / 2}px`;
+    circle.style.width = `${size}px`;
+    circle.style.height = `${size}px`;
+    circle.style.borderRadius = "9999px";
+    circle.style.background = "rgba(13,71,161,0.3)";
+    circle.style.transform = "scale(0)";
+    circle.style.opacity = "0.9";
+    circle.style.pointerEvents = "none";
+    circle.style.transition = "transform 450ms ease, opacity 600ms ease";
+    btn.appendChild(circle);
+    requestAnimationFrame(() => {
+      circle.style.transform = "scale(1.6)";
+      circle.style.opacity = "0";
+    });
+    setTimeout(() => circle.remove(), 650);
   };
 
   const headerGradient = { background: `linear-gradient(90deg, ${BLUE.headerFrom}, ${BLUE.headerTo})` };
@@ -1372,45 +1411,142 @@ export default function Classic() {
         viewport={{ once: true, margin: "-80px" }}
         transition={{ duration: 0.5 }}
       >
-        <div className="container mx-auto max-w-6xl px-4 py-8 md:py-10">
+        <div className="container mx-auto max-w-6xl px-4 py-7">
           <SectionTitle id="contact-title">Contact</SectionTitle>
-          <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="mt-5 grid grid-cols-1 md:grid-cols-2 gap-5">
             <Card className="shadow-sm">
-              <CardHeader className="pb-2">
+              <CardHeader className="pb-1">
                 <CardTitle className="text-lg">Let's talk</CardTitle>
               </CardHeader>
               <CardContent>
-                <form onSubmit={onSubmitContact} className="space-y-3">
-                  <Input name="name" placeholder="Your name" required />
-                  <Input type="email" name="email" placeholder="Email" required />
-                  <Textarea name="message" placeholder="Message" required className="min-h-[120px]" />
-                  <Button type="submit" disabled={sending}>
-                    {sending ? "Preparing…" : "Send"}
-                    <ArrowRight className="w-4 h-4 ml-2" />
-                  </Button>
+                <form onSubmit={onSubmitContact} className="space-y-2.5 relative">
+                  {/* Name */}
+                  <div className="relative">
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 select-none">👤</span>
+                    <Input
+                      name="name"
+                      placeholder="Your name"
+                      value={nameVal}
+                      onChange={(e) => setNameVal(e.target.value)}
+                      onBlur={validate}
+                      aria-invalid={!!errors.name}
+                      className={`pl-9 ${errors.name ? "border-red-500 focus-visible:ring-red-500" : nameVal ? "border-green-500 focus-visible:ring-green-500" : ""}`}
+                      required
+                    />
+                    {nameVal && !errors.name ? (
+                      <span className="absolute right-2 top-1/2 -translate-y-1/2 text-green-600 text-sm">✅</span>
+                    ) : null}
+                    {errors.name ? <div className="mt-1 text-xs text-red-600">{errors.name}</div> : null}
+                  </div>
+
+                  {/* Email */}
+                  <div className="relative">
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 select-none">✉️</span>
+                    <Input
+                      type="email"
+                      name="email"
+                      placeholder="Email"
+                      value={emailVal}
+                      onChange={(e) => setEmailVal(e.target.value)}
+                      onBlur={validate}
+                      aria-invalid={!!errors.email}
+                      className={`pl-9 ${errors.email ? "border-red-500 focus-visible:ring-red-500" : emailVal ? "border-green-500 focus-visible:ring-green-500" : ""}`}
+                      required
+                    />
+                    {emailVal && !errors.email ? (
+                      <span className="absolute right-2 top-1/2 -translate-y-1/2 text-green-600 text-sm">✅</span>
+                    ) : null}
+                    {errors.email ? <div className="mt-1 text-xs text-red-600">{errors.email}</div> : null}
+                  </div>
+
+                  {/* Message */}
+                  <div className="relative">
+                    <span className="absolute left-3 top-3 select-none">💬</span>
+                    <Textarea
+                      name="message"
+                      placeholder="Message"
+                      value={messageVal}
+                      onChange={(e) => setMessageVal(e.target.value)}
+                      onBlur={validate}
+                      aria-invalid={!!errors.message}
+                      className={`pl-9 min-h-[110px] ${errors.message ? "border-red-500 focus-visible:ring-red-500" : messageVal ? "border-green-500 focus-visible:ring-green-500" : ""}`}
+                      required
+                    />
+                    {messageVal && !errors.message ? (
+                      <span className="absolute right-2 top-2 text-green-600 text-sm">✅</span>
+                    ) : null}
+                    {errors.message ? <div className="mt-1 text-xs text-red-600">{errors.message}</div> : null}
+                  </div>
+
+                  {/* Send button with hover + ripple */}
+                  <div className="pt-1.5">
+                    <Button
+                      type="submit"
+                      disabled={sending}
+                      onClick={addRipple}
+                      className="relative overflow-hidden bg-blue-700 hover:bg-blue-800 active:scale-[0.99] transition"
+                    >
+                      {sending ? "Preparing…" : "Send"}
+                      <ArrowRight className="w-4 h-4 ml-2" />
+                    </Button>
+                  </div>
                 </form>
-                <div className="mt-4 flex flex-wrap items-center gap-3 text-sm">
-                  <a href="mailto:darshitapatel1506@gmail.com" className="inline-flex items-center gap-1 text-blue-700 hover:underline">
+
+                <div className="mt-3 flex flex-wrap items-center gap-2 text-sm">
+                  <a
+                    href="mailto:darshitapatel1506@gmail.com"
+                    className="inline-flex items-center gap-1 text-blue-700 hover:underline"
+                    aria-label="Email Darshita"
+                  >
                     <Mail className="w-4 h-4" /> Email
                   </a>
                 </div>
               </CardContent>
             </Card>
+
+            {/* Social as circular icon buttons */}
             <Card className="shadow-sm">
-              <CardHeader className="pb-2">
+              <CardHeader className="pb-1">
                 <CardTitle className="text-lg">Social</CardTitle>
               </CardHeader>
-              <CardContent className="flex gap-3">
-                <Button asChild variant="outline">
-                  <a href="https://www.linkedin.com/" target="_blank" rel="noreferrer">
-                    <Linkedin className="w-4 h-4 mr-2" /> LinkedIn
-                  </a>
-                </Button>
-                <Button asChild variant="outline">
-                  <a href="https://github.com/" target="_blank" rel="noreferrer">
-                    <Github className="w-4 h-4 mr-2" /> GitHub
-                  </a>
-                </Button>
+              <CardContent className="flex flex-wrap gap-3">
+                <a
+                  href="https://www.linkedin.com/"
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="LinkedIn"
+                  className="group relative grid place-items-center w-11 h-11 rounded-full bg-white border border-slate-200 text-slate-700 hover:text-white hover:bg-blue-700 hover:border-blue-700 transition-transform duration-200 hover:scale-105 shadow-sm"
+                >
+                  <Linkedin className="w-5 h-5" />
+                </a>
+                <a
+                  href="https://github.com/"
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="GitHub"
+                  className="group relative grid place-items-center w-11 h-11 rounded-full bg-white border border-slate-200 text-slate-700 hover:text-white hover:bg-blue-700 hover:border-blue-700 transition-transform duration-200 hover:scale-105 shadow-sm"
+                >
+                  <Github className="w-5 h-5" />
+                </a>
+                <a
+                  href="#"
+                  download
+                  onClick={(e) => {
+                    e.preventDefault();
+                    toast("Resume download not configured yet.");
+                  }}
+                  aria-label="Download Resume"
+                  className="group relative grid place-items-center w-11 h-11 rounded-full bg-white border border-slate-200 text-slate-700 hover:text-white hover:bg-blue-700 hover:border-blue-700 transition-transform duration-200 hover:scale-105 shadow-sm"
+                >
+                  <span className="text-base select-none">📄</span>
+                </a>
+                <a
+                  href="mailto:darshitapatel1506@gmail.com"
+                  aria-label="Email"
+                  className="group relative grid place-items-center w-11 h-11 rounded-full bg-white border border-slate-200 text-slate-700 hover:text-white hover:bg-blue-700 hover:border-blue-700 transition-transform duration-200 hover:scale-105 shadow-sm"
+                >
+                  <Mail className="w-5 h-5" />
+                </a>
               </CardContent>
             </Card>
           </div>
