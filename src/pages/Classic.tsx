@@ -1292,16 +1292,16 @@ export default function Classic() {
             <div key={ ed.front } className="group [perspective:1000px]">
               <div className="relative h-40 w-full transition-transform duration-500 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]">
                 {/* FRONT: top-centered, single-line, ellipsis */}
-                <Card className="absolute inset-0 flex items-start justify-center pt-3 backface-hidden shadow-sm transition-transform transition-shadow duration-200 hover:-translate-y-0.5 hover:shadow-md">
+                <Card className="absolute inset-0 flex items-start justify-center pt-3 [backface-visibility:hidden] shadow-sm transition-transform transition-shadow duration-200 hover:-translate-y-0.5 hover:shadow-md">
                   <CardHeader className="p-0">
-                    <CardTitle className="text-center text-base md:text-lg text-slate-900 font-semibold whitespace-nowrap overflow-hidden text-ellipsis max-w-[90%] mx-auto">
+                    <CardTitle className="text-center text-base md:text-lg text-black text-slate-900 font-semibold whitespace-nowrap overflow-hidden text-ellipsis max-w-[90%] mx-auto">
                       {ed.front}
                     </CardTitle>
                   </CardHeader>
                 </Card>
 
                 {/* BACK: unchanged */}
-                <Card className="absolute inset-0 grid place-items-center backface-hidden [transform:rotateY(180deg)] shadow-sm transition-transform transition-shadow duration-200 hover:-translate-y-0.5 hover:shadow-md">
+                <Card className="absolute inset-0 grid place-items-center [backface-visibility:hidden] [transform:rotateY(180deg)] shadow-sm transition-transform transition-shadow duration-200 hover:-translate-y-0.5 hover:shadow-md">
                   <CardContent className="text-center whitespace-pre-line text-sm text-slate-700">{ed.back}</CardContent>
                 </Card>
               </div>
