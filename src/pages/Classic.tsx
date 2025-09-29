@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { ArrowRight, Award, Briefcase, Database, Github, Linkedin, Mail, Phone, Smartphone, Star, ExternalLink } from "lucide-react";
+import { ArrowRight, Briefcase, Database, Github, Linkedin, Mail, Smartphone, Star, ExternalLink } from "lucide-react";
 
 type Project = {
   id: string;
@@ -239,82 +239,8 @@ function StickyNav() {
 }
 
 function BubblesBackground() {
-  // Lightweight, CSS-driven bubbles; respects reduced motion
-  const reduced =
-    typeof window !== "undefined" &&
-    window.matchMedia &&
-    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-  // Increase density slightly for better presence on desktop
-  const count = reduced ? 10 : 34;
-  const bubbles = Array.from({ length: count });
-
-  return (
-    <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
-      {/* Keyframes local to this page */}
-      <style>
-        {`
-        @keyframes bubble-rise {
-          0%   { transform: translate3d(var(--bx, 0), 100%, 0) scale(var(--bs, 1)); opacity: 0; }
-          10%  { opacity: 0.85; }
-          90%  { opacity: 0.85; }
-          100% { transform: translate3d(calc(var(--bx, 0) + var(--bshift, 0px)), -20%, 0) scale(var(--bs, 1)); opacity: 0; }
-        }
-      `}
-      </style>
-      {(() => {
-        const reduced =
-          typeof window !== "undefined" &&
-          window.matchMedia &&
-          window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-        const count = reduced ? 10 : 34;
-        const bubbles = Array.from({ length: count });
-        return bubbles.map((_, i) => {
-          const size = 14 + Math.random() * 42; // 14–56px
-          const left = Math.random() * 100; // vw %
-          const norm = (size - 14) / 42;
-          const dur = 26 + norm * 22 + Math.random() * 8; // larger = slower
-          const delay = Math.random() * 8;
-          const scale = 0.9 + Math.random() * 0.5;
-          const shift = (Math.random() * 90 - 45).toFixed(1) + "px";
-
-          // Enriched palette: increase average opacity for visibility on pastel bg
-          const palette = [
-            "rgba(255,255,255,0.98)", // brighter white
-            "rgba(255,255,255,0.90)", // soft white
-            "rgba(230,244,255,0.92)", // very light blue
-            "rgba(189,222,255,0.86)", // light blue
-            "rgba(120,169,255,0.50)", // soft navy tint
-          ];
-          const bg = palette[i % palette.length];
-
-          return (
-            <span
-              key={i}
-              aria-hidden="true"
-              className="absolute rounded-full backdrop-blur-[1px]"
-              style={{
-                width: `${size}px`,
-                height: `${size}px`,
-                left: `${left}%`,
-                bottom: "-10%",
-                // Layer a faint inner highlight over the base color
-                background: `radial-gradient(circle at 35% 30%, rgba(255,255,255,0.35), rgba(255,255,255,0) 60%), ${bg}`,
-                // Slightly stronger border/shadow for contrast
-                border: "1.25px solid rgba(255,255,255,0.6)",
-                boxShadow: "0 4px 14px rgba(13,71,161,0.16)",
-                animation: reduced ? undefined : `bubble-rise ${dur}s linear ${delay}s infinite`,
-                // @ts-ignore custom properties
-                "--bx": "0px",
-                "--bs": scale,
-                "--bshift": shift,
-              } as React.CSSProperties}
-            />
-          );
-        });
-      })()}
-    </div>
-  );
+  // Disable bubbles completely
+  return null;
 }
 
 export default function Classic() {
@@ -1281,11 +1207,17 @@ export default function Classic() {
           ].map((ed) => (
             <div key={ ed.front } className="group [perspective:1000px]">
               <div className="relative h-40 w-full transition-transform duration-500 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]">
-                <Card className="absolute inset-0 grid place-items-center backface-hidden shadow-sm transition-transform transition-shadow duration-200 hover:-translate-y-0.5 hover:shadow-md">
-                  <CardHeader><CardTitle className="text-center">{ed.front}</CardTitle></CardHeader>
+                <Card className="absolute inset-0 grid place-items-center [backface-visibility:hidden] shadow-sm transition-transform transition-shadow duration-200 hover:-translate-y-0.5 hover:shadow-md">
+                  <CardHeader>
+                    <CardTitle className="text-center text-black text-slate-900 font-bold text-lg md:text-xl whitespace-nowrap overflow-hidden text-ellipsis mx-auto">
+                      {ed.front}
+                    </CardTitle>
+                  </CardHeader>
                 </Card>
-                <Card className="absolute inset-0 grid place-items-center backface-hidden [transform:rotateY(180deg)] shadow-sm transition-transform transition-shadow duration-200 hover:-translate-y-0.5 hover:shadow-md">
-                  <CardContent className="text-center whitespace-pre-line text-sm text-slate-700">{ed.back}</CardContent>
+                <Card className="absolute inset-0 grid place-items-center [backface-visibility:hidden] [transform:rotateY(180deg)] shadow-sm transition-transform transition-shadow duration-200 hover:-translate-y-0.5 hover:shadow-md">
+                  <CardContent className="text-center whitespace-pre-line text-sm text-slate-700">
+                    {ed.back}
+                  </CardContent>
                 </Card>
               </div>
             </div>
