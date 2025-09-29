@@ -1269,6 +1269,40 @@ export default function Classic() {
         })()}
       </motion.section>
 
+      {/* Education - moved ABOVE Certificates */}
+      <motion.section
+        className="container mx-auto max-w-6xl px-4 py-10"
+        initial={{ opacity: 0, y: 14 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-80px" }}
+        transition={{ duration: 0.5 }}
+      >
+        <SectionTitle id="education-title">Education</SectionTitle>
+        <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+          {[
+            {
+              front: "Illinois State University (ISU)",
+              back: "M.S. in Information Systems | GPA: 4.0 | 2025\nInternet Application Development Sequence",
+            },
+            {
+              front: "Devi Ahilya Vishwavidyalaya (DAVV), India",
+              back: "B.C.A. (Hons.) | GPA: 3.5 | 2022",
+            },
+          ].map((ed) => (
+            <div key={ ed.front } className="group [perspective:1000px]">
+              <div className="relative h-40 w-full transition-transform duration-500 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]">
+                <Card className="absolute inset-0 grid place-items-center backface-hidden shadow-sm transition-transform transition-shadow duration-200 hover:-translate-y-0.5 hover:shadow-md">
+                  <CardHeader><CardTitle className="text-center">{ed.front}</CardTitle></CardHeader>
+                </Card>
+                <Card className="absolute inset-0 grid place-items-center backface-hidden [transform:rotateY(180deg)] shadow-sm transition-transform transition-shadow duration-200 hover:-translate-y-0.5 hover:shadow-md">
+                  <CardContent className="text-center whitespace-pre-line text-sm text-slate-700">{ed.back}</CardContent>
+                </Card>
+              </div>
+            </div>
+          ))}
+        </div>
+      </motion.section>
+
       {/* Certificates & Achievements - SINGLE HORIZONTAL CAROUSEL */}
       <motion.section
         className="container mx-auto max-w-6xl px-4 py-8 md:py-10"
@@ -1294,7 +1328,6 @@ export default function Classic() {
               ].map((c) => (
                 <CarouselItem
                   key={c.title}
-                  // Responsive widths: 1–2 on mobile, 2–3 on tablet, 3–4 on desktop
                   className="basis-3/4 sm:basis-1/2 md:basis-1/3 lg:basis-1/4"
                 >
                   <Card className="h-[150px] max-w-[260px] mx-auto rounded-xl shadow-sm transition-transform transition-shadow duration-200 hover:-translate-y-0.5 hover:shadow-md border-slate-200">
@@ -1302,7 +1335,7 @@ export default function Classic() {
                       <div className="text-xl" aria-hidden="true">{c.icon}</div>
                       <div className="px-1">
                         <div
-                          className="font-medium text-[14px] sm:text-[15px] leading-snug text-slate-900"
+                          className="font-medium text-[14px] sm:text[15px] leading-snug text-slate-900"
                           style={{ fontFamily: '"Montserrat","Inter",ui-sans-serif' }}
                         >
                           {c.title}
@@ -1321,40 +1354,6 @@ export default function Classic() {
             <CarouselPrevious data-autoscroll-prev="1" />
             <CarouselNext data-autoscroll-next="1" />
           </Carousel>
-        </div>
-      </motion.section>
-
-      {/* Education - NEW */}
-      <motion.section
-        className="container mx-auto max-w-6xl px-4 py-10"
-        initial={{ opacity: 0, y: 14 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-80px" }}
-        transition={{ duration: 0.5 }}
-      >
-        <SectionTitle id="education-title">Education</SectionTitle>
-        <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-          {[
-            {
-              front: "Illinois State University (ISU)",
-              back: "M.S. in Information Systems | GPA: 4.0 | 2025\nInternet Application Development Sequence",
-            },
-            {
-              front: "Devi Ahilya Vishwavidyalaya (DAVV), India",
-              back: "B.C.A. (Hons.) | GPA: 3.5 | 2022",
-            },
-          ].map((ed) => (
-            <div key={ed.front} className="group [perspective:1000px]">
-              <div className="relative h-40 w-full transition-transform duration-500 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]">
-                <Card className="absolute inset-0 grid place-items-center backface-hidden shadow-sm transition-transform transition-shadow duration-200 hover:-translate-y-0.5 hover:shadow-md">
-                  <CardHeader><CardTitle className="text-center">{ed.front}</CardTitle></CardHeader>
-                </Card>
-                <Card className="absolute inset-0 grid place-items-center backface-hidden [transform:rotateY(180deg)] shadow-sm transition-transform transition-shadow duration-200 hover:-translate-y-0.5 hover:shadow-md">
-                  <CardContent className="text-center whitespace-pre-line text-sm text-slate-700">{ed.back}</CardContent>
-                </Card>
-              </div>
-            </div>
-          ))}
         </div>
       </motion.section>
 
