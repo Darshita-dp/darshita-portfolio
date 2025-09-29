@@ -911,7 +911,7 @@ export default function Classic() {
                   </CardHeader>
                   <CardContent>
                     <div
-                      className="text-sm text-slate-700 max-h-0 opacity-0 group-hover:max-h-[700px] group-hover:opacity-100 group-focus-within:max-h-[700px] group-focus-within:opacity-100 transition-all duration-300 ease-out"
+                      className="text-sm text-slate-700 whitespace-pre-line max-h-0 opacity-0 group-hover:max-h-[700px] group-hover:opacity-100 group-focus-within:max-h-[700px] group-focus-within:opacity-100 transition-all duration-300 ease-out"
                     >
                       {item.desc}
                     </div>
