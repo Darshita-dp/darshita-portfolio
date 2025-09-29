@@ -32,7 +32,7 @@ const featuredProjects: Array<Project> = [
     id: "smartplanner",
     title: "SmartPlanner (SwiftUI)",
     summary: "iOS task manager with AI-inspired priority, week view, drag-to-reschedule, Core Data.",
-    image: "/logo_bg.png",
+    image: "https://harmless-tapir-303.convex.cloud/api/storage/9c96e942-0cbd-47dc-8910-948153ae3f91",
     tags: ["SwiftUI", "Core Data", "MVVM"],
     link: "#",
     metrics: [
