@@ -869,25 +869,35 @@ export default function Classic() {
                   "Instructed and supported 120+ students in IT productivity tools; developed lab content and guided students in Microsoft Office Suite and data tools.",
               },
               {
+                icon: <Database className="w-4 h-4 text-blue-700" />,
+                title: "CIIWAS NGO | Data and Web Development Intern — Normal, IL",
+                period: "08/2024 – 12/2024",
+                desc: `• Designed and deployed interactive web modules that centralized workshop resources, converting raw program data into structured dashboards used by 100+ women participants to track IT learning progress
+• Optimized MySQL queries and automated pipelines to manage participant records, accelerating enrollment insights and improving registration efficiency by 25%
+• Engineered React-based visualization components that translated training outcomes in Python, IT tools, and career readiness into accessible metrics, enabling leadership to measure program impact and refine workshops`,
+              },
+              {
+                icon: <Database className="w-4 h-4 text-blue-700" />,
+                title: "GMP MachPro | Data Analyst Intern — India",
+                period: "01/2023 – 06/2023",
+                desc: `• Analyzed production datasets from granulation and liquid packaging lines, identifying efficiency gaps that reduced downtime by 8% and contributed to operational savings
+• Developed Power BI dashboards to monitor KPIs — machine output, rejection rates, and utilization — giving leadership realtime visibility into production performance
+• Conducted statistical reviews of sales and quality data, uncovering demand trends and batch variances that improved forecasting accuracy by 15% and strengthened compliance`,
+              },
+              {
+                icon: <Database className="w-4 h-4 text-blue-700" />,
+                title: "ORANGES NGO | IT Data Analyst Intern — India",
+                period: "04/2022 – 12/2022",
+                desc: `• Standardized donor datasets from 80+ regions, strengthening pipelines and improving reporting accuracy
+• Queried and modeled SQL datasets to uncover donation trends and community needs, delivering insights that boosted donor participation by 25% in 2 months
+• Automated cross-regional reporting by converting manual records into structured datasets, enabling leadership to track 2,000+ beneficiaries and optimize resource allocation in partnership with organizations like Smile Train`,
+              },
+              {
                 icon: <Briefcase className="w-4 h-4 text-blue-700" />,
                 title: "Product Supervisor | Chaudhary Tea Processors & Packets Pvt. Ltd.",
                 period: "2023",
                 desc:
                   "Oversaw product information management systems; ensured data accuracy and coordinated smooth workflows.",
-              },
-              {
-                icon: <Database className="w-4 h-4 text-blue-700" />,
-                title: "Web Development Intern | CIIWAS NGO",
-                period: "Aug 2024 – Dec 2024",
-                desc:
-                  "Maintained NGO website; processed community datasets to improve reporting accuracy.",
-              },
-              {
-                icon: <Database className="w-4 h-4 text-blue-700" />,
-                title: "IT Analyst Intern | ORANGES NGO",
-                period: "Apr 2022 – Dec 2022",
-                desc:
-                  "Processed and cleansed donor/beneficiary datasets from 80+ regions; automated workflows to improve governance and reporting.",
               },
               {
                 icon: <Award className="w-4 h-4 text-blue-700" />,
