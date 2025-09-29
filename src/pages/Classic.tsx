@@ -1245,25 +1245,34 @@ export default function Classic() {
               back: "B.C.A. (Hons.) | GPA: 3.5 | 2022",
             },
           ].map((ed) => (
-            <div key={ ed.front } className="group [perspective:1000px]">
-              <div className="relative h-40 w-full transition-transform duration-500 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]">
-                {/* FRONT FACE: ensure always visible and on top */}
+            <div key={ed.front} className="group [perspective:1200px]">
+              {/* Flip wrapper */}
+              <div className="relative h-40 w-full will-change-transform transition-transform duration-500 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]">
+                {/* FRONT FACE (always on top, solid bg, pushed slightly forward) */}
                 <Card
-                  className="absolute inset-0 grid place-items-start content-start [backface-visibility:hidden] shadow-sm transition-transform transition-shadow duration-200 hover:-translate-y-0.5 hover:shadow-md p-4 z-20 bg-white"
-                  style={{ backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden", transform: "translateZ(1px)" }}
+                  className="absolute inset-0 rounded-xl border shadow-sm p-4 z-20 bg-white grid place-items-start content-start"
+                  style={{
+                    backfaceVisibility: "hidden",
+                    WebkitBackfaceVisibility: "hidden",
+                    transform: "rotateY(0deg) translateZ(1px)",
+                  }}
                 >
                   <CardHeader className="p-0">
-                    <CardTitle className="text-left text-black text-slate-900 font-bold text-lg md:text-xl whitespace-nowrap overflow-hidden text-ellipsis relative z-20">
+                    <CardTitle className="text-left font-bold text-black text-slate-900 text-lg md:text-xl whitespace-nowrap overflow-hidden text-ellipsis">
                       {ed.front}
                     </CardTitle>
                   </CardHeader>
                 </Card>
-                {/* BACK FACE */}
+
+                {/* BACK FACE (rotated 180deg) */}
                 <Card
-                  className="absolute inset-0 grid place-items-center [backface-visibility:hidden] [transform:rotateY(180deg)] shadow-sm transition-transform transition-shadow duration-200 hover:-translate-y-0.5 hover:shadow-md z-10"
-                  style={{ backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden" }}
+                  className="absolute inset-0 rounded-xl border shadow-sm z-10 bg-white grid place-items-center [transform:rotateY(180deg)]"
+                  style={{
+                    backfaceVisibility: "hidden",
+                    WebkitBackfaceVisibility: "hidden",
+                  }}
                 >
-                  <CardContent className="text-center whitespace-pre-line text-sm text-slate-700">
+                  <CardContent className="text-center whitespace-pre-line text-sm text-slate-700 px-4">
                     {ed.back}
                   </CardContent>
                 </Card>
