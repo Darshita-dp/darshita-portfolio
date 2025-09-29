@@ -1355,7 +1355,7 @@ export default function Classic() {
         transition={{ duration: 0.5 }}
       >
         <SectionTitle id="hobbies-title">Hobbies & Interests</SectionTitle>
-        <div className="mt-6 grid grid-cols-2 md:grid-cols-5 gap-4">
+        <div className="mt-6 grid grid-cols-3 sm:grid-cols-4 md:grid-cols-7 gap-3">
           {[
             ["📸", "Photography & Visual Design"],
             ["🎨", "Creative Designing & Posters"],
@@ -1365,9 +1365,9 @@ export default function Classic() {
             ["🎹", "Piano"],
             ["🏸", "Badminton"],
           ].map(([icon, label]) => (
-            <div key={label} className="rounded-xl bg-white p-4 border hover:shadow-md transition transform hover:scale-105 text-center">
-              <div className="text-3xl">{icon}</div>
-              <div className="mt-2 text-xs text-slate-700">{label}</div>
+            <div key={label} className="rounded-lg bg-white p-3 border hover:shadow-sm transition text-center">
+              <div className="text-2xl">{icon}</div>
+              <div className="mt-1 text-[11px] text-slate-700 truncate">{label}</div>
             </div>
           ))}
         </div>
