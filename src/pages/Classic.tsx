@@ -329,14 +329,21 @@ export default function Classic() {
     if (reduced) return;
 
     // Handle multiple carousels by class
-    const wraps = Array.from(document.querySelectorAll<HTMLDivElement>(".certs-auto-scroll-wrap"));
+    // UPDATED: support both certificates and projects carousels
+    const wraps = Array.from(
+      document.querySelectorAll<HTMLDivElement>(".certs-auto-scroll-wrap, .projects-auto-scroll-wrap"),
+    );
     if (!wraps.length) return;
 
     const cleanups: Array<() => void> = [];
 
     for (const wrap of wraps) {
-      const scroller = wrap.querySelector<HTMLDivElement>(".auto-scroll-certs");
-      const nextBtn = wrap.querySelector<HTMLButtonElement>('[data-autoscroll-next="1"]');
+      // UPDATED: detect the correct inner scroller and next button per wrap
+      const scroller =
+        wrap.querySelector<HTMLDivElement>(".auto-scroll-certs") ||
+        wrap.querySelector<HTMLDivElement>(".auto-scroll-projects");
+      const nextBtn =
+        wrap.querySelector<HTMLButtonElement>('[data-autoscroll-next="1"]') || null;
 
       let paused = false;
       const onEnter = () => (paused = true);
@@ -363,7 +370,7 @@ export default function Classic() {
           return;
         }
 
-        // Fallback: click "next" (may not loop depending on underlying carousel settings)
+        // Fallback: click "next"
         if (nextBtn) nextBtn.click();
       }, stepEveryMs);
 
@@ -1156,130 +1163,110 @@ export default function Classic() {
       >
         <SectionTitle id="projects-title">Projects</SectionTitle>
 
-        <div className="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {featuredProjects.map((p, i) => (
-            p.link ? (
-              <motion.a
-                key={p.id}
-                href={p.link}
-                target="_blank"
-                rel="noreferrer"
-                whileHover={{ y: -6, scale: 1.01 }}
-                transition={{ type: "spring", stiffness: 250, damping: 20 }}
-                className="group"
-                aria-label={`Open project ${p.title}`}
-              >
-                <Card className="overflow-hidden border-slate-200 hover:border-blue-300 transition-all shadow-sm hover:shadow-lg hover:-translate-y-0.5">
-                  <div className="relative h-40 w-full overflow-hidden">
-                    <img
-                      src={p.image}
-                      alt={p.title}
-                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.06]"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                  </div>
-                  <CardHeader className="pb-2">
-                    <CardTitle
-                      className="text-lg"
-                      style={{ letterSpacing: "0.3px", fontFamily: '"Montserrat","Inter",ui-sans-serif' }}
-                    >
-                      {p.title}
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-3">
-                    <p className="text-sm text-slate-600">{p.summary}</p>
-                    <div className="flex flex-wrap gap-2">
-                      {p.tags.map((t) => (
-                        <Badge key={t} variant="secondary" className="bg-[#E8F2FF] text-[#0D47A1] border-blue-200">
-                          {t}
-                        </Badge>
-                      ))}
-                    </div>
-                    {p.metrics && p.metrics.length > 0 && (
-                      <div className="pt-1 grid grid-cols-2 gap-3 text-xs text-slate-700">
-                        {p.metrics.map((m, idx) => (
-                          <div key={idx} className="inline-flex items-center gap-1.5">
-                            <span className="text-blue-700">{m.icon}</span>
-                            {typeof m.value === "number" ? (
-                              <>
-                                <CountUpNumber
-                                  to={m.value}
-                                  suffix={m.suffix}
-                                  className="font-semibold text-slate-900"
-                                />
-                                <span className="opacity-70">{m.label}</span>
-                              </>
-                            ) : (
-                              <span>{m.label}</span>
-                            )}
+        {/* UPDATED: Auto-scrolling carousel with prioritized ordering */}
+        {(() => {
+          const priority = ["ai-predictive-analytics", "it-services-optimization", "retail-analytics-candles"] as const;
+          const rank: Record<string, number> = Object.fromEntries(priority.map((id, i) => [id, i]));
+          const ordered = [...featuredProjects].sort((a, b) => {
+            const ra = rank[a.id] ?? Number.POSITIVE_INFINITY;
+            const rb = rank[b.id] ?? Number.POSITIVE_INFINITY;
+            return ra - rb;
+          });
+
+          return (
+            <div className="mt-6 projects-auto-scroll-wrap">
+              <Carousel className="w-full">
+                <CarouselContent className="flex gap-4 auto-scroll-projects">
+                  {ordered.map((p) => {
+                    const CardInner = (
+                      <Card className="overflow-hidden border-slate-200 hover:border-blue-300 transition-all shadow-sm hover:shadow-lg hover:-translate-y-0.5">
+                        <div className="relative h-40 w-full overflow-hidden">
+                          <img
+                            src={p.image}
+                            alt={p.title}
+                            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.06]"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                        </div>
+                        <CardHeader className="pb-2">
+                          <CardTitle
+                            className="text-lg"
+                            style={{ letterSpacing: "0.3px", fontFamily: '"Montserrat","Inter",ui-sans-serif' }}
+                          >
+                            {p.title}
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-3">
+                          <p className="text-sm text-slate-600">{p.summary}</p>
+                          <div className="flex flex-wrap gap-2">
+                            {p.tags.map((t) => (
+                              <Badge key={t} variant="secondary" className="bg-[#E8F2FF] text-[#0D47A1] border-blue-200">
+                                {t}
+                              </Badge>
+                            ))}
                           </div>
-                        ))}
-                      </div>
-                    )}
-                  </CardContent>
-                </Card>
-              </motion.a>
-            ) : (
-              <motion.div
-                key={p.id}
-                whileHover={{ y: -6, scale: 1.01 }}
-                transition={{ type: "spring", stiffness: 250, damping: 20 }}
-                className="group"
-                aria-label={`${p.title} project`}
-              >
-                <Card className="overflow-hidden border-slate-200 hover:border-blue-300 transition-all shadow-sm hover:shadow-lg hover:-translate-y-0.5">
-                  <div className="relative h-40 w-full overflow-hidden">
-                    <img
-                      src={p.image}
-                      alt={p.title}
-                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.06]"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                  </div>
-                  <CardHeader className="pb-2">
-                    <CardTitle
-                      className="text-lg"
-                      style={{ letterSpacing: "0.3px", fontFamily: '"Montserrat","Inter",ui-sans-serif' }}
-                    >
-                      {p.title}
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-3">
-                    <p className="text-sm text-slate-600">{p.summary}</p>
-                    <div className="flex flex-wrap gap-2">
-                      {p.tags.map((t) => (
-                        <Badge key={t} variant="secondary" className="bg-[#E8F2FF] text-[#0D47A1] border-blue-200">
-                          {t}
-                        </Badge>
-                      ))}
-                    </div>
-                    {p.metrics && p.metrics.length > 0 && (
-                      <div className="pt-1 grid grid-cols-2 gap-3 text-xs text-slate-700">
-                        {p.metrics.map((m, idx) => (
-                          <div key={idx} className="inline-flex items-center gap-1.5">
-                            <span className="text-blue-700">{m.icon}</span>
-                            {typeof m.value === "number" ? (
-                              <>
-                                <CountUpNumber
-                                  to={m.value}
-                                  suffix={m.suffix}
-                                  className="font-semibold text-slate-900"
-                                />
-                                <span className="opacity-70">{m.label}</span>
-                              </>
-                            ) : (
-                              <span>{m.label}</span>
-                            )}
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </CardContent>
-                </Card>
-              </motion.div>
-            )
-          ))}
-        </div>
+                          {p.metrics && p.metrics.length > 0 && (
+                            <div className="pt-1 grid grid-cols-2 gap-3 text-xs text-slate-700">
+                              {p.metrics.map((m, idx) => (
+                                <div key={idx} className="inline-flex items-center gap-1.5">
+                                  <span className="text-blue-700">{m.icon}</span>
+                                  {typeof m.value === "number" ? (
+                                    <>
+                                      <CountUpNumber
+                                        to={m.value}
+                                        suffix={m.suffix}
+                                        className="font-semibold text-slate-900"
+                                      />
+                                      <span className="opacity-70">{m.label}</span>
+                                    </>
+                                  ) : (
+                                    <span>{m.label}</span>
+                                  )}
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </CardContent>
+                      </Card>
+                    );
+
+                    return (
+                      <CarouselItem
+                        key={p.id}
+                        className="basis-3/4 sm:basis-1/2 md:basis-1/3 lg:basis-1/3"
+                      >
+                        {p.link ? (
+                          <motion.a
+                            href={p.link}
+                            target="_blank"
+                            rel="noreferrer"
+                            whileHover={{ y: -6, scale: 1.01 }}
+                            transition={{ type: "spring", stiffness: 250, damping: 20 }}
+                            className="group block"
+                            aria-label={`Open project ${p.title}`}
+                          >
+                            {CardInner}
+                          </motion.a>
+                        ) : (
+                          <motion.div
+                            whileHover={{ y: -6, scale: 1.01 }}
+                            transition={{ type: "spring", stiffness: 250, damping: 20 }}
+                            className="group"
+                            aria-label={`${p.title} project`}
+                          >
+                            {CardInner}
+                          </motion.div>
+                        )}
+                      </CarouselItem>
+                    );
+                  })}
+                </CarouselContent>
+                <CarouselPrevious data-autoscroll-prev="1" />
+                <CarouselNext data-autoscroll-next="1" />
+              </Carousel>
+            </div>
+          );
+        })()}
       </motion.section>
 
       {/* Certificates & Achievements - SINGLE HORIZONTAL CAROUSEL */}
