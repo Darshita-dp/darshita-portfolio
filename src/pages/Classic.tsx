@@ -1361,7 +1361,9 @@ export default function Classic() {
             ["🎨", "Creative Designing & Posters"],
             ["✍️", "Blogging & Storytelling"],
             ["💡", "Exploring AI & Tech Trends"],
-            ["👭", "Time with sisters"],
+            ["🍳", "Cooking"],
+            ["🎹", "Piano"],
+            ["🏸", "Badminton"],
           ].map(([icon, label]) => (
             <div key={label} className="rounded-xl bg-white p-4 border hover:shadow-md transition transform hover:scale-105 text-center">
               <div className="text-3xl">{icon}</div>
