@@ -395,7 +395,8 @@ export default function Classic() {
       setSending(false);
       const subject = encodeURIComponent(`Portfolio contact from ${name}`);
       const body = encodeURIComponent(`${message}\n\n— ${name}\n${email}`);
-      window.location.href = `mailto:darshitaa2001@gmail.com?subject=${subject}&body=${body}`;
+      // Update recipient to requested email
+      window.location.href = `mailto:darshitapatel1506@gmail.com?subject=${subject}&body=${body}`;
     }, 450);
   };
 
@@ -1457,11 +1458,8 @@ export default function Classic() {
                   </Button>
                 </form>
                 <div className="mt-4 flex flex-wrap items-center gap-3 text-sm">
-                  <a href="mailto:darshitaa2001@gmail.com" className="inline-flex items-center gap-1 text-blue-700 hover:underline">
+                  <a href="mailto:darshitapatel1506@gmail.com" className="inline-flex items-center gap-1 text-blue-700 hover:underline">
                     <Mail className="w-4 h-4" /> Email
-                  </a>
-                  <a href="tel:+1" className="inline-flex items-center gap-1 text-blue-700 hover:underline">
-                    <Phone className="w-4 h-4" /> Phone
                   </a>
                 </div>
               </CardContent>
