@@ -56,9 +56,9 @@ const featuredProjects: Array<Project> = [
     id: "scholarship-automation",
     title: "Scholarship Automation",
     summary: "Process analysis with RFP & BPMN; vendor comparison and automation framework.",
-    image: "/logo_bg.png",
+    image: "https://harmless-tapir-303.convex.cloud/api/storage/3311862a-8472-4130-b2bd-0ac148ef9aad",
     tags: ["Process", "BPMN", "RFP"],
-    link: "#",
+    // link removed per request (no link for now)
     metrics: [
       { icon: <Star className="w-3.5 h-3.5" />, label: "Efficiency", value: 40, suffix: "%" },
       { icon: <Database className="w-3.5 h-3.5" />, label: "Docs", value: 8, suffix: "+" },
@@ -1128,67 +1128,126 @@ export default function Classic() {
 
         <div className="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {featuredProjects.map((p, i) => (
-            <motion.a
-              key={p.id}
-              href={p.link || "#"}
-              // Open external project links in a new tab
-              target={p.link ? "_blank" : undefined}
-              rel={p.link ? "noreferrer" : undefined}
-              whileHover={{ y: -6, scale: 1.01 }}
-              transition={{ type: "spring", stiffness: 250, damping: 20 }}
-              className="group"
-              aria-label={`Open project ${p.title}`}
-            >
-              <Card className="overflow-hidden border-slate-200 hover:border-blue-300 transition-all shadow-sm hover:shadow-lg hover:-translate-y-0.5">
-                <div className="relative h-40 w-full overflow-hidden">
-                  <img
-                    src={p.image}
-                    alt={p.title}
-                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.06]"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                </div>
-                <CardHeader className="pb-2">
-                  <CardTitle
-                    className="text-lg"
-                    style={{ letterSpacing: "0.3px", fontFamily: '"Montserrat","Inter",ui-sans-serif' }}
-                  >
-                    {p.title}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <p className="text-sm text-slate-600">{p.summary}</p>
-                  <div className="flex flex-wrap gap-2">
-                    {p.tags.map((t) => (
-                      <Badge key={t} variant="secondary" className="bg-[#E8F2FF] text-[#0D47A1] border-blue-200">
-                        {t}
-                      </Badge>
-                    ))}
+            p.link ? (
+              <motion.a
+                key={p.id}
+                href={p.link}
+                target="_blank"
+                rel="noreferrer"
+                whileHover={{ y: -6, scale: 1.01 }}
+                transition={{ type: "spring", stiffness: 250, damping: 20 }}
+                className="group"
+                aria-label={`Open project ${p.title}`}
+              >
+                <Card className="overflow-hidden border-slate-200 hover:border-blue-300 transition-all shadow-sm hover:shadow-lg hover:-translate-y-0.5">
+                  <div className="relative h-40 w-full overflow-hidden">
+                    <img
+                      src={p.image}
+                      alt={p.title}
+                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.06]"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                   </div>
-                  {p.metrics && p.metrics.length > 0 && (
-                    <div className="pt-1 grid grid-cols-2 gap-3 text-xs text-slate-700">
-                      {p.metrics.map((m, idx) => (
-                        <div key={idx} className="inline-flex items-center gap-1.5">
-                          <span className="text-blue-700">{m.icon}</span>
-                          {typeof m.value === "number" ? (
-                            <>
-                              <CountUpNumber
-                                to={m.value}
-                                suffix={m.suffix}
-                                className="font-semibold text-slate-900"
-                              />
-                              <span className="opacity-70">{m.label}</span>
-                            </>
-                          ) : (
-                            <span>{m.label}</span>
-                          )}
-                        </div>
+                  <CardHeader className="pb-2">
+                    <CardTitle
+                      className="text-lg"
+                      style={{ letterSpacing: "0.3px", fontFamily: '"Montserrat","Inter",ui-sans-serif' }}
+                    >
+                      {p.title}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <p className="text-sm text-slate-600">{p.summary}</p>
+                    <div className="flex flex-wrap gap-2">
+                      {p.tags.map((t) => (
+                        <Badge key={t} variant="secondary" className="bg-[#E8F2FF] text-[#0D47A1] border-blue-200">
+                          {t}
+                        </Badge>
                       ))}
                     </div>
-                  )}
-                </CardContent>
-              </Card>
-            </motion.a>
+                    {p.metrics && p.metrics.length > 0 && (
+                      <div className="pt-1 grid grid-cols-2 gap-3 text-xs text-slate-700">
+                        {p.metrics.map((m, idx) => (
+                          <div key={idx} className="inline-flex items-center gap-1.5">
+                            <span className="text-blue-700">{m.icon}</span>
+                            {typeof m.value === "number" ? (
+                              <>
+                                <CountUpNumber
+                                  to={m.value}
+                                  suffix={m.suffix}
+                                  className="font-semibold text-slate-900"
+                                />
+                                <span className="opacity-70">{m.label}</span>
+                              </>
+                            ) : (
+                              <span>{m.label}</span>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              </motion.a>
+            ) : (
+              <motion.div
+                key={p.id}
+                whileHover={{ y: -6, scale: 1.01 }}
+                transition={{ type: "spring", stiffness: 250, damping: 20 }}
+                className="group"
+                aria-label={`${p.title} project`}
+              >
+                <Card className="overflow-hidden border-slate-200 hover:border-blue-300 transition-all shadow-sm hover:shadow-lg hover:-translate-y-0.5">
+                  <div className="relative h-40 w-full overflow-hidden">
+                    <img
+                      src={p.image}
+                      alt={p.title}
+                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.06]"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </div>
+                  <CardHeader className="pb-2">
+                    <CardTitle
+                      className="text-lg"
+                      style={{ letterSpacing: "0.3px", fontFamily: '"Montserrat","Inter",ui-sans-serif' }}
+                    >
+                      {p.title}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <p className="text-sm text-slate-600">{p.summary}</p>
+                    <div className="flex flex-wrap gap-2">
+                      {p.tags.map((t) => (
+                        <Badge key={t} variant="secondary" className="bg-[#E8F2FF] text-[#0D47A1] border-blue-200">
+                          {t}
+                        </Badge>
+                      ))}
+                    </div>
+                    {p.metrics && p.metrics.length > 0 && (
+                      <div className="pt-1 grid grid-cols-2 gap-3 text-xs text-slate-700">
+                        {p.metrics.map((m, idx) => (
+                          <div key={idx} className="inline-flex items-center gap-1.5">
+                            <span className="text-blue-700">{m.icon}</span>
+                            {typeof m.value === "number" ? (
+                              <>
+                                <CountUpNumber
+                                  to={m.value}
+                                  suffix={m.suffix}
+                                  className="font-semibold text-slate-900"
+                                />
+                                <span className="opacity-70">{m.label}</span>
+                              </>
+                            ) : (
+                              <span>{m.label}</span>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              </motion.div>
+            )
           ))}
         </div>
       </motion.section>
