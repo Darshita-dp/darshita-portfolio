@@ -1331,6 +1331,11 @@ export default function Classic() {
                   style={{ backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden" }}
                 >
                   <div className="w-full">
+                    {/* add two line breaks for extra top spacing */}
+                    <div aria-hidden="true" className="text-transparent select-none leading-[0]">
+                      <br />
+                      <br />
+                    </div>
                     <div
                       className="text-left text-lg md:text-xl whitespace-nowrap overflow-hidden text-ellipsis"
                       style={{ color: "#000000", fontWeight: 400, fontFamily: '"Montserrat","Inter",ui-sans-serif' }}
