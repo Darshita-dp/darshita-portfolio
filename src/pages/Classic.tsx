@@ -1384,11 +1384,13 @@ export default function Classic() {
                 >
                   <CardContent className="text-center whitespace-pre-line text-sm text-slate-700 px-4">
                     {ed.details}
-                    {/* Add Systems Analyst Certificate note with an icon, keeping it compact */}
-                    <div className="mt-2 text-slate-800 text-[13px] leading-snug">
-                      <span aria-hidden="true" className="mr-1">🏆</span>
-                      Systems Analyst Certificate
-                    </div>
+                    {/* Certificate note should appear only for ISU */}
+                    {ed.uni.includes("Illinois State University") ? (
+                      <div className="mt-2 text-slate-800 text-[13px] leading-snug">
+                        <span aria-hidden="true" className="mr-1">🏆</span>
+                        Systems Analyst Certificate
+                      </div>
+                    ) : null}
                   </CardContent>
                 </div>
               </div>
