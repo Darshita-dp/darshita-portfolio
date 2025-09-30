@@ -1246,9 +1246,11 @@ export default function Classic() {
             },
           ].map((ed) => (
             <div key={ed.front} className="group [perspective:1200px]">
-              {/* robust flip container */}
-              <div className="relative h-40 w-full will-change-transform transition-transform duration-500 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]">
-                {/* FRONT FACE: solid bg, top-left title, forced on top */}
+              {/* Flipper */}
+              <div
+                className="relative h-40 w-full transition-transform duration-500 [transform-style:preserve-3d] will-change-transform group-hover:[transform:rotateY(180deg)]"
+              >
+                {/* FRONT FACE */}
                 <Card
                   className="absolute inset-0 rounded-xl border shadow-sm p-4 z-20 bg-white grid place-items-start content-start"
                   style={{
@@ -1264,7 +1266,7 @@ export default function Classic() {
                   </CardHeader>
                 </Card>
 
-                {/* BACK FACE: only details, rotated 180 */}
+                {/* BACK FACE */}
                 <Card
                   className="absolute inset-0 rounded-xl border shadow-sm z-10 bg-white grid place-items-center [transform:rotateY(180deg)]"
                   style={{
