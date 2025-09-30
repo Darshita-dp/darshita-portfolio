@@ -11,6 +11,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
 import { ArrowRight, Briefcase, Database, Github, Linkedin, Mail, Smartphone, Star, ExternalLink } from "lucide-react";
+import { BarChart3, Code2, Users, Wrench } from "lucide-react";
 
 type Project = {
   id: string;
@@ -520,8 +521,8 @@ export default function Classic() {
             // Source-of-truth skills per category
             const data: Array<{ title: string; icon: string; items: Array<Skill> }> = [
               {
-                title: "📊 Data Skills",
-                icon: "📊",
+                title: "Data Skills",
+                icon: "data",
                 items: [
                   { category: "Data", name: "SQL", percent: 85, level: "Advanced", notes: "MySQL, Oracle; complex joins, window funcs, tuning" },
                   { category: "Data", name: "Python", percent: 85, level: "Intermediate", notes: "Pandas, NumPy, data wrangling" },
@@ -535,8 +536,8 @@ export default function Classic() {
                 ],
               },
               {
-                title: "💻 Development Skills",
-                icon: "💻",
+                title: "Development Skills",
+                icon: "dev",
                 items: [
                   { category: "Dev", name: "React", percent: 80, level: "Advanced", notes: "Hooks, components, state" },
                   { category: "Dev", name: "SwiftUI", percent: 85, level: "Advanced", notes: "MVVM, Core Data basics" },
@@ -551,8 +552,8 @@ export default function Classic() {
                 ],
               },
               {
-                title: "🧠 Interpersonal",
-                icon: "🧠",
+                title: "Interpersonal",
+                icon: "interpersonal",
                 items: [
                   { category: "Interpersonal", name: "Leadership", percent: 95, level: "Advanced" },
                   { category: "Interpersonal", name: "Communication", percent: 95, level: "Advanced" },
@@ -567,8 +568,8 @@ export default function Classic() {
                 ],
               },
               {
-                title: "🌐 Tools & Others",
-                icon: "🌐",
+                title: "Tools & Others",
+                icon: "tools",
                 items: [
                   { category: "Tools", name: "AWS", percent: 80, level: "Intermediate", notes: "EC2, RDS, S3, VPC basics" },
                   { category: "Tools", name: "Jira/Confluence", percent: 80, level: "Advanced" },
@@ -804,6 +805,17 @@ export default function Classic() {
                     >
                       <CardHeader className="pb-2">
                         <CardTitle className="text-lg text-slate-900 inline-flex items-center gap-2">
+                          <span aria-hidden="true" className="text-blue-700">
+                            {cat.icon === "data" ? (
+                              <BarChart3 className="w-4 h-4" />
+                            ) : cat.icon === "dev" ? (
+                              <Code2 className="w-4 h-4" />
+                            ) : cat.icon === "interpersonal" ? (
+                              <Users className="w-4 h-4" />
+                            ) : cat.icon === "tools" ? (
+                              <Wrench className="w-4 h-4" />
+                            ) : null}
+                          </span>
                           <span>{cat.title}</span>
                         </CardTitle>
                         <Legend />
