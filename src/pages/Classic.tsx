@@ -10,7 +10,7 @@ import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
-import { ArrowRight, Briefcase, Database, Github, Linkedin, Mail, Smartphone, Star, ExternalLink } from "lucide-react";
+import { ArrowRight, Briefcase, Database, Github, Linkedin, Mail, Smartphone, Star, ExternalLink, User, MessageSquare } from "lucide-react";
 import { BarChart3, Code2, Users, Wrench } from "lucide-react";
 
 type Project = {
@@ -1540,7 +1540,9 @@ export default function Classic() {
                 <form onSubmit={onSubmitContact} className="space-y-2.5 relative">
                   {/* Name */}
                   <div className="relative">
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 select-none">👤</span>
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" aria-hidden="true">
+                      <User className="w-[16px] h-[16px]" />
+                    </span>
                     <Input
                       name="name"
                       placeholder="Your name"
@@ -1559,7 +1561,9 @@ export default function Classic() {
 
                   {/* Email */}
                   <div className="relative">
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 select-none">✉️</span>
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" aria-hidden="true">
+                      <Mail className="w-[16px] h-[16px]" />
+                    </span>
                     <Input
                       type="email"
                       name="email"
@@ -1579,7 +1583,9 @@ export default function Classic() {
 
                   {/* Message */}
                   <div className="relative">
-                    <span className="absolute left-3 top-3 select-none">💬</span>
+                    <span className="absolute left-3 top-3 text-slate-500" aria-hidden="true">
+                      <MessageSquare className="w-[16px] h-[16px]" />
+                    </span>
                     <Textarea
                       name="message"
                       placeholder="Message"
