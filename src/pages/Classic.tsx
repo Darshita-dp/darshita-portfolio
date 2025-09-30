@@ -436,7 +436,7 @@ export default function Classic() {
                   <a href="https://www.linkedin.com/" target="_blank" rel="noreferrer" aria-label="Open LinkedIn profile">
                     <span className="inline-flex items-center gap-2">
                       <Linkedin className="w-4 h-4" aria-hidden="true" />
-                      <span className="sr-only">LinkedIn</span>
+                      <span>LinkedIn</span>
                     </span>
                   </a>
                 </Button>
@@ -448,7 +448,7 @@ export default function Classic() {
                   <a href="https://github.com/" target="_blank" rel="noreferrer" aria-label="Open GitHub profile">
                     <span className="inline-flex items-center gap-2">
                       <Github className="w-4 h-4" aria-hidden="true" />
-                      <span className="sr-only">GitHub</span>
+                      <span>GitHub</span>
                     </span>
                   </a>
                 </Button>
