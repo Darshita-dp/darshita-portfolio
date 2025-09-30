@@ -1524,7 +1524,7 @@ export default function Classic() {
                       target="_blank"
                       rel="noopener"
                       aria-label="Open LinkedIn"
-                      className="grid place-items-center rounded-full w-9 h-9 sm:w-10 sm:h-10 bg-blue-50 text-blue-700 border border-blue-100 shadow-sm hover:text-blue-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 transition-colors duration-150 ease-out"
+                      className="grid place-items-center rounded-full w-9 h-9 sm:w-10 sm:h-10 bg-blue-50 text-blue-700 border border-blue-100 shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 transition-colors duration-150 ease-out hover:bg-blue-800 hover:text-white"
                     >
                       <Linkedin className="w-[18px] h-[18px]" />
                     </a>
@@ -1534,7 +1534,7 @@ export default function Classic() {
                       target="_blank"
                       rel="noopener"
                       aria-label="Open GitHub"
-                      className="grid place-items-center rounded-full w-9 h-9 sm:w-10 sm:h-10 bg-blue-50 text-blue-700 border border-blue-100 shadow-sm hover:text-blue-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 transition-colors duration-150 ease-out"
+                      className="grid place-items-center rounded-full w-9 h-9 sm:w-10 sm:h-10 bg-blue-50 text-blue-700 border border-blue-100 shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 transition-colors duration-150 ease-out hover:bg-blue-800 hover:text-white"
                     >
                       <Github className="w-[18px] h-[18px]" />
                     </a>
@@ -1545,7 +1545,7 @@ export default function Classic() {
                       target="_blank"
                       rel="noopener"
                       aria-label="Download Resume"
-                      className="grid place-items-center rounded-full w-9 h-9 sm:w-10 sm:h-10 bg-blue-50 text-blue-700 border border-blue-100 shadow-sm hover:text-blue-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 transition-colors duration-150 ease-out"
+                      className="grid place-items-center rounded-full w-9 h-9 sm:w-10 sm:h-10 bg-blue-50 text-blue-700 border border-blue-100 shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 transition-colors duration-150 ease-out hover:bg-blue-800 hover:text-white"
                     >
                       <span className="text-[16px]" aria-hidden="true">📄</span>
                     </a>
@@ -1553,7 +1553,7 @@ export default function Classic() {
                     <a
                       href="mailto:darshitapatel1506@gmail.com"
                       aria-label="Email Darshita"
-                      className="grid place-items-center rounded-full w-9 h-9 sm:w-10 sm:h-10 bg-blue-50 text-blue-700 border border-blue-100 shadow-sm hover:text-blue-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 transition-colors duration-150 ease-out"
+                      className="grid place-items-center rounded-full w-9 h-9 sm:w-10 sm:h-10 bg-blue-50 text-blue-700 border border-blue-100 shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 transition-colors duration-150 ease-out hover:bg-blue-800 hover:text-white"
                     >
                       <Mail className="w-[18px] h-[18px]" />
                     </a>
