@@ -1418,6 +1418,7 @@ export default function Classic() {
               {[
                 { title: "Outstanding Graduate Student Award – ISU", year: "2025", icon: "🏅" },
                 { title: "ISU Research Symposium Poster – AI in Banking", year: "2025", icon: "📜" },
+                { title: "System Analyst Certificate – ISU", year: "2025", icon: "🏆" },
                 { title: "LinkedIn Learning – Data Analysis & SQL", year: "", icon: "📘" },
                 { title: "AWS Cloud Practitioner (In Progress)", year: "", icon: "☁️" },
                 { title: "Tableau Desktop Specialist (In Progress)", year: "", icon: "📊" },
