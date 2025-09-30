@@ -1326,23 +1326,25 @@ export default function Classic() {
               />
               <div className="edu-flip h-40 w-full">
                 {/* FRONT */}
-                <div className="edu-front rounded-xl border shadow-sm bg-white p-4 grid place-items-start content-start">
+                <div
+                  className="edu-front rounded-xl border shadow-sm bg-white p-4 grid place-items-start content-start"
+                  style={{ backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden" }}
+                >
                   <div className="w-full">
                     <div
-                      className="font-bold text-left text-lg md:text-xl whitespace-nowrap overflow-hidden text-ellipsis"
-                      style={{ color: "#0F2B6C", fontFamily: '"Montserrat","Inter",ui-sans-serif' }}
+                      className="text-left text-lg md:text-xl whitespace-nowrap overflow-hidden text-ellipsis"
+                      style={{ color: "#000000", fontWeight: 400, fontFamily: '"Montserrat","Inter",ui-sans-serif' }}
                     >
                       {ed.uni}
-                    </div>
-                    {/* optional muted degree line preview; keep static for clarity */}
-                    <div className="text-sm text-slate-700 mt-1 line-clamp-1">
-                      {ed.details.split("\n")[0]}
                     </div>
                   </div>
                 </div>
 
                 {/* BACK */}
-                <div className="edu-back rounded-xl border shadow-sm bg-white grid place-items-center">
+                <div
+                  className="edu-back rounded-xl border shadow-sm bg-white grid place-items-center"
+                  style={{ backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden" }}
+                >
                   <CardContent className="text-center whitespace-pre-line text-sm text-slate-700 px-4">
                     {ed.details}
                   </CardContent>
