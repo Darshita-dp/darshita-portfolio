@@ -1436,7 +1436,7 @@ export default function Classic() {
           <div className="mt-5 grid grid-cols-1 md:grid-cols-1 gap-5">
             <Card className="shadow-sm bg-[#EAF4FF] border-blue-100">
               <CardHeader className="pb-1">
-                <CardTitle className="text-lg">Let's talk</CardTitle>
+                <CardTitle className="text-lg">Let's connect</CardTitle>
               </CardHeader>
               <CardContent>
                 <form onSubmit={onSubmitContact} className="space-y-2.5 relative">
