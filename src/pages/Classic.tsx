@@ -1225,7 +1225,7 @@ export default function Classic() {
         })()}
       </motion.section>
 
-      {/* Education - moved ABOVE Certificates */}
+      {/* Education - rewritten with clean edu-* structure */}
       <motion.section
         className="container mx-auto max-w-6xl px-4 py-10"
         initial={{ opacity: 0, y: 14 }}
@@ -1234,50 +1234,119 @@ export default function Classic() {
         transition={{ duration: 0.5 }}
       >
         <SectionTitle id="education-title">Education</SectionTitle>
+
+        {/* New edu-* styles and reduced-motion handling */}
+        <style>
+          {`
+            .edu-card {
+              perspective: 1000px;
+            }
+            .edu-flip {
+              position: relative;
+              transform-style: preserve-3d;
+              will-change: transform;
+              transition: transform var(--flip-duration, 600ms) cubic-bezier(.22,.61,.36,1);
+            }
+            .edu-front,
+            .edu-back {
+              position: absolute;
+              inset: 0;
+              backface-visibility: hidden;
+              -webkit-backface-visibility: hidden;
+              transform: translateZ(1px); /* paint stability */
+            }
+            .edu-front {
+              transform: rotateY(0deg) translateZ(1px);
+              z-index: 2;
+            }
+            .edu-back {
+              transform: rotateY(180deg) translateZ(1px);
+              z-index: 1;
+            }
+            .edu-card:hover .edu-flip,
+            .edu-card:focus-within .edu-flip {
+              transform: rotateY(180deg);
+            }
+            /* Accessibility: toggle via aria-expanded on the button wrapper */
+            .edu-toggle[aria-expanded="true"] + .edu-flip {
+              transform: rotateY(180deg);
+            }
+
+            /* Reduced motion: no 3D flip; cross-fade instead */
+            @media (prefers-reduced-motion: reduce) {
+              .edu-front,
+              .edu-back {
+                transform: none;
+              }
+              .edu-flip {
+                transition: none;
+              }
+              .edu-card:hover .edu-flip,
+              .edu-card:focus-within .edu-flip {
+                transform: none;
+              }
+              .edu-front,
+              .edu-back {
+                opacity: 1;
+                transition: opacity 250ms ease;
+              }
+              .edu-toggle[aria-expanded="true"] + .edu-flip .edu-front {
+                opacity: 0;
+              }
+              .edu-toggle[aria-expanded="true"] + .edu-flip .edu-back {
+                opacity: 1;
+              }
+            }
+          `}
+        </style>
+
         <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
           {[
             {
-              front: "Illinois State University (ISU)",
-              back: "M.S. in Information Systems | GPA: 4.0 | 2025\nInternet Application Development Sequence",
+              uni: "Illinois State University (ISU)",
+              details: "M.S. in Information Systems | GPA: 4.0 | 2025\nInternet Application Development Sequence",
             },
             {
-              front: "Devi Ahilya Vishwavidyalaya (DAVV), India",
-              back: "B.C.A. (Hons.) | GPA: 3.5 | 2022",
+              uni: "Devi Ahilya Vishwavidyalaya (DAVV), India",
+              details: "B.C.A. (Hons.) | GPA: 3.5 | 2022",
             },
           ].map((ed) => (
-            <div key={ed.front} className="group [perspective:1200px]">
-              {/* Flipper */}
-              <div
-                className="relative h-40 w-full transition-transform duration-500 [transform-style:preserve-3d] will-change-transform group-hover:[transform:rotateY(180deg)]"
-              >
-                {/* FRONT FACE */}
-                <Card
-                  className="absolute inset-0 rounded-xl border shadow-sm p-4 z-20 bg-white grid place-items-start content-start"
-                  style={{
-                    backfaceVisibility: "hidden",
-                    WebkitBackfaceVisibility: "hidden",
-                    transform: "rotateY(0deg) translateZ(1px)",
-                  }}
-                >
-                  <CardHeader className="p-0">
-                    <CardTitle className="text-left font-bold text-black text-slate-900 text-lg md:text-xl whitespace-nowrap overflow-hidden text-ellipsis">
-                      {ed.front}
-                    </CardTitle>
-                  </CardHeader>
-                </Card>
+            <div key={ed.uni} className="edu-card relative">
+              {/* Button for mobile toggle (aria-expanded). Kept visually minimal. */}
+              <button
+                type="button"
+                className="edu-toggle sr-only"
+                aria-expanded={false}
+                aria-label={`Toggle details for ${ed.uni}`}
+                onClick={(e) => {
+                  const btn = e.currentTarget;
+                  const expanded = btn.getAttribute("aria-expanded") === "true";
+                  btn.setAttribute("aria-expanded", expanded ? "false" : "true");
+                }}
+              />
+              <div className="edu-flip h-40 w-full">
+                {/* FRONT */}
+                <div className="edu-front rounded-xl border shadow-sm bg-white p-4 grid place-items-start content-start">
+                  <div className="w-full">
+                    <div
+                      className="font-bold text-left text-lg md:text-xl whitespace-nowrap overflow-hidden text-ellipsis"
+                      style={{ color: "#0F2B6C", fontFamily: '"Montserrat","Inter",ui-sans-serif' }}
+                    >
+                      {ed.uni}
+                    </div>
+                    {/* optional muted degree line preview; keep static for clarity */}
+                    <div className="text-sm text-slate-700 mt-1 line-clamp-1">
+                      {ed.details.split("\n")[0]}
+                    </div>
+                  </div>
+                </div>
 
-                {/* BACK FACE */}
-                <Card
-                  className="absolute inset-0 rounded-xl border shadow-sm z-10 bg-white grid place-items-center [transform:rotateY(180deg)]"
-                  style={{
-                    backfaceVisibility: "hidden",
-                    WebkitBackfaceVisibility: "hidden",
-                  }}
-                >
+                {/* BACK */}
+                <div className="edu-back rounded-xl border shadow-sm bg-white grid place-items-center">
                   <CardContent className="text-center whitespace-pre-line text-sm text-slate-700 px-4">
-                    {ed.back}
+                    {ed.details}
                   </CardContent>
-                </Card>
+                </div>
               </div>
             </div>
           ))}
