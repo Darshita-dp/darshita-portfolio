@@ -226,10 +226,30 @@ function StickyNav() {
             <button
               key={it.id}
               onClick={() => go(it.id)}
-              className="px-3 py-1.5 rounded-full text-sm border hover:shadow-sm transition"
+              className="px-3 py-1.5 rounded-full text-sm border transition"
               style={{
                 borderColor: "rgba(13, 71, 161, 0.18)",
                 color: "#0D47A1",
+              }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#0D47A1";
+                (e.currentTarget as HTMLButtonElement).style.color = "#FFFFFF";
+                (e.currentTarget as HTMLButtonElement).style.borderColor = "#0D47A1";
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLButtonElement).style.backgroundColor = "transparent";
+                (e.currentTarget as HTMLButtonElement).style.color = "#0D47A1";
+                (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(13, 71, 161, 0.18)";
+              }}
+              onFocus={(e) => {
+                (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#0D47A1";
+                (e.currentTarget as HTMLButtonElement).style.color = "#FFFFFF";
+                (e.currentTarget as HTMLButtonElement).style.borderColor = "#0D47A1";
+              }}
+              onBlur={(e) => {
+                (e.currentTarget as HTMLButtonElement).style.backgroundColor = "transparent";
+                (e.currentTarget as HTMLButtonElement).style.color = "#0D47A1";
+                (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(13, 71, 161, 0.18)";
               }}
             >
               {it.label}
