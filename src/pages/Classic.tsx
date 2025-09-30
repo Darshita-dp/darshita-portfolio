@@ -376,7 +376,6 @@ export default function Classic() {
 
   return (
     <div className="min-h-screen relative" style={{ background: BLUE.bgTint }}>
-      <BubblesBackground />
       <StickyNav />
 
       {/* Hero / Profile */}
@@ -397,6 +396,8 @@ export default function Classic() {
                   src="https://harmless-tapir-303.convex.cloud/api/storage/fbbcab3e-d3b1-4639-99b4-311c5e1ab7ca"
                   alt="Profile"
                   className="w-full h-full object-cover opacity-100"
+                  loading="lazy"
+                  decoding="async"
                 />
               </div>
               <div className="absolute inset-0 rounded-full blur-2xl opacity-50 -z-10" style={{ background: BLUE.accent }} />
@@ -1173,6 +1174,8 @@ export default function Classic() {
                             src={p.image}
                             alt={p.title}
                             className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.06]"
+                            loading="lazy"
+                            decoding="async"
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                         </div>
