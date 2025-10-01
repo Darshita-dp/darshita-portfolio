@@ -11,28 +11,38 @@ import { ArrowLeft, Compass, MessageSquare, Waves } from "lucide-react";
 type QA = { q: string; a: string; keywords: string[] };
 const KNOWLEDGE: Array<QA> = [
   {
-    q: "Master's in Information Systems",
-    a: "I’m pursuing an M.S. in Information Systems at Illinois State University (ISU), graduating in 2025, with a 4.0 GPA. My coursework includes systems analysis, project management, and web development.",
-    keywords: ["masters", "ms", "information systems", "isu", "graduate", "gpa", "4.0", "project management", "systems analysis", "web development"],
+    q: "Master's Degree",
+    a: "I completed my Master of Science in Information Systems at Illinois State University with a 4.0/4.0 GPA. Courses included: Advanced System Analysis & Design, IT Project Management, Web Development Technologies, Advanced Web Application Development, Mobile & Cloud Computing, Database Processing, Advanced Database Management, Practical Cryptography & Trusted Systems, Advanced Software Engineering, Systems Analysis & Design, Information Technology Strategy & Policy, Professional Practice in IT, Research Methodology, Information Assurance & Security, Writing for Graduate Students, C++ Programming, Information Technology Capstone.",
+    keywords: ["master's", "ms", "information systems", "isu", "gpa", "courses", "graduate school", "illinois state university", "4.0", "coursework"],
   },
   {
-    q: "Bachelor's in Computer Applications",
-    a: "I hold a BCA (Bachelor’s in Computer Applications) from India with a 3.5 GPA.",
-    keywords: ["bachelors", "bca", "computer applications", "india", "3.5 gpa"],
+    q: "Bachelor's Degree",
+    a: "I completed my Bachelor of Computer Applications (Hons.) from Devi Ahilya Vishwavidyalaya in India with a GPA of 3.5/4.0. Courses included: Fundamentals of Programming in C, Object-Oriented Programming in C++, Core Java Programming, Data Structures & Algorithms, Digital Electronics & Computer Organization, Microprocessor & Assembly Language, Database Management Systems, Internet & Web Programming, Human-Computer Interaction, System Analysis & Design, System Programming, Computer Graphics, UNIX Operating System, Probability & Statistics, Organizational Behavior, Communication Skills & French Language, Final Year Project.",
+    keywords: ["bachelor's", "undergrad", "bca", "devi ahilya", "india", "gpa", "computer applications", "courses", "subjects", "3.5", "vishwavidyalaya"],
   },
   {
-    q: "Teaching Assistant",
-    a: "I served as a Graduate Teaching Assistant for IT-150 labs at ISU, helping 120+ students build strong computer and tech fundamentals.",
-    keywords: ["gta", "teaching", "assistant", "it-150", "120 students", "labs", "graduate teaching assistant"],
+    q: "Graduate Teaching Assistant",
+    a: "As a Graduate Teaching Assistant at ISU, I taught IT-150 labs covering the full MS Office Suite — Word, Excel, Access, and PowerPoint — to around 150 students per semester for 2 semesters. I also graded assignments, guided projects, and provided one-on-one support.",
+    keywords: ["gta", "teaching", "ta", "assistant", "professor", "ms office", "word", "excel", "access", "powerpoint", "students", "it-150", "labs", "grading"],
+  },
+  {
+    q: "Awards",
+    a: "I received a Graduate Teaching Assistantship and was honored with the Outstanding Graduate Student Award at Illinois State University.",
+    keywords: ["award", "scholarship", "recognition", "outstanding", "graduate", "achievement", "teaching assistantship", "honors"],
+  },
+  {
+    q: "Research Work",
+    a: "I presented a research poster on how Artificial Intelligence is applied in the banking sector at a university symposium.",
+    keywords: ["research", "symposium", "ai", "banking", "poster", "project", "artificial intelligence", "presentation"],
   },
   {
     q: "NGO Internships",
     a: "I worked with NGOs including CIIWAS and ORANGES, building accessible websites and dashboards that supported community projects and increased engagement.",
-    keywords: ["ngo", "ciIwas", "oranges", "web development", "accessibility", "dashboards", "impact"],
+    keywords: ["ngo", "ciiwas", "oranges", "web development", "accessibility", "dashboards", "impact"],
   },
   {
     q: "Technical skills",
-    a: "I’m comfortable with C, C++, Java, Python, Swift/SwiftUI, JavaScript/TypeScript, React, PHP/MySQL, and data tools. I love building full‑stack and mobile experiences.",
+    a: "I'm comfortable with C, C++, Java, Python, Swift/SwiftUI, JavaScript/TypeScript, React, PHP/MySQL, and data tools. I love building full‑stack and mobile experiences.",
     keywords: ["skills", "c", "c++", "java", "python", "swift", "swiftui", "react", "php", "mysql", "javascript", "typescript", "data tools"],
   },
   {
@@ -57,7 +67,7 @@ const KNOWLEDGE: Array<QA> = [
   },
   {
     q: "Personal interests",
-    a: "I love creative design, photography, and building playful/gamified UIs. Also: I’m a twin—so collaboration is in my DNA!",
+    a: "I love creative design, photography, and building playful/gamified UIs. Also: I'm a twin—so collaboration is in my DNA!",
     keywords: ["interests", "creative", "design", "photography", "twin", "gamified", "ui"],
   },
 ];
@@ -115,7 +125,7 @@ function AskMeAnything() {
       role: "ai",
       text:
         answerFromKB(trimmed) +
-        " If you’d like a quick overview, try asking about my Master's, teaching experience, or SmartPlanner.",
+        " If you'd like a quick overview, try asking about my Master's, teaching experience, or SmartPlanner.",
       ts: Date.now() + 1,
     };
     setMessages((m) => [...m, userMsg, aiMsg]);
@@ -171,7 +181,7 @@ function AskMeAnything() {
               <Button onClick={onSend} className="rounded-full">Send</Button>
             </div>
             <div className="mt-2 text-xs text-muted-foreground">
-              Tip: Try “Tell me about SmartPlanner”, “What’s your GPA?”, or “What NGOs have you worked with?”
+              Tip: Try "Tell me about SmartPlanner", "What's your GPA? ", or "What NGOs have you worked with?"
             </div>
           </CardContent>
         </Card>
@@ -186,7 +196,7 @@ function InterviewMe() {
     {
       role: "ai",
       text:
-        "Welcome. Please proceed with your questions. I’ll keep responses concise and professional.",
+        "Welcome. Please proceed with your questions. I'll keep responses concise and professional.",
       ts: Date.now(),
     },
   ]);
@@ -275,14 +285,14 @@ function InterviewMe() {
 function GuideMe() {
   const navigate = useNavigate();
   const [messages, setMessages] = useState<Array<string>>([
-    "Ahoy matey! I’m yer friendly navigator. Tap a card and I’ll steer ye straight to treasure!",
+    "Ahoy matey! I'm yer friendly navigator. Tap a card and I'll steer ye straight to treasure!",
   ]);
 
   const onSelect = (id: "projects" | "skills" | "education" | "contact") => {
     let msg = "";
     if (id === "projects") {
       msg =
-        "Ahoy! Me chest o’ projects: SmartPlanner (SwiftUI/Core Data/MVVM), Film-Fusion (web), Course Manager (tracking UX), and Courtside Leadership (WordPress/SEO).";
+        "Ahoy! Me chest o' projects: SmartPlanner (SwiftUI/Core Data/MVVM), Film-Fusion (web), Course Manager (tracking UX), and Courtside Leadership (WordPress/SEO).";
     } else if (id === "skills") {
       msg =
         "Skills off the starboard bow: C, C++, Java, Python, Swift/SwiftUI, React/TS, PHP/MySQL, data tools. A full-stack sailor at heart!";
@@ -316,7 +326,7 @@ function GuideMe() {
       {
         id: "education" as const,
         title: "Know My Education",
-        desc: "ISU Master’s, GTA, academic highlights",
+        desc: "ISU Master's, GTA, academic highlights",
         action: () => onSelect("education"),
         linkAction: () => navigate("/story"),
       },
@@ -399,7 +409,7 @@ function GuideMe() {
         {/* Narrative log */}
         <Card className="max-w-3xl mx-auto mt-6 bg-white/70 dark:bg-slate-900/60 backdrop-blur-md">
           <CardHeader className="pb-2">
-            <CardTitle className="tracking-tight">Captain’s Log</CardTitle>
+            <CardTitle className="tracking-tight">Captain's Log</CardTitle>
           </CardHeader>
           <CardContent className="space-y-2 text-sm">
             {messages.map((m, i) => (
@@ -461,7 +471,7 @@ export default function AiPage() {
       </main>
 
       <footer className="container mx-auto px-4 py-6 text-center text-xs text-muted-foreground">
-        When I can’t answer something precisely, I’ll point you to my projects or LinkedIn. Let’s connect!
+        When I can't answer something precisely, I'll point you to my projects or LinkedIn. Let's connect!
       </footer>
     </div>
   );
