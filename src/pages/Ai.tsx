@@ -131,6 +131,46 @@ const KNOWLEDGE: Array<QA> = [
     keywords: ["interests", "creative", "design", "photography", "twin", "gamified", "ui"],
   },
   {
+    q: "Hobbies & Creative Interests",
+    a: "I love drawing, cooking, playing piano, watching anime, doing photography, and playing badminton. These hobbies keep me creative, calm, and balanced outside of tech life.",
+    keywords: ["hobby", "hobbies", "drawing", "cooking", "piano", "anime", "photography", "badminton", "sports", "art", "music", "free time"],
+  },
+  {
+    q: "Cooking Hobby",
+    a: "I enjoy cooking daily. Being vegetarian, I love experimenting with healthy recipes and traditional dishes.",
+    keywords: ["cooking", "vegetarian", "food", "meals"],
+  },
+  {
+    q: "Piano Practice",
+    a: "I've been learning piano as a way to relax — it helps me focus and refresh after long coding sessions.",
+    keywords: ["piano", "music", "instrument", "hobby"],
+  },
+  {
+    q: "Badminton Love",
+    a: "I love playing badminton. It's my go-to game for both fitness and fun with friends.",
+    keywords: ["badminton", "sports", "hobby", "game"],
+  },
+  {
+    q: "Jira & Confluence",
+    a: "I use Jira for sprint planning and Confluence for documentation. They help keep teamwork transparent and organized.",
+    keywords: ["jira", "confluence", "agile", "sprint", "documentation"],
+  },
+  {
+    q: "Docker Basics",
+    a: "I've learned Docker basics to containerize small applications and maintain consistent development environments.",
+    keywords: ["docker", "container", "devops", "environment"],
+  },
+  {
+    q: "Figma",
+    a: "I use Figma to design UI layouts and interactive prototypes before starting front-end development.",
+    keywords: ["figma", "ui design", "prototype", "wireframe"],
+  },
+  {
+    q: "Recent Achievement",
+    a: "Recently, I was recognized as the Outstanding Graduate Student and completed several portfolio enhancements, including my AI chat system and SmartPlanner app.",
+    keywords: ["achievement", "award", "recognition", "recent"],
+  },
+  {
     q: "Leadership in Projects",
     a: "I led a 4-member team for a university project, organizing weekly stand-ups, assigning Jira tasks, and ensuring delivery ahead of schedule.",
     keywords: ["leadership", "teamwork", "collaboration", "coordination", "jira", "team lead"],
