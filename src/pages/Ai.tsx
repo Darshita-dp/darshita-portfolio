@@ -248,9 +248,7 @@ function AskMeAnything() {
     const userMsg: Msg = { role: "user", text: trimmed, ts: Date.now() };
     const aiMsg: Msg = {
       role: "ai",
-      text:
-        answerFromKB(trimmed) +
-        " If you'd like a quick overview, try asking about my Master's, teaching experience, or SmartPlanner.",
+      text: answerFromKB(trimmed),
       ts: Date.now() + 1,
     };
     setMessages((m) => [...m, userMsg, aiMsg]);
