@@ -11,6 +11,11 @@ import { ArrowLeft, Compass, MessageSquare, Waves } from "lucide-react";
 type QA = { q: string; a: string; keywords: string[] };
 const KNOWLEDGE: Array<QA> = [
   {
+    q: "Introduction & Overview",
+    a: "Hi! I'm Darshita Patel, a graduate student at Illinois State University with a 4.0 GPA in Information Systems. I'm passionate about data analytics, full-stack development, and building user-friendly applications. I've worked as a Graduate Teaching Assistant, completed internships at GMP MachPro and NGOs, and built projects like SmartPlanner (iOS app) and AI-driven analytics dashboards. I'm currently preparing for AWS and Tableau certifications while seeking opportunities as a Data Analyst or Systems Analyst. Outside of tech, I enjoy cooking, playing piano, badminton, and photography!",
+    keywords: ["introduce", "introduction", "about you", "about yourself", "who are you", "tell me about", "overview", "summary", "yourself", "background"],
+  },
+  {
     q: "Master's Degree",
     a: "I completed my Master of Science in Information Systems at Illinois State University with a 4.0/4.0 GPA. Courses included: Advanced System Analysis & Design, IT Project Management, Web Development Technologies, Advanced Web Application Development, Mobile & Cloud Computing, Database Processing, Advanced Database Management, Practical Cryptography & Trusted Systems, Advanced Software Engineering, Systems Analysis & Design, Information Technology Strategy & Policy, Professional Practice in IT, Research Methodology, Information Assurance & Security, Writing for Graduate Students, C++ Programming, Information Technology Capstone.",
     keywords: ["master's", "ms", "information systems", "isu", "gpa", "courses", "graduate school", "illinois state university", "4.0", "coursework"],
