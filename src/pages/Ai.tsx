@@ -41,9 +41,49 @@ const KNOWLEDGE: Array<QA> = [
     keywords: ["ngo", "ciiwas", "oranges", "web development", "accessibility", "dashboards", "impact"],
   },
   {
+    q: "GMP MachPro Internship",
+    a: "During my Data Analyst Internship at GMP MachPro, I built Power BI dashboards to track daily production and quality metrics. These visualizations reduced manual reporting time by 30% and improved team decision-making.",
+    keywords: ["gmp", "internship", "machpro", "data analyst", "dashboard", "metrics", "power bi", "production", "quality"],
+  },
+  {
+    q: "Internship Impact Summary",
+    a: "Across all my internships, I improved data accuracy by 25%, reduced reporting effort by 30%, and helped teams visualize trends more clearly through automated dashboards.",
+    keywords: ["achievements", "metrics", "improvement", "experience", "impact", "results", "quantifiable"],
+  },
+  {
+    q: "Certifications",
+    a: "I've earned a Systems Analyst Certificate and I'm currently preparing for AWS Cloud Practitioner and Tableau Desktop Specialist certifications.",
+    keywords: ["certifications", "certificate", "aws", "tableau", "systems analyst", "credentials"],
+  },
+  {
+    q: "Learning Goals",
+    a: "I plan to strengthen my skills in Snowflake, SQL optimization, and advanced Power BI DAX in the coming months.",
+    keywords: ["learning goals", "upskilling", "future skills", "professional development", "growth"],
+  },
+  {
     q: "Technical skills",
     a: "I'm comfortable with C, C++, Java, Python, Swift/SwiftUI, JavaScript/TypeScript, React, PHP/MySQL, and data tools. I love building full‑stack and mobile experiences.",
     keywords: ["skills", "c", "c++", "java", "python", "swift", "swiftui", "react", "php", "mysql", "javascript", "typescript", "data tools"],
+  },
+  {
+    q: "Tableau Experience",
+    a: "I designed multiple dashboards in Tableau, using calculated fields, filters, and stories to visualize trends clearly for non-technical users.",
+    keywords: ["tableau", "dashboard", "visualization", "calculated fields", "stories"],
+  },
+  {
+    q: "Power BI Experience",
+    a: "In Power BI, I built KPI dashboards with DAX formulas to automate monthly reports and visualize performance insights efficiently.",
+    keywords: ["power bi", "dax", "dashboard", "kpi", "reports", "automation"],
+  },
+  {
+    q: "Snowflake Learning",
+    a: "I'm learning Snowflake to manage and analyze large-scale datasets and improve my understanding of modern cloud data architecture.",
+    keywords: ["snowflake", "cloud data warehouse", "sql", "cloud", "data architecture"],
+  },
+  {
+    q: "Excel Expertise",
+    a: "I've built interactive Excel dashboards using PivotTables, charts, and data cleaning formulas to make raw data easier to interpret.",
+    keywords: ["excel", "pivot table", "data cleaning", "formulas", "spreadsheet"],
   },
   {
     q: "SmartPlanner iOS app",
@@ -66,9 +106,49 @@ const KNOWLEDGE: Array<QA> = [
     keywords: ["courtside leadership", "wordpress", "seo", "capstone", "performance"],
   },
   {
+    q: "AI-Driven Predictive Analytics Project",
+    a: "I built a predictive model that analyzed business process trends and achieved 87% prediction accuracy, helping the team identify improvement areas proactively.",
+    keywords: ["ai", "predictive analytics", "data science", "model", "accuracy", "machine learning", "87%"],
+  },
+  {
+    q: "IT Services Optimization Project",
+    a: "As part of the Managed IT Services RFP project, my team proposed a new vendor system that targeted 99.9% uptime and a 30% reduction in ticket resolution time.",
+    keywords: ["it services", "optimization", "rfp", "project management", "uptime", "vendor"],
+  },
+  {
+    q: "Retail Analytics – Candle Business",
+    a: "I designed Power BI dashboards to visualize sales trends for a local candle business, identifying underperforming product lines and increasing forecast accuracy by 20%.",
+    keywords: ["retail analytics", "candle business", "sales", "local", "power bi", "forecast", "trends"],
+  },
+  {
+    q: "MovieLens Data Analysis",
+    a: "Using the MovieLens dataset, I analyzed user behavior and built visualizations that revealed patterns in genre preferences and rating trends.",
+    keywords: ["movielens", "data analytics", "visualization", "recommendation", "user behavior", "genre"],
+  },
+  {
     q: "Personal interests",
     a: "I love creative design, photography, and building playful/gamified UIs. Also: I'm a twin—so collaboration is in my DNA!",
     keywords: ["interests", "creative", "design", "photography", "twin", "gamified", "ui"],
+  },
+  {
+    q: "Leadership in Projects",
+    a: "I led a 4-member team for a university project, organizing weekly stand-ups, assigning Jira tasks, and ensuring delivery ahead of schedule.",
+    keywords: ["leadership", "teamwork", "collaboration", "coordination", "jira", "team lead"],
+  },
+  {
+    q: "Problem Solving Example",
+    a: "In one project, when an API integration kept failing, I analyzed the JSON structure, debugged the endpoint, and implemented caching that cut load time by 40%.",
+    keywords: ["problem solving", "challenge", "issue resolution", "debugging", "api", "optimization"],
+  },
+  {
+    q: "Short-Term Career Goal",
+    a: "My short-term goal is to begin as a Data Analyst or Systems Analyst, gaining real-world experience in data visualization, requirement analysis, and reporting automation.",
+    keywords: ["short term goal", "entry level", "first role", "career start", "data analyst", "systems analyst"],
+  },
+  {
+    q: "Long-Term Vision",
+    a: "In the long run, I want to become a Data Strategist or Research Lead, combining analytics, AI, and creativity to design smart, ethical systems.",
+    keywords: ["long term", "future", "goal", "vision", "data strategist", "research lead", "career path"],
   },
 ];
 
