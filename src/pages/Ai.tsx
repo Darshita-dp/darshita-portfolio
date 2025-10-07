@@ -368,9 +368,9 @@ function GuideMe() {
   );
 }
 
-/* -------------------- Page container with three options -------------------- */
+/* -------------------- Page container with two options -------------------- */
 export default function AiPage() {
-  const [tab, setTab] = useState<"ama" | "interview" | "guide">("ama");
+  const [tab, setTab] = useState<"interview" | "guide">("interview");
 
   const TabButton = ({
     id,
@@ -402,14 +402,12 @@ export default function AiPage() {
 
       <div className="container mx-auto px-4 py-4">
         <div className="flex flex-wrap gap-2 items-center justify-center">
-          <TabButton id="ama" label="Ask Me Anything 🌤️" active={tab === "ama"} onClick={() => setTab("ama")} />
           <TabButton id="interview" label="Interview Me 🎤" active={tab === "interview"} onClick={() => setTab("interview")} />
           <TabButton id="guide" label="Let Me Guide You 🧭" active={tab === "guide"} onClick={() => setTab("guide")} />
         </div>
       </div>
 
       <main aria-live="polite">
-        {tab === "ama" && <AskMeAnything />}
         {tab === "interview" && <InterviewMe />}
         {tab === "guide" && <GuideMe />}
       </main>
