@@ -43,7 +43,7 @@ const KNOWLEDGE: Array<QA> = [
   {
     q: "Why Data Analyst?",
     a: "I want to be a Data Analyst because it brings together everything I enjoy — problem-solving, technology, and storytelling. I love finding insights hidden inside data and turning them into something meaningful for decision-making. I've worked with tools like Excel, Power BI, and SQL, and I really enjoy the process of cleaning, analyzing, and visualizing data to tell a clear story. It's a field where I can keep learning new tools and also make an impact — and that combination keeps me motivated.",
-    keywords: ["why data analyst", "why analyst", "career choice", "why this role", "motivation for data"],
+    keywords: ["why data analyst", "why analyst", "career choice", "why this role", "motivation for data", "want to be", "data analyst role"],
   },
   {
     q: "Challenges Overcome",
