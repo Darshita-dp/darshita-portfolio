@@ -180,8 +180,42 @@ function InterviewMe() {
   };
 
   return (
-    <div className="min-h-[calc(100vh-56px)] bg-[#EDE7E3] dark:bg-slate-900">
-      <div className="container mx-auto max-w-3xl px-4 py-6">
+    <div className="min-h-[calc(100vh-56px)] bg-[#EDE7E3] dark:bg-slate-900 relative overflow-hidden">
+      {/* Animated grass background */}
+      <div className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none z-0">
+        {/* Multiple grass blades with staggered animation */}
+        {[...Array(40)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute bottom-0"
+            style={{
+              left: `${(i * 2.5)}%`,
+              height: `${60 + Math.random() * 40}px`,
+              width: '8px',
+            }}
+            animate={{
+              rotate: [0, 3, -3, 0],
+              scaleY: [1, 1.05, 0.98, 1],
+            }}
+            transition={{
+              duration: 2 + Math.random() * 2,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: Math.random() * 2,
+            }}
+          >
+            <div 
+              className="w-full h-full rounded-t-full"
+              style={{
+                background: `linear-gradient(to top, #4CAF50, #81C784)`,
+                transformOrigin: 'bottom center',
+              }}
+            />
+          </motion.div>
+        ))}
+      </div>
+
+      <div className="container mx-auto max-w-3xl px-4 py-6 relative z-10">
         <Card className="overflow-hidden border-0 shadow-lg">
           {/* WhatsApp-style Header */}
           <div className="bg-[#0B6A5B] text-white px-4 py-3 flex items-center gap-3 h-14">
