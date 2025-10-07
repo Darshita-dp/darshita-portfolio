@@ -172,7 +172,7 @@ function InterviewMe() {
   return (
     <div className="min-h-screen bg-[#EDE7E3] dark:bg-slate-900 flex flex-col">
       {/* WhatsApp-style Header */}
-      <header className="sticky top-0 z-50 bg-[#0B6A5B] text-white px-4 py-3 flex items-center justify-between shadow-md">
+      <header className="fixed top-0 left-0 right-0 z-50 bg-[#0B6A5B] text-white px-4 py-3 flex items-center justify-between shadow-md h-14">
         <div className="flex items-center gap-3">
           <Button
             variant="ghost"
@@ -204,7 +204,7 @@ function InterviewMe() {
       {/* Chat Body */}
       <div
         ref={chatBodyRef}
-        className="flex-1 overflow-y-auto px-4 py-4 space-y-2 max-w-[820px] mx-auto w-full"
+        className="flex-1 overflow-y-auto px-4 py-4 space-y-2 max-w-[820px] mx-auto w-full pt-[72px] pb-[132px]"
       >
         {messages.map((m, idx) => {
           const isFirstInGroup =
@@ -310,8 +310,8 @@ function InterviewMe() {
       </div>
 
       {/* Input Bar */}
-      <div className="sticky bottom-0 bg-[#F0F0F0] dark:bg-slate-800 px-4 py-3 border-t border-gray-200 max-w-[820px] mx-auto w-full">
-        <div className="flex items-center gap-2">
+      <div className="fixed bottom-[72px] left-0 right-0 bg-white/80 dark:bg-slate-800/80 backdrop-blur-md px-4 py-3 border-t border-gray-200 shadow-lg z-40">
+        <div className="flex items-center gap-3 max-w-[820px] mx-auto">
           <Input
             placeholder="Ask interview questions (experience, achievements, projects, goals)"
             value={input}
@@ -323,41 +323,43 @@ function InterviewMe() {
               }
             }}
             disabled={isTyping}
-            className="flex-1 rounded-full bg-white border-gray-300 focus-visible:ring-1 h-11"
+            className="flex-1 rounded-full bg-white border-gray-300 focus-visible:ring-1 h-11 shadow-sm"
           />
           <Button
             onClick={() => onSend()}
             disabled={!input.trim() || isTyping}
-            className="rounded-full w-11 h-11 p-0 bg-[#2F80ED] hover:bg-[#2F80ED]/90"
+            className="rounded-full w-11 h-11 p-0 bg-[#128C7E] hover:bg-[#0B6A5B] shadow-md active:scale-95 transition-transform"
           >
-            <Send className="w-4 h-4" />
+            <Send className="w-5 h-5 -rotate-6" />
           </Button>
         </div>
       </div>
 
       {/* Footer */}
-      <footer className="bg-white dark:bg-slate-900 px-4 py-4 text-center text-xs text-gray-600 dark:text-gray-400 border-t max-w-[820px] mx-auto w-full">
-        <p className="mb-2">
-          When I can't answer something precisely, I'll point you to my projects or LinkedIn. Let's connect!
-        </p>
-        <div className="flex gap-2 justify-center flex-wrap">
-          <Button size="sm" variant="outline" onClick={() => window.location.href = "/classic"}>
-            View Projects
-          </Button>
-          <Button
-            size="sm"
-            variant="outline"
-            onClick={() => window.open("https://www.linkedin.com/in/darshita-patel", "_blank")}
-          >
-            LinkedIn
-          </Button>
-          <Button
-            size="sm"
-            variant="outline"
-            onClick={() => window.location.href = "mailto:darshitapatel1506@gmail.com"}
-          >
-            Email
-          </Button>
+      <footer className="fixed bottom-0 left-0 right-0 bg-white dark:bg-slate-900 px-4 py-4 text-center text-xs text-gray-600 dark:text-gray-400 border-t z-30">
+        <div className="max-w-[820px] mx-auto">
+          <p className="mb-2">
+            When I can't answer something precisely, I'll point you to my projects or LinkedIn. Let's connect!
+          </p>
+          <div className="flex gap-2 justify-center flex-wrap">
+            <Button size="sm" variant="outline" onClick={() => window.location.href = "/classic"}>
+              View Projects
+            </Button>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => window.open("https://www.linkedin.com/in/darshita-patel", "_blank")}
+            >
+              LinkedIn
+            </Button>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => window.location.href = "mailto:darshitapatel1506@gmail.com"}
+            >
+              Email
+            </Button>
+          </div>
         </div>
       </footer>
     </div>
