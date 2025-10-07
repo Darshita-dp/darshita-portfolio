@@ -145,6 +145,7 @@ function InterviewMe() {
     },
   ]);
   const [input, setInput] = useState("");
+  const [isTyping, setIsTyping] = useState(false);
 
   const formatInterviewAnswer = (q: string) => {
     // concise, professional tone
@@ -154,13 +155,23 @@ function InterviewMe() {
     return `${base} ${highlights}`;
   };
 
-  const onSend = () => {
+  const onSend = async () => {
     const trimmed = input.trim();
-    if (!trimmed) return;
+    if (!trimmed || isTyping) return;
+    
     const userMsg: Msg = { role: "user", text: trimmed, ts: Date.now() };
-    const aiMsg: Msg = { role: "ai", text: formatInterviewAnswer(trimmed), ts: Date.now() + 1 };
-    setMessages((m) => [...m, userMsg, aiMsg]);
+    setMessages((m) => [...m, userMsg]);
     setInput("");
+    
+    // Show typing indicator
+    setIsTyping(true);
+    
+    // Simulate bot thinking time
+    await new Promise(resolve => setTimeout(resolve, 800));
+    
+    const aiMsg: Msg = { role: "ai", text: formatInterviewAnswer(trimmed), ts: Date.now() + 1 };
+    setMessages((m) => [...m, aiMsg]);
+    setIsTyping(false);
   };
 
   const fmtTime = (ts: number) => {
@@ -169,55 +180,105 @@ function InterviewMe() {
   };
 
   return (
-    <div className="min-h-[calc(100vh-56px)] bg-[#e5ddd5] dark:bg-slate-900">
+    <div className="min-h-[calc(100vh-56px)] bg-[#EDE7E3] dark:bg-slate-900">
       <div className="container mx-auto max-w-3xl px-4 py-6">
-        <Card className="overflow-hidden border-0">
-          {/* Header mock */}
-          <div className="bg-[#075e54] text-white px-4 py-3 flex items-center gap-2">
-            <MessageSquare className="w-5 h-5" />
-            <div className="font-semibold">Interview Me 🎤</div>
+        <Card className="overflow-hidden border-0 shadow-lg">
+          {/* WhatsApp-style Header */}
+          <div className="bg-[#0B6A5B] text-white px-4 py-3 flex items-center gap-3 h-14">
+            <img 
+              src="https://harmless-tapir-303.convex.cloud/api/storage/fbbcab3e-d3b1-4639-99b4-311c5e1ab7ca" 
+              alt="Darshita" 
+              className="h-9 w-9 rounded-full ring-2 ring-white object-cover"
+            />
+            <div className="flex flex-col">
+              <span className="font-medium text-base">Darshita's bot</span>
+              <span className="text-xs text-white/80">online</span>
+            </div>
           </div>
 
           {/* Chat area */}
-          <div className="bg-[#efe7dd] dark:bg-slate-950 h-[60vh] min-h-[380px] overflow-y-auto p-3">
+          <div className="bg-[#EFE7DD] dark:bg-slate-950 h-[60vh] min-h-[380px] overflow-y-auto p-3">
             {messages.map((m, idx) => (
               <div key={idx} className={`flex mb-2 ${m.role === "user" ? "justify-end" : "justify-start"}`}>
                 {m.role === "ai" && (
-                  <div className="mr-2">
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-slate-300 to-slate-100 dark:from-slate-700 dark:to-slate-600 grid place-items-center border">
-                      <span className="text-[10px]">AI</span>
-                    </div>
+                  <div className="mr-2 flex-shrink-0">
+                    <img 
+                      src="https://harmless-tapir-303.convex.cloud/api/storage/fbbcab3e-d3b1-4639-99b4-311c5e1ab7ca" 
+                      alt="" 
+                      className="w-8 h-8 rounded-full object-cover ring-2 ring-white"
+                    />
                   </div>
                 )}
                 <div
-                  className={`max-w-[78%] rounded-lg px-3 py-2 text-sm relative ${
+                  className={`max-w-[78%] rounded-lg px-3 py-2 text-sm relative shadow-sm ${
                     m.role === "user"
-                      ? "bg-[#dcf8c6]"
-                      : "bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100"
+                      ? "bg-[#DCF8C6] rounded-tr-sm"
+                      : "bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border rounded-tl-sm"
                   }`}
                 >
                   <div>{m.text}</div>
-                  <div className="text-[10px] opacity-60 mt-1 text-right flex items-center gap-1">
+                  <div className="text-[10px] opacity-60 mt-1 text-right flex items-center justify-end gap-1">
                     <span>{fmtTime(m.ts)}</span>
-                    {m.role === "user" ? <span>✔✔</span> : null}
+                    {m.role === "user" ? <span className="text-blue-500">✓✓</span> : null}
                   </div>
                 </div>
               </div>
             ))}
+            
+            {/* Typing indicator */}
+            {isTyping && (
+              <div className="flex items-end gap-2 mt-2" aria-live="polite">
+                <img 
+                  src="https://harmless-tapir-303.convex.cloud/api/storage/fbbcab3e-d3b1-4639-99b4-311c5e1ab7ca" 
+                  alt="" 
+                  className="h-8 w-8 rounded-full object-cover ring-2 ring-white flex-shrink-0"
+                />
+                <div className="bg-white px-3 py-2 rounded-2xl shadow-sm border rounded-tl-sm">
+                  <span className="inline-flex gap-1 text-[#606770]">
+                    <span className="animate-bounce" style={{ animationDelay: '-0.2s' }}>•</span>
+                    <span className="animate-bounce" style={{ animationDelay: '-0.1s' }}>•</span>
+                    <span className="animate-bounce">•</span>
+                  </span>
+                </div>
+              </div>
+            )}
           </div>
 
-          {/* Input bar */}
-          <div className="bg-[#f0f0f0] dark:bg-slate-900 p-2 flex items-center gap-2 border-t">
+          {/* Input bar with WhatsApp-style send button */}
+          <div className="bg-[#F0F0F0] dark:bg-slate-900 p-2 flex items-center gap-2 border-t">
             <Input
               placeholder="Ask interview questions (experience, achievements, projects, goals)"
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && onSend()}
-              className="bg-white dark:bg-slate-800"
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey) {
+                  e.preventDefault();
+                  onSend();
+                }
+              }}
+              disabled={isTyping}
+              className="bg-white dark:bg-slate-800 flex-1"
             />
-            <Button onClick={onSend} variant="default">
-              Send
-            </Button>
+            <button
+              type="button"
+              onClick={onSend}
+              disabled={isTyping}
+              aria-label="Send"
+              className="h-12 w-12 shrink-0 grid place-items-center rounded-full bg-[#128C7E] text-white hover:bg-[#0B6A5B] active:scale-95 transition shadow focus:outline-none focus:ring-2 focus:ring-[#128C7E]/35 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <svg 
+                className="-rotate-6 h-5 w-5" 
+                viewBox="0 0 24 24" 
+                fill="none" 
+                stroke="currentColor" 
+                strokeWidth="2.2"
+                strokeLinecap="round" 
+                strokeLinejoin="round"
+              >
+                <path d="M22 2L11 13"></path>
+                <path d="M22 2l-7 20-4-9-9-4 20-7z"></path>
+              </svg>
+            </button>
           </div>
         </Card>
       </div>
