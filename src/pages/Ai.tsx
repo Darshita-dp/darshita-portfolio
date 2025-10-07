@@ -18,7 +18,37 @@ const KNOWLEDGE: Array<QA> = [
   {
     q: "Master's Degree",
     a: "I completed my Master of Science in Information Systems at Illinois State University with a 4.0/4.0 GPA. Courses included: Advanced System Analysis & Design, IT Project Management, Web Development Technologies, Advanced Web Application Development, Mobile & Cloud Computing, Database Processing, Advanced Database Management, Practical Cryptography & Trusted Systems, Advanced Software Engineering, Systems Analysis & Design, Information Technology Strategy & Policy, Professional Practice in IT, Research Methodology, Information Assurance & Security, Writing for Graduate Students, C++ Programming, Information Technology Capstone.",
-    keywords: ["master's", "ms", "information systems", "isu", "gpa", "courses", "graduate school", "illinois state university", "4.0", "coursework"],
+    keywords: ["master's degree", "ms degree", "information systems degree", "isu degree", "gpa", "courses", "graduate school", "illinois state university", "4.0", "coursework", "what did you study"],
+  },
+  {
+    q: "Why Master's in Information Systems?",
+    a: "I chose a Master's in Information Systems because it connects both sides of me — the tech thinker and the problem solver. In my undergrad, I studied Computer Applications, and I loved programming, but I also wanted to understand how technology supports business decisions and real-world operations. Information Systems felt like the perfect bridge — it gave me both the technical skills and the analytical mindset to design, manage, and improve systems that people actually use. It's not just about coding; it's about creating solutions that make work smarter and more efficient.",
+    keywords: ["why master's", "why information systems", "motivation", "why did you choose", "what motivated", "why pursue", "reason for master's"],
+  },
+  {
+    q: "Why Illinois State University?",
+    a: "I chose Illinois State University because of its balance between technical depth and practical learning. When I saw courses like Advanced Systems Analysis and Design and IT Project Management, I immediately felt they matched my goals. But beyond academics, ISU has a very supportive environment — professors are approachable, and I've had great opportunities like being a Teaching Assistant and working on real projects with teams. ISU gave me the confidence and exposure I needed to grow as both a learner and a professional.",
+    keywords: ["why isu", "why illinois state", "why choose isu", "why this university", "reason for isu"],
+  },
+  {
+    q: "How I Got Interested in Tech & Data",
+    a: "My interest started back in school when I took Computer Science in 11th grade. The first time I ran a small C++ program and saw it work, I was amazed — it felt like magic. That curiosity never left me. As I learned more, I got interested in how data helps us make smarter decisions. I realized that behind every project or product, there's data guiding the way. Over time, I found my comfort zone in analyzing, visualizing, and finding patterns — that's when I knew data was my field.",
+    keywords: ["how did you get interested", "interest in tech", "interest in data", "why tech", "how started", "origin story", "first program"],
+  },
+  {
+    q: "Proudest Achievement",
+    a: "My proudest achievement is completing my Master's with a 4.0 GPA while also working as a Teaching Assistant. It was challenging to balance coursework, labs, and mentoring more than 150 students each semester — but I managed through good planning and time management. I'm proud not just of the grades, but of how I grew — helping others learn while improving my own technical and communication skills. It showed me that with discipline and passion, I can handle multiple responsibilities successfully.",
+    keywords: ["proudest achievement", "proud of", "biggest accomplishment", "what are you proud of", "greatest achievement"],
+  },
+  {
+    q: "Why Data Analyst?",
+    a: "I want to be a Data Analyst because it brings together everything I enjoy — problem-solving, technology, and storytelling. I love finding insights hidden inside data and turning them into something meaningful for decision-making. I've worked with tools like Excel, Power BI, and SQL, and I really enjoy the process of cleaning, analyzing, and visualizing data to tell a clear story. It's a field where I can keep learning new tools and also make an impact — and that combination keeps me motivated.",
+    keywords: ["why data analyst", "why analyst", "career choice", "why this role", "motivation for data"],
+  },
+  {
+    q: "Challenges Overcome",
+    a: "Moving from India to the U.S. for my master's was a big challenge for me. Everything was new — the culture, the education system, even the food! In the beginning, I struggled with homesickness and adapting to the pace here. But I slowly built a routine, took part-time work, handled my studies, and learned how to stay independent. That experience taught me resilience — now I feel confident that I can adjust to any environment and still give my best.",
+    keywords: ["challenges", "overcome", "difficulty", "struggle", "resilience", "moving to us", "adaptation"],
   },
   {
     q: "Bachelor's Degree",
