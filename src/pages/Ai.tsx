@@ -1,11 +1,11 @@
-import { useMemo, useRef, useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useMemo, useRef, useState } from "react";
+import { motion } from "framer-motion";
 import { useNavigate } from "react-router";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, Compass, MessageSquare, Waves, Send, Check, CheckCheck, Clock } from "lucide-react";
+import { ArrowLeft, Compass, MessageSquare, Waves } from "lucide-react";
 import { KNOWLEDGE, type QA } from "@/lib/aiKnowledge";
 
 function answerFromKB(question: string) {
@@ -38,12 +38,7 @@ function answerFromKB(question: string) {
 }
 
 // Simple message type
-type Msg = { 
-  role: "user" | "ai"; 
-  text: string; 
-  ts: number;
-  status?: "sending" | "sent" | "delivered" | "seen";
-};
+type Msg = { role: "user" | "ai"; text: string; ts: number };
 
 // Shared header
 function TopBar({ title }: { title: string }) {
@@ -61,99 +56,111 @@ function TopBar({ title }: { title: string }) {
   );
 }
 
-/* -------------------- WhatsApp-Style Interview Me 💼 -------------------- */
+/* -------------------- OPTION 1: Ask Me Anything 🌤️ -------------------- */
+function AskMeAnything() {
+  const [messages, setMessages] = useState<Array<Msg>>([
+    { role: "ai", text: "Hi! Ask me anything about my background, projects, or skills 🌤️", ts: Date.now() },
+  ]);
+  const [input, setInput] = useState("");
+
+  const onSend = () => {
+    const trimmed = input.trim();
+    if (!trimmed) return;
+    const userMsg: Msg = { role: "user", text: trimmed, ts: Date.now() };
+    const aiMsg: Msg = {
+      role: "ai",
+      text: answerFromKB(trimmed),
+      ts: Date.now() + 1,
+    };
+    setMessages((m) => [...m, userMsg, aiMsg]);
+    setInput("");
+  };
+
+  return (
+    <div className="min-h-[calc(100vh-56px)] relative">
+      {/* Animated sky and clouds */}
+      <div className="absolute inset-0 overflow-hidden bg-gradient-to-b from-pink-100 to-sky-100 dark:from-slate-800 dark:to-slate-900">
+        {[...Array(5)].map((_, i) => (
+          <motion.div
+            key={i}
+            initial={{ x: -200 }}
+            animate={{ x: "120%" }}
+            transition={{ duration: 30 + i * 5, repeat: Infinity, ease: "linear", delay: i * 2 }}
+            className="absolute top-10 w-36 h-16 rounded-full bg-white/70 blur-sm"
+            style={{ top: `${10 + i * 14}%`, left: `${-20 - i * 8}%` }}
+          />
+        ))}
+      </div>
+
+      {/* Chat box */}
+      <div className="relative z-10 container mx-auto max-w-3xl px-4 py-8">
+        <Card className="border-white/40 bg-white/60 dark:bg-slate-900/60 backdrop-blur-lg">
+          <CardHeader className="pb-2">
+            <CardTitle className="tracking-tight">Ask Me Anything 🗨️</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="h-[52vh] min-h-[360px] overflow-y-auto space-y-3 p-2 rounded-md bg-white/50 dark:bg-slate-900/40">
+              {messages.map((m, idx) => (
+                <div key={idx} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
+                  <div
+                    className={`max-w-[80%] rounded-2xl px-4 py-2 text-sm shadow-sm ${
+                      m.role === "user"
+                        ? "bg-pink-200/80 text-slate-800"
+                        : "bg-white/90 dark:bg-slate-800/80 text-slate-900 dark:text-slate-100"
+                    }`}
+                  >
+                    {m.text}
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="mt-4 flex items-center gap-2">
+              <Input
+                placeholder="Ask about my Master's, projects, teaching, skills..."
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && onSend()}
+                className="rounded-full shadow-sm focus-visible:ring-1"
+              />
+              <Button onClick={onSend} className="rounded-full">Send</Button>
+            </div>
+            <div className="mt-2 text-xs text-muted-foreground">
+              Tip: Try "Tell me about SmartPlanner", "What's your GPA? ", or "What NGOs have you worked with?"
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
+}
+
+/* -------------------- OPTION 2: Interview Me 💬 -------------------- */
 function InterviewMe() {
   const [messages, setMessages] = useState<Array<Msg>>([
     {
       role: "ai",
-      text: "Welcome. Please proceed with your questions. I'll keep responses concise and professional.",
+      text:
+        "Welcome. Please proceed with your questions. I'll keep responses concise and professional.",
       ts: Date.now(),
-      status: "seen",
     },
   ]);
   const [input, setInput] = useState("");
-  const [isTyping, setIsTyping] = useState(false);
-  const [showQuickChips, setShowQuickChips] = useState(true);
-  const chatBodyRef = useRef<HTMLDivElement>(null);
-  const lastMessageRef = useRef<HTMLDivElement>(null);
 
-  const quickChips = [
-    "Tell me about your GTA experience",
-    "Walk me through SmartPlanner",
-    "Top 3 strengths",
-    "Why Data Analyst?",
-    "A project with measurable impact",
-  ];
+  const formatInterviewAnswer = (q: string) => {
+    // concise, professional tone
+    const base = answerFromKB(q);
+    const highlights =
+      "Highlights: 4.0 GPA (ISU), Outstanding Graduate Student Award nomination, GTA for 120+ students, real-world NGO web development, and multi-language proficiency.";
+    return `${base} ${highlights}`;
+  };
 
-  // Auto-scroll to bottom
-  useEffect(() => {
-    if (lastMessageRef.current) {
-      lastMessageRef.current.scrollIntoView({ behavior: "smooth" });
-    }
-  }, [messages]);
-
-  // Mark messages as seen when they enter viewport
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const msgIndex = parseInt(entry.target.getAttribute("data-msg-index") || "-1");
-            if (msgIndex >= 0) {
-              setMessages((prev) =>
-                prev.map((msg, idx) =>
-                  idx === msgIndex && msg.role === "user" && msg.status !== "seen"
-                    ? { ...msg, status: "seen" }
-                    : msg
-                )
-              );
-            }
-          }
-        });
-      },
-      { threshold: 0.5 }
-    );
-
-    const msgElements = document.querySelectorAll("[data-msg-index]");
-    msgElements.forEach((el) => observer.observe(el));
-
-    return () => observer.disconnect();
-  }, [messages]);
-
-  const onSend = (text?: string) => {
-    const trimmed = (text || input).trim();
-    if (!trimmed || isTyping) return;
-    
-    setShowQuickChips(false);
-    const userMsg: Msg = { role: "user", text: trimmed, ts: Date.now(), status: "sending" };
-    setMessages((m) => [...m, userMsg]);
+  const onSend = () => {
+    const trimmed = input.trim();
+    if (!trimmed) return;
+    const userMsg: Msg = { role: "user", text: trimmed, ts: Date.now() };
+    const aiMsg: Msg = { role: "ai", text: formatInterviewAnswer(trimmed), ts: Date.now() + 1 };
+    setMessages((m) => [...m, userMsg, aiMsg]);
     setInput("");
-    setIsTyping(true);
-
-    // Simulate delivery states
-    setTimeout(() => {
-      setMessages((m) =>
-        m.map((msg, idx) => (idx === m.length - 1 ? { ...msg, status: "sent" } : msg))
-      );
-    }, 300);
-
-    setTimeout(() => {
-      setMessages((m) =>
-        m.map((msg, idx) => (idx === m.length - 1 ? { ...msg, status: "delivered" } : msg))
-      );
-    }, 600);
-
-    // AI response after typing delay
-    setTimeout(() => {
-      const aiMsg: Msg = {
-        role: "ai",
-        text: answerFromKB(trimmed),
-        ts: Date.now(),
-        status: "seen",
-      };
-      setMessages((m) => [...m, aiMsg]);
-      setIsTyping(false);
-    }, 1200 + Math.random() * 800);
   };
 
   const fmtTime = (ts: number) => {
@@ -161,207 +168,59 @@ function InterviewMe() {
     return d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
   };
 
-  const StatusIcon = ({ status }: { status?: string }) => {
-    if (status === "sending") return <Clock className="w-3 h-3 text-gray-400" />;
-    if (status === "sent") return <Check className="w-3 h-3 text-gray-400" />;
-    if (status === "delivered") return <CheckCheck className="w-3 h-3 text-gray-400" />;
-    if (status === "seen") return <CheckCheck className="w-3 h-3 text-[#34B7F1]" />;
-    return null;
-  };
-
   return (
-    <div className="min-h-screen bg-[#EDE7E3] dark:bg-slate-900 flex flex-col">
-      {/* WhatsApp-style Header */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-[#0B6A5B] text-white px-4 py-3 flex items-center justify-between shadow-md h-14">
-        <div className="flex items-center gap-3">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => window.history.back()}
-            className="text-white hover:bg-white/10 p-1"
-          >
-            <ArrowLeft className="w-5 h-5" />
-          </Button>
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-full bg-white ring-2 ring-white overflow-hidden">
-              <img
-                        src="https://harmless-tapir-303.convex.cloud/api/storage/fbbcab3e-d3b1-4639-99b4-311c5e1ab7ca"
-                alt="Darshita Patel"
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <div>
-              <div className="font-semibold text-sm">Interview Me 💼</div>
-              <div className="text-xs opacity-90 flex items-center gap-1">
-                <span className="w-2 h-2 rounded-full bg-green-400"></span>
-                {isTyping ? "typing..." : "online"}
-              </div>
-            </div>
+    <div className="min-h-[calc(100vh-56px)] bg-[#e5ddd5] dark:bg-slate-900">
+      <div className="container mx-auto max-w-3xl px-4 py-6">
+        <Card className="overflow-hidden border-0">
+          {/* Header mock */}
+          <div className="bg-[#075e54] text-white px-4 py-3 flex items-center gap-2">
+            <MessageSquare className="w-5 h-5" />
+            <div className="font-semibold">Interview Me 🎤</div>
           </div>
-        </div>
-      </header>
 
-      {/* Chat Body */}
-      <div
-        ref={chatBodyRef}
-        className="flex-1 overflow-y-auto px-4 py-4 space-y-2 max-w-[820px] mx-auto w-full pt-[72px] pb-[132px]"
-      >
-        {messages.map((m, idx) => {
-          const isFirstInGroup =
-            idx === 0 || messages[idx - 1].role !== m.role;
-          const isLastInGroup =
-            idx === messages.length - 1 || messages[idx + 1].role !== m.role;
-
-          return (
-            <motion.div
-              key={idx}
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.18, ease: "easeOut" }}
-              className={`flex ${m.role === "user" ? "justify-end" : "justify-start"} gap-2`}
-              data-msg-index={idx}
-              ref={idx === messages.length - 1 ? lastMessageRef : null}
-            >
-              {m.role === "ai" && isFirstInGroup && (
-                <div className="w-8 h-8 rounded-full bg-white ring-1 ring-gray-200 overflow-hidden flex-shrink-0">
-                  <img
-                    src="https://harmless-tapir-303.convex.cloud/api/storage/fbbcab3e-d3b1-4639-99b4-311c5e1ab7ca"
-                    alt="AI"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              )}
-              {m.role === "ai" && !isFirstInGroup && <div className="w-8" />}
-
-              <div
-                className={`max-w-[75%] rounded-[18px] px-3 py-2 text-sm shadow-sm ${
-                  m.role === "user"
-                    ? "bg-[#DCF8C6] text-[#102015] rounded-tr-sm"
-                    : "bg-white text-[#1C1C1C] border border-[#E8EAED] rounded-tl-sm"
-                }`}
-              >
-                <div className="whitespace-pre-wrap">{m.text}</div>
-                <div className="text-[11px] text-[#7A7F85] mt-1 flex items-center justify-end gap-1">
-                  <span>{fmtTime(m.ts)}</span>
-                  {m.role === "user" && <StatusIcon status={m.status} />}
+          {/* Chat area */}
+          <div className="bg-[#efe7dd] dark:bg-slate-950 h-[60vh] min-h-[380px] overflow-y-auto p-3">
+            {messages.map((m, idx) => (
+              <div key={idx} className={`flex mb-2 ${m.role === "user" ? "justify-end" : "justify-start"}`}>
+                {m.role === "ai" && (
+                  <div className="mr-2">
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-slate-300 to-slate-100 dark:from-slate-700 dark:to-slate-600 grid place-items-center border">
+                      <span className="text-[10px]">AI</span>
+                    </div>
+                  </div>
+                )}
+                <div
+                  className={`max-w-[78%] rounded-lg px-3 py-2 text-sm relative ${
+                    m.role === "user"
+                      ? "bg-[#dcf8c6]"
+                      : "bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100"
+                  }`}
+                >
+                  <div>{m.text}</div>
+                  <div className="text-[10px] opacity-60 mt-1 text-right flex items-center gap-1">
+                    <span>{fmtTime(m.ts)}</span>
+                    {m.role === "user" ? <span>✔✔</span> : null}
+                  </div>
                 </div>
               </div>
-
-              {m.role === "user" && (
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 text-white text-xs font-semibold grid place-items-center flex-shrink-0">
-                  U
-                </div>
-              )}
-            </motion.div>
-          );
-        })}
-
-        {/* Quick Chips */}
-        {showQuickChips && messages.length === 1 && (
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="flex flex-wrap gap-2 mt-3 justify-center"
-          >
-            {quickChips.map((chip, i) => (
-              <button
-                key={i}
-                onClick={() => onSend(chip)}
-                className="px-3 py-1.5 text-xs bg-white border border-[#E8EAED] rounded-full hover:bg-gray-50 transition-colors shadow-sm"
-              >
-                {chip}
-              </button>
             ))}
-          </motion.div>
-        )}
+          </div>
 
-        {/* Typing Indicator */}
-        {isTyping && (
-          <motion.div
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="flex justify-start gap-2"
-          >
-            <div className="w-8 h-8 rounded-full bg-white ring-1 ring-gray-200 overflow-hidden flex-shrink-0">
-              <img
-                src="https://harmless-tapir-303.convex.cloud/api/storage/fbbcab3e-d3b1-4639-99b4-311c5e1ab7ca"
-                alt="AI"
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <div className="bg-white border border-[#E8EAED] rounded-[18px] rounded-tl-sm px-4 py-3 shadow-sm">
-              <div className="flex gap-1">
-                {[0, 1, 2].map((i) => (
-                  <motion.div
-                    key={i}
-                    animate={{ y: [0, -6, 0] }}
-                    transition={{
-                      duration: 0.6,
-                      repeat: Infinity,
-                      delay: i * 0.15,
-                    }}
-                    className="w-2 h-2 rounded-full bg-gray-400"
-                  />
-                ))}
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </div>
-
-      {/* Input Bar */}
-      <div className="fixed bottom-[72px] left-0 right-0 bg-white/80 dark:bg-slate-800/80 backdrop-blur-md px-4 py-3 border-t border-gray-200 shadow-lg z-40">
-        <div className="flex items-center gap-3 max-w-[820px] mx-auto">
-          <Input
-            placeholder="Ask interview questions (experience, achievements, projects, goals)"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && !e.shiftKey) {
-                e.preventDefault();
-                onSend();
-              }
-            }}
-            disabled={isTyping}
-            className="flex-1 rounded-full bg-white border-gray-300 focus-visible:ring-1 h-11 shadow-sm"
-          />
-          <Button
-            onClick={() => onSend()}
-            disabled={!input.trim() || isTyping}
-            className="rounded-full w-11 h-11 p-0 bg-[#128C7E] hover:bg-[#0B6A5B] shadow-md active:scale-95 transition-transform"
-          >
-            <Send className="w-5 h-5 -rotate-6" />
-          </Button>
-        </div>
-      </div>
-
-      {/* Footer */}
-      <footer className="fixed bottom-0 left-0 right-0 bg-white dark:bg-slate-900 px-4 py-4 text-center text-xs text-gray-600 dark:text-gray-400 border-t z-30">
-        <div className="max-w-[820px] mx-auto">
-          <p className="mb-2">
-            When I can't answer something precisely, I'll point you to my projects or LinkedIn. Let's connect!
-          </p>
-          <div className="flex gap-2 justify-center flex-wrap">
-            <Button size="sm" variant="outline" onClick={() => window.location.href = "/classic"}>
-              View Projects
-            </Button>
-            <Button
-              size="sm"
-              variant="outline"
-              onClick={() => window.open("https://www.linkedin.com/in/darshita-patel", "_blank")}
-            >
-              LinkedIn
-            </Button>
-            <Button
-              size="sm"
-              variant="outline"
-              onClick={() => window.location.href = "mailto:darshitapatel1506@gmail.com"}
-            >
-              Email
+          {/* Input bar */}
+          <div className="bg-[#f0f0f0] dark:bg-slate-900 p-2 flex items-center gap-2 border-t">
+            <Input
+              placeholder="Ask interview questions (experience, achievements, projects, goals)"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && onSend()}
+              className="bg-white dark:bg-slate-800"
+            />
+            <Button onClick={onSend} variant="default">
+              Send
             </Button>
           </div>
-        </div>
-      </footer>
+        </Card>
+      </div>
     </div>
   );
 }
@@ -513,7 +372,7 @@ function GuideMe() {
 export default function AiPage() {
   const [tab, setTab] = useState<"interview" | "guide">("interview");
 
-  const TabButton = (({
+  const TabButton = ({
     id,
     label,
     active,
@@ -535,7 +394,7 @@ export default function AiPage() {
     >
       {label}
     </button>
-  ));
+  );
 
   return (
     <div className="min-h-screen bg-background">
