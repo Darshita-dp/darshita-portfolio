@@ -28,7 +28,7 @@ const KNOWLEDGE: Array<QA> = [
   {
     q: "Why Illinois State University?",
     a: "I chose Illinois State University because of its balance between technical depth and practical learning. When I saw courses like Advanced Systems Analysis and Design and IT Project Management, I immediately felt they matched my goals. But beyond academics, ISU has a very supportive environment — professors are approachable, and I've had great opportunities like being a Teaching Assistant and working on real projects with teams. ISU gave me the confidence and exposure I needed to grow as both a learner and a professional.",
-    keywords: ["why isu", "why illinois state", "why choose isu", "why this university", "reason for isu", "why did you choose isu", "chose illinois state university"],
+    keywords: ["why isu", "why illinois state university", "why illinois state", "why choose isu", "why did you choose illinois state university", "why did you choose isu", "chose illinois state university", "reason for isu", "why this university"],
   },
   {
     q: "How I Got Interested in Tech & Data",
