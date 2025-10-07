@@ -98,7 +98,7 @@ const KNOWLEDGE: Array<QA> = [
   {
     q: "Technical skills",
     a: "I'm comfortable with C, C++, Java, Python, Swift/SwiftUI, JavaScript/TypeScript, React, PHP/MySQL, and data tools. I love building full‑stack and mobile experiences.",
-    keywords: ["skills", "c", "c++", "java", "python", "swift", "swiftui", "react", "php", "mysql", "javascript", "typescript", "data tools"],
+    keywords: ["skills", "technical skills", "programming languages", "what languages", "c", "c++", "java", "python", "swift", "swiftui", "react", "php", "mysql", "javascript", "typescript", "data tools"],
   },
   {
     q: "Tableau Experience",
@@ -229,6 +229,10 @@ const KNOWLEDGE: Array<QA> = [
 
 function answerFromKB(question: string) {
   const q = question.toLowerCase();
+  
+  // Boost score for "why" questions
+  const isWhyQuestion = q.includes("why") || q.includes("what motivated") || q.includes("reason for");
+  
   // lightweight scoring by keyword overlap
   let best: { score: number; a: string } | null = null;
   for (const item of KNOWLEDGE) {
@@ -238,6 +242,12 @@ function answerFromKB(question: string) {
     }
     // small title similarity
     if (item.q.toLowerCase().includes(q) || q.includes(item.q.toLowerCase())) score += 2;
+    
+    // Boost motivational entries for "why" questions
+    if (isWhyQuestion && (item.q.includes("Why") || item.q.includes("motivated"))) {
+      score += 3;
+    }
+    
     if (!best || score > best.score) best = { score, a: item.a };
   }
   if (best && best.score > 0) return best.a;
