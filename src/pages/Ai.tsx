@@ -185,7 +185,7 @@ function InterviewMe() {
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-full bg-white ring-2 ring-white overflow-hidden">
               <img
-                src="https://harmless-tapir-303.convex.cloud/api/storage/9c96e942-0cbd-47dc-8910-948153ae3f91"
+                        src="https://harmless-tapir-303.convex.cloud/api/storage/fbbcab3e-d3b1-4639-99b4-311c5e1ab7ca"
                 alt="Darshita Patel"
                 className="w-full h-full object-cover"
               />
@@ -225,7 +225,7 @@ function InterviewMe() {
               {m.role === "ai" && isFirstInGroup && (
                 <div className="w-8 h-8 rounded-full bg-white ring-1 ring-gray-200 overflow-hidden flex-shrink-0">
                   <img
-                    src="https://harmless-tapir-303.convex.cloud/api/storage/9c96e942-0cbd-47dc-8910-948153ae3f91"
+                    src="https://harmless-tapir-303.convex.cloud/api/storage/fbbcab3e-d3b1-4639-99b4-311c5e1ab7ca"
                     alt="AI"
                     className="w-full h-full object-cover"
                   />
