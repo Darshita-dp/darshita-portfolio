@@ -350,7 +350,7 @@ function InterviewMe() {
       {grassBackground}
 
       <div className="container mx-auto max-w-3xl px-4 py-6 relative z-10">
-        <Card className="overflow-hidden border-0 shadow-lg">
+        <Card className="overflow-hidden border-0 shadow-lg w-[85%] mx-auto">
           {/* WhatsApp-style Header */}
           <div className="bg-[#0B6A5B] text-white px-4 py-3 flex items-center gap-3 h-14">
             <img 
