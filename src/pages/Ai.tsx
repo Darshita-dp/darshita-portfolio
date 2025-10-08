@@ -322,7 +322,10 @@ function InterviewMe() {
     const casualKeywords = ["hi", "hey", "hello", "how are you", "what's your name", "who are you", "okay", "ok", "good", "fine", "i am fine", "i'm fine", "i'm good", "i am good", "alright", "cool", "nice"];
     const isCasual = casualKeywords.some(keyword => q.toLowerCase().includes(keyword));
     
-    if (isCasual) {
+    // Also check if the response itself is a fallback (contains certain phrases)
+    const isFallback = base.includes("brain buffer") || base.includes("circuits are confused") || base.includes("don't know that yet") || base.includes("officially curious");
+    
+    if (isCasual || isFallback) {
       return base;
     }
     
