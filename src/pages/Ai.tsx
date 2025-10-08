@@ -353,7 +353,7 @@ function InterviewMe() {
         className="container mx-auto max-w-3xl px-4 py-1 relative z-10 h-full flex items-center"
         style={{
           height: "calc(100dvh - 56px - 56px - 8px)", // 100vh - topbar - footer - minimal padding
-          minHeight: "420px"
+          minHeight: "480px"
         }}
       >
         <Card className="h-full flex flex-col overflow-hidden border-0 shadow-lg w-[95%] mx-auto">
