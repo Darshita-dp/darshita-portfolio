@@ -350,9 +350,9 @@ function InterviewMe() {
       {grassBackground}
 
       <div className="container mx-auto max-w-3xl px-4 py-6 relative z-10">
-        <Card className="overflow-hidden border-0 shadow-lg flex flex-col p-0">
+        <Card className="overflow-hidden border-0 shadow-lg">
           {/* WhatsApp-style Header */}
-          <div className="bg-[#0B6A5B] text-white px-4 py-3 flex items-center gap-3 h-14 flex-shrink-0">
+          <div className="bg-[#0B6A5B] text-white px-4 py-3 flex items-center gap-3 h-14">
             <img 
               src="https://harmless-tapir-303.convex.cloud/api/storage/fbbcab3e-d3b1-4639-99b4-311c5e1ab7ca" 
               alt="Darshita" 
@@ -416,7 +416,7 @@ function InterviewMe() {
           </div>
 
           {/* Input bar with WhatsApp-style send button */}
-          <div className="bg-[#F0F0F0] dark:bg-slate-900 p-2 pb-4 flex items-center gap-2 border-t">
+          <div className="bg-[#F0F0F0] dark:bg-slate-900 p-2 flex items-center gap-2 border-t">
             <Input
               placeholder="Type your question before my code daydreams again 💫"
               value={input}
