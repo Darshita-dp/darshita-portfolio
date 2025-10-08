@@ -317,29 +317,7 @@ function InterviewMe() {
   ), []); // Empty dependency array means this only renders once
 
   const formatInterviewAnswer = (q: string) => {
-    const base = answerFromKB(q);
-    
-    // Only add highlights for substantive interview questions
-    // Check if this is a casual greeting or acknowledgment
-    const casualKeywords = ["hi", "hey", "hello", "how are you", "what's your name", "who are you", "okay", "ok", "good", "fine", "i am fine", "i'm fine", "i'm good", "i am good", "alright", "cool", "nice"];
-    const isCasual = casualKeywords.some(keyword => q.toLowerCase().includes(keyword));
-    
-    // Check if the response is a fallback (AI doesn't know the answer)
-    const fallbackPhrases = ["brain buffer", "circuits are confused", "don't know that yet", "officially curious", "might not have the exact detail", "point you to my projects", "promise i'll study"];
-    const isFallback = fallbackPhrases.some(phrase => base.toLowerCase().includes(phrase));
-    
-    // Check if it's a conversational response (contains emojis and casual language)
-    const isConversational = base.includes("🌼") || base.includes("🤖") || base.includes("🎧") || base.includes("💫");
-    
-    // Only append highlights if it's NOT casual, NOT a fallback, and NOT conversational
-    if (isCasual || isFallback || isConversational) {
-      return base;
-    }
-    
-    // For substantive interview questions only
-    const highlights =
-      "Highlights: 4.0 GPA (ISU), Outstanding Graduate Student Award nomination, GTA for 120+ students, real-world NGO web development, and multi-language proficiency.";
-    return `${base} ${highlights}`;
+    return answerFromKB(q);
   };
 
   const onSend = async () => {
