@@ -184,7 +184,7 @@ function InterviewMe() {
       {/* Animated grass background */}
       <div className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none z-0">
         {/* Multiple grass blades with varied shapes, sizes, and colors */}
-        {[...Array(120)].map((_, i) => {
+        {[...Array(240)].map((_, i) => {
           const greenShades = [
             ['#2E7D32', '#66BB6A'], // Dark to medium green
             ['#388E3C', '#81C784'], // Medium green
@@ -202,7 +202,7 @@ function InterviewMe() {
               key={i}
               className="absolute bottom-0"
               style={{
-                left: `${(i * 0.85)}%`,
+                left: `${(i * 0.42)}%`,
                 height: `${height}px`,
                 width: `${width}px`,
               }}
