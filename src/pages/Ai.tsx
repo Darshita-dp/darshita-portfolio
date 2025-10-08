@@ -317,8 +317,15 @@ function InterviewMe() {
   ), []); // Empty dependency array means this only renders once
 
   const formatInterviewAnswer = (q: string) => {
-    // concise, professional tone
     const base = answerFromKB(q);
+    // Only add highlights for substantive interview questions, not greetings or casual chat
+    const casualKeywords = ["hi", "hey", "hello", "how are you", "what's your name", "who are you"];
+    const isCasual = casualKeywords.some(keyword => q.toLowerCase().includes(keyword));
+    
+    if (isCasual) {
+      return base;
+    }
+    
     const highlights =
       "Highlights: 4.0 GPA (ISU), Outstanding Graduate Student Award nomination, GTA for 120+ students, real-world NGO web development, and multi-language proficiency.";
     return `${base} ${highlights}`;
