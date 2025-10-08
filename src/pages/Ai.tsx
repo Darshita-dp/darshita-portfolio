@@ -462,7 +462,7 @@ function InterviewMe() {
               onClick={onSend}
               disabled={isTyping}
               aria-label="Send"
-              className="h-12 w-12 shrink-0 grid place-items-center rounded-full bg-[#128C7E] text-white hover:bg-[#90EE90] active:scale-95 transition shadow focus:outline-none focus:ring-2 focus:ring-[#128C7E]/35 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="h-12 w-12 shrink-0 grid place-items-center rounded-full bg-[#128C7E] text-white hover:bg-[#90EE90] active:scale-95 transition shadow focus:outline-none focus:ring-2 focus:ring-[rgba(18,140,126,.35)] disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <svg 
                 className="-rotate-6 h-5 w-5" 
