@@ -276,8 +276,8 @@ function InterviewMe() {
                   ease: "easeInOut",
                 }}
                 style={{
-                  width: '20px',
-                  height: '20px',
+                  width: '28px',
+                  height: '28px',
                   borderRadius: '50%',
                   background: 'radial-gradient(circle, #FFFFFF 30%, #F0F0F0 60%, rgba(255,255,255,0.6) 100%)',
                   boxShadow: '0 0 8px rgba(255,255,255,0.8), inset 0 0 4px rgba(200,200,200,0.5)',
