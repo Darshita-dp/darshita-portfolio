@@ -345,14 +345,14 @@ function InterviewMe() {
   };
 
   return (
-    <div className="h-full bg-[#D4E8E4] dark:bg-slate-900 relative overflow-hidden flex items-center justify-center">
+    <div className="min-h-[calc(100vh-56px)] bg-[#D4E8E4] dark:bg-slate-900 relative overflow-hidden">
       {/* Animated grass background */}
       {grassBackground}
 
-      <div className="w-[95%] max-w-3xl mx-auto relative z-10" style={{ height: "calc(100dvh - 56px - 56px - 32px)", minHeight: "360px" }}>
-        <Card className="h-full flex flex-col overflow-hidden border-0 shadow-lg">
+      <div className="container mx-auto max-w-3xl px-4 py-4 relative z-10">
+        <Card className="overflow-hidden border-0 shadow-lg w-[95%] mx-auto mt-2">
           {/* WhatsApp-style Header */}
-          <div className="bg-[#0B6A5B] text-white px-4 py-3 flex items-center gap-3 h-14 flex-shrink-0">
+          <div className="bg-[#0B6A5B] text-white px-4 py-3 flex items-center gap-3 h-14">
             <img 
               src="https://harmless-tapir-303.convex.cloud/api/storage/fbbcab3e-d3b1-4639-99b4-311c5e1ab7ca" 
               alt="Darshita" 
@@ -629,10 +629,10 @@ export default function AiPage() {
   );
 
   return (
-    <div className="min-h-[100dvh] overflow-hidden grid grid-rows-[auto,1fr,auto]">
+    <div className="min-h-screen bg-background">
       <TopBar title="AI Chat" />
 
-      <main aria-live="polite" className="overflow-hidden">
+      <main aria-live="polite">
         {tab === "interview" && <InterviewMe />}
         {tab === "guide" && <GuideMe />}
       </main>
