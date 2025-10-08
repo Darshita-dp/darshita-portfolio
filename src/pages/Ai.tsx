@@ -147,6 +147,7 @@ function InterviewMe() {
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   // Auto-scroll to bottom when messages change
   useEffect(() => {
@@ -343,6 +344,9 @@ function InterviewMe() {
     const aiMsg: Msg = { role: "ai", text: formatInterviewAnswer(trimmed), ts: Date.now() + 1 };
     setMessages((m) => [...m, aiMsg]);
     setIsTyping(false);
+    
+    // Refocus input after AI responds
+    inputRef.current?.focus();
   };
 
   const fmtTime = (ts: number) => {
@@ -433,6 +437,7 @@ function InterviewMe() {
           {/* Input bar with WhatsApp-style send button */}
           <div className="bg-[#F0F0F0] dark:bg-slate-900 p-2 flex items-center gap-2 border-t flex-shrink-0">
             <Input
+              ref={inputRef}
               placeholder="Type your question before my code daydreams again 💫"
               value={input}
               onChange={(e) => setInput(e.target.value)}
