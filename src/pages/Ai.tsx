@@ -569,13 +569,6 @@ export default function AiPage() {
     <div className="min-h-screen bg-background">
       <TopBar title="AI Chat" />
 
-      <div className="container mx-auto px-4 py-4">
-        <div className="flex flex-wrap gap-2 items-center justify-center">
-          <TabButton id="interview" label="Interview Me 🎤" active={tab === "interview"} onClick={() => setTab("interview")} />
-          <TabButton id="guide" label="Let Me Guide You 🧭" active={tab === "guide"} onClick={() => setTab("guide")} />
-        </div>
-      </div>
-
       <main aria-live="polite">
         {tab === "interview" && <InterviewMe />}
         {tab === "guide" && <GuideMe />}
