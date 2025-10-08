@@ -180,7 +180,7 @@ function InterviewMe() {
   };
 
   return (
-    <div className="min-h-[calc(100vh-56px)] bg-[#EDE7E3] dark:bg-slate-900 relative overflow-hidden">
+    <div className="min-h-[calc(100vh-56px)] bg-[#D4E8E4] dark:bg-slate-900 relative overflow-hidden">
       {/* Animated grass background */}
       <div className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none z-0">
         {/* Multiple grass blades with varied shapes, sizes, and colors */}
