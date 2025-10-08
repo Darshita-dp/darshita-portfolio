@@ -193,8 +193,8 @@ function InterviewMe() {
             ['#1B5E20', '#4CAF50'], // Very dark to medium
           ];
           const shade = greenShades[i % greenShades.length];
-          const height = 40 + Math.random() * 80; // Wider range: 40-120px
-          const width = 3 + Math.random() * 10; // Wider range: 3-13px
+          const height = 60 + Math.random() * 100; // 60-160px
+          const width = 5 + Math.random() * 15; // 5-20px
           const isWide = Math.random() > 0.7;
           
           return (
@@ -223,7 +223,65 @@ function InterviewMe() {
                 style={{
                   background: `linear-gradient(to top, ${shade[0]}, ${shade[1]})`,
                   transformOrigin: 'bottom center',
-                  opacity: 0.65 + Math.random() * 0.35,
+                  opacity: 0.7 + Math.random() * 0.3,
+                }}
+              />
+            </motion.div>
+          );
+        })}
+        
+        {/* Fluffy weed flowers (dandelions) */}
+        {[...Array(15)].map((_, i) => {
+          const height = 160 + Math.random() * 40; // 160-200px (taller than max grass)
+          const leftPos = Math.random() * 95; // Random position 0-95%
+          
+          return (
+            <motion.div
+              key={`flower-${i}`}
+              className="absolute bottom-0"
+              style={{
+                left: `${leftPos}%`,
+                height: `${height}px`,
+                width: '3px',
+              }}
+              animate={{
+                rotate: [0, 5 + Math.random() * 4, -(5 + Math.random() * 4), 0],
+                x: [0, 3, -3, 0],
+              }}
+              transition={{
+                duration: 3 + Math.random() * 2,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: Math.random() * 2,
+              }}
+            >
+              {/* Stem */}
+              <div 
+                className="w-full h-full"
+                style={{
+                  background: 'linear-gradient(to top, #2E7D32, #66BB6A)',
+                  transformOrigin: 'bottom center',
+                }}
+              />
+              {/* Fluffy flower head */}
+              <motion.div
+                className="absolute -top-3 left-1/2 -translate-x-1/2"
+                animate={{
+                  scale: [1, 1.1, 1],
+                  rotate: [0, 10, -10, 0],
+                }}
+                transition={{
+                  duration: 2 + Math.random(),
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+                style={{
+                  width: '20px',
+                  height: '20px',
+                  borderRadius: '50%',
+                  background: 'radial-gradient(circle, #FFFFFF 30%, #F0F0F0 60%, rgba(255,255,255,0.6) 100%)',
+                  boxShadow: '0 0 8px rgba(255,255,255,0.8), inset 0 0 4px rgba(200,200,200,0.5)',
+                  filter: 'blur(0.5px)',
                 }}
               />
             </motion.div>
