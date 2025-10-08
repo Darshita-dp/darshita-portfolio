@@ -416,7 +416,7 @@ function InterviewMe() {
           </div>
 
           {/* Input bar with WhatsApp-style send button */}
-          <div className="bg-[#F0F0F0] dark:bg-slate-900 p-2 flex items-center gap-2 border-t-0">
+          <div className="bg-[#F0F0F0] dark:bg-slate-900 px-2 pb-2 pt-0 flex items-center gap-2 border-t-0">
             <Input
               placeholder="Type your question before my code daydreams again 💫"
               value={input}
