@@ -200,7 +200,7 @@ function InterviewMe() {
       {/* Fluffy weed flowers (dandelions) */}
       {[...Array(22)].map((_, i) => {
         const height = 160 + Math.random() * 40; // 160-200px (taller than max grass)
-        const leftPos = i < 10 ? Math.random() * 40 : Math.random() * 95;
+        const leftPos = i < 6 ? Math.random() * 30 : 20 + Math.random() * 75;
         
         return (
           <motion.div
