@@ -656,7 +656,7 @@ export default function AiPage() {
   );
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background" style={{ height: '100%', overflow: 'hidden' }}>
       <TopBar title="AI Chat" />
 
       <main aria-live="polite">

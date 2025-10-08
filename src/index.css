@@ -116,10 +116,8 @@
   * {
     @apply border-border outline-ring/50;
   }
-  html, body {
-    height: 100%;
-    overflow: hidden;
-    overscroll-behavior: contain;
+  body {
+    @apply bg-background text-foreground;
   }
   body {
     @apply bg-background text-foreground;
