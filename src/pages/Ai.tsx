@@ -276,7 +276,40 @@ function InterviewMe() {
                 boxShadow: '0 0 8px rgba(255,255,255,0.8), inset 0 0 4px rgba(200,200,200,0.5)',
                 filter: 'blur(0.5px)',
               }}
-            />
+            >
+              {/* Sparkle effects */}
+              {[...Array(6)].map((_, sparkleIdx) => {
+                const angle = (sparkleIdx * 60) + Math.random() * 30;
+                const distance = 12 + Math.random() * 6;
+                return (
+                  <motion.div
+                    key={sparkleIdx}
+                    className="absolute"
+                    style={{
+                      left: '50%',
+                      top: '50%',
+                      width: '3px',
+                      height: '3px',
+                      borderRadius: '50%',
+                      background: '#FFFFFF',
+                      boxShadow: '0 0 3px #FFFFFF',
+                    }}
+                    animate={{
+                      x: [0, Math.cos(angle * Math.PI / 180) * distance, 0],
+                      y: [0, Math.sin(angle * Math.PI / 180) * distance, 0],
+                      opacity: [0, 1, 0],
+                      scale: [0, 1, 0],
+                    }}
+                    transition={{
+                      duration: 1.5 + Math.random() * 0.5,
+                      repeat: Infinity,
+                      ease: "easeOut",
+                      delay: sparkleIdx * 0.2 + Math.random() * 0.3,
+                    }}
+                  />
+                );
+              })}
+            </motion.div>
           </motion.div>
         );
       })}
