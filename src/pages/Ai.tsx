@@ -368,7 +368,7 @@ function InterviewMe() {
           </CardHeader>
 
           {/* Chat area */}
-          <CardContent className="bg-[#EFE7DD]/60 dark:bg-slate-950/60 h-[50vh] min-h-[300px] overflow-y-auto px-3 pt-3 pb-0 flex-1">
+          <CardContent className="bg-[#EFE7DD]/60 dark:bg-slate-950/60 h-[50vh] min-h-[300px] overflow-y-auto px-3 pt-3 pb-0 flex-1 relative">
             {messages.map((m, idx) => (
               <div key={idx} className={`flex mb-2 ${m.role === "user" ? "justify-end" : "justify-start"}`}>
                 {m.role === "ai" && (
