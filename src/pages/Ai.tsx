@@ -345,14 +345,14 @@ function InterviewMe() {
   };
 
   return (
-    <div className="min-h-[calc(100vh-56px)] bg-[#D4E8E4] dark:bg-slate-900 relative overflow-hidden">
+    <div className="h-full bg-[#D4E8E4] dark:bg-slate-900 relative overflow-hidden flex items-center justify-center">
       {/* Animated grass background */}
       {grassBackground}
 
-      <div className="container mx-auto max-w-3xl px-4 py-4 relative z-10">
-        <Card className="overflow-hidden border-0 shadow-lg w-[95%] mx-auto mt-2">
+      <div className="container mx-auto max-w-3xl px-4 py-4 relative z-10 h-full flex items-center">
+        <Card className="h-full flex flex-col overflow-hidden border-0 shadow-lg w-[95%] mx-auto">
           {/* WhatsApp-style Header */}
-          <div className="bg-[#0B6A5B] text-white px-4 py-3 flex items-center gap-3 h-14">
+          <div className="bg-[#0B6A5B] text-white px-4 py-3 flex items-center gap-3 h-14 flex-shrink-0">
             <img 
               src="https://harmless-tapir-303.convex.cloud/api/storage/fbbcab3e-d3b1-4639-99b4-311c5e1ab7ca" 
               alt="Darshita" 
@@ -368,7 +368,7 @@ function InterviewMe() {
           </div>
 
           {/* Chat area */}
-          <div className="bg-[#EFE7DD]/60 dark:bg-slate-950/60 h-[60vh] min-h-[380px] overflow-y-auto p-3">
+          <div className="bg-[#EFE7DD]/60 dark:bg-slate-950/60 flex-1 overflow-y-auto p-3">
             {messages.map((m, idx) => (
               <div key={idx} className={`flex mb-2 ${m.role === "user" ? "justify-end" : "justify-start"}`}>
                 {m.role === "ai" && (
@@ -416,7 +416,7 @@ function InterviewMe() {
           </div>
 
           {/* Input bar with WhatsApp-style send button */}
-          <div className="bg-[#F0F0F0] dark:bg-slate-900 p-2 flex items-center gap-2 border-t">
+          <div className="bg-[#F0F0F0] dark:bg-slate-900 p-2 flex items-center gap-2 border-t flex-shrink-0">
             <Input
               placeholder="Type your question before my code daydreams again 💫"
               value={input}
