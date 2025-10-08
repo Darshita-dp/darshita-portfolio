@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from "react";
+import { useMemo, useRef, useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router";
 import { Button } from "@/components/ui/button";
@@ -146,6 +146,12 @@ function InterviewMe() {
   ]);
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Auto-scroll to bottom when messages change
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
   // Memoize the grass background to prevent re-renders on input changes
   const grassBackground = useMemo(() => (
@@ -419,6 +425,9 @@ function InterviewMe() {
                 </div>
               </div>
             )}
+            
+            {/* Invisible div for auto-scroll anchor */}
+            <div ref={messagesEndRef} />
           </div>
 
           {/* Input bar with WhatsApp-style send button */}
