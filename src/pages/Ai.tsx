@@ -45,7 +45,7 @@ function TopBar({ title }: { title: string }) {
   const navigate = useNavigate();
   return (
     <header className="sticky top-0 z-50 bg-[#0B6A5B] border-b">
-      <div className="container mx-auto px-4 py-3 flex items-center justify-between text-white">
+      <div className="container mx-auto px-4 py-2 flex items-center justify-between text-white">
         <Button variant="ghost" size="sm" onClick={() => navigate("/")} className="flex items-center gap-2">
           <ArrowLeft className="w-4 h-4" />
           Back to Modes
