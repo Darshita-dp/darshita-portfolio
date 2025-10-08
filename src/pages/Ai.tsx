@@ -365,7 +365,7 @@ function InterviewMe() {
             <div className="flex flex-col">
               <span className="font-medium text-base">Darshita's bot</span>
               <div className="flex items-center gap-1">
-                <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
+                <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></span>
                 <span className="text-xs text-white/80">online</span>
               </div>
             </div>
