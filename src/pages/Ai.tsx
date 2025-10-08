@@ -638,7 +638,7 @@ export default function AiPage() {
         {tab === "guide" && <GuideMe />}
       </main>
 
-      <footer className="container mx-auto px-4 py-6 text-center text-xs text-muted-foreground bg-[#B8D8D8] dark:bg-slate-800">
+      <footer className="fixed bottom-0 left-0 right-0 z-30 bg-[#0B6A5B] text-white px-4 py-3 text-center text-xs">
         When I can't answer something precisely, I'll point you to my{" "}
         <a 
           href="/classic#projects" 
