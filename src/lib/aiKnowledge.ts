@@ -3,9 +3,24 @@ export type QA = { q: string; a: string; keywords: string[] };
 
 export const KNOWLEDGE: Array<QA> = [
   {
+    q: "Greeting - Hi/Hey/Hello",
+    a: "Heya 🌼 I'm here, fully charged and ready to chat!",
+    keywords: ["hi", "hey", "hello", "greetings", "sup", "yo"],
+  },
+  {
+    q: "How are you?",
+    a: "Running at 99% positivity and 1% curiosity 🌸 How about you?",
+    keywords: ["how are you", "how's it going", "what's up", "how do you do", "how are things"],
+  },
+  {
+    q: "What's your name?",
+    a: "I'm Darshita's bot 🌼 still learning her vibes one line at a time!",
+    keywords: ["what's your name", "who are you", "your name", "what do i call you", "what should i call you"],
+  },
+  {
     q: "Introduction & Overview",
     a: "Hi! I'm Darshita Patel, a graduate student at Illinois State University with a 4.0 GPA in Information Systems. I'm passionate about data analytics, full-stack development, and building user-friendly applications. I've worked as a Graduate Teaching Assistant, completed internships at GMP MachPro and NGOs, and built projects like SmartPlanner (iOS app) and AI-driven analytics dashboards. I'm currently preparing for AWS and Tableau certifications while seeking opportunities as a Data Analyst or Systems Analyst. Outside of tech, I enjoy cooking, playing piano, badminton, and photography!",
-    keywords: ["introduce", "introduction", "about you", "about yourself", "who are you", "tell me about", "overview", "summary", "yourself", "background"],
+    keywords: ["introduce", "introduction", "about you", "about yourself", "tell me about", "overview", "summary", "yourself", "background"],
   },
   {
     q: "Master's Degree",
