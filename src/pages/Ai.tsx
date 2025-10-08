@@ -349,7 +349,13 @@ function InterviewMe() {
       {/* Animated grass background */}
       {grassBackground}
 
-      <div className="container mx-auto max-w-3xl px-4 py-4 relative z-10 h-full flex items-center">
+      <div 
+        className="container mx-auto max-w-3xl px-4 py-4 relative z-10 h-full flex items-center"
+        style={{
+          height: "calc(100dvh - 56px - 56px - 32px)", // 100vh - topbar - footer - padding
+          minHeight: "360px"
+        }}
+      >
         <Card className="h-full flex flex-col overflow-hidden border-0 shadow-lg w-[95%] mx-auto">
           {/* WhatsApp-style Header */}
           <div className="bg-[#0B6A5B] text-white px-4 py-3 flex items-center gap-3 h-14 flex-shrink-0">
@@ -368,7 +374,7 @@ function InterviewMe() {
           </div>
 
           {/* Chat area */}
-          <div className="bg-[#EFE7DD]/60 dark:bg-slate-950/60 flex-1 overflow-y-auto p-3">
+          <div className="bg-[#EFE7DD]/60 dark:bg-slate-950/60 flex-1 overflow-y-auto p-3 h-[45vh] md:h-[40vh] min-h-[170px]">
             {messages.map((m, idx) => (
               <div key={idx} className={`flex mb-2 ${m.role === "user" ? "justify-end" : "justify-start"}`}>
                 {m.role === "ai" && (
