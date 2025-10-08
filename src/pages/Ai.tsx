@@ -184,7 +184,7 @@ function InterviewMe() {
       {/* Animated grass background */}
       <div className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none z-0">
         {/* Multiple grass blades with varied shapes, sizes, and colors */}
-        {[...Array(80)].map((_, i) => {
+        {[...Array(120)].map((_, i) => {
           const greenShades = [
             ['#2E7D32', '#66BB6A'], // Dark to medium green
             ['#388E3C', '#81C784'], // Medium green
@@ -193,8 +193,8 @@ function InterviewMe() {
             ['#1B5E20', '#4CAF50'], // Very dark to medium
           ];
           const shade = greenShades[i % greenShades.length];
-          const height = 50 + Math.random() * 60;
-          const width = 4 + Math.random() * 8;
+          const height = 40 + Math.random() * 80; // Wider range: 40-120px
+          const width = 3 + Math.random() * 10; // Wider range: 3-13px
           const isWide = Math.random() > 0.7;
           
           return (
@@ -202,17 +202,17 @@ function InterviewMe() {
               key={i}
               className="absolute bottom-0"
               style={{
-                left: `${(i * 1.25)}%`,
+                left: `${(i * 0.85)}%`,
                 height: `${height}px`,
                 width: `${width}px`,
               }}
               animate={{
-                rotate: [0, 4 + Math.random() * 2, -(4 + Math.random() * 2), 0],
-                scaleY: [1, 1.08, 0.95, 1],
-                scaleX: [1, 0.98, 1.02, 1],
+                rotate: [0, 3 + Math.random() * 3, -(3 + Math.random() * 3), 0],
+                scaleY: [1, 1.05 + Math.random() * 0.05, 0.95 + Math.random() * 0.05, 1],
+                scaleX: [1, 0.97, 1.03, 1],
               }}
               transition={{
-                duration: 2.5 + Math.random() * 2.5,
+                duration: 2 + Math.random() * 3,
                 repeat: Infinity,
                 ease: "easeInOut",
                 delay: Math.random() * 3,
@@ -223,14 +223,13 @@ function InterviewMe() {
                 style={{
                   background: `linear-gradient(to top, ${shade[0]}, ${shade[1]})`,
                   transformOrigin: 'bottom center',
-                  opacity: 0.7 + Math.random() * 0.3,
+                  opacity: 0.65 + Math.random() * 0.35,
                 }}
               />
             </motion.div>
           );
         })}
       </div>
-=======
 
       <div className="container mx-auto max-w-3xl px-4 py-6 relative z-10">
         <Card className="overflow-hidden border-0 shadow-lg">
