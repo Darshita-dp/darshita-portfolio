@@ -368,7 +368,7 @@ function InterviewMe() {
           </div>
 
           {/* Chat area */}
-          <div className="bg-[#EFE7DD]/60 dark:bg-slate-950/60 h-[50vh] min-h-[300px] overflow-y-auto px-3 pt-3 pb-2">
+          <div className="bg-[#EFE7DD]/60 dark:bg-slate-950/60 h-[50vh] min-h-[300px] overflow-y-auto p-3">
             {messages.map((m, idx) => (
               <div key={idx} className={`flex mb-2 ${m.role === "user" ? "justify-end" : "justify-start"}`}>
                 {m.role === "ai" && (
@@ -416,7 +416,7 @@ function InterviewMe() {
           </div>
 
           {/* Input bar with WhatsApp-style send button */}
-          <div className="bg-[#F0F0F0] dark:bg-slate-900 p-2 flex items-center gap-2">
+          <div className="bg-[#F0F0F0] dark:bg-slate-900 p-2 flex items-center gap-2 -mt-3">
             <Input
               placeholder="Type your question before my code daydreams again 💫"
               value={input}
