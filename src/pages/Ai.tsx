@@ -319,7 +319,7 @@ function InterviewMe() {
   const formatInterviewAnswer = (q: string) => {
     const base = answerFromKB(q);
     // Only add highlights for substantive interview questions, not greetings or casual chat
-    const casualKeywords = ["hi", "hey", "hello", "how are you", "what's your name", "who are you"];
+    const casualKeywords = ["hi", "hey", "hello", "how are you", "what's your name", "who are you", "okay", "ok", "good", "fine", "i am fine", "i'm fine", "i'm good", "i am good", "alright", "cool", "nice"];
     const isCasual = casualKeywords.some(keyword => q.toLowerCase().includes(keyword));
     
     if (isCasual) {
