@@ -18,6 +18,11 @@ export const KNOWLEDGE: Array<QA> = [
     keywords: ["what's your name", "who are you", "your name", "what do i call you", "what should i call you"],
   },
   {
+    q: "User acknowledgment - Okay/Good/Fine",
+    a: "Awesome! I'm all ears for your next query 🎧✨",
+    keywords: ["okay", "ok", "good", "fine", "i am fine", "i'm fine", "i'm good", "i am good", "alright", "cool", "nice"],
+  },
+  {
     q: "Introduction & Overview",
     a: "Hi! I'm Darshita Patel, a graduate student at Illinois State University with a 4.0 GPA in Information Systems. I'm passionate about data analytics, full-stack development, and building user-friendly applications. I've worked as a Graduate Teaching Assistant, completed internships at GMP MachPro and NGOs, and built projects like SmartPlanner (iOS app) and AI-driven analytics dashboards. I'm currently preparing for AWS and Tableau certifications while seeking opportunities as a Data Analyst or Systems Analyst. Outside of tech, I enjoy cooking, playing piano, badminton, and photography!",
     keywords: ["introduce", "introduction", "about you", "about yourself", "tell me about", "overview", "summary", "yourself", "background"],
