@@ -147,6 +147,116 @@ function InterviewMe() {
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
 
+  // Memoize the grass background to prevent re-renders on input changes
+  const grassBackground = useMemo(() => (
+    <div className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none z-0">
+      {/* Multiple grass blades with varied shapes, sizes, and colors */}
+      {[...Array(240)].map((_, i) => {
+        const greenShades = [
+          ['#2E7D32', '#66BB6A'], // Dark to medium green
+          ['#388E3C', '#81C784'], // Medium green
+          ['#43A047', '#A5D6A7'], // Light green
+          ['#4CAF50', '#C8E6C9'], // Very light green
+          ['#1B5E20', '#4CAF50'], // Very dark to medium
+        ];
+        const shade = greenShades[i % greenShades.length];
+        const height = 60 + Math.random() * 100; // 60-160px
+        const width = 5 + Math.random() * 15; // 5-20px
+        const isWide = Math.random() > 0.7;
+        
+        return (
+          <motion.div
+            key={i}
+            className="absolute bottom-0"
+            style={{
+              left: `${(i * 0.42)}%`,
+              height: `${height}px`,
+              width: `${width}px`,
+            }}
+            animate={{
+              rotate: [0, 3 + Math.random() * 3, -(3 + Math.random() * 3), 0],
+              scaleY: [1, 1.05 + Math.random() * 0.05, 0.95 + Math.random() * 0.05, 1],
+              scaleX: [1, 0.97, 1.03, 1],
+            }}
+            transition={{
+              duration: 2 + Math.random() * 3,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: Math.random() * 3,
+            }}
+          >
+            <div 
+              className={isWide ? "w-full h-full rounded-t-lg" : "w-full h-full rounded-t-full"}
+              style={{
+                background: `linear-gradient(to top, ${shade[0]}, ${shade[1]})`,
+                transformOrigin: 'bottom center',
+                opacity: 0.7 + Math.random() * 0.3,
+              }}
+            />
+          </motion.div>
+        );
+      })}
+      
+      {/* Fluffy weed flowers (dandelions) */}
+      {[...Array(22)].map((_, i) => {
+        const height = 160 + Math.random() * 40; // 160-200px (taller than max grass)
+        const leftPos = i < 10 ? Math.random() * 40 : Math.random() * 95;
+        
+        return (
+          <motion.div
+            key={`flower-${i}`}
+            className="absolute bottom-0"
+            style={{
+              left: `${leftPos}%`,
+              height: `${height}px`,
+              width: '3px',
+            }}
+            animate={{
+              rotate: [0, 5 + Math.random() * 4, -(5 + Math.random() * 4), 0],
+              x: [0, 3, -3, 0],
+            }}
+            transition={{
+              duration: 3 + Math.random() * 2,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: Math.random() * 2,
+            }}
+          >
+            {/* Stem */}
+            <div 
+              className="w-full h-full"
+              style={{
+                background: 'linear-gradient(to top, #2E7D32, #66BB6A)',
+                transformOrigin: 'bottom center',
+              }}
+            />
+            {/* Fluffy flower head */}
+            <motion.div
+              className="absolute -top-3 left-1/2 -translate-x-1/2"
+              animate={{
+                scale: [1, 1.1, 1],
+                rotate: [0, 10, -10, 0],
+              }}
+              transition={{
+                duration: 2 + Math.random(),
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+              style={{
+                width: '28px',
+                height: '28px',
+                borderRadius: '50%',
+                background: 'radial-gradient(circle, #FFFFFF 30%, #F0F0F0 60%, rgba(255,255,255,0.6) 100%)',
+                boxShadow: '0 0 8px rgba(255,255,255,0.8), inset 0 0 4px rgba(200,200,200,0.5)',
+                filter: 'blur(0.5px)',
+              }}
+            />
+          </motion.div>
+        );
+      })}
+    </div>
+  ), []); // Empty dependency array means this only renders once
+
   const formatInterviewAnswer = (q: string) => {
     // concise, professional tone
     const base = answerFromKB(q);
@@ -182,112 +292,7 @@ function InterviewMe() {
   return (
     <div className="min-h-[calc(100vh-56px)] bg-[#D4E8E4] dark:bg-slate-900 relative overflow-hidden">
       {/* Animated grass background */}
-      <div className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none z-0">
-        {/* Multiple grass blades with varied shapes, sizes, and colors */}
-        {[...Array(240)].map((_, i) => {
-          const greenShades = [
-            ['#2E7D32', '#66BB6A'], // Dark to medium green
-            ['#388E3C', '#81C784'], // Medium green
-            ['#43A047', '#A5D6A7'], // Light green
-            ['#4CAF50', '#C8E6C9'], // Very light green
-            ['#1B5E20', '#4CAF50'], // Very dark to medium
-          ];
-          const shade = greenShades[i % greenShades.length];
-          const height = 60 + Math.random() * 100; // 60-160px
-          const width = 5 + Math.random() * 15; // 5-20px
-          const isWide = Math.random() > 0.7;
-          
-          return (
-            <motion.div
-              key={i}
-              className="absolute bottom-0"
-              style={{
-                left: `${(i * 0.42)}%`,
-                height: `${height}px`,
-                width: `${width}px`,
-              }}
-              animate={{
-                rotate: [0, 3 + Math.random() * 3, -(3 + Math.random() * 3), 0],
-                scaleY: [1, 1.05 + Math.random() * 0.05, 0.95 + Math.random() * 0.05, 1],
-                scaleX: [1, 0.97, 1.03, 1],
-              }}
-              transition={{
-                duration: 2 + Math.random() * 3,
-                repeat: Infinity,
-                ease: "easeInOut",
-                delay: Math.random() * 3,
-              }}
-            >
-              <div 
-                className={isWide ? "w-full h-full rounded-t-lg" : "w-full h-full rounded-t-full"}
-                style={{
-                  background: `linear-gradient(to top, ${shade[0]}, ${shade[1]})`,
-                  transformOrigin: 'bottom center',
-                  opacity: 0.7 + Math.random() * 0.3,
-                }}
-              />
-            </motion.div>
-          );
-        })}
-        
-        {/* Fluffy weed flowers (dandelions) */}
-        {[...Array(15)].map((_, i) => {
-          const height = 160 + Math.random() * 40; // 160-200px (taller than max grass)
-          const leftPos = Math.random() * 95; // Random position 0-95%
-          
-          return (
-            <motion.div
-              key={`flower-${i}`}
-              className="absolute bottom-0"
-              style={{
-                left: `${leftPos}%`,
-                height: `${height}px`,
-                width: '3px',
-              }}
-              animate={{
-                rotate: [0, 5 + Math.random() * 4, -(5 + Math.random() * 4), 0],
-                x: [0, 3, -3, 0],
-              }}
-              transition={{
-                duration: 3 + Math.random() * 2,
-                repeat: Infinity,
-                ease: "easeInOut",
-                delay: Math.random() * 2,
-              }}
-            >
-              {/* Stem */}
-              <div 
-                className="w-full h-full"
-                style={{
-                  background: 'linear-gradient(to top, #2E7D32, #66BB6A)',
-                  transformOrigin: 'bottom center',
-                }}
-              />
-              {/* Fluffy flower head */}
-              <motion.div
-                className="absolute -top-3 left-1/2 -translate-x-1/2"
-                animate={{
-                  scale: [1, 1.1, 1],
-                  rotate: [0, 10, -10, 0],
-                }}
-                transition={{
-                  duration: 2 + Math.random(),
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-                style={{
-                  width: '28px',
-                  height: '28px',
-                  borderRadius: '50%',
-                  background: 'radial-gradient(circle, #FFFFFF 30%, #F0F0F0 60%, rgba(255,255,255,0.6) 100%)',
-                  boxShadow: '0 0 8px rgba(255,255,255,0.8), inset 0 0 4px rgba(200,200,200,0.5)',
-                  filter: 'blur(0.5px)',
-                }}
-              />
-            </motion.div>
-          );
-        })}
-      </div>
+      {grassBackground}
 
       <div className="container mx-auto max-w-3xl px-4 py-6 relative z-10">
         <Card className="overflow-hidden border-0 shadow-lg">
