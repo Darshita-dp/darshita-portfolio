@@ -154,6 +154,13 @@ function InterviewMe() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
+  // Auto-focus input on mount and after typing stops
+  useEffect(() => {
+    if (!isTyping) {
+      inputRef.current?.focus();
+    }
+  }, [isTyping]);
+
   // Memoize the grass background to prevent re-renders on input changes
   const grassBackground = useMemo(() => (
     <div className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none z-0">
