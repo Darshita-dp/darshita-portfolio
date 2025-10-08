@@ -142,3 +142,10 @@
 html {
   scroll-behavior: smooth;
 }
+
+/* Prevent page scroll on AI chat page */
+html, body {
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: contain;
+}
