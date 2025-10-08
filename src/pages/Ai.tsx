@@ -140,7 +140,7 @@ function InterviewMe() {
     {
       role: "ai",
       text:
-        "Heya! I'm the chat version of Darshita 🌼 fueled by data, design, and a bit of curiosity. Still training my circuits on her story though — so if I slip up, go easy on me, okay? UwU 🤖✨",
+        "Heya! I'm the chat version of Darshita 🌼 fueled by data, design, and a bit of curiosity.\n\nStill training my circuits on her story though — so if I slip up, go easy on me, okay? UwU 🤖✨",
       ts: Date.now(),
     },
   ]);
