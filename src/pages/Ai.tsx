@@ -508,7 +508,23 @@ export default function AiPage() {
       </main>
 
       <footer className="container mx-auto px-4 py-6 text-center text-xs text-muted-foreground">
-        When I can't answer something precisely, I'll point you to my projects or LinkedIn. Let's connect!
+        When I can't answer something precisely, I'll point you to my{" "}
+        <a 
+          href="/classic#projects" 
+          className="underline hover:text-foreground transition-colors"
+        >
+          projects
+        </a>
+        {" "}or{" "}
+        <a 
+          href="https://www.linkedin.com/in/darshitapatel2001/" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="underline hover:text-foreground transition-colors"
+        >
+          LinkedIn
+        </a>
+        . Let's connect!
       </footer>
     </div>
   );
