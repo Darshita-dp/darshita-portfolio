@@ -445,7 +445,7 @@ function InterviewMe() {
           <div className="bg-[#F0F0F0] dark:bg-slate-900 p-2 flex items-center gap-2 border-t flex-shrink-0">
             <Input
               ref={inputRef}
-              placeholder="Type your question before my code daydreams again 💫"
+              placeholder="Type your question before my code daydreams again"
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => {
