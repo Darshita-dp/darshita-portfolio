@@ -118,13 +118,6 @@
   }
   body {
     @apply bg-background text-foreground;
-    height: 100%;
-    overflow: hidden;
-    overscroll-behavior: contain;
-  }
-  html {
-    height: 100%;
-    overflow: hidden;
   }
   button:not([disabled]),
   [role="button"]:not([disabled]) {
