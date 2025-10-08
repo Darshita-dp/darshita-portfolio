@@ -224,12 +224,38 @@ function InterviewMe() {
           >
             {/* Stem */}
             <div 
-              className="w-full h-full"
+              className="w-full h-full relative"
               style={{
                 background: 'linear-gradient(to top, #2E7D32, #66BB6A)',
                 transformOrigin: 'bottom center',
               }}
-            />
+            >
+              {/* Small leaves on stem */}
+              <div 
+                className="absolute"
+                style={{
+                  left: '-4px',
+                  top: '40%',
+                  width: '8px',
+                  height: '12px',
+                  background: 'linear-gradient(135deg, #43A047, #66BB6A)',
+                  borderRadius: '0 50% 50% 0',
+                  transform: 'rotate(-30deg)',
+                }}
+              />
+              <div 
+                className="absolute"
+                style={{
+                  right: '-4px',
+                  top: '60%',
+                  width: '8px',
+                  height: '12px',
+                  background: 'linear-gradient(225deg, #43A047, #66BB6A)',
+                  borderRadius: '50% 0 0 50%',
+                  transform: 'rotate(30deg)',
+                }}
+              />
+            </div>
             {/* Fluffy flower head */}
             <motion.div
               className="absolute -top-3 left-1/2 -translate-x-1/2"
