@@ -58,7 +58,7 @@ export function XPBar({ totalStars, collectedStars }: XPBarProps) {
       <div
         className="text-xs font-black tracking-wider mt-2"
         style={{
-          color: `${BYTE_BUBBLES_THEME.textSecondary}cc`,
+          color: "#000000",
           fontFamily: "'Anton', 'Impact', 'Arial Black', sans-serif",
           letterSpacing: "0.05em",
         }}
