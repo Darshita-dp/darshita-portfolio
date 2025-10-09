@@ -44,7 +44,7 @@ export const BUBBLE_NODES: BubbleNode[] = [
   { id: 5, label: "Impact", x: 56, y: 56, type: "timeline" },
   { id: 6, label: "Design", x: 68, y: 44, type: "design" },
   { id: 7, label: "Future", x: 80, y: 52, type: "boss" },
-  { id: 8, label: "Under Construction", x: 92, y: 30, type: "sign" },
+  { id: 8, label: "Under Construction", x: 92, y: 40, type: "sign" },
 ];
 
 export const LEVEL_DATA = {
