@@ -56,7 +56,7 @@ export function XPBar({ totalStars, collectedStars }: XPBarProps) {
 
       {/* XP Label */}
       <div
-        className="text-sm md:text-base font-semibold tracking-wider mt-2"
+        className="text-sm md:text-base tracking-wider mt-2"
         style={{
           color: "#000000",
           fontFamily: "'Anton', 'Impact', 'Arial Black', sans-serif",
