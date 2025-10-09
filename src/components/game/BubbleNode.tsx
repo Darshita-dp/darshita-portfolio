@@ -1,0 +1,102 @@
+import { motion } from "framer-motion";
+import { BYTE_BUBBLES_THEME } from "@/lib/byteBubblesData";
+
+interface BubbleNodeProps {
+  label: string;
+  x: number;
+  y: number;
+  onClick: () => void;
+  isCompleted?: boolean;
+}
+
+export function BubbleNode({ label, x, y, onClick, isCompleted }: BubbleNodeProps) {
+  return (
+    <motion.button
+      className="absolute"
+      style={{
+        left: `${x}%`,
+        top: `${y}%`,
+        transform: "translate(-50%, -50%)",
+        width: "clamp(76px, 9vw, 120px)",
+        height: "clamp(76px, 9vw, 120px)",
+      }}
+      initial={{ scale: 0, opacity: 0 }}
+      animate={{ scale: 1, opacity: 1 }}
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
+      transition={{ duration: 0.3 }}
+      onClick={onClick}
+      aria-label={`Play ${label} level`}
+    >
+      <motion.div
+        className="relative w-full h-full rounded-full flex items-center justify-center"
+        style={{
+          background: `linear-gradient(135deg, ${BYTE_BUBBLES_THEME.bubble} 0%, rgba(255,255,255,0.9) 100%)`,
+          border: `2px solid ${BYTE_BUBBLES_THEME.accent}`,
+          boxShadow: `0 4px 20px rgba(167, 232, 225, 0.3), inset 0 2px 8px rgba(255,255,255,0.6)`,
+        }}
+        animate={{
+          y: [0, -8, 0],
+        }}
+        transition={{
+          duration: 6,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+      >
+        {/* Shimmer effect on hover */}
+        <motion.div
+          className="absolute inset-0 rounded-full"
+          style={{
+            background: `linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.4) 50%, transparent 70%)`,
+            backgroundSize: "200% 200%",
+          }}
+          whileHover={{
+            backgroundPosition: ["0% 0%", "100% 100%"],
+          }}
+          transition={{ duration: 0.6 }}
+        />
+        
+        {/* Sunflower glow on hover */}
+        <motion.div
+          className="absolute inset-0 rounded-full"
+          style={{
+            boxShadow: `0 0 0 0px ${BYTE_BUBBLES_THEME.star}`,
+          }}
+          whileHover={{
+            boxShadow: `0 0 0 4px ${BYTE_BUBBLES_THEME.star}40`,
+          }}
+          transition={{ duration: 0.3 }}
+        />
+
+        {/* Label */}
+        <span
+          className="relative z-10 font-medium text-center px-2"
+          style={{
+            color: BYTE_BUBBLES_THEME.text,
+            fontSize: "clamp(12px, 1.4vw, 16px)",
+            lineHeight: 1.2,
+          }}
+        >
+          {label}
+        </span>
+
+        {/* Completion indicator */}
+        {isCompleted && (
+          <motion.div
+            className="absolute -top-1 -right-1 w-6 h-6 rounded-full flex items-center justify-center"
+            style={{
+              background: BYTE_BUBBLES_THEME.star,
+              boxShadow: `0 2px 8px ${BYTE_BUBBLES_THEME.star}80`,
+            }}
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ type: "spring", stiffness: 500, damping: 15 }}
+          >
+            <span className="text-xs">⭐</span>
+          </motion.div>
+        )}
+      </motion.div>
+    </motion.button>
+  );
+}
