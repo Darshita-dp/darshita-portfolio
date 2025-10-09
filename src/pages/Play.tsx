@@ -103,8 +103,8 @@ export default function Play() {
         <div
           className="absolute top-0 right-0 h-full overflow-hidden"
           style={{
-            width: "calc(100% - clamp(56px, 5vw, 72px))",
-            left: "clamp(56px, 5vw, 72px)",
+            width: "calc(100% - clamp(48px, 4vw, 60px))",
+            left: "clamp(48px, 4vw, 60px)",
           }}
         >
           {/* Bubble Nodes */}
