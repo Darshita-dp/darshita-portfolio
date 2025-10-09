@@ -39,7 +39,7 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
 
     // Load images
     const playerImg = new Image();
-    playerImg.src = "https://harmless-tapir-303.convex.cloud/api/storage/b443f2f5-47b5-4748-bb60-7ab8b4468ccd";
+    playerImg.src = "https://harmless-tapir-303.convex.cloud/api/storage/d009bf33-100f-493e-ab37-a526e124e39f";
     
     const bgImg = new Image();
     bgImg.src = "https://harmless-tapir-303.convex.cloud/api/storage/a4bff787-1951-4c58-80d3-6ceef52a4d73";
