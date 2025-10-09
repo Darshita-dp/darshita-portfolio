@@ -56,14 +56,31 @@ export default function Play() {
 
       {/* Header */}
       <header
-        className="relative z-50 border-b"
+        className="relative z-50 border-b overflow-hidden"
         style={{
-          background: `${BYTE_BUBBLES_THEME.bubble}20`,
-          backdropFilter: "blur(12px)",
           borderColor: `${BYTE_BUBBLES_THEME.accent}10`,
         }}
       >
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+        {/* Background image layer */}
+        <div
+          className="absolute inset-0 z-0"
+          style={{
+            backgroundImage: `url('https://harmless-tapir-303.convex.cloud/api/storage/6b855f1f-d615-4a32-a313-547148956a49')`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+            opacity: 0.9,
+          }}
+        />
+        {/* Overlay for better text readability */}
+        <div
+          className="absolute inset-0 z-0"
+          style={{
+            background: `linear-gradient(90deg, ${BYTE_BUBBLES_THEME.bubble}30, transparent 50%, ${BYTE_BUBBLES_THEME.bubble}30)`,
+            backdropFilter: "blur(4px)",
+          }}
+        />
+        <div className="relative z-10 container mx-auto px-4 py-4 flex items-center justify-between">
           <Button
             variant="ghost"
             size="sm"
