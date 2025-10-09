@@ -160,7 +160,7 @@ export default function Play() {
             ))}
 
             {/* Floating background bubbles */}
-            {Array.from({ length: 12 }).map((_, i) => (
+            {Array.from({ length: 25 }).map((_, i) => (
               <motion.div
                 key={i}
                 className="absolute rounded-full"
