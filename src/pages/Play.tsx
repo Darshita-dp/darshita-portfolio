@@ -208,15 +208,20 @@ export default function Play() {
                           height: `${orbiterSize}px`,
                           left: `calc(${bubbleLeft}% + ${Math.cos(angle * Math.PI / 180) * distance}px)`,
                           top: `calc(${bubbleTop}% + ${Math.sin(angle * Math.PI / 180) * distance}px)`,
-                          background: `${BYTE_BUBBLES_THEME.bubble}60`,
-                          border: `1px dashed ${BYTE_BUBBLES_THEME.accent}80`,
-                          boxShadow: `0 1px 3px rgba(167, 232, 225, 0.2)`,
+                          background: `radial-gradient(circle at center, ${BYTE_BUBBLES_THEME.bubble}, ${BYTE_BUBBLES_THEME.accent}60)`,
+                          border: `1px dashed ${BYTE_BUBBLES_THEME.accent}`,
+                          boxShadow: `0 0 8px ${BYTE_BUBBLES_THEME.accent}80, 0 0 12px ${BYTE_BUBBLES_THEME.seafoam}60, inset 0 1px 3px rgba(255,255,255,0.6)`,
                         }}
                         animate={{
                           y: [0, -100 - Math.random() * 200],
                           x: [0, (Math.random() - 0.5) * 60],
-                          opacity: [0.4, 0.7, 0],
-                          scale: [0.8, 1, 0.8],
+                          opacity: [0.5, 0.9, 0.3, 0.8, 0],
+                          scale: [0.6, 1.2, 0.8, 1.3, 0.6],
+                          boxShadow: [
+                            `0 0 8px ${BYTE_BUBBLES_THEME.accent}80, 0 0 12px ${BYTE_BUBBLES_THEME.seafoam}60`,
+                            `0 0 16px ${BYTE_BUBBLES_THEME.accent}, 0 0 24px ${BYTE_BUBBLES_THEME.seafoam}80`,
+                            `0 0 8px ${BYTE_BUBBLES_THEME.accent}80, 0 0 12px ${BYTE_BUBBLES_THEME.seafoam}60`,
+                          ],
                         }}
                         transition={{
                           duration: 8 + Math.random() * 6,
