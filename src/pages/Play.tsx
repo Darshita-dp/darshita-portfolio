@@ -6,13 +6,19 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BubbleNode } from "@/components/game/BubbleNode";
 import { XPBar } from "@/components/game/XPBar";
-import { BUBBLE_NODES, BYTE_BUBBLES_THEME, loadGameProgress, saveGameProgress, type GameProgress } from "@/lib/byteBubblesData";
+import { LevelPreview } from "@/components/game/LevelPreview";
+import { RunnerQuest } from "@/components/game/levels/RunnerQuest";
+import { BUBBLE_NODES, BYTE_BUBBLES_THEME, LEVEL_DATA, loadGameProgress, saveGameProgress, type GameProgress } from "@/lib/byteBubblesData";
+
+type ViewState = "map" | "preview" | "level";
 
 export default function Play() {
   const navigate = useNavigate();
   const [soundOn, setSoundOn] = useState(false);
   const [showUnderConstruction, setShowUnderConstruction] = useState(false);
   const [progress, setProgress] = useState<GameProgress>(() => loadGameProgress());
+  const [view, setView] = useState<ViewState>("map");
+  const [selectedLevel, setSelectedLevel] = useState<number | null>(null);
 
   const handleBubbleClick = (nodeId: number) => {
     const node = BUBBLE_NODES.find((n) => n.id === nodeId);
@@ -23,18 +29,72 @@ export default function Play() {
       return;
     }
 
-    // For now, just mark as complete for demo
+    setSelectedLevel(nodeId);
+    setView("preview");
+  };
+
+  const handlePlayLevel = () => {
+    setView("level");
+  };
+
+  const handleLevelComplete = (factsCollected: string[]) => {
+    if (selectedLevel === null) return;
+
     const newProgress = {
       ...progress,
       xp: progress.xp + 10,
-      levelStatus: { ...progress.levelStatus, [nodeId]: "complete" as const },
+      factsFound: [...new Set([...progress.factsFound, ...factsCollected])],
+      levelStatus: { ...progress.levelStatus, [selectedLevel]: "complete" as const },
     };
     setProgress(newProgress);
     saveGameProgress(newProgress);
+    
+    setView("map");
+    setSelectedLevel(null);
+  };
+
+  const handleBackToMap = () => {
+    setView("map");
+    setSelectedLevel(null);
   };
 
   const completedCount = Object.values(progress.levelStatus).filter((s) => s === "complete").length;
   const totalLevels = BUBBLE_NODES.filter((n) => n.type !== "sign").length;
+
+  // Get facts for selected level
+  const getLevelFacts = (levelId: number): string[] => {
+    const node = BUBBLE_NODES.find((n) => n.id === levelId);
+    if (!node) return [];
+    
+    switch (node.type) {
+      case "runner":
+        return LEVEL_DATA.runner.facts;
+      case "memory":
+        return LEVEL_DATA.memory.facts;
+      case "puzzle":
+        return LEVEL_DATA.puzzle.facts;
+      case "timeline":
+        return LEVEL_DATA.timeline.facts;
+      case "design":
+        return LEVEL_DATA.design.facts;
+      case "boss":
+        return LEVEL_DATA.boss.facts;
+      default:
+        return [];
+    }
+  };
+
+  // Render based on view state
+  if (view === "level" && selectedLevel !== null) {
+    return (
+      <RunnerQuest
+        levelId={selectedLevel}
+        facts={getLevelFacts(selectedLevel)}
+        onComplete={handleLevelComplete}
+        onBack={handleBackToMap}
+      />
+    );
+  }
 
   return (
     <div
@@ -155,7 +215,7 @@ export default function Play() {
             {/* Floating background bubbles */}
             {Array.from({ length: 45 }).map((_, i) => {
               const size = 20 + Math.random() * 40;
-              const hasOrbiters = i < 15; // First 15 bubbles get small dotted orbiters
+              const hasOrbiters = i < 15;
               const bubbleLeft = Math.random() * 100;
               const bubbleTop = Math.random() * 100;
               
@@ -192,7 +252,7 @@ export default function Play() {
                   
                   {/* Small dotted orbiters for first 15 bubbles */}
                   {hasOrbiters && Array.from({ length: 5 }).map((_, orbiterIndex) => {
-                    const angle = (orbiterIndex * 72) + (Math.random() * 30); // Distribute around circle
+                    const angle = (orbiterIndex * 72) + (Math.random() * 30);
                     const distance = size * 0.7 + Math.random() * 10;
                     const orbiterSize = 4 + Math.random() * 4;
                     
@@ -239,6 +299,17 @@ export default function Play() {
           </div>
         </div>
       </div>
+
+      {/* Level Preview Modal */}
+      <AnimatePresence>
+        {view === "preview" && selectedLevel !== null && (
+          <LevelPreview
+            levelId={selectedLevel}
+            onStart={handlePlayLevel}
+            onClose={handleBackToMap}
+          />
+        )}
+      </AnimatePresence>
 
       {/* Under Construction Modal */}
       <AnimatePresence>
