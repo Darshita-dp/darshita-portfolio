@@ -199,8 +199,8 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
           state.collectedStars.add(star.id); // Mark as processed
           state.missedStars++;
           
-          // Check game over condition: missed 10 stars without collecting 5
-          if (state.missedStars >= 10 && collectedCount < 5) {
+          // Check game over condition: missed 8 stars without collecting 5
+          if (state.missedStars >= 8 && collectedCount < 5) {
             setShowGameOver(true);
             setIsPaused(true);
           }
