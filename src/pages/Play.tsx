@@ -98,14 +98,12 @@ export default function Play() {
 
   return (
     <div
-      data-play-mode
       className="min-h-screen w-full overflow-hidden relative"
       style={{
         backgroundImage: `url('https://harmless-tapir-303.convex.cloud/api/storage/b443f2f5-47b5-4748-bb60-7ab8b4468ccd')`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
-        cursor: `url('https://harmless-tapir-303.convex.cloud/api/storage/7305c1a0-a51f-490f-a16c-53be430531fd') 16 16, pointer`,
       }}
     >
       {/* Overlay to maintain theme colors */}
