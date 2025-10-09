@@ -14,8 +14,8 @@ export function XPBar({ totalStars, collectedStars }: XPBarProps) {
       className="fixed left-0 top-0 h-screen flex flex-col items-center justify-center py-8 px-2 md:px-3"
       style={{
         width: "clamp(48px, 4vw, 60px)",
-        background: `linear-gradient(180deg, ${BYTE_BUBBLES_THEME.bgStart}60 0%, ${BYTE_BUBBLES_THEME.bgMid}50 50%, ${BYTE_BUBBLES_THEME.bgEnd}60 100%)`,
-        borderRight: `1px solid ${BYTE_BUBBLES_THEME.accent}30`,
+        background: `linear-gradient(180deg, ${BYTE_BUBBLES_THEME.bgStart}40 0%, ${BYTE_BUBBLES_THEME.bgMid}30 50%, ${BYTE_BUBBLES_THEME.bgEnd}40 100%)`,
+        borderRight: `1px solid ${BYTE_BUBBLES_THEME.accent}20`,
         backdropFilter: "blur(8px)",
       }}
     >
