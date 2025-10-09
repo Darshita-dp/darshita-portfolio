@@ -160,7 +160,7 @@ export default function Play() {
             ))}
 
             {/* Floating background bubbles */}
-            {Array.from({ length: 25 }).map((_, i) => {
+            {Array.from({ length: 45 }).map((_, i) => {
               const size = 20 + Math.random() * 40;
               const hasOrbiters = i < 15; // First 15 bubbles get small dotted orbiters
               const bubbleLeft = Math.random() * 100;
