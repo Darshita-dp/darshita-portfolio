@@ -314,7 +314,7 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
               initial={{ scale: 0.8, y: 20 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.8, y: 20 }}
-              style={{ width: "clamp(300px, 60%, 480px)" }}
+              style={{ width: "clamp(400px, 75%, 700px)" }}
             >
               <Card
                 style={{
@@ -337,14 +337,14 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
                     ✨ DATA PROFILE UNLOCKED ✨
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="pb-6">
-                  <div className="flex flex-col md:flex-row gap-6 items-center">
+                <CardContent className="pb-4">
+                  <div className="flex flex-row gap-6 items-center">
                     {/* Left side: Avatar */}
                     <div className="flex-shrink-0">
                       <motion.img
                         src="https://harmless-tapir-303.convex.cloud/api/storage/d009bf33-100f-493e-ab37-a526e124e39f"
                         alt="Player Avatar"
-                        className="w-32 h-32 md:w-40 md:h-40 rounded-2xl"
+                        className="w-28 h-28 md:w-32 md:h-32 rounded-2xl"
                         style={{
                           border: `3px solid ${BYTE_BUBBLES_THEME.star}`,
                           boxShadow: `0 0 20px ${BYTE_BUBBLES_THEME.star}60`,
@@ -361,18 +361,18 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
                     </div>
                     
                     {/* Right side: Player Stats */}
-                    <div className="flex-1 space-y-3 text-left">
+                    <div className="flex-1 space-y-2 text-left">
                       <div
-                        className="text-sm md:text-base font-mono leading-relaxed"
+                        className="text-xs md:text-sm font-mono leading-snug"
                         style={{
                           color: BYTE_BUBBLES_THEME.text,
                           fontFamily: "'Courier New', monospace",
                         }}
                       >
-                        <div className="mb-3 pb-2 border-b-2" style={{ borderColor: BYTE_BUBBLES_THEME.accent }}>
+                        <div className="mb-2 pb-1 border-b-2" style={{ borderColor: BYTE_BUBBLES_THEME.accent }}>
                           <strong>PLAYER FILE UNLOCKED</strong>
                         </div>
-                        <div className="space-y-1.5">
+                        <div className="space-y-1">
                           <div><strong>Name:</strong> Darshita Patel</div>
                           <div><strong>Level:</strong> Graduate in Information Systems (4.0 GPA)</div>
                           <div><strong>Class:</strong> Creative Technologist / System Analyst</div>
@@ -380,8 +380,8 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
                           <div><strong>Base Origin:</strong> Illinois State University</div>
                           <div><strong>Current Quest:</strong> Building the future of smart design & data</div>
                         </div>
-                        <div className="mt-3 pt-2 border-t-2" style={{ borderColor: BYTE_BUBBLES_THEME.accent }}>
-                          <div className="text-center" style={{ color: BYTE_BUBBLES_THEME.star }}>
+                        <div className="mt-2 pt-1 border-t-2" style={{ borderColor: BYTE_BUBBLES_THEME.accent }}>
+                          <div className="text-center text-xs" style={{ color: BYTE_BUBBLES_THEME.star }}>
                             🏆 Achievement Unlocked: "Boot-Up Complete – You met Darshita!"
                           </div>
                         </div>
@@ -390,11 +390,11 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
                   </div>
                   
                   {/* Next Button */}
-                  <div className="mt-6 text-center">
+                  <div className="mt-4 text-center">
                     <Button
-                      size="lg"
+                      size="default"
                       onClick={handleComplete}
-                      className="text-lg px-8 py-6"
+                      className="text-base px-6 py-4"
                       style={{
                         background: `linear-gradient(135deg, ${BYTE_BUBBLES_THEME.star} 0%, #FFC94A 100%)`,
                         border: `3px solid ${BYTE_BUBBLES_THEME.star}`,
