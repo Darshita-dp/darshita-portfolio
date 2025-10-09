@@ -38,14 +38,14 @@ export function CrabCursor() {
       animate={{ scale: 1 }}
       transition={{ duration: 0.1 }}
     >
-      <img
-        src="https://harmless-tapir-303.convex.cloud/api/storage/f77c98f7-cafd-4c9a-88e8-38f33cd2c459"
-        alt="Crab cursor"
-        className="w-12 h-12 md:w-16 md:h-16"
+      <span
+        className="text-5xl md:text-6xl"
         style={{
           filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.3))",
         }}
-      />
+      >
+        🦀
+      </span>
     </motion.div>
   );
 }
