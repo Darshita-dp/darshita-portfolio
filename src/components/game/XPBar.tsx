@@ -56,10 +56,11 @@ export function XPBar({ totalStars, collectedStars }: XPBarProps) {
 
       {/* XP Label */}
       <div
-        className="text-xs font-bold tracking-wider mt-2"
+        className="text-xs font-black tracking-wider mt-2"
         style={{
           color: `${BYTE_BUBBLES_THEME.textSecondary}cc`,
-          fontFamily: "'Orbitron', sans-serif",
+          fontFamily: "'Anton', 'Impact', 'Arial Black', sans-serif",
+          letterSpacing: "0.05em",
         }}
       >
         XP

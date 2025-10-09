@@ -75,6 +75,9 @@ export default function Play() {
                 0 0 0 4px rgba(255,255,255,0.3)
               `,
               color: BYTE_BUBBLES_THEME.text,
+              fontFamily: "'Anton', 'Impact', 'Arial Black', sans-serif",
+              fontWeight: 900,
+              letterSpacing: "0.02em",
             }}
           >
             ← Exit
