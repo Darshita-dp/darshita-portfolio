@@ -37,6 +37,13 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
+    // Load images
+    const playerImg = new Image();
+    playerImg.src = "https://harmless-tapir-303.convex.cloud/api/storage/b443f2f5-47b5-4748-bb60-7ab8b4468ccd";
+    
+    const bgImg = new Image();
+    bgImg.src = "https://harmless-tapir-303.convex.cloud/api/storage/b443f2f5-47b5-4748-bb60-7ab8b4468ccd";
+
     const resizeCanvas = () => {
       const container = canvas.parentElement;
       if (!container) return;
@@ -111,13 +118,18 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
       // Auto-scroll
       state.scrollOffset += 2;
 
-      // Draw background gradient
-      const gradient = ctx.createLinearGradient(0, 0, 0, rect.height);
-      gradient.addColorStop(0, BYTE_BUBBLES_THEME.bgStart);
-      gradient.addColorStop(0.5, BYTE_BUBBLES_THEME.bgMid);
-      gradient.addColorStop(1, BYTE_BUBBLES_THEME.bgEnd);
-      ctx.fillStyle = gradient;
-      ctx.fillRect(0, 0, rect.width, rect.height);
+      // Draw background image
+      if (bgImg.complete) {
+        ctx.drawImage(bgImg, 0, 0, rect.width, rect.height);
+      } else {
+        // Fallback gradient while loading
+        const gradient = ctx.createLinearGradient(0, 0, 0, rect.height);
+        gradient.addColorStop(0, BYTE_BUBBLES_THEME.bgStart);
+        gradient.addColorStop(0.5, BYTE_BUBBLES_THEME.bgMid);
+        gradient.addColorStop(1, BYTE_BUBBLES_THEME.bgEnd);
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, rect.width, rect.height);
+      }
 
       // Draw platforms
       ctx.fillStyle = BYTE_BUBBLES_THEME.accent;
@@ -162,29 +174,35 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
         }
       });
 
-      // Draw player (bubble character)
+      // Draw player (SpongeBob character)
       ctx.save();
       ctx.translate(state.player.x, state.player.y);
       
-      // Bubble gradient
-      const bubbleGradient = ctx.createRadialGradient(-10, -10, 5, 0, 0, 35);
-      bubbleGradient.addColorStop(0, "rgba(255,255,255,0.9)");
-      bubbleGradient.addColorStop(0.4, "rgba(135,206,250,0.7)");
-      bubbleGradient.addColorStop(0.7, "rgba(70,130,180,0.8)");
-      bubbleGradient.addColorStop(1, "rgba(100,149,237,0.6)");
-      
-      ctx.fillStyle = bubbleGradient;
-      ctx.shadowColor = "rgba(0,0,0,0.2)";
-      ctx.shadowBlur = 10;
-      ctx.beginPath();
-      ctx.arc(0, 0, 35, 0, Math.PI * 2);
-      ctx.fill();
-      
-      // Highlight
-      ctx.fillStyle = "rgba(255,255,255,0.6)";
-      ctx.beginPath();
-      ctx.arc(-12, -12, 12, 0, Math.PI * 2);
-      ctx.fill();
+      if (playerImg.complete) {
+        // Draw SpongeBob image
+        const playerSize = 70;
+        ctx.drawImage(playerImg, -playerSize / 2, -playerSize / 2, playerSize, playerSize);
+      } else {
+        // Fallback bubble while loading
+        const bubbleGradient = ctx.createRadialGradient(-10, -10, 5, 0, 0, 35);
+        bubbleGradient.addColorStop(0, "rgba(255,255,255,0.9)");
+        bubbleGradient.addColorStop(0.4, "rgba(135,206,250,0.7)");
+        bubbleGradient.addColorStop(0.7, "rgba(70,130,180,0.8)");
+        bubbleGradient.addColorStop(1, "rgba(100,149,237,0.6)");
+        
+        ctx.fillStyle = bubbleGradient;
+        ctx.shadowColor = "rgba(0,0,0,0.2)";
+        ctx.shadowBlur = 10;
+        ctx.beginPath();
+        ctx.arc(0, 0, 35, 0, Math.PI * 2);
+        ctx.fill();
+        
+        // Highlight
+        ctx.fillStyle = "rgba(255,255,255,0.6)";
+        ctx.beginPath();
+        ctx.arc(-12, -12, 12, 0, Math.PI * 2);
+        ctx.fill();
+      }
       
       ctx.restore();
 
