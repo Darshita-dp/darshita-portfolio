@@ -129,7 +129,7 @@ export default function Play() {
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <button
             onClick={() => navigate("/")}
-            className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all hover:scale-105"
+            className="flex items-center gap-2 px-4 py-2 rounded-full text-sm transition-all hover:scale-105"
             style={{
               background: `radial-gradient(circle at 35% 25%, rgba(255,255,255,0.9), rgba(135,206,250,0.7) 40%, rgba(70,130,180,0.8) 70%, rgba(100,149,237,0.6))`,
               border: `3px solid rgba(255,255,255,0.5)`,
