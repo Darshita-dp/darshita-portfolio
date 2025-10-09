@@ -77,11 +77,12 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
     state.player.y = state.groundY - state.playerHeight;
     state.collectedStars = new Set<number>();
     
-    // Create 15 stars at varied positions
+    // Create 15 stars at varied positions with better spacing
     state.stars = [];
     for (let i = 0; i < 15; i++) {
       const baseX = 600 + i * 800;
-      const heightVariation = Math.random() > 0.5 ? -200 : -130;
+      // Alternate between high and low positions to prevent stacking
+      const heightVariation = i % 2 === 0 ? -200 : -130;
       state.stars.push({
         x: baseX,
         y: state.groundY + heightVariation,
@@ -309,6 +310,19 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
     state.missedStars = 0;
     state.player.y = state.groundY - state.playerHeight;
     state.player.vy = 0;
+    
+    // Regenerate stars for a fresh attempt
+    state.stars = [];
+    for (let i = 0; i < 15; i++) {
+      const baseX = 600 + i * 800;
+      const heightVariation = i % 2 === 0 ? -200 : -130;
+      state.stars.push({
+        x: baseX,
+        y: state.groundY + heightVariation,
+        collected: false,
+        id: i,
+      });
+    }
   };
 
   return (
