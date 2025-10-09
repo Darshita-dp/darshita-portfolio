@@ -494,7 +494,7 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
                     {/* Left side: Avatar */}
                     <div className="flex-shrink-0">
                       <motion.img
-                        src="https://harmless-tapir-303.convex.cloud/api/storage/d009bf33-100f-493e-ab37-a526e124e39f"
+                        src="https://harmless-tapir-303.convex.cloud/api/storage/740f4dbc-2959-4f4c-b9b2-7cd645e28bee"
                         alt="Player Avatar"
                         className="w-28 h-28 md:w-32 md:h-32 rounded-2xl"
                         style={{
