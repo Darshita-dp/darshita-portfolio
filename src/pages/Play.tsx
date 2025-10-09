@@ -160,32 +160,35 @@ export default function Play() {
             ))}
 
             {/* Floating background bubbles */}
-            {Array.from({ length: 25 }).map((_, i) => (
-              <motion.div
-                key={i}
-                className="absolute rounded-full"
-                style={{
-                  width: `${20 + Math.random() * 40}px`,
-                  height: `${20 + Math.random() * 40}px`,
-                  left: `${Math.random() * 100}%`,
-                  top: `${Math.random() * 100}%`,
-                  background: `radial-gradient(circle at 30% 30%, ${BYTE_BUBBLES_THEME.bubble}80, ${BYTE_BUBBLES_THEME.accent}40)`,
-                  border: `1px solid ${BYTE_BUBBLES_THEME.accent}60`,
-                  boxShadow: `inset 0 2px 6px rgba(255,255,255,0.4)`,
-                }}
-                animate={{
-                  y: [0, -100 - Math.random() * 200],
-                  x: [0, (Math.random() - 0.5) * 60],
-                  opacity: [0.3, 0.6, 0],
-                }}
-                transition={{
-                  duration: 8 + Math.random() * 6,
-                  repeat: Infinity,
-                  delay: Math.random() * 4,
-                  ease: "easeInOut",
-                }}
-              />
-            ))}
+            {Array.from({ length: 25 }).map((_, i) => {
+              const size = 20 + Math.random() * 40;
+              return (
+                <motion.div
+                  key={i}
+                  className="absolute rounded-full"
+                  style={{
+                    width: `${size}px`,
+                    height: `${size}px`,
+                    left: `${Math.random() * 100}%`,
+                    top: `${Math.random() * 100}%`,
+                    background: `radial-gradient(circle at 30% 30%, ${BYTE_BUBBLES_THEME.bubble}80, ${BYTE_BUBBLES_THEME.accent}40)`,
+                    border: `1px solid ${BYTE_BUBBLES_THEME.accent}60`,
+                    boxShadow: `inset 0 2px 6px rgba(255,255,255,0.4)`,
+                  }}
+                  animate={{
+                    y: [0, -100 - Math.random() * 200],
+                    x: [0, (Math.random() - 0.5) * 60],
+                    opacity: [0.3, 0.6, 0],
+                  }}
+                  transition={{
+                    duration: 8 + Math.random() * 6,
+                    repeat: Infinity,
+                    delay: Math.random() * 4,
+                    ease: "easeInOut",
+                  }}
+                />
+              );
+            })}
           </div>
         </div>
       </div>
