@@ -25,8 +25,8 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
     stars: [] as { x: number; y: number; collected: boolean }[],
     platforms: [] as { x: number; y: number; width: number }[],
     scrollOffset: 0,
-    gravity: 0.6,
-    jumpPower: -12,
+    gravity: 0.5,
+    jumpPower: -10,
     groundY: 0,
   });
 
@@ -68,16 +68,18 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
     const state = gameStateRef.current;
     state.player.y = state.groundY;
     
-    // Create stars at intervals
+    // Create stars at well-spaced intervals
+    state.stars = [];
     for (let i = 0; i < facts.length; i++) {
       state.stars.push({
-        x: 400 + i * 600,
-        y: state.groundY - 150 - Math.random() * 100,
+        x: 500 + i * 800, // Better spacing between stars
+        y: state.groundY - 120 - (Math.random() * 80), // Varied heights but not too high
         collected: false,
       });
     }
 
     // Create platforms
+    state.platforms = [];
     for (let i = 0; i < 20; i++) {
       state.platforms.push({
         x: i * 300,
@@ -103,9 +105,7 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
       const state = gameStateRef.current;
 
       // Update player physics
-      if (!state.player.jumping || state.player.vy > 0) {
-        state.player.vy += state.gravity;
-      }
+      state.player.vy += state.gravity;
       state.player.y += state.player.vy;
 
       // Ground collision
@@ -114,9 +114,15 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
         state.player.vy = 0;
         state.player.jumping = false;
       }
+      
+      // Ceiling collision (prevent going off-screen)
+      if (state.player.y < 50) {
+        state.player.y = 50;
+        state.player.vy = 0;
+      }
 
-      // Auto-scroll
-      state.scrollOffset += 2;
+      // Auto-scroll (slower for better gameplay)
+      state.scrollOffset += 1.5;
 
       // Draw background image
       if (bgImg.complete) {
