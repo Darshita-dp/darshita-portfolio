@@ -226,7 +226,14 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
           
           if (distance < 40 && !state.collectedStars.has(star.id)) {
             state.collectedStars.add(star.id);
-            setCollectedCount(prev => prev + 1);
+            const newCount = state.collectedStars.size;
+            setCollectedCount(newCount);
+            
+            // Check for victory immediately after collection
+            if (newCount === 5 && !showComplete) {
+              setShowComplete(true);
+              setIsPaused(true);
+            }
           }
         }
       });
@@ -250,12 +257,6 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
       }
       
       ctx.restore();
-
-      // Check completion (exactly 5 stars collected)
-      if (collectedCount === 5 && !showComplete) {
-        setShowComplete(true);
-        setIsPaused(true);
-      }
 
       animationId = requestAnimationFrame(gameLoop);
     };
