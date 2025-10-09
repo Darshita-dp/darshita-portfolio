@@ -224,7 +224,8 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
           const dy = star.y - playerCenterY;
           const distance = Math.sqrt(dx * dx + dy * dy);
           
-          if (distance < 40) {
+          if (distance < 40 && !state.collectedStars.has(star.id)) {
+            state.collectedStars.add(star.id);
             setCollectedCount(prev => prev + 1);
           }
         }
