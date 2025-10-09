@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { FactCard } from "@/components/game/FactCard";
 import { BYTE_BUBBLES_THEME } from "@/lib/byteBubblesData";
 
 interface RunnerQuestProps {
@@ -19,14 +18,16 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
   const [showComplete, setShowComplete] = useState(false);
 
   const gameStateRef = useRef({
-    player: { x: 100, y: 0, vy: 0, jumping: false },
-    stars: [] as { x: number; y: number; collected: boolean }[],
-    platforms: [] as { x: number; y: number; width: number }[],
+    player: { x: 100, y: 0, vy: 0, jumping: false, onGround: false },
+    stars: [] as { x: number; y: number; collected: boolean; id: number }[],
+    platforms: [] as { x: number; y: number; width: number; height: number }[],
     scrollOffset: 0,
-    gravity: 0.5,
-    jumpPower: -12,
+    gravity: 0.6,
+    jumpPower: -14,
     groundY: 0,
-    collectedStars: 0,
+    collectedStars: new Set<number>(),
+    playerWidth: 60,
+    playerHeight: 60,
   });
 
   useEffect(() => {
@@ -38,7 +39,7 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
 
     // Load images
     const playerImg = new Image();
-    playerImg.src = "https://harmless-tapir-303.convex.cloud/api/storage/d009bf33-100f-493e-ab37-a526e124e39f";
+    playerImg.src = "https://harmless-tapir-303.convex.cloud/api/storage/684f9879-8593-4d6d-b7cf-896a5e33048b";
     
     const bgImg = new Image();
     bgImg.src = "https://harmless-tapir-303.convex.cloud/api/storage/a4bff787-1951-4c58-80d3-6ceef52a4d73";
@@ -57,13 +58,12 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
       
       ctx.scale(dpr, dpr);
       
-      gameStateRef.current.groundY = rect.height - 100;
+      gameStateRef.current.groundY = rect.height - 80;
     };
 
-    // Initial resize with a slight delay to ensure DOM is ready
+    // Initial resize with delay to ensure DOM is ready
     const initialResize = () => {
       resizeCanvas();
-      // Call again after a short delay to catch any layout shifts
       setTimeout(resizeCanvas, 100);
     };
 
@@ -72,26 +72,46 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
 
     // Initialize game objects
     const state = gameStateRef.current;
-    state.player.y = state.groundY;
+    state.player.y = state.groundY - state.playerHeight;
+    state.collectedStars = new Set<number>();
     
-    // Create 15 stars at well-spaced intervals (need to collect 5)
+    // Create 15 stars at varied positions
     state.stars = [];
     for (let i = 0; i < 15; i++) {
+      const baseX = 600 + i * 800;
+      const heightVariation = Math.random() > 0.5 ? -150 : -80;
       state.stars.push({
-        x: 500 + i * 800,
-        y: state.groundY - 80 - (Math.random() * 40),
+        x: baseX,
+        y: state.groundY + heightVariation,
         collected: false,
+        id: i,
       });
     }
 
-    // Create platforms
+    // Create platforms for Mario-style gameplay
     state.platforms = [];
-    for (let i = 0; i < 20; i++) {
+    const platformHeight = 20;
+    
+    // Ground platforms
+    for (let i = 0; i < 30; i++) {
       state.platforms.push({
         x: i * 300,
         y: state.groundY,
-        width: 250,
+        width: 280,
+        height: platformHeight,
       });
+    }
+    
+    // Elevated platforms for higher stars
+    for (let i = 0; i < 15; i++) {
+      if (Math.random() > 0.3) {
+        state.platforms.push({
+          x: 800 + i * 600,
+          y: state.groundY - 120 - Math.random() * 40,
+          width: 200,
+          height: platformHeight,
+        });
+      }
     }
 
     // Game loop
@@ -110,31 +130,45 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
 
       const state = gameStateRef.current;
 
-      // Update player physics
+      // Apply gravity
       state.player.vy += state.gravity;
       state.player.y += state.player.vy;
 
-      // Ground collision
-      if (state.player.y >= state.groundY) {
-        state.player.y = state.groundY;
-        state.player.vy = 0;
-        state.player.jumping = false;
-      }
+      // Check platform collisions
+      state.player.onGround = false;
       
-      // Ceiling collision (prevent going off-screen)
-      if (state.player.y < 50) {
-        state.player.y = 50;
+      for (const platform of state.platforms) {
+        const platformScreenX = platform.x - state.scrollOffset;
+        
+        // Check if player is above platform and falling
+        if (
+          state.player.x + state.playerWidth > platformScreenX &&
+          state.player.x < platformScreenX + platform.width &&
+          state.player.y + state.playerHeight >= platform.y &&
+          state.player.y + state.playerHeight <= platform.y + platform.height + 10 &&
+          state.player.vy >= 0
+        ) {
+          state.player.y = platform.y - state.playerHeight;
+          state.player.vy = 0;
+          state.player.jumping = false;
+          state.player.onGround = true;
+          break;
+        }
+      }
+
+      // Ceiling collision
+      if (state.player.y < 30) {
+        state.player.y = 30;
         state.player.vy = 0;
       }
 
-      // Auto-scroll (slower for better gameplay)
-      state.scrollOffset += 1.5;
+      // Auto-scroll (faster for better gameplay)
+      state.scrollOffset += 2;
 
-      // Draw background image
+      // Draw background
       if (bgImg.complete) {
         ctx.drawImage(bgImg, 0, 0, rect.width, rect.height);
       } else {
-        // Fallback gradient while loading
         const gradient = ctx.createLinearGradient(0, 0, 0, rect.height);
         gradient.addColorStop(0, BYTE_BUBBLES_THEME.bgStart);
         gradient.addColorStop(0.5, BYTE_BUBBLES_THEME.bgMid);
@@ -148,13 +182,13 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
       state.platforms.forEach((platform) => {
         const x = platform.x - state.scrollOffset;
         if (x > -platform.width && x < rect.width) {
-          roundRect(ctx, x, platform.y, platform.width, 20, 10);
+          roundRect(ctx, x, platform.y, platform.width, platform.height, 8);
         }
       });
 
       // Draw and check stars
-      state.stars.forEach((star, index) => {
-        if (star.collected) return;
+      state.stars.forEach((star) => {
+        if (state.collectedStars.has(star.id)) return;
         
         const x = star.x - state.scrollOffset;
         if (x > -50 && x < rect.width) {
@@ -168,54 +202,42 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
           ctx.fill();
           ctx.restore();
 
-          // Check collision with player
-          const dx = x - state.player.x;
-          const dy = star.y - state.player.y;
+          // Check collision with player (center-based)
+          const playerCenterX = state.player.x + state.playerWidth / 2;
+          const playerCenterY = state.player.y + state.playerHeight / 2;
+          const dx = x - playerCenterX;
+          const dy = star.y - playerCenterY;
           const distance = Math.sqrt(dx * dx + dy * dy);
           
-          if (distance < 50) {
-            star.collected = true;
-            state.collectedStars += 1;
-            setCollectedCount(state.collectedStars);
-            // TODO: Play bubble pop sound here
+          if (distance < 40) {
+            state.collectedStars.add(star.id);
+            setCollectedCount(state.collectedStars.size);
           }
         }
       });
 
-      // Draw player (SpongeBob character)
+      // Draw player (SpongeBob)
       ctx.save();
       ctx.translate(state.player.x, state.player.y);
       
       if (playerImg.complete) {
-        // Draw SpongeBob image
-        const playerSize = 70;
-        ctx.drawImage(playerImg, -playerSize / 2, -playerSize / 2, playerSize, playerSize);
+        ctx.drawImage(
+          playerImg,
+          -state.playerWidth / 2,
+          -state.playerHeight / 2,
+          state.playerWidth,
+          state.playerHeight
+        );
       } else {
-        // Fallback bubble while loading
-        const bubbleGradient = ctx.createRadialGradient(-10, -10, 5, 0, 0, 35);
-        bubbleGradient.addColorStop(0, "rgba(255,255,255,0.9)");
-        bubbleGradient.addColorStop(0.4, "rgba(135,206,250,0.7)");
-        bubbleGradient.addColorStop(0.7, "rgba(70,130,180,0.8)");
-        bubbleGradient.addColorStop(1, "rgba(100,149,237,0.6)");
-        
-        ctx.fillStyle = bubbleGradient;
-        ctx.shadowColor = "rgba(0,0,0,0.2)";
-        ctx.shadowBlur = 10;
-        ctx.beginPath();
-        ctx.arc(0, 0, 35, 0, Math.PI * 2);
-        ctx.fill();
-        
-        // Highlight
-        ctx.fillStyle = "rgba(255,255,255,0.6)";
-        ctx.beginPath();
-        ctx.arc(-12, -12, 12, 0, Math.PI * 2);
-        ctx.fill();
+        // Fallback
+        ctx.fillStyle = "#FFD700";
+        ctx.fillRect(-state.playerWidth / 2, -state.playerHeight / 2, state.playerWidth, state.playerHeight);
       }
       
       ctx.restore();
 
-      // Check if 5 stars collected (only trigger once)
-      if (state.collectedStars === 5 && !showComplete) {
+      // Check completion (exactly 5 stars)
+      if (state.collectedStars.size === 5 && !showComplete) {
         setShowComplete(true);
         setIsPaused(true);
       }
@@ -228,9 +250,10 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
     // Input handlers
     const handleJump = () => {
       const state = gameStateRef.current;
-      if (!state.player.jumping && !isPaused) {
+      if (state.player.onGround && !isPaused) {
         state.player.jumping = true;
         state.player.vy = state.jumpPower;
+        state.player.onGround = false;
       }
     };
 
@@ -252,7 +275,7 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
       canvas.removeEventListener("touchstart", handleJump);
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [facts, isPaused, collectedCount, showComplete]);
+  }, [facts, isPaused, showComplete]);
 
   const handleComplete = () => {
     onComplete(facts);
