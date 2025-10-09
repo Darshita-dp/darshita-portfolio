@@ -31,9 +31,14 @@ export function BubbleNode({ label, x, y, onClick, isCompleted }: BubbleNodeProp
       <motion.div
         className="relative w-full h-full rounded-full flex items-center justify-center"
         style={{
-          background: `linear-gradient(135deg, ${BYTE_BUBBLES_THEME.bubble} 0%, rgba(255,255,255,0.9) 100%)`,
-          border: `2px solid ${BYTE_BUBBLES_THEME.accent}`,
-          boxShadow: `0 4px 20px rgba(167, 232, 225, 0.3), inset 0 2px 8px rgba(255,255,255,0.6)`,
+          background: `radial-gradient(circle at 35% 25%, rgba(255,255,255,0.9), rgba(135,206,250,0.7) 40%, rgba(70,130,180,0.8) 70%, rgba(100,149,237,0.6))`,
+          border: `3px solid rgba(255,255,255,0.5)`,
+          boxShadow: `
+            inset -8px -8px 12px rgba(70,130,180,0.4),
+            inset 12px 12px 16px rgba(255,255,255,0.8),
+            0 8px 24px rgba(0,0,0,0.15),
+            0 0 0 4px rgba(255,255,255,0.3)
+          `,
         }}
         animate={{
           y: [0, -8, 0],
