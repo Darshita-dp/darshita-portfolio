@@ -41,7 +41,7 @@ export function CrabCursor() {
       {/* Glowing dotted bubbles */}
       {[...Array(6)].map((_, i) => {
         const angle = (i * 60) * (Math.PI / 180);
-        const distance = 25 + Math.random() * 10;
+        const distance = 15 + Math.random() * 5;
         const x = Math.cos(angle) * distance;
         const y = Math.sin(angle) * distance;
         
