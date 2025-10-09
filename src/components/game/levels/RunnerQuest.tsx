@@ -300,6 +300,7 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
 
   const handleRetry = () => {
     setShowGameOver(false);
+    setShowComplete(false);
     setCollectedCount(0);
     setIsPaused(false);
     
