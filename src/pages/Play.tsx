@@ -65,7 +65,7 @@ export default function Play() {
         <div
           className="absolute inset-0 z-0"
           style={{
-            backgroundImage: `url('https://harmless-tapir-303.convex.cloud/api/storage/6b855f1f-d615-4a32-a313-547148956a49')`,
+            backgroundImage: `url('https://harmless-tapir-303.convex.cloud/api/storage/e5f6985e-5fa5-40cb-b5c5-12651856ab53')`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat',
