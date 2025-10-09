@@ -38,6 +38,41 @@ export function CrabCursor() {
       animate={{ scale: 1 }}
       transition={{ duration: 0.1 }}
     >
+      {/* Glowing dotted bubbles */}
+      {[...Array(6)].map((_, i) => {
+        const angle = (i * 60) * (Math.PI / 180);
+        const distance = 25 + Math.random() * 10;
+        const x = Math.cos(angle) * distance;
+        const y = Math.sin(angle) * distance;
+        
+        return (
+          <motion.div
+            key={i}
+            className="absolute rounded-full"
+            style={{
+              width: "6px",
+              height: "6px",
+              left: `${x}px`,
+              top: `${y}px`,
+              background: "radial-gradient(circle, rgba(167, 232, 225, 0.9), rgba(167, 232, 225, 0.3))",
+              boxShadow: "0 0 8px rgba(167, 232, 225, 0.8), 0 0 12px rgba(167, 232, 225, 0.4)",
+            }}
+            animate={{
+              scale: [0.8, 1.2, 0.8],
+              opacity: [0.6, 1, 0.6],
+              y: [y, y - 5, y],
+            }}
+            transition={{
+              duration: 2 + Math.random(),
+              repeat: Infinity,
+              delay: i * 0.2,
+              ease: "easeInOut",
+            }}
+          />
+        );
+      })}
+      
+      {/* Jellyfish cursor */}
       <motion.img
         src="https://harmless-tapir-303.convex.cloud/api/storage/504aaf5b-3288-46a3-b785-5aa69fee077f"
         alt="Jellyfish cursor"
