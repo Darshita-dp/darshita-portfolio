@@ -38,11 +38,22 @@ export default function Play() {
 
   return (
     <div
-      className="min-h-screen w-full overflow-hidden"
+      className="min-h-screen w-full overflow-hidden relative"
       style={{
-        background: `linear-gradient(180deg, ${BYTE_BUBBLES_THEME.bgStart} 0%, ${BYTE_BUBBLES_THEME.bgMid} 50%, ${BYTE_BUBBLES_THEME.bgEnd} 100%)`,
+        backgroundImage: `url('https://harmless-tapir-303.convex.cloud/api/storage/7e0a6f69-eb3b-4864-a566-9b10b7536338')`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
       }}
     >
+      {/* Overlay to maintain theme colors */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background: `linear-gradient(180deg, ${BYTE_BUBBLES_THEME.bgStart}40 0%, ${BYTE_BUBBLES_THEME.bgMid}30 50%, ${BYTE_BUBBLES_THEME.bgEnd}40 100%)`,
+        }}
+      />
+
       {/* Header */}
       <header
         className="relative z-50 border-b"
