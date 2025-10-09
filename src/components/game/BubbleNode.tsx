@@ -76,13 +76,14 @@ export function BubbleNode({ label, x, y, onClick, isCompleted }: BubbleNodeProp
 
         {/* Label */}
         <span
-          className="relative z-10 font-black text-center px-2"
+          className="relative z-10 font-semibold text-center px-2"
           style={{
             color: BYTE_BUBBLES_THEME.text,
             fontSize: "clamp(12px, 1.4vw, 16px)",
             lineHeight: 1.2,
             fontFamily: "'Anton', 'Impact', 'Arial Black', sans-serif",
             letterSpacing: "0.02em",
+            fontWeight: 600,
           }}
         >
           {label}

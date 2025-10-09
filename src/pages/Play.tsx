@@ -76,20 +76,21 @@ export default function Play() {
               `,
               color: BYTE_BUBBLES_THEME.text,
               fontFamily: "'Anton', 'Impact', 'Arial Black', sans-serif",
-              fontWeight: 900,
+              fontWeight: 600,
               letterSpacing: "0.02em",
             }}
           >
             ← Exit
           </button>
           <h1
-            className="text-3xl md:text-5xl font-black tracking-wider"
+            className="text-3xl md:text-5xl font-semibold tracking-wider"
             style={{
               fontFamily: "'Anton', 'Impact', 'Arial Black', sans-serif",
               color: BYTE_BUBBLES_THEME.star,
               textShadow: `3px 3px 0px ${BYTE_BUBBLES_THEME.text}, 0 4px 12px ${BYTE_BUBBLES_THEME.accent}80`,
               letterSpacing: "0.05em",
               textTransform: "uppercase" as const,
+              fontWeight: 600,
             }}
           >
             Bubbles of My Journey
