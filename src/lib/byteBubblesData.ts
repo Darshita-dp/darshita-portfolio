@@ -37,14 +37,14 @@ export interface PuzzlePair {
 }
 
 export const BUBBLE_NODES: BubbleNode[] = [
-  { id: 1, label: "Intro", x: 7, y: 60, type: "runner" },
-  { id: 2, label: "Education", x: 21, y: 38, type: "memory" },
-  { id: 3, label: "Experience", x: 33, y: 48, type: "quiz" },
-  { id: 4, label: "Projects", x: 45, y: 36, type: "puzzle" },
-  { id: 5, label: "Impact", x: 57, y: 46, type: "timeline" },
-  { id: 6, label: "Design", x: 69, y: 34, type: "design" },
-  { id: 7, label: "Future", x: 81, y: 42, type: "boss" },
-  { id: 8, label: "Under Construction", x: 94, y: 30, type: "sign" },
+  { id: 1, label: "Intro", x: 5, y: 50, type: "runner" },
+  { id: 2, label: "Education", x: 19, y: 28, type: "memory" },
+  { id: 3, label: "Experience", x: 31, y: 38, type: "quiz" },
+  { id: 4, label: "Projects", x: 43, y: 26, type: "puzzle" },
+  { id: 5, label: "Impact", x: 55, y: 36, type: "timeline" },
+  { id: 6, label: "Design", x: 67, y: 24, type: "design" },
+  { id: 7, label: "Future", x: 79, y: 32, type: "boss" },
+  { id: 8, label: "Under Construction", x: 90, y: 20, type: "sign" },
 ];
 
 export const LEVEL_DATA = {
