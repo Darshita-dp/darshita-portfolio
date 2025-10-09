@@ -93,7 +93,7 @@ export default function Play() {
               fontWeight: 600,
             }}
           >
-            Bubbles of My Journey
+            Bubble Byte
           </h1>
           <Button
             variant="ghost"
