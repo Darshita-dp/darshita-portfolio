@@ -81,7 +81,7 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
     state.stars = [];
     for (let i = 0; i < 15; i++) {
       const baseX = 600 + i * 800;
-      const heightVariation = Math.random() > 0.5 ? -150 : -80;
+      const heightVariation = Math.random() > 0.5 ? -200 : -130;
       state.stars.push({
         x: baseX,
         y: state.groundY + heightVariation,
@@ -165,7 +165,7 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
       }
 
       // Auto-scroll (faster for better gameplay)
-      state.scrollOffset += 2;
+      state.scrollOffset += 3;
 
       // Draw background
       if (bgImg.complete) {
