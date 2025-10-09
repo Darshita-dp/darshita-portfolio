@@ -98,6 +98,7 @@ export default function Play() {
 
   return (
     <div
+      data-play-mode
       className="min-h-screen w-full overflow-hidden relative"
       style={{
         backgroundImage: `url('https://harmless-tapir-303.convex.cloud/api/storage/b443f2f5-47b5-4748-bb60-7ab8b4468ccd')`,

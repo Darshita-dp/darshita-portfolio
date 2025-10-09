@@ -148,3 +148,9 @@ html {
 
 /* Byte Bubbles Game Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Nunito:wght@500;600;700&family=Quicksand:wght@500;600;700&family=Anton&display=swap');
+
+/* Custom crab cursor for Play mode */
+body:has([data-play-mode]) *,
+body:has([data-play-mode]) {
+  cursor: url('https://harmless-tapir-303.convex.cloud/api/storage/7305c1a0-a51f-490f-a16c-53be430531fd') 16 16, pointer !important;
+}
