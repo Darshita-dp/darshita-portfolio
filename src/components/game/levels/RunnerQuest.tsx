@@ -16,6 +16,7 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
   const [collectedCount, setCollectedCount] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [showComplete, setShowComplete] = useState(false);
+  const [showGameOver, setShowGameOver] = useState(false);
 
   const gameStateRef = useRef({
     player: { x: 100, y: 0, vy: 0, jumping: false, onGround: false },
@@ -26,6 +27,7 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
     jumpPower: -14,
     groundY: 0,
     collectedStars: new Set<number>(),
+    missedStars: 0,
     playerWidth: 60,
     playerHeight: 60,
   });
@@ -191,6 +193,19 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
         if (state.collectedStars.has(star.id)) return;
         
         const x = star.x - state.scrollOffset;
+        
+        // Check if star has been missed (scrolled past the player)
+        if (x < state.player.x - 100 && !state.collectedStars.has(star.id)) {
+          state.collectedStars.add(star.id); // Mark as processed
+          state.missedStars++;
+          
+          // Check game over condition: missed 10 stars without collecting 5
+          if (state.missedStars >= 10 && collectedCount < 5) {
+            setShowGameOver(true);
+            setIsPaused(true);
+          }
+        }
+        
         if (x > -50 && x < rect.width) {
           // Draw star
           ctx.save();
@@ -210,8 +225,7 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
           const distance = Math.sqrt(dx * dx + dy * dy);
           
           if (distance < 40) {
-            state.collectedStars.add(star.id);
-            setCollectedCount(state.collectedStars.size);
+            setCollectedCount(prev => prev + 1);
           }
         }
       });
@@ -236,8 +250,8 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
       
       ctx.restore();
 
-      // Check completion (exactly 5 stars)
-      if (state.collectedStars.size === 5 && !showComplete) {
+      // Check completion (exactly 5 stars collected)
+      if (collectedCount === 5 && !showComplete) {
         setShowComplete(true);
         setIsPaused(true);
       }
@@ -279,6 +293,20 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
 
   const handleComplete = () => {
     onComplete(facts);
+  };
+
+  const handleRetry = () => {
+    setShowGameOver(false);
+    setCollectedCount(0);
+    setIsPaused(false);
+    
+    // Reset game state
+    const state = gameStateRef.current;
+    state.scrollOffset = 0;
+    state.collectedStars = new Set<number>();
+    state.missedStars = 0;
+    state.player.y = state.groundY - state.playerHeight;
+    state.player.vy = 0;
   };
 
   return (
@@ -330,6 +358,83 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
           style={{ display: "block" }}
         />
       </div>
+
+      {/* Game Over Modal */}
+      <AnimatePresence>
+        {showGameOver && (
+          <motion.div
+            className="absolute inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <motion.div
+              initial={{ scale: 0.8, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.8, y: 20 }}
+              style={{ width: "clamp(400px, 75%, 700px)" }}
+            >
+              <Card
+                style={{
+                  background: `linear-gradient(135deg, ${BYTE_BUBBLES_THEME.bubble}95 0%, ${BYTE_BUBBLES_THEME.seafoam}90 100%)`,
+                  backdropFilter: "blur(16px)",
+                  borderRadius: "24px",
+                  border: `2px solid ${BYTE_BUBBLES_THEME.accent}60`,
+                  boxShadow: `0 8px 32px rgba(0,0,0,0.2)`,
+                }}
+              >
+                <CardHeader className="text-center pb-2">
+                  <CardTitle
+                    className="text-2xl md:text-3xl mb-2"
+                    style={{
+                      fontFamily: "'Anton', sans-serif",
+                      color: BYTE_BUBBLES_THEME.text,
+                      letterSpacing: "0.05em",
+                    }}
+                  >
+                    💔 GAME OVER 💔
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="pb-4 text-center space-y-4">
+                  <p
+                    className="text-lg"
+                    style={{
+                      fontFamily: "'Quicksand', sans-serif",
+                      color: BYTE_BUBBLES_THEME.textSecondary,
+                    }}
+                  >
+                    You didn't collect enough stars! You collected {collectedCount} out of 5.
+                  </p>
+                  <div className="flex gap-4 justify-center">
+                    <Button
+                      size="default"
+                      onClick={handleRetry}
+                      className="text-base px-6 py-4"
+                      style={{
+                        background: `linear-gradient(135deg, ${BYTE_BUBBLES_THEME.star} 0%, #FFC94A 100%)`,
+                        border: `3px solid ${BYTE_BUBBLES_THEME.star}`,
+                        boxShadow: `0 0 20px ${BYTE_BUBBLES_THEME.star}80, 0 4px 12px rgba(0,0,0,0.2)`,
+                        fontFamily: "'Anton', sans-serif",
+                        letterSpacing: "0.05em",
+                      }}
+                    >
+                      Try Again
+                    </Button>
+                    <Button
+                      size="default"
+                      onClick={onBack}
+                      variant="outline"
+                      className="text-base px-6 py-4"
+                    >
+                      Back to Map
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Level Complete Modal */}
       <AnimatePresence>
