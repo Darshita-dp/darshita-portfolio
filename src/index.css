@@ -146,5 +146,10 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Custom cursor for Play mode */
+[style*="cursor: none"] * {
+  cursor: none !important;
+}
+
 /* Byte Bubbles Game Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Nunito:wght@500;600;700&family=Quicksand:wght@500;600;700&family=Anton&display=swap');

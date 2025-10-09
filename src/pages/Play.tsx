@@ -8,6 +8,7 @@ import { BubbleNode } from "@/components/game/BubbleNode";
 import { XPBar } from "@/components/game/XPBar";
 import { LevelPreview } from "@/components/game/LevelPreview";
 import { RunnerQuest } from "@/components/game/levels/RunnerQuest";
+import { CrabCursor } from "@/components/game/CrabCursor";
 import { BUBBLE_NODES, BYTE_BUBBLES_THEME, LEVEL_DATA, loadGameProgress, saveGameProgress, type GameProgress } from "@/lib/byteBubblesData";
 
 type ViewState = "map" | "preview" | "level";
@@ -104,8 +105,12 @@ export default function Play() {
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
+        cursor: 'none',
       }}
     >
+      {/* Custom Crab Cursor */}
+      <CrabCursor />
+
       {/* Overlay to maintain theme colors */}
       <div
         className="absolute inset-0 pointer-events-none"
