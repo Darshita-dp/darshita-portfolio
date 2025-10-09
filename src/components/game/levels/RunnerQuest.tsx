@@ -26,6 +26,7 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
     gravity: 0.5,
     jumpPower: -12,
     groundY: 0,
+    collectedStars: 0,
   });
 
   useEffect(() => {
@@ -165,9 +166,10 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
           const dy = star.y - state.player.y;
           const distance = Math.sqrt(dx * dx + dy * dy);
           
-          if (distance < 40) {
+          if (distance < 50 && !star.collected) {
             star.collected = true;
-            setCollectedCount((prev) => prev + 1);
+            state.collectedStars += 1;
+            setCollectedCount(state.collectedStars);
             // TODO: Play bubble pop sound here
           }
         }
@@ -206,8 +208,9 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
       ctx.restore();
 
       // Check if 5 stars collected
-      if (collectedCount >= 5 && !showComplete) {
+      if (state.collectedStars >= 5 && !showComplete) {
         setShowComplete(true);
+        setIsPaused(true);
       }
 
       animationId = requestAnimationFrame(gameLoop);
