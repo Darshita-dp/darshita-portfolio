@@ -41,7 +41,7 @@ export function CrabCursor() {
       <img
         src="https://harmless-tapir-303.convex.cloud/api/storage/504aaf5b-3288-46a3-b785-5aa69fee077f"
         alt="Jellyfish cursor"
-        className="w-12 h-12 md:w-16 md:h-16"
+        className="w-10 h-10 md:w-12 md:h-12"
         style={{
           filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.3))",
         }}
