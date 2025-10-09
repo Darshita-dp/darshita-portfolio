@@ -42,7 +42,7 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
     playerImg.src = "https://harmless-tapir-303.convex.cloud/api/storage/b443f2f5-47b5-4748-bb60-7ab8b4468ccd";
     
     const bgImg = new Image();
-    bgImg.src = "https://harmless-tapir-303.convex.cloud/api/storage/b443f2f5-47b5-4748-bb60-7ab8b4468ccd";
+    bgImg.src = "https://harmless-tapir-303.convex.cloud/api/storage/a4bff787-1951-4c58-80d3-6ceef52a4d73";
 
     const resizeCanvas = () => {
       const container = canvas.parentElement;
@@ -256,11 +256,23 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
   };
 
   return (
-    <div className="fixed inset-0 z-40 flex flex-col bg-gradient-to-b"
-      style={{
-        background: `linear-gradient(180deg, ${BYTE_BUBBLES_THEME.bgStart} 0%, ${BYTE_BUBBLES_THEME.bgMid} 50%, ${BYTE_BUBBLES_THEME.bgEnd} 100%)`,
-      }}
+    <motion.div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
     >
+      <motion.div
+        initial={{ scale: 0.8, y: 20 }}
+        animate={{ scale: 1, y: 0 }}
+        exit={{ scale: 0.8, y: 20 }}
+        className="w-[90vw] h-[80vh] max-w-5xl max-h-[700px] flex flex-col rounded-3xl overflow-hidden"
+        style={{
+          background: `linear-gradient(180deg, ${BYTE_BUBBLES_THEME.bgStart} 0%, ${BYTE_BUBBLES_THEME.bgMid} 50%, ${BYTE_BUBBLES_THEME.bgEnd} 100%)`,
+          border: `3px solid ${BYTE_BUBBLES_THEME.accent}60`,
+          boxShadow: `0 8px 32px rgba(0,0,0,0.3)`,
+        }}
+      >
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 border-b"
         style={{
@@ -323,7 +335,7 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
       <AnimatePresence>
         {showComplete && (
           <motion.div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm"
+            className="absolute inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -372,7 +384,8 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
           </motion.div>
         )}
       </AnimatePresence>
-    </div>
+    </motion.div>
+    </motion.div>
   );
 }
 
