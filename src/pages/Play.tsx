@@ -242,11 +242,11 @@ export default function Play() {
                         0 ${size * 0.1}px ${size * 0.3}px rgba(0,0,0,0.1)
                       `,
                     }}
-                    animate={{
-                      y: [0, -100 - Math.random() * 200],
-                      x: [0, (Math.random() - 0.5) * 60],
-                      opacity: [0.3, 0.6, 0],
-                    }}
+                  animate={{
+                    y: [0, -100 - Math.random() * 200],
+                    x: [0, (Math.random() - 0.5) * 60],
+                    opacity: [0.15, 0.3, 0],
+                  }}
                     transition={{
                       duration: 8 + Math.random() * 6,
                       repeat: Infinity,
