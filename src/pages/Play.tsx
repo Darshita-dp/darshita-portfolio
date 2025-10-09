@@ -74,7 +74,7 @@ export default function Play() {
             ← Back to Modes
           </Button>
           <h1
-            className="text-2xl md:text-3xl font-black tracking-wider"
+            className="text-3xl md:text-5xl font-black tracking-wider"
             style={{
               fontFamily: "'Anton', 'Impact', 'Arial Black', sans-serif",
               color: BYTE_BUBBLES_THEME.star,
