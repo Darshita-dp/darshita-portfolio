@@ -173,7 +173,7 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
           const dy = star.y - state.player.y;
           const distance = Math.sqrt(dx * dx + dy * dy);
           
-          if (distance < 50 && !star.collected) {
+          if (distance < 50) {
             star.collected = true;
             state.collectedStars += 1;
             setCollectedCount(state.collectedStars);
@@ -214,8 +214,8 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
       
       ctx.restore();
 
-      // Check if 5 stars collected
-      if (state.collectedStars >= 5 && !showComplete) {
+      // Check if 5 stars collected (only trigger once)
+      if (state.collectedStars === 5 && !showComplete) {
         setShowComplete(true);
         setIsPaused(true);
       }
