@@ -107,49 +107,6 @@ export default function Play() {
             left: "clamp(56px, 5vw, 72px)",
           }}
         >
-          {/* Progress Info */}
-          <div className="absolute top-6 left-1/2 -translate-x-1/2 z-30">
-            <Card
-              className="border-2"
-              style={{
-                background: `${BYTE_BUBBLES_THEME.bubble}f0`,
-                borderColor: BYTE_BUBBLES_THEME.accent,
-                boxShadow: `0 4px 16px ${BYTE_BUBBLES_THEME.accent}40`,
-              }}
-            >
-              <CardContent className="p-3 text-center">
-                <p
-                  className="text-sm font-semibold"
-                  style={{
-                    fontFamily: "'Quicksand', sans-serif",
-                    color: BYTE_BUBBLES_THEME.text,
-                  }}
-                >
-                  World Progress: {completedCount} / {totalLevels} completed
-                </p>
-                <div
-                  className="mt-2 h-2 rounded-full overflow-hidden"
-                  style={{ background: `${BYTE_BUBBLES_THEME.textSecondary}30` }}
-                >
-                  <motion.div
-                    className="h-full rounded-full"
-                    style={{ background: BYTE_BUBBLES_THEME.star }}
-                    initial={{ width: 0 }}
-                    animate={{ width: `${(completedCount / totalLevels) * 100}%` }}
-                    transition={{ duration: 0.6, ease: "easeOut" }}
-                  />
-                </div>
-                <div className="flex items-center justify-center gap-1 mt-2">
-                  {Array.from({ length: totalLevels }).map((_, i) => (
-                    <span key={i} className="text-xs">
-                      {i < completedCount ? "⭐" : "○"}
-                    </span>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
           {/* Bubble Nodes */}
           <div className="relative w-full h-full">
             {/* Wavy connection path */}
