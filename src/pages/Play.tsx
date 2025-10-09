@@ -157,9 +157,13 @@ export default function Play() {
                       height: `${size}px`,
                       left: `${bubbleLeft}%`,
                       top: `${bubbleTop}%`,
-                      background: `radial-gradient(circle at 30% 30%, ${BYTE_BUBBLES_THEME.bubble}80, ${BYTE_BUBBLES_THEME.accent}40)`,
-                      border: `1px solid ${BYTE_BUBBLES_THEME.accent}60`,
-                      boxShadow: `inset 0 2px 6px rgba(255,255,255,0.4)`,
+                      background: `radial-gradient(circle at 35% 25%, rgba(255,255,255,0.9), rgba(135,206,250,0.7) 40%, rgba(70,130,180,0.8) 70%, rgba(100,149,237,0.6))`,
+                      border: `2px solid rgba(255,255,255,0.4)`,
+                      boxShadow: `
+                        inset -${size * 0.1}px -${size * 0.1}px ${size * 0.15}px rgba(70,130,180,0.4),
+                        inset ${size * 0.15}px ${size * 0.15}px ${size * 0.2}px rgba(255,255,255,0.8),
+                        0 ${size * 0.1}px ${size * 0.3}px rgba(0,0,0,0.1)
+                      `,
                     }}
                     animate={{
                       y: [0, -100 - Math.random() * 200],
@@ -189,9 +193,13 @@ export default function Play() {
                           height: `${orbiterSize}px`,
                           left: `calc(${bubbleLeft}% + ${Math.cos(angle * Math.PI / 180) * distance}px)`,
                           top: `calc(${bubbleTop}% + ${Math.sin(angle * Math.PI / 180) * distance}px)`,
-                          background: `radial-gradient(circle at center, ${BYTE_BUBBLES_THEME.bubble}, ${BYTE_BUBBLES_THEME.accent}60)`,
-                          border: `1px dashed ${BYTE_BUBBLES_THEME.accent}`,
-                          boxShadow: `0 0 8px ${BYTE_BUBBLES_THEME.accent}80, 0 0 12px ${BYTE_BUBBLES_THEME.seafoam}60, inset 0 1px 3px rgba(255,255,255,0.6)`,
+                          background: `radial-gradient(circle at 35% 25%, rgba(255,255,255,0.9), rgba(135,206,250,0.7) 40%, rgba(70,130,180,0.8))`,
+                          border: `1.5px solid rgba(255,255,255,0.5)`,
+                          boxShadow: `
+                            inset -${orbiterSize * 0.15}px -${orbiterSize * 0.15}px ${orbiterSize * 0.2}px rgba(70,130,180,0.4),
+                            inset ${orbiterSize * 0.2}px ${orbiterSize * 0.2}px ${orbiterSize * 0.25}px rgba(255,255,255,0.8),
+                            0 ${orbiterSize * 0.15}px ${orbiterSize * 0.4}px rgba(0,0,0,0.1)
+                          `,
                         }}
                         animate={{
                           y: [0, -100 - Math.random() * 200],
