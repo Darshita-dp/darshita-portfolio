@@ -58,9 +58,9 @@ export default function Play() {
       <header
         className="relative z-50 border-b"
         style={{
-          background: `${BYTE_BUBBLES_THEME.bubble}40`,
+          background: `${BYTE_BUBBLES_THEME.bubble}20`,
           backdropFilter: "blur(12px)",
-          borderColor: `${BYTE_BUBBLES_THEME.accent}30`,
+          borderColor: `${BYTE_BUBBLES_THEME.accent}10`,
         }}
       >
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
