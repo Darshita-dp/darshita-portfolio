@@ -62,15 +62,23 @@ export default function Play() {
         }}
       >
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <Button
-            variant="ghost"
-            size="sm"
+          <button
             onClick={() => navigate("/")}
-            className="flex items-center gap-2"
-            style={{ color: BYTE_BUBBLES_THEME.text }}
+            className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all hover:scale-105"
+            style={{
+              background: `radial-gradient(circle at 35% 25%, rgba(255,255,255,0.9), rgba(135,206,250,0.7) 40%, rgba(70,130,180,0.8) 70%, rgba(100,149,237,0.6))`,
+              border: `3px solid rgba(255,255,255,0.5)`,
+              boxShadow: `
+                inset -8px -8px 12px rgba(70,130,180,0.4),
+                inset 12px 12px 16px rgba(255,255,255,0.8),
+                0 8px 24px rgba(0,0,0,0.15),
+                0 0 0 4px rgba(255,255,255,0.3)
+              `,
+              color: BYTE_BUBBLES_THEME.text,
+            }}
           >
             ← Exit
-          </Button>
+          </button>
           <h1
             className="text-3xl md:text-5xl font-black tracking-wider"
             style={{
