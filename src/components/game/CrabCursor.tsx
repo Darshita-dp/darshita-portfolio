@@ -39,7 +39,7 @@ export function CrabCursor() {
       transition={{ duration: 0.1 }}
     >
       <img
-        src="https://harmless-tapir-303.convex.cloud/api/storage/6cb2c3d3-c46b-460c-a234-5f926133984d"
+        src="https://harmless-tapir-303.convex.cloud/api/storage/f77c98f7-cafd-4c9a-88e8-38f33cd2c459"
         alt="Crab cursor"
         className="w-8 h-8 md:w-10 md:h-10"
         style={{
