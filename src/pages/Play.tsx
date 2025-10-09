@@ -74,11 +74,13 @@ export default function Play() {
             ← Back to Modes
           </Button>
           <h1
-            className="text-2xl md:text-3xl font-bold tracking-wide"
+            className="text-2xl md:text-3xl font-black tracking-wider"
             style={{
-              fontFamily: "'Orbitron', sans-serif",
-              color: BYTE_BUBBLES_THEME.text,
-              textShadow: `0 2px 8px ${BYTE_BUBBLES_THEME.accent}60`,
+              fontFamily: "'Anton', 'Impact', 'Arial Black', sans-serif",
+              color: BYTE_BUBBLES_THEME.star,
+              textShadow: `3px 3px 0px ${BYTE_BUBBLES_THEME.text}, 0 4px 12px ${BYTE_BUBBLES_THEME.accent}80`,
+              letterSpacing: "0.05em",
+              textTransform: "uppercase" as const,
             }}
           >
             Bubbles of My Journey
