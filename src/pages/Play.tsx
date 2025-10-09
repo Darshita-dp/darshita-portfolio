@@ -104,7 +104,7 @@ export default function Play() {
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
-        cursor: `url('https://harmless-tapir-303.convex.cloud/api/storage/7305c1a0-a51f-490f-a16c-53be430531fd'), auto`,
+        cursor: `url('https://harmless-tapir-303.convex.cloud/api/storage/7305c1a0-a51f-490f-a16c-53be430531fd') 16 16, auto`,
       }}
     >
       {/* Overlay to maintain theme colors */}
