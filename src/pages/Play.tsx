@@ -88,7 +88,7 @@ export default function Play() {
             className="flex items-center gap-2"
             style={{ color: BYTE_BUBBLES_THEME.text }}
           >
-            ← Back to Modes
+            ← Exit
           </Button>
           <h1
             className="text-3xl md:text-5xl font-black tracking-wider"
