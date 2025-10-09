@@ -15,8 +15,6 @@ interface RunnerQuestProps {
 export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [collectedCount, setCollectedCount] = useState(0);
-  const [currentFact, setCurrentFact] = useState<string | null>(null);
-  const [showMissMsg, setShowMissMsg] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [showComplete, setShowComplete] = useState(false);
 
@@ -68,12 +66,12 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
     const state = gameStateRef.current;
     state.player.y = state.groundY;
     
-    // Create stars at well-spaced intervals
+    // Create 15 stars at well-spaced intervals (need to collect 5)
     state.stars = [];
-    for (let i = 0; i < facts.length; i++) {
+    for (let i = 0; i < 15; i++) {
       state.stars.push({
-        x: 500 + i * 800, // Better spacing between stars
-        y: state.groundY - 80 - (Math.random() * 40), // Lower heights, easier to reach
+        x: 500 + i * 800,
+        y: state.groundY - 80 - (Math.random() * 40),
         collected: false,
       });
     }
@@ -170,12 +168,7 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
           if (distance < 40) {
             star.collected = true;
             setCollectedCount((prev) => prev + 1);
-            setCurrentFact(facts[index]);
-          } else if (x < state.player.x - 100) {
-            // Missed the star
-            star.collected = true;
-            setShowMissMsg(true);
-            setTimeout(() => setShowMissMsg(false), 1500);
+            // TODO: Play bubble pop sound here
           }
         }
       });
@@ -212,10 +205,8 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
       
       ctx.restore();
 
-      // Check if all stars collected
-      const allCollected = state.stars.every((s) => s.collected);
-      const allFactsShown = collectedCount === facts.length;
-      if (allCollected && allFactsShown && !showComplete) {
+      // Check if 5 stars collected
+      if (collectedCount >= 5 && !showComplete) {
         setShowComplete(true);
       }
 
@@ -252,10 +243,6 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [facts, isPaused, collectedCount, showComplete]);
-
-  const handleFactDismiss = () => {
-    setCurrentFact(null);
-  };
 
   const handleComplete = () => {
     onComplete(facts);
@@ -294,7 +281,7 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
             Level {levelId}
           </span>
           <span style={{ color: BYTE_BUBBLES_THEME.textSecondary }}>
-            ⭐ {collectedCount} / {facts.length}
+            ⭐ {collectedCount} / 5
           </span>
         </div>
         <Button variant="ghost" size="sm" onClick={() => setIsPaused(!isPaused)}>
@@ -309,33 +296,7 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
           className="w-full h-full"
           style={{ display: "block" }}
         />
-        
-        {/* Miss message */}
-        <AnimatePresence>
-          {showMissMsg && (
-            <motion.div
-              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 px-6 py-3 rounded-full"
-              style={{
-                background: `${BYTE_BUBBLES_THEME.bubble}95`,
-                border: `2px solid ${BYTE_BUBBLES_THEME.accent}`,
-                fontFamily: "'Quicksand', sans-serif",
-                color: BYTE_BUBBLES_THEME.text,
-                fontWeight: 600,
-              }}
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.8 }}
-            >
-              Missed! Keep going!
-            </motion.div>
-          )}
-        </AnimatePresence>
       </div>
-
-      {/* Fact Card Overlay */}
-      <AnimatePresence>
-        {currentFact && <FactCard fact={currentFact} onDismiss={handleFactDismiss} />}
-      </AnimatePresence>
 
       {/* Level Complete Modal */}
       <AnimatePresence>
@@ -355,35 +316,93 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
               <Card
                 style={{
                   background: `linear-gradient(135deg, ${BYTE_BUBBLES_THEME.bubble}95 0%, ${BYTE_BUBBLES_THEME.seafoam}90 100%)`,
+                  backdropFilter: "blur(16px)",
                   borderRadius: "24px",
                   border: `2px solid ${BYTE_BUBBLES_THEME.accent}60`,
+                  boxShadow: `0 8px 32px rgba(0,0,0,0.2)`,
                 }}
               >
-                <CardHeader className="text-center">
+                <CardHeader className="text-center pb-2">
                   <CardTitle
-                    className="text-3xl mb-2"
+                    className="text-2xl md:text-3xl mb-2"
                     style={{
                       fontFamily: "'Anton', sans-serif",
                       color: BYTE_BUBBLES_THEME.text,
+                      letterSpacing: "0.05em",
                     }}
                   >
-                    🎉 Level Complete! 🎉
+                    ✨ DATA PROFILE UNLOCKED ✨
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="flex flex-col items-center gap-4 pb-8">
-                  <p style={{ fontFamily: "'Quicksand', sans-serif", color: BYTE_BUBBLES_THEME.textSecondary }}>
-                    You collected all {facts.length} stars!
-                  </p>
-                  <Button
-                    size="lg"
-                    onClick={handleComplete}
-                    style={{
-                      background: `linear-gradient(135deg, ${BYTE_BUBBLES_THEME.star} 0%, #FFC94A 100%)`,
-                      fontFamily: "'Anton', sans-serif",
-                    }}
-                  >
-                    Continue
-                  </Button>
+                <CardContent className="pb-6">
+                  <div className="flex flex-col md:flex-row gap-6 items-center">
+                    {/* Left side: Avatar */}
+                    <div className="flex-shrink-0">
+                      <motion.img
+                        src="https://harmless-tapir-303.convex.cloud/api/storage/d009bf33-100f-493e-ab37-a526e124e39f"
+                        alt="Player Avatar"
+                        className="w-32 h-32 md:w-40 md:h-40 rounded-2xl"
+                        style={{
+                          border: `3px solid ${BYTE_BUBBLES_THEME.star}`,
+                          boxShadow: `0 0 20px ${BYTE_BUBBLES_THEME.star}60`,
+                        }}
+                        animate={{
+                          y: [0, -10, 0],
+                        }}
+                        transition={{
+                          duration: 1,
+                          repeat: Infinity,
+                          ease: "easeInOut",
+                        }}
+                      />
+                    </div>
+                    
+                    {/* Right side: Player Stats */}
+                    <div className="flex-1 space-y-3 text-left">
+                      <div
+                        className="text-sm md:text-base font-mono leading-relaxed"
+                        style={{
+                          color: BYTE_BUBBLES_THEME.text,
+                          fontFamily: "'Courier New', monospace",
+                        }}
+                      >
+                        <div className="mb-3 pb-2 border-b-2" style={{ borderColor: BYTE_BUBBLES_THEME.accent }}>
+                          <strong>PLAYER FILE UNLOCKED</strong>
+                        </div>
+                        <div className="space-y-1.5">
+                          <div><strong>Name:</strong> Darshita Patel</div>
+                          <div><strong>Level:</strong> Graduate in Information Systems (4.0 GPA)</div>
+                          <div><strong>Class:</strong> Creative Technologist / System Analyst</div>
+                          <div><strong>Power-Ups:</strong> Communication ⚡ Creativity ✨ Curiosity 💡</div>
+                          <div><strong>Base Origin:</strong> Illinois State University</div>
+                          <div><strong>Current Quest:</strong> Building the future of smart design & data</div>
+                        </div>
+                        <div className="mt-3 pt-2 border-t-2" style={{ borderColor: BYTE_BUBBLES_THEME.accent }}>
+                          <div className="text-center" style={{ color: BYTE_BUBBLES_THEME.star }}>
+                            🏆 Achievement Unlocked: "Boot-Up Complete – You met Darshita!"
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Next Button */}
+                  <div className="mt-6 text-center">
+                    <Button
+                      size="lg"
+                      onClick={handleComplete}
+                      className="text-lg px-8 py-6"
+                      style={{
+                        background: `linear-gradient(135deg, ${BYTE_BUBBLES_THEME.star} 0%, #FFC94A 100%)`,
+                        border: `3px solid ${BYTE_BUBBLES_THEME.star}`,
+                        boxShadow: `0 0 20px ${BYTE_BUBBLES_THEME.star}80, 0 4px 12px rgba(0,0,0,0.2)`,
+                        fontFamily: "'Anton', sans-serif",
+                        letterSpacing: "0.05em",
+                      }}
+                    >
+                      Next →
+                    </Button>
+                  </div>
                 </CardContent>
               </Card>
             </motion.div>
