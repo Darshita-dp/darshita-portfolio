@@ -60,7 +60,14 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
       gameStateRef.current.groundY = rect.height - 100;
     };
 
-    resizeCanvas();
+    // Initial resize with a slight delay to ensure DOM is ready
+    const initialResize = () => {
+      resizeCanvas();
+      // Call again after a short delay to catch any layout shifts
+      setTimeout(resizeCanvas, 100);
+    };
+
+    initialResize();
     window.addEventListener("resize", resizeCanvas);
 
     // Initialize game objects
