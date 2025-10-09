@@ -40,7 +40,7 @@ export default function Play() {
     <div
       className="min-h-screen w-full overflow-hidden relative"
       style={{
-        backgroundImage: `url('https://harmless-tapir-303.convex.cloud/api/storage/7e0a6f69-eb3b-4864-a566-9b10b7536338')`,
+        backgroundImage: `url('https://harmless-tapir-303.convex.cloud/api/storage/b443f2f5-47b5-4748-bb60-7ab8b4468ccd')`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
