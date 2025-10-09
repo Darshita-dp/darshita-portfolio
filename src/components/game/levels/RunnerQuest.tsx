@@ -26,7 +26,7 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
     platforms: [] as { x: number; y: number; width: number }[],
     scrollOffset: 0,
     gravity: 0.5,
-    jumpPower: -10,
+    jumpPower: -12,
     groundY: 0,
   });
 
@@ -73,7 +73,7 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
     for (let i = 0; i < facts.length; i++) {
       state.stars.push({
         x: 500 + i * 800, // Better spacing between stars
-        y: state.groundY - 120 - (Math.random() * 80), // Varied heights but not too high
+        y: state.groundY - 80 - (Math.random() * 40), // Lower heights, easier to reach
         collected: false,
       });
     }
