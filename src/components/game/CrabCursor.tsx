@@ -38,12 +38,22 @@ export function CrabCursor() {
       animate={{ scale: 1 }}
       transition={{ duration: 0.1 }}
     >
-      <img
+      <motion.img
         src="https://harmless-tapir-303.convex.cloud/api/storage/504aaf5b-3288-46a3-b785-5aa69fee077f"
         alt="Jellyfish cursor"
         className="w-10 h-10 md:w-12 md:h-12"
         style={{
           filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.3))",
+        }}
+        animate={{
+          y: [0, -8, 0],
+          rotate: [-3, 3, -3],
+          scale: [1, 1.05, 1],
+        }}
+        transition={{
+          duration: 2.5,
+          repeat: Infinity,
+          ease: "easeInOut",
         }}
       />
     </motion.div>
