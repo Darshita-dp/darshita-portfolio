@@ -162,31 +162,72 @@ export default function Play() {
             {/* Floating background bubbles */}
             {Array.from({ length: 25 }).map((_, i) => {
               const size = 20 + Math.random() * 40;
+              const hasOrbiters = i < 15; // First 15 bubbles get small dotted orbiters
+              const bubbleLeft = Math.random() * 100;
+              const bubbleTop = Math.random() * 100;
+              
               return (
-                <motion.div
-                  key={i}
-                  className="absolute rounded-full"
-                  style={{
-                    width: `${size}px`,
-                    height: `${size}px`,
-                    left: `${Math.random() * 100}%`,
-                    top: `${Math.random() * 100}%`,
-                    background: `radial-gradient(circle at 30% 30%, ${BYTE_BUBBLES_THEME.bubble}80, ${BYTE_BUBBLES_THEME.accent}40)`,
-                    border: `1px solid ${BYTE_BUBBLES_THEME.accent}60`,
-                    boxShadow: `inset 0 2px 6px rgba(255,255,255,0.4)`,
-                  }}
-                  animate={{
-                    y: [0, -100 - Math.random() * 200],
-                    x: [0, (Math.random() - 0.5) * 60],
-                    opacity: [0.3, 0.6, 0],
-                  }}
-                  transition={{
-                    duration: 8 + Math.random() * 6,
-                    repeat: Infinity,
-                    delay: Math.random() * 4,
-                    ease: "easeInOut",
-                  }}
-                />
+                <div key={`bubble-group-${i}`}>
+                  {/* Main bubble */}
+                  <motion.div
+                    className="absolute rounded-full"
+                    style={{
+                      width: `${size}px`,
+                      height: `${size}px`,
+                      left: `${bubbleLeft}%`,
+                      top: `${bubbleTop}%`,
+                      background: `radial-gradient(circle at 30% 30%, ${BYTE_BUBBLES_THEME.bubble}80, ${BYTE_BUBBLES_THEME.accent}40)`,
+                      border: `1px solid ${BYTE_BUBBLES_THEME.accent}60`,
+                      boxShadow: `inset 0 2px 6px rgba(255,255,255,0.4)`,
+                    }}
+                    animate={{
+                      y: [0, -100 - Math.random() * 200],
+                      x: [0, (Math.random() - 0.5) * 60],
+                      opacity: [0.3, 0.6, 0],
+                    }}
+                    transition={{
+                      duration: 8 + Math.random() * 6,
+                      repeat: Infinity,
+                      delay: Math.random() * 4,
+                      ease: "easeInOut",
+                    }}
+                  />
+                  
+                  {/* Small dotted orbiters for first 15 bubbles */}
+                  {hasOrbiters && Array.from({ length: 5 }).map((_, orbiterIndex) => {
+                    const angle = (orbiterIndex * 72) + (Math.random() * 30); // Distribute around circle
+                    const distance = size * 0.7 + Math.random() * 10;
+                    const orbiterSize = 4 + Math.random() * 4;
+                    
+                    return (
+                      <motion.div
+                        key={`orbiter-${i}-${orbiterIndex}`}
+                        className="absolute rounded-full"
+                        style={{
+                          width: `${orbiterSize}px`,
+                          height: `${orbiterSize}px`,
+                          left: `calc(${bubbleLeft}% + ${Math.cos(angle * Math.PI / 180) * distance}px)`,
+                          top: `calc(${bubbleTop}% + ${Math.sin(angle * Math.PI / 180) * distance}px)`,
+                          background: `${BYTE_BUBBLES_THEME.bubble}60`,
+                          border: `1px dashed ${BYTE_BUBBLES_THEME.accent}80`,
+                          boxShadow: `0 1px 3px rgba(167, 232, 225, 0.2)`,
+                        }}
+                        animate={{
+                          y: [0, -100 - Math.random() * 200],
+                          x: [0, (Math.random() - 0.5) * 60],
+                          opacity: [0.4, 0.7, 0],
+                          scale: [0.8, 1, 0.8],
+                        }}
+                        transition={{
+                          duration: 8 + Math.random() * 6,
+                          repeat: Infinity,
+                          delay: Math.random() * 4,
+                          ease: "easeInOut",
+                        }}
+                      />
+                    );
+                  })}
+                </div>
               );
             })}
           </div>
