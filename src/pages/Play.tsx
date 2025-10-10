@@ -37,6 +37,7 @@ export default function Play() {
   };
 
   const handlePlayLevel = () => {
+    console.log("handlePlayLevel called, selectedLevel:", selectedLevel);
     setView("level");
   };
 
