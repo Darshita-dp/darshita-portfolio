@@ -16,8 +16,8 @@ export function LevelPreview({ levelId, onStart, onClose }: LevelPreviewProps) {
       case 1: // Intro
         return {
           title: "Boot-Up Protocol: Ready to Know the Player?",
-          body: "Collect 5 special stars to unlock your data profile",
-          icon: "⭐",
+          body: "Collect 5 special jellyfish to unlock data profile",
+          icon: "https://harmless-tapir-303.convex.cloud/api/storage/62277434-6a50-4a22-85b7-efee30f6d666",
           buttonText: "START RUN",
         };
       case 2: // Education
@@ -118,7 +118,15 @@ export function LevelPreview({ levelId, onStart, onClose }: LevelPreviewProps) {
             </div>
           </CardHeader>
           <CardContent className="flex flex-col items-center gap-6 pb-8">
-            <div className="text-6xl">{content.icon}</div>
+            {typeof content.icon === 'string' && content.icon.startsWith('http') ? (
+              <img 
+                src={content.icon} 
+                alt="Level icon" 
+                className="w-20 h-20 md:w-24 md:h-24"
+              />
+            ) : (
+              <div className="text-6xl">{content.icon}</div>
+            )}
             <Button
               size="lg"
               onClick={onStart}
