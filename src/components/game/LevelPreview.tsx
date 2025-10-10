@@ -58,7 +58,10 @@ export function LevelPreview({ levelId, onStart, onClose }: LevelPreviewProps) {
         initial={{ scale: 0.8, y: 20 }}
         animate={{ scale: 1, y: 0 }}
         exit={{ scale: 0.8, y: 20 }}
-        onClick={(e) => e.stopPropagation()}
+        onClick={(e) => {
+          e.stopPropagation();
+          console.log("=== Inner card clicked, propagation stopped ===");
+        }}
         style={{
           width: "clamp(300px, 60%, 560px)",
         }}
