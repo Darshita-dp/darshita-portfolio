@@ -37,10 +37,13 @@ export default function Play() {
   };
 
   const handlePlayLevel = () => {
-    console.log("handlePlayLevel called, selectedLevel:", selectedLevel);
+    console.log("=== handlePlayLevel called ===");
+    console.log("selectedLevel:", selectedLevel);
     const node = BUBBLE_NODES.find((n) => n.id === selectedLevel);
     console.log("Node found:", node);
+    console.log("Setting view to 'level'");
     setView("level");
+    console.log("View state updated");
   };
 
   const handleLevelComplete = (factsCollected: string[]) => {

@@ -129,7 +129,10 @@ export function LevelPreview({ levelId, onStart, onClose }: LevelPreviewProps) {
             )}
             <Button
               size="lg"
-              onClick={onStart}
+              onClick={() => {
+                console.log("=== Start Mission button clicked ===");
+                onStart();
+              }}
               className="text-lg px-8 py-6 font-semibold"
               style={{
                 background: `linear-gradient(135deg, ${BYTE_BUBBLES_THEME.star} 0%, #FFC94A 100%)`,
