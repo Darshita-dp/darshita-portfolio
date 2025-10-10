@@ -135,6 +135,7 @@ export function LevelPreview({ levelId, onStart, onClose }: LevelPreviewProps) {
               onClick={(e) => {
                 e.stopPropagation();
                 console.log("=== Start Mission button clicked ===");
+                console.log("Calling onStart()");
                 onStart();
               }}
               className="text-lg px-8 py-6 font-semibold transition-all hover:scale-105 active:scale-95"
