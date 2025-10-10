@@ -38,6 +38,8 @@ export default function Play() {
 
   const handlePlayLevel = () => {
     console.log("handlePlayLevel called, selectedLevel:", selectedLevel);
+    const node = BUBBLE_NODES.find((n) => n.id === selectedLevel);
+    console.log("Node found:", node);
     setView("level");
   };
 
@@ -96,9 +98,11 @@ export default function Play() {
   // Render based on view state
   if (view === "level" && selectedLevel !== null) {
     const node = BUBBLE_NODES.find((n) => n.id === selectedLevel);
+    console.log("Rendering level view, node:", node, "view:", view);
     
     // Render different game components based on level type
     if (node?.type === "runner") {
+      console.log("Rendering RunnerQuest");
       return (
         <RunnerQuest
           levelId={selectedLevel}
@@ -108,6 +112,7 @@ export default function Play() {
         />
       );
     } else if (node?.type === "memory") {
+      console.log("Rendering EducationMemory");
       return (
         <EducationMemory
           levelId={selectedLevel}
@@ -117,6 +122,7 @@ export default function Play() {
         />
       );
     } else {
+      console.log("Rendering fallback - under construction");
       // Fallback for other game types - show under construction
       return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
