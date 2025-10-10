@@ -44,7 +44,7 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
     playerImg.src = "https://harmless-tapir-303.convex.cloud/api/storage/8926a390-96f1-48da-9484-80297ff081ae";
     
     const bgImg = new Image();
-    bgImg.src = "https://harmless-tapir-303.convex.cloud/api/storage/a4bff787-1951-4c58-80d3-6ceef52a4d73";
+    bgImg.src = "https://harmless-tapir-303.convex.cloud/api/storage/e465bbfd-c5cb-4dcc-a361-a05673746d5c";
 
     const resizeCanvas = () => {
       const container = canvas.parentElement;
