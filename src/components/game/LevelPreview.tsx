@@ -132,7 +132,8 @@ export function LevelPreview({ levelId, onStart, onClose }: LevelPreviewProps) {
             )}
             <Button
               size="lg"
-              onClick={() => {
+              onClick={(e) => {
+                e.stopPropagation();
                 console.log("=== Start Mission button clicked ===");
                 onStart();
               }}
