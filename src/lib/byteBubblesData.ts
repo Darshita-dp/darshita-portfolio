@@ -41,10 +41,8 @@ export const BUBBLE_NODES: BubbleNode[] = [
   { id: 2, label: "Education", x: 19, y: 28, type: "memory" },
   { id: 3, label: "Experience", x: 31, y: 38, type: "quiz" },
   { id: 4, label: "Projects", x: 43, y: 26, type: "puzzle" },
-  { id: 5, label: "Impact", x: 55, y: 36, type: "timeline" },
-  { id: 6, label: "Design", x: 67, y: 24, type: "design" },
-  { id: 7, label: "Future", x: 79, y: 32, type: "boss" },
-  { id: 8, label: "Under Construction", x: 90, y: 20, type: "sign" },
+  { id: 7, label: "Future", x: 55, y: 32, type: "boss" },
+  { id: 8, label: "Under Construction", x: 67, y: 20, type: "sign" },
 ];
 
 export const LEVEL_DATA = {
