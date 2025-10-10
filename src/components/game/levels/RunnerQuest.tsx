@@ -565,7 +565,7 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
                         <div className="space-y-1">
                           <div><strong>Name:</strong> Darshita Patel</div>
                           <div><strong>Level:</strong> Graduate in Information Systems (4.0 GPA)</div>
-                          <div><strong>Class:</strong> Creative Technologist / System Analyst</div>
+                          <div><strong>Class:</strong> Creative Technologist / Data Analyst</div>
                           <div><strong>Power-Ups:</strong> Communication ⚡ Creativity ✨ Curiosity 💡</div>
                           <div><strong>Base Origin:</strong> Illinois State University</div>
                           <div><strong>Current Quest:</strong> Building the future of smart design & data</div>
