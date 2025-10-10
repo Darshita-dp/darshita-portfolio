@@ -1,0 +1,10 @@
+if (view === "level" && selectedLevel !== null) {
+  return (
+    <RunnerQuest
+      levelId={selectedLevel}
+      facts={getLevelFacts(selectedLevel)}
+      onComplete={handleLevelComplete}
+      onBack={handleBackToMap}
+    />
+  );
+}
