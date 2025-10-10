@@ -212,18 +212,33 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
         }
         
         if (x > -50 && x < rect.width) {
-          // Draw jellyfish with glowing animation
+          // Draw jellyfish with enhanced glowing animation and movement
           ctx.save();
-          ctx.translate(x, star.y);
           
-          // Animated glow effect
-          const glowIntensity = 0.5 + Math.sin(time * 3 + star.id) * 0.5;
+          // Add floating movement (vertical bobbing and slight rotation)
+          const bobOffset = Math.sin(time * 2 + star.id * 0.5) * 15;
+          const rotationAngle = Math.sin(time * 1.5 + star.id) * 0.1;
+          
+          ctx.translate(x, star.y + bobOffset);
+          ctx.rotate(rotationAngle);
+          
+          // Enhanced animated glow effect with stronger intensity
+          const glowIntensity = 0.6 + Math.sin(time * 3 + star.id) * 0.4;
+          const glowSize = 25 + glowIntensity * 20;
+          
+          // Multiple glow layers for more vibrant effect
           ctx.shadowColor = `rgba(255, 105, 180, ${glowIntensity})`;
-          ctx.shadowBlur = 20 + glowIntensity * 15;
+          ctx.shadowBlur = glowSize;
           
-          // Draw jellyfish image
+          // Outer glow
+          ctx.fillStyle = `rgba(255, 105, 180, ${glowIntensity * 0.3})`;
+          ctx.beginPath();
+          ctx.arc(0, 0, 35, 0, Math.PI * 2);
+          ctx.fill();
+          
+          // Draw jellyfish image with pulsing scale
           if (jellyfishImg.complete) {
-            const jellyfishSize = 50;
+            const jellyfishSize = 50 + Math.sin(time * 2.5 + star.id) * 3;
             ctx.drawImage(
               jellyfishImg,
               -jellyfishSize / 2,
@@ -232,8 +247,8 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
               jellyfishSize
             );
           } else {
-            // Fallback circle
-            ctx.fillStyle = `rgba(255, 105, 180, ${0.7 + glowIntensity * 0.3})`;
+            // Fallback circle with enhanced glow
+            ctx.fillStyle = `rgba(255, 105, 180, ${0.8 + glowIntensity * 0.2})`;
             ctx.beginPath();
             ctx.arc(0, 0, 25, 0, Math.PI * 2);
             ctx.fill();
@@ -241,11 +256,11 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
           
           ctx.restore();
 
-          // Check collision with player (center-based)
+          // Check collision with player (center-based, accounting for bobbing)
           const playerCenterX = state.player.x + state.playerWidth / 2;
           const playerCenterY = state.player.y + state.playerHeight / 2;
           const dx = x - playerCenterX;
-          const dy = star.y - playerCenterY;
+          const dy = (star.y + bobOffset) - playerCenterY;
           const distance = Math.sqrt(dx * dx + dy * dy);
           
           if (distance < 40 && !state.collectedStars.has(star.id)) {
