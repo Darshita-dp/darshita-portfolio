@@ -32,6 +32,13 @@ export default function Play() {
       return;
     }
 
+    // Skip preview for Education bubble (memory type) - go directly to level
+    if (node.type === "memory") {
+      setSelectedLevel(nodeId);
+      setView("level");
+      return;
+    }
+
     setSelectedLevel(nodeId);
     setView("preview");
   };
