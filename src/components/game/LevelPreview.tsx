@@ -10,6 +10,42 @@ interface LevelPreviewProps {
 }
 
 export function LevelPreview({ levelId, onStart, onClose }: LevelPreviewProps) {
+  // Custom content based on level ID
+  const getPreviewContent = () => {
+    switch (levelId) {
+      case 1: // Intro
+        return {
+          title: "Boot-Up Protocol: Ready to Know the Player?",
+          body: "Collect 5 special stars to unlock your data profile",
+          icon: "⭐",
+          buttonText: "START RUN",
+        };
+      case 2: // Education
+        return {
+          title: "⚙️ INITIATING TRAINING GROUNDS…",
+          body: (
+            <>
+              <p className="mb-3">Welcome back, Player!</p>
+              <p className="mb-3">Your learning modules are fragmented across the ocean of data.</p>
+              <p className="mb-2">🧩 <strong>Mission:</strong> Match each skill with its pair to sync your Knowledge Nodes.</p>
+              <p>💠 <strong>Goal:</strong> Complete 5 matches to assemble your Data Cube and unlock the Education File.</p>
+            </>
+          ),
+          icon: "🎓",
+          buttonText: "Start Mission →",
+        };
+      default:
+        return {
+          title: "Level Preview",
+          body: "Get ready to play!",
+          icon: "🎮",
+          buttonText: "START",
+        };
+    }
+  };
+
+  const content = getPreviewContent();
+
   return (
     <motion.div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm"
@@ -37,6 +73,28 @@ export function LevelPreview({ levelId, onStart, onClose }: LevelPreviewProps) {
             boxShadow: `0 8px 32px rgba(0,0,0,0.2), 0 0 0 1px ${BYTE_BUBBLES_THEME.accent}40`,
           }}
         >
+          {/* Animated grid background for Education level */}
+          {levelId === 2 && (
+            <motion.div
+              className="absolute inset-0 opacity-10"
+              style={{
+                backgroundImage: `
+                  linear-gradient(${BYTE_BUBBLES_THEME.accent} 1px, transparent 1px),
+                  linear-gradient(90deg, ${BYTE_BUBBLES_THEME.accent} 1px, transparent 1px)
+                `,
+                backgroundSize: "20px 20px",
+              }}
+              animate={{
+                opacity: [0.05, 0.15, 0.05],
+              }}
+              transition={{
+                duration: 3,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            />
+          )}
+
           <CardHeader className="text-center pb-4">
             <CardTitle
               className="text-2xl md:text-3xl mb-2"
@@ -47,20 +105,20 @@ export function LevelPreview({ levelId, onStart, onClose }: LevelPreviewProps) {
                 letterSpacing: "0.02em",
               }}
             >
-              Boot-Up Protocol: Ready to Know the Player?
+              {content.title}
             </CardTitle>
-            <p
-              className="text-base md:text-lg"
+            <div
+              className="text-base md:text-lg text-left px-4"
               style={{
                 fontFamily: "'Quicksand', sans-serif",
                 color: BYTE_BUBBLES_THEME.textSecondary,
               }}
             >
-              Collect 5 special stars to unlock your data profile
-            </p>
+              {content.body}
+            </div>
           </CardHeader>
           <CardContent className="flex flex-col items-center gap-6 pb-8">
-            <div className="text-6xl">⭐</div>
+            <div className="text-6xl">{content.icon}</div>
             <Button
               size="lg"
               onClick={onStart}
@@ -75,7 +133,7 @@ export function LevelPreview({ levelId, onStart, onClose }: LevelPreviewProps) {
                 fontWeight: 600,
               }}
             >
-              START RUN
+              {content.buttonText}
             </Button>
           </CardContent>
         </Card>
