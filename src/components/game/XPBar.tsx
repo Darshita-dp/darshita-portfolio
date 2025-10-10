@@ -1,12 +1,13 @@
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { BYTE_BUBBLES_THEME } from "@/lib/byteBubblesData";
 
 interface XPBarProps {
   totalStars: number;
   collectedStars: number;
+  showXPGain?: boolean;
 }
 
-export function XPBar({ totalStars, collectedStars }: XPBarProps) {
+export function XPBar({ totalStars, collectedStars, showXPGain = false }: XPBarProps) {
   const stars = Array.from({ length: totalStars }, (_, i) => i < collectedStars);
 
   return (
@@ -66,6 +67,27 @@ export function XPBar({ totalStars, collectedStars }: XPBarProps) {
       >
         XP
       </div>
+
+      {/* XP Gain Animation */}
+      {showXPGain && (
+        <motion.div
+          className="absolute left-full ml-2 top-1/2 -translate-y-1/2"
+          initial={{ opacity: 0, x: -10, scale: 0.5 }}
+          animate={{ opacity: 1, x: 0, scale: 1 }}
+          exit={{ opacity: 0, y: -20, scale: 0.8 }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
+          style={{
+            color: BYTE_BUBBLES_THEME.star,
+            fontFamily: "'Anton', 'Impact', 'Arial Black', sans-serif",
+            fontSize: "1.5rem",
+            fontWeight: 700,
+            textShadow: `0 0 10px ${BYTE_BUBBLES_THEME.star}80, 0 2px 4px rgba(0,0,0,0.3)`,
+            pointerEvents: "none",
+          }}
+        >
+          +1
+        </motion.div>
+      )}
     </div>
   );
 }

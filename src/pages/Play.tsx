@@ -20,6 +20,7 @@ export default function Play() {
   const [progress, setProgress] = useState<GameProgress>(() => loadGameProgress());
   const [view, setView] = useState<ViewState>("map");
   const [selectedLevel, setSelectedLevel] = useState<number | null>(null);
+  const [showXPGain, setShowXPGain] = useState(false);
 
   const handleBubbleClick = (nodeId: number) => {
     const node = BUBBLE_NODES.find((n) => n.id === nodeId);
@@ -50,8 +51,13 @@ export default function Play() {
     setProgress(newProgress);
     saveGameProgress(newProgress);
     
-    setView("map");
-    setSelectedLevel(null);
+    // Trigger XP gain animation
+    setShowXPGain(true);
+    setTimeout(() => {
+      setShowXPGain(false);
+      setView("map");
+      setSelectedLevel(null);
+    }, 1500);
   };
 
   const handleBackToMap = () => {
@@ -174,7 +180,7 @@ export default function Play() {
       {/* Main Game Area */}
       <div className="relative h-[calc(100vh-80px)] w-full">
         {/* XP Bar - Left Side */}
-        <XPBar totalStars={totalLevels} collectedStars={completedCount} />
+        <XPBar totalStars={totalLevels} collectedStars={completedCount} showXPGain={showXPGain} />
 
         {/* Map Stage - Right Side */}
         <div
