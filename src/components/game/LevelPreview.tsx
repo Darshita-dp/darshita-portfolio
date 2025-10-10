@@ -58,12 +58,11 @@ export function LevelPreview({ levelId, onStart, onClose }: LevelPreviewProps) {
         initial={{ scale: 0.8, y: 20 }}
         animate={{ scale: 1, y: 0 }}
         exit={{ scale: 0.8, y: 20 }}
-        onClick={(e) => {
-          e.stopPropagation();
-          console.log("=== Inner card clicked, propagation stopped ===");
-        }}
+        onClick={(e) => e.stopPropagation()}
         style={{
           width: "clamp(300px, 60%, 560px)",
+          position: "relative",
+          zIndex: 60,
         }}
       >
         <Card
@@ -138,7 +137,7 @@ export function LevelPreview({ levelId, onStart, onClose }: LevelPreviewProps) {
                 console.log("Calling onStart()");
                 onStart();
               }}
-              className="text-lg px-8 py-6 font-semibold transition-all hover:scale-105 active:scale-95"
+              className="text-lg px-8 py-6 font-semibold transition-all hover:scale-105 active:scale-95 relative z-10 cursor-pointer"
               style={{
                 background: `linear-gradient(135deg, ${BYTE_BUBBLES_THEME.star} 0%, #FFC94A 100%)`,
                 border: `3px solid ${BYTE_BUBBLES_THEME.star}`,
@@ -147,6 +146,7 @@ export function LevelPreview({ levelId, onStart, onClose }: LevelPreviewProps) {
                 fontFamily: "'Anton', 'Impact', 'Arial Black', sans-serif",
                 letterSpacing: "0.05em",
                 fontWeight: 600,
+                pointerEvents: "auto",
               }}
             >
               {content.buttonText}
