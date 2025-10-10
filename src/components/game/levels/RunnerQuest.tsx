@@ -45,6 +45,9 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
     
     const bgImg = new Image();
     bgImg.src = "https://harmless-tapir-303.convex.cloud/api/storage/e465bbfd-c5cb-4dcc-a361-a05673746d5c";
+    
+    const jellyfishImg = new Image();
+    jellyfishImg.src = "https://harmless-tapir-303.convex.cloud/api/storage/4969c52c-a6ca-45c0-adf2-c79d6a95fbe9";
 
     const resizeCanvas = () => {
       const container = canvas.parentElement;
@@ -77,7 +80,7 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
     state.player.y = state.groundY - state.playerHeight;
     state.collectedStars = new Set<number>();
     
-    // Create 15 stars at varied positions with better spacing
+    // Create 15 jellyfish at varied positions with better spacing
     state.stars = [];
     for (let i = 0; i < 15; i++) {
       const baseX = 600 + i * 800;
@@ -189,18 +192,19 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
         }
       });
 
-      // Draw and check stars
+      // Draw and check jellyfish
+      const time = Date.now() / 1000;
       state.stars.forEach((star) => {
         if (state.collectedStars.has(star.id)) return;
         
         const x = star.x - state.scrollOffset;
         
-        // Check if star has been missed (scrolled past the player)
+        // Check if jellyfish has been missed (scrolled past the player)
         if (x < state.player.x - 100 && !state.collectedStars.has(star.id)) {
           state.collectedStars.add(star.id); // Mark as processed
           state.missedStars++;
           
-          // Check game over condition: missed 8 stars without collecting 5
+          // Check game over condition: missed 8 jellyfish without collecting 5
           if (state.missedStars >= 8 && collectedCount < 5) {
             setShowGameOver(true);
             setIsPaused(true);
@@ -208,14 +212,33 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
         }
         
         if (x > -50 && x < rect.width) {
-          // Draw star
+          // Draw jellyfish with glowing animation
           ctx.save();
           ctx.translate(x, star.y);
-          ctx.fillStyle = BYTE_BUBBLES_THEME.star;
-          ctx.shadowColor = BYTE_BUBBLES_THEME.star;
-          ctx.shadowBlur = 15;
-          drawStarPath(ctx, 0, 0, 5, 20, 10);
-          ctx.fill();
+          
+          // Animated glow effect
+          const glowIntensity = 0.5 + Math.sin(time * 3 + star.id) * 0.5;
+          ctx.shadowColor = `rgba(255, 105, 180, ${glowIntensity})`;
+          ctx.shadowBlur = 20 + glowIntensity * 15;
+          
+          // Draw jellyfish image
+          if (jellyfishImg.complete) {
+            const jellyfishSize = 50;
+            ctx.drawImage(
+              jellyfishImg,
+              -jellyfishSize / 2,
+              -jellyfishSize / 2,
+              jellyfishSize,
+              jellyfishSize
+            );
+          } else {
+            // Fallback circle
+            ctx.fillStyle = `rgba(255, 105, 180, ${0.7 + glowIntensity * 0.3})`;
+            ctx.beginPath();
+            ctx.arc(0, 0, 25, 0, Math.PI * 2);
+            ctx.fill();
+          }
+          
           ctx.restore();
 
           // Check collision with player (center-based)
@@ -312,7 +335,7 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
     state.player.y = state.groundY - state.playerHeight;
     state.player.vy = 0;
     
-    // Regenerate stars for a fresh attempt
+    // Regenerate jellyfish for a fresh attempt
     state.stars = [];
     for (let i = 0; i < 15; i++) {
       const baseX = 600 + i * 800;
@@ -420,7 +443,7 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
                       color: BYTE_BUBBLES_THEME.textSecondary,
                     }}
                   >
-                    You didn't collect enough stars! You collected {collectedCount} out of 5.
+                    You didn't collect enough jellyfish! You collected {collectedCount} out of 5.
                   </p>
                   <div className="flex gap-4 justify-center">
                     <Button
