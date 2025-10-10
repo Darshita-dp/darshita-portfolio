@@ -16,8 +16,8 @@ export function LevelPreview({ levelId, onStart, onClose }: LevelPreviewProps) {
       case 1: // Intro
         return {
           title: "Boot-Up Protocol: Ready to Know the Player?",
-          body: "Collect 5 special jellyfish to unlock your data profile",
-          icon: "🪼",
+          body: "Collect 5 special stars to unlock your data profile",
+          icon: "⭐",
           buttonText: "START RUN",
         };
       case 2: // Education
