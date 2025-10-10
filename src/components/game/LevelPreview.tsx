@@ -127,25 +127,30 @@ export function LevelPreview({ levelId, onStart, onClose }: LevelPreviewProps) {
             ) : (
               <div className="text-6xl">{content.icon}</div>
             )}
-            <Button
-              size="lg"
-              onClick={() => {
-                console.log("=== Start Mission button clicked ===");
-                onStart();
-              }}
-              className="text-lg px-8 py-6 font-semibold"
-              style={{
-                background: `linear-gradient(135deg, ${BYTE_BUBBLES_THEME.star} 0%, #FFC94A 100%)`,
-                border: `3px solid ${BYTE_BUBBLES_THEME.star}`,
-                boxShadow: `0 0 20px ${BYTE_BUBBLES_THEME.star}80, 0 4px 12px rgba(0,0,0,0.2)`,
-                color: BYTE_BUBBLES_THEME.text,
-                fontFamily: "'Anton', 'Impact', 'Arial Black', sans-serif",
-                letterSpacing: "0.05em",
-                fontWeight: 600,
-              }}
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
-              {content.buttonText}
-            </Button>
+              <Button
+                size="lg"
+                onClick={() => {
+                  console.log("=== Start Mission button clicked ===");
+                  onStart();
+                }}
+                className="text-lg px-8 py-6 font-semibold transition-all"
+                style={{
+                  background: `linear-gradient(135deg, ${BYTE_BUBBLES_THEME.star} 0%, #FFC94A 100%)`,
+                  border: `3px solid ${BYTE_BUBBLES_THEME.star}`,
+                  boxShadow: `0 0 20px ${BYTE_BUBBLES_THEME.star}80, 0 4px 12px rgba(0,0,0,0.2)`,
+                  color: BYTE_BUBBLES_THEME.text,
+                  fontFamily: "'Anton', 'Impact', 'Arial Black', sans-serif",
+                  letterSpacing: "0.05em",
+                  fontWeight: 600,
+                }}
+              >
+                {content.buttonText}
+              </Button>
+            </motion.div>
           </CardContent>
         </Card>
       </motion.div>

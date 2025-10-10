@@ -117,14 +117,12 @@ export default function Play() {
     } else if (node?.type === "memory") {
       console.log("Rendering EducationMemory");
       return (
-        <AnimatePresence mode="wait">
-          <EducationMemory
-            levelId={selectedLevel}
-            facts={getLevelFacts(selectedLevel)}
-            onComplete={handleLevelComplete}
-            onBack={handleBackToMap}
-          />
-        </AnimatePresence>
+        <EducationMemory
+          levelId={selectedLevel}
+          facts={getLevelFacts(selectedLevel)}
+          onComplete={handleLevelComplete}
+          onBack={handleBackToMap}
+        />
       );
     } else {
       console.log("Rendering fallback - under construction");
