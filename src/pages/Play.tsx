@@ -115,6 +115,21 @@ export default function Play() {
           onBack={handleBackToMap}
         />
       );
+    } else {
+      // Fallback for other game types - show under construction
+      return (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+          <Card className="max-w-md mx-4">
+            <CardHeader>
+              <CardTitle className="text-center">🚧 Coming Soon 🚧</CardTitle>
+            </CardHeader>
+            <CardContent className="text-center space-y-4">
+              <p>This game mode is under development.</p>
+              <Button onClick={handleBackToMap}>Back to Map</Button>
+            </CardContent>
+          </Card>
+        </div>
+      );
     }
   }
 
