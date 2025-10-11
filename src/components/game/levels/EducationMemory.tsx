@@ -565,7 +565,7 @@ export function EducationMemory({ levelId, facts, onComplete, onBack }: Educatio
                         Level-Up Path:
                       </h3>
                       <div className="space-y-1 text-sm">
-                        <p>🎓 Master's in Information Systems – Illinois State University</p>
+                        <p>Master's in Information Systems – Illinois State University</p>
                         <p>📘 GPA: 4.0 — MAX RANK</p>
                       </div>
                     </div>
