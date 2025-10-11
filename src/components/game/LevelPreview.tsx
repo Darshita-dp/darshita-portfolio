@@ -31,7 +31,7 @@ export function LevelPreview({ levelId, onStart, onClose }: LevelPreviewProps) {
               <p>💠 <strong>Goal:</strong> Complete 5 matches to assemble your Data Cube and unlock the Education File.</p>
             </>
           ),
-          icon: "⚙️",
+          icon: "",
           buttonText: "Start Mission →",
         };
       default:
@@ -126,9 +126,9 @@ export function LevelPreview({ levelId, onStart, onClose }: LevelPreviewProps) {
                 alt="Level icon" 
                 className="w-20 h-20 md:w-24 md:h-24"
               />
-            ) : (
+            ) : content.icon ? (
               <div className="text-6xl">{content.icon}</div>
-            )}
+            ) : null}
             <Button
               size="lg"
               onClick={(e) => {
