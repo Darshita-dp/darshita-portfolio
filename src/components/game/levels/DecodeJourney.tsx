@@ -225,7 +225,7 @@ export function DecodeJourney({ levelId, facts, onComplete, onBack }: DecodeJour
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.3 }}
-      style={{ background: 'transparent' }}
+      style={{ background: 'rgba(0, 0, 0, 0.25)' }}
     >
       <motion.div
         initial={{ scale: 0.8, y: 20, opacity: 0 }}
