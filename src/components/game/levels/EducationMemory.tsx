@@ -255,7 +255,7 @@ export function EducationMemory({ levelId, facts, onComplete, onBack }: Educatio
         </div>
 
         {/* Game Area */}
-        <div className="flex-1 relative p-4 md:p-6 overflow-y-auto">
+        <div className="flex-1 relative p-2 md:p-4 overflow-hidden flex items-center justify-center">
           {/* Floating bubbles background effect */}
           {Array.from({ length: 15 }).map((_, i) => (
             <motion.div
@@ -282,11 +282,11 @@ export function EducationMemory({ levelId, facts, onComplete, onBack }: Educatio
           ))}
 
           {/* Card Grid */}
-          <div className="grid grid-cols-5 gap-2 md:gap-3 max-w-3xl mx-auto">
+          <div className="grid grid-cols-5 gap-1.5 sm:gap-2 md:gap-3 max-w-[95%] sm:max-w-3xl mx-auto w-full">
             {cards.map((card) => (
                 <motion.div
                 key={card.id}
-                className="aspect-[3/4] cursor-pointer"
+                className="aspect-[3/4] cursor-pointer w-full"
                 style={{ perspective: '800px' }}
                 onClick={() => handleCardClick(card.id)}
                 whileHover={!card.isFlipped && !card.isMatched ? { scale: 1.02 } : {}}
@@ -300,7 +300,7 @@ export function EducationMemory({ levelId, facts, onComplete, onBack }: Educatio
                 >
                   {/* Card Back */}
                   <div
-                    className="absolute inset-0 rounded-lg flex items-center justify-center"
+                    className="absolute inset-0 rounded-md md:rounded-lg flex items-center justify-center"
                     style={{
                       backfaceVisibility: 'hidden',
                       backgroundImage: `url('https://harmless-tapir-303.convex.cloud/api/storage/9835dd29-1c38-4215-ac90-4276110dc314')`,
@@ -313,7 +313,7 @@ export function EducationMemory({ levelId, facts, onComplete, onBack }: Educatio
                   
                   {/* Card Front */}
                   <div
-                    className="absolute inset-0 rounded-lg flex flex-col items-center justify-end p-1.5"
+                    className="absolute inset-0 rounded-md md:rounded-lg flex flex-col items-center justify-end p-1 sm:p-1.5"
                     style={{
                       backfaceVisibility: 'hidden',
                       transform: 'rotateY(180deg)',
@@ -338,13 +338,13 @@ export function EducationMemory({ levelId, facts, onComplete, onBack }: Educatio
                   >
                     {(card.value === 'html' || card.value === 'webdev' || card.value === 'sql' || card.value === 'database' || card.value === 'python' || card.value === 'dataanalysis' || card.value === 'powerbi' || card.value === 'visualization' || card.value === 'agile' || card.value === 'projectmgmt') ? (
                       <div
-                        className="w-full px-1 py-1 rounded"
+                        className="w-full px-0.5 sm:px-1 py-0.5 sm:py-1 rounded"
                         style={{
                           background: 'rgba(0,0,0,0.75)',
                         }}
                       >
                         <span
-                          className="text-center text-[10px] md:text-xs font-bold leading-tight block"
+                          className="text-center text-[8px] sm:text-[10px] md:text-xs font-bold leading-tight block"
                           style={{
                             fontFamily: "'Nunito', sans-serif",
                             color: '#FFD700',
@@ -356,7 +356,7 @@ export function EducationMemory({ levelId, facts, onComplete, onBack }: Educatio
                       </div>
                     ) : (
                       <span
-                        className="text-center text-[10px] md:text-xs font-semibold leading-tight"
+                        className="text-center text-[8px] sm:text-[10px] md:text-xs font-semibold leading-tight"
                         style={{
                           fontFamily: "'Nunito', sans-serif",
                           color: BYTE_BUBBLES_THEME.text,
