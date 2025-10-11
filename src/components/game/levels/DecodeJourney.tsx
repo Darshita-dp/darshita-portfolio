@@ -445,7 +445,7 @@ export function DecodeJourney({ levelId, facts, onComplete, onBack }: DecodeJour
 
                 {/* XP Star Float */}
                 <motion.div
-                  className="absolute -top-8 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full text-sm font-semibold"
+                  className="absolute -top-6 sm:-top-8 left-1/2 -translate-x-1/2 px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-semibold"
                   style={{
                     background: '#B8F1D2',
                     color: '#025B47',
@@ -465,22 +465,22 @@ export function DecodeJourney({ levelId, facts, onComplete, onBack }: DecodeJour
                     borderRadius: '16px',
                     backdropFilter: 'blur(8px)',
                     boxShadow: '0 4px 12px rgba(0, 0, 0, 0.05)',
-                    padding: '2rem',
+                    padding: 'clamp(1rem, 4vw, 2rem)',
                   }}
                 >
-                  <CardHeader className="p-0 mb-4">
+                  <CardHeader className="p-0 mb-2 sm:mb-4">
                     <CardTitle
-                      className="text-lg sm:text-xl md:text-2xl"
                       style={{
                         fontFamily: "'Orbitron', sans-serif",
                         color: '#02394A',
                         fontWeight: 700,
+                        fontSize: 'clamp(1rem, 3.5vw, 1.5rem)',
                       }}
                     >
                       {currentChallenge.reveal.title}
                     </CardTitle>
                   </CardHeader>
-                  <CardContent className="space-y-4 p-0">
+                  <CardContent className="space-y-3 sm:space-y-4 p-0">
                     <p
                       style={{
                         fontFamily: "'Nunito', sans-serif",
@@ -493,10 +493,11 @@ export function DecodeJourney({ levelId, facts, onComplete, onBack }: DecodeJour
                     </p>
                     <div>
                       <h4 
-                        className="font-bold mb-2 text-sm sm:text-base" 
+                        className="font-bold mb-1.5 sm:mb-2" 
                         style={{ 
                           fontFamily: "'Nunito', sans-serif",
                           color: '#007E7E',
+                          fontSize: 'clamp(0.875rem, 2.5vw, 1rem)',
                         }}
                       >
                         Impact:
@@ -509,10 +510,11 @@ export function DecodeJourney({ levelId, facts, onComplete, onBack }: DecodeJour
                     </div>
                     <div>
                       <h4 
-                        className="font-bold mb-2 text-sm sm:text-base" 
+                        className="font-bold mb-1.5 sm:mb-2" 
                         style={{ 
                           fontFamily: "'Nunito', sans-serif",
                           color: '#007E7E',
+                          fontSize: 'clamp(0.875rem, 2.5vw, 1rem)',
                         }}
                       >
                         Skills:
@@ -534,7 +536,7 @@ export function DecodeJourney({ levelId, facts, onComplete, onBack }: DecodeJour
                       <Button
                         size="lg"
                         onClick={handleNextChallenge}
-                        className="w-full text-base sm:text-lg mt-4"
+                        className="w-full mt-3 sm:mt-4"
                         style={{
                           background: 'linear-gradient(135deg, #A2E2D1, #6FDCC2)',
                           fontFamily: "'Nunito', sans-serif",
@@ -542,9 +544,10 @@ export function DecodeJourney({ levelId, facts, onComplete, onBack }: DecodeJour
                           color: '#053E45',
                           border: 'none',
                           borderRadius: '9999px',
-                          padding: '0.8rem 2rem',
+                          padding: 'clamp(0.6rem, 2vw, 0.8rem) clamp(1.5rem, 4vw, 2rem)',
                           boxShadow: '0 0 10px rgba(111, 220, 194, 0.6)',
                           transition: 'all 0.3s ease',
+                          fontSize: 'clamp(0.875rem, 2.5vw, 1.125rem)',
                         }}
                         onMouseEnter={(e) => {
                           e.currentTarget.style.background = 'linear-gradient(135deg, #7FE9D0, #53C8AE)';
