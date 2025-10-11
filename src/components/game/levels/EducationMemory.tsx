@@ -315,6 +315,8 @@ export function EducationMemory({ levelId, facts, onComplete, onBack }: Educatio
                         ? `url('https://harmless-tapir-303.convex.cloud/api/storage/8068e115-c02d-43dd-9ac1-09cf93ed9a6d')`
                         : (card.value === 'powerbi' || card.value === 'visualization')
                         ? `url('https://harmless-tapir-303.convex.cloud/api/storage/ede9107b-55a3-4ed1-ab07-e7b2994c987d')`
+                        : (card.value === 'agile' || card.value === 'projectmgmt')
+                        ? `url('https://harmless-tapir-303.convex.cloud/api/storage/1e878333-42a1-4456-8515-faf38f2b8bb1')`
                         : `linear-gradient(135deg, ${BYTE_BUBBLES_THEME.bgStart} 0%, ${BYTE_BUBBLES_THEME.bgMid} 100%)`,
                       backgroundSize: 'cover',
                       backgroundPosition: 'center',
@@ -324,7 +326,7 @@ export function EducationMemory({ levelId, facts, onComplete, onBack }: Educatio
                         : '0 3px 10px rgba(0,0,0,0.15)',
                     }}
                   >
-                    {(card.value === 'html' || card.value === 'webdev' || card.value === 'sql' || card.value === 'database' || card.value === 'python' || card.value === 'dataanalysis' || card.value === 'powerbi' || card.value === 'visualization') ? (
+                    {(card.value === 'html' || card.value === 'webdev' || card.value === 'sql' || card.value === 'database' || card.value === 'python' || card.value === 'dataanalysis' || card.value === 'powerbi' || card.value === 'visualization' || card.value === 'agile' || card.value === 'projectmgmt') ? (
                       <div
                         className="w-full px-1 py-1 rounded"
                         style={{
