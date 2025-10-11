@@ -236,7 +236,7 @@ export function DecodeJourney({ levelId, facts, onComplete, onBack }: DecodeJour
           damping: 25,
           opacity: { duration: 0.2 }
         }}
-        className="w-[95vw] h-[85vh] sm:w-[90vw] sm:h-[80vh] max-w-4xl max-h-[700px] flex flex-col rounded-2xl sm:rounded-3xl overflow-hidden"
+        className="w-[95vw] h-[90vh] sm:w-[90vw] sm:h-[85vh] max-w-4xl flex flex-col rounded-2xl sm:rounded-3xl overflow-hidden"
         style={{
           background: `linear-gradient(180deg, #DFF6FF 0%, #A3D5F2 100%)`,
           border: `3px solid #9ED8E0`,
@@ -273,7 +273,7 @@ export function DecodeJourney({ levelId, facts, onComplete, onBack }: DecodeJour
 
         {/* Game Area */}
         <div 
-          className="flex-1 relative p-2 sm:p-4 md:p-6 overflow-y-auto overflow-x-hidden flex items-center justify-center"
+          className="flex-1 relative p-2 sm:p-4 md:p-6 overflow-hidden flex items-center justify-center"
           style={{
             backgroundImage: 'url(https://harmless-tapir-303.convex.cloud/api/storage/d2d82577-719f-4e83-933c-9a4e6c68f892)',
             backgroundSize: 'cover',
@@ -312,12 +312,13 @@ export function DecodeJourney({ levelId, facts, onComplete, onBack }: DecodeJour
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
-              className="w-full max-w-2xl space-y-3 sm:space-y-6"
+              className="w-full max-w-2xl space-y-2 sm:space-y-4"
             >
               <div
-                className="text-base sm:text-xl md:text-2xl text-center px-3 py-3 sm:px-6 sm:py-4 rounded-xl sm:rounded-2xl"
+                className="text-center px-2 py-2 sm:px-4 sm:py-3 rounded-lg sm:rounded-xl"
                 style={{
                   fontFamily: "'Nunito', sans-serif",
+                  fontSize: 'clamp(0.875rem, 2.5vw, 1.25rem)',
                   color: BYTE_BUBBLES_THEME.text,
                   background: 'rgba(255,255,255,0.85)',
                   backdropFilter: 'blur(12px)',
@@ -327,13 +328,13 @@ export function DecodeJourney({ levelId, facts, onComplete, onBack }: DecodeJour
               >
                 {currentChallenge.prompt}
               </div>
-              <div className="space-y-2 sm:space-y-3 px-2 sm:px-4">
+              <div className="space-y-1.5 sm:space-y-2.5 px-1 sm:px-3">
                 {currentChallenge.options.map((option, index) => (
                   <motion.button
                     key={index}
                     onClick={() => handleAnswerSelect(index)}
                     disabled={selectedAnswer !== null}
-                    className="w-full p-2 sm:p-4 rounded-lg text-left transition-all disabled:cursor-not-allowed"
+                    className="w-full p-1.5 sm:p-3 rounded-lg text-left transition-all disabled:cursor-not-allowed"
                     style={{
                       background: selectedAnswer === index
                         ? (isCorrect ? '#B2F2BB' : '#FAD4D4')
