@@ -312,51 +312,47 @@ export function DecodeJourney({ levelId, facts, onComplete, onBack }: DecodeJour
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
-              className="w-full max-w-2xl"
+              className="w-full max-w-2xl space-y-6"
             >
-              <Card
+              <div
+                className="text-xl md:text-2xl text-center px-6 py-4 rounded-2xl"
                 style={{
-                  background: 'rgba(255,255,255,0.9)',
-                  border: '2px solid rgba(255,255,255,0.2)',
-                  backdropFilter: 'blur(16px)',
+                  fontFamily: "'Nunito', sans-serif",
+                  color: BYTE_BUBBLES_THEME.text,
+                  background: 'rgba(255,255,255,0.85)',
+                  backdropFilter: 'blur(12px)',
+                  border: '2px solid rgba(255,255,255,0.3)',
+                  boxShadow: '0 4px 20px rgba(0,0,0,0.15)',
                 }}
               >
-                <CardHeader>
-                  <CardTitle
-                    className="text-xl md:text-2xl text-center"
+                {currentChallenge.prompt}
+              </div>
+              <div className="space-y-3 px-4">
+                {currentChallenge.options.map((option, index) => (
+                  <motion.button
+                    key={index}
+                    onClick={() => handleAnswerSelect(index)}
+                    disabled={selectedAnswer !== null}
+                    className="w-full p-4 rounded-lg text-left transition-all disabled:cursor-not-allowed"
                     style={{
+                      background: selectedAnswer === index
+                        ? (isCorrect ? '#B2F2BB' : '#FAD4D4')
+                        : 'rgba(255,211,110,0.95)',
+                      border: '2px solid rgba(255,255,255,0.4)',
+                      backdropFilter: 'blur(8px)',
                       fontFamily: "'Nunito', sans-serif",
+                      fontSize: '1rem',
+                      fontWeight: 600,
                       color: BYTE_BUBBLES_THEME.text,
+                      boxShadow: '0 2px 12px rgba(0,0,0,0.1)',
                     }}
+                    whileHover={selectedAnswer === null ? { scale: 1.02, boxShadow: '0 0 20px #FFD36E80' } : {}}
+                    whileTap={selectedAnswer === null ? { scale: 0.98 } : {}}
                   >
-                    {currentChallenge.prompt}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  {currentChallenge.options.map((option, index) => (
-                    <motion.button
-                      key={index}
-                      onClick={() => handleAnswerSelect(index)}
-                      disabled={selectedAnswer !== null}
-                      className="w-full p-4 rounded-lg text-left transition-all disabled:cursor-not-allowed"
-                      style={{
-                        background: selectedAnswer === index
-                          ? (isCorrect ? '#B2F2BB' : '#FAD4D4')
-                          : '#FFD36E',
-                        border: '2px solid rgba(255,255,255,0.3)',
-                        fontFamily: "'Nunito', sans-serif",
-                        fontSize: '1rem',
-                        fontWeight: 600,
-                        color: BYTE_BUBBLES_THEME.text,
-                      }}
-                      whileHover={selectedAnswer === null ? { scale: 1.02, boxShadow: '0 0 20px #FFD36E80' } : {}}
-                      whileTap={selectedAnswer === null ? { scale: 0.98 } : {}}
-                    >
-                      {option}
-                    </motion.button>
-                  ))}
-                </CardContent>
-              </Card>
+                    {option}
+                  </motion.button>
+                ))}
+              </div>
             </motion.div>
           )}
 
