@@ -781,19 +781,6 @@ export function DecodeJourney({ levelId, facts, onComplete, onBack }: DecodeJour
                       </div>
                     </div>
 
-                    {/* Tech Stack */}
-                    <div>
-                      <h3
-                        className="text-lg font-bold mb-2"
-                        style={{ fontFamily: "'Nunito', sans-serif", color: BYTE_BUBBLES_THEME.text }}
-                      >
-                        Tech Stack:
-                      </h3>
-                      <p className="text-sm">
-                        React | MySQL | Python | Power BI | SQL | ETL | Data Visualization | MS Suite | Statistical Analysis
-                      </p>
-                    </div>
-
                     {/* XP and Badge */}
                     <div className="border-t pt-4 space-y-2">
                       <p className="text-lg font-bold" style={{ color: '#FFD36E' }}>
