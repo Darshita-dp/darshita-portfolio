@@ -717,293 +717,122 @@ export function DecodeJourney({ levelId, facts, onComplete, onBack }: DecodeJour
         <AnimatePresence>
           {showComplete && (
             <motion.div
-              className="absolute inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto"
+              className="absolute inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4 overflow-y-auto"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              style={{
-                background: 'linear-gradient(135deg, #B4F1E0 0%, #A5E6D3 50%, #9BD0E6 100%)',
-              }}
             >
-              {/* Floating bubble particles */}
-              {Array.from({ length: 20 }).map((_, i) => (
-                <motion.div
-                  key={`victory-bubble-${i}`}
-                  className="absolute rounded-full pointer-events-none"
-                  style={{
-                    width: `${15 + Math.random() * 30}px`,
-                    height: `${15 + Math.random() * 30}px`,
-                    left: `${Math.random() * 100}%`,
-                    top: `${Math.random() * 100}%`,
-                    background: 'radial-gradient(circle at 35% 25%, rgba(255,255,255,0.4), rgba(164,229,217,0.2))',
-                    opacity: 0.2,
-                  }}
-                  animate={{
-                    y: [0, -100 - Math.random() * 100],
-                    opacity: [0.1, 0.3, 0],
-                  }}
-                  transition={{
-                    duration: 6 + Math.random() * 4,
-                    repeat: Infinity,
-                    delay: Math.random() * 3,
-                  }}
-                />
-              ))}
-
               <motion.div
-                initial={{ scale: 0.95, y: 20 }}
+                initial={{ scale: 0.8, y: 20 }}
                 animate={{ scale: 1, y: 0 }}
-                exit={{ scale: 0.95, y: 20 }}
-                transition={{ type: "spring", stiffness: 200, damping: 20 }}
-                className="w-full max-w-2xl my-8 relative"
+                exit={{ scale: 0.8, y: 20 }}
+                className="w-full max-w-3xl my-8"
               >
                 <Card
-                  className="overflow-hidden relative"
+                  className="overflow-hidden"
                   style={{
-                    background: 'rgba(255, 255, 255, 0.08)',
-                    backdropFilter: 'blur(16px)',
-                    border: '1px solid rgba(255, 255, 255, 0.25)',
-                    borderRadius: '24px',
-                    boxShadow: '0 0 15px #9FF0E0, 0 4px 24px rgba(0, 0, 0, 0.15)',
-                    padding: '2.5rem',
+                    background: 'rgba(255,255,255,0.98)',
+                    border: '3px solid #9ED8E0',
+                    boxShadow: '0 0 40px #9ED8E0',
                   }}
                 >
-                  {/* Glow pulse animation */}
-                  <motion.div
-                    className="absolute inset-0 rounded-3xl pointer-events-none"
-                    style={{
-                      border: '2px solid #9FF0E0',
-                      opacity: 0.6,
-                    }}
-                    animate={{
-                      opacity: [0.4, 0.8, 0.4],
-                      boxShadow: [
-                        '0 0 10px #9FF0E0',
-                        '0 0 25px #9FF0E0',
-                        '0 0 10px #9FF0E0',
-                      ],
-                    }}
-                    transition={{
-                      duration: 2,
-                      repeat: 2,
-                      ease: "easeInOut",
-                    }}
-                  />
-
-                  {/* Header */}
-                  <CardHeader className="text-center pb-4 p-0 mb-6" style={{ borderBottom: '1px solid rgba(255,255,255,0.2)' }}>
+                  <CardHeader className="text-center border-b pb-4">
                     <CardTitle
-                      className="text-2xl md:text-3xl uppercase"
+                      className="text-2xl md:text-3xl"
                       style={{
                         fontFamily: "'Orbitron', sans-serif",
-                        fontWeight: 700,
-                        color: '#E7FDFB',
-                        textShadow: '0 0 8px rgba(159, 240, 224, 0.7)',
-                        letterSpacing: '0.05em',
+                        color: BYTE_BUBBLES_THEME.text,
                       }}
                     >
                       EXPERIENCE FILE: VERIFIED ✅
                     </CardTitle>
                   </CardHeader>
-
-                  <CardContent className="space-y-6 p-0">
-                    {/* Mission Log Section */}
+                  <CardContent className="space-y-6 pt-6 max-h-[60vh] overflow-y-auto">
+                    {/* Mission Log */}
                     <div>
                       <h3
-                        className="text-lg font-semibold mb-3"
-                        style={{ 
-                          fontFamily: "'Nunito', sans-serif", 
-                          color: '#E7FDFB',
-                          fontSize: '1.1rem',
-                        }}
+                        className="text-lg font-bold mb-2"
+                        style={{ fontFamily: "'Nunito', sans-serif", color: BYTE_BUBBLES_THEME.text }}
                       >
-                        🧾 Mission Log
+                        Mission Log:
                       </h3>
-                      <div className="space-y-3">
-                        <div style={{ borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '0.75rem' }}>
-                          <p style={{ fontFamily: "'Nunito', sans-serif", color: '#DFF8F5', fontWeight: 600, fontSize: '0.95rem' }}>
-                            🎓 Graduate Teaching Assistant — Illinois State University
-                          </p>
-                          <p style={{ fontFamily: "'Nunito', sans-serif", color: '#C8FAEA', fontSize: '0.85rem', marginTop: '0.25rem', marginLeft: '1.5rem' }}>
-                            IT150 Labs | 150+ Students | MS Suite (Excel | Word | Access | PowerPoint)
-                          </p>
-                        </div>
-                        <div style={{ borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '0.75rem' }}>
-                          <p style={{ fontFamily: "'Nunito', sans-serif", color: '#DFF8F5', fontWeight: 600, fontSize: '0.95rem' }}>
-                            🌊 Data & Web Development Intern — CIIWAS NGO
-                          </p>
-                          <p style={{ fontFamily: "'Nunito', sans-serif", color: '#C8FAEA', fontSize: '0.85rem', marginTop: '0.25rem', marginLeft: '1.5rem' }}>
-                            React | MySQL | Data Dashboards | 100+ Women Empowered
-                          </p>
-                        </div>
-                        <div style={{ borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '0.75rem' }}>
-                          <p style={{ fontFamily: "'Nunito', sans-serif", color: '#DFF8F5', fontWeight: 600, fontSize: '0.95rem' }}>
-                            🏭 Data Analyst Intern — GMP MachPro
-                          </p>
-                          <p style={{ fontFamily: "'Nunito', sans-serif", color: '#C8FAEA', fontSize: '0.85rem', marginTop: '0.25rem', marginLeft: '1.5rem' }}>
-                            Power BI | SQL | Production KPIs | Downtime ↓ 8%
-                          </p>
-                        </div>
-                        <div style={{ paddingBottom: '0.75rem' }}>
-                          <p style={{ fontFamily: "'Nunito', sans-serif", color: '#DFF8F5', fontWeight: 600, fontSize: '0.95rem' }}>
-                            🤝 IT Data Analyst Intern — ORANGESNGO
-                          </p>
-                          <p style={{ fontFamily: "'Nunito', sans-serif", color: '#C8FAEA', fontSize: '0.85rem', marginTop: '0.25rem', marginLeft: '1.5rem' }}>
-                            SQL | ETL Pipelines | Donor Data | Participation ↑ 25%
-                          </p>
-                        </div>
+                      <div className="space-y-1 text-sm">
+                        <p>🎓 Graduate Teaching Assistant — Illinois State University</p>
+                        <p className="ml-4 text-xs">IT150 Labs | 150+ students | MS Suite (Excel | Word | Access | PowerPoint)</p>
+                        <p>🌊 Data & Web Development Intern — CIIWAS NGO (Normal, IL | 08/2024–12/2024)</p>
+                        <p>🏭 Data Analyst Intern — GMP MachPro (India | 01/2023–06/2023)</p>
+                        <p>🤝 IT Data Analyst Intern — ORANGESNGO (India | 04/2022–12/2022)</p>
                       </div>
                     </div>
 
                     {/* Impact Highlights */}
                     <div>
                       <h3
-                        className="text-lg font-semibold mb-3"
-                        style={{ 
-                          fontFamily: "'Nunito', sans-serif", 
-                          color: '#E7FDFB',
-                          fontSize: '1.1rem',
-                        }}
+                        className="text-lg font-bold mb-2"
+                        style={{ fontFamily: "'Nunito', sans-serif", color: BYTE_BUBBLES_THEME.text }}
                       >
-                        ⚡ Impact Highlights
+                        Impact Highlights:
                       </h3>
-                      <div className="space-y-2">
-                        {[
-                          'CIIWAS: Dashboards used by 100+ women | Registration efficiency ↑ 25% | MySQL pipelines automated',
-                          'GMP MachPro: Downtime ↓ 8% | Forecast accuracy ↑ 15% | KPI visibility via Power BI',
-                          'ORANGESNGO: Donor participation ↑ 25% | 80+ regions standardized | 2,000+ beneficiaries tracked',
-                          'ISU GTA: Led labs for 150+ students | Strengthened communication & mentorship',
-                        ].map((item, i) => (
-                          <motion.p
-                            key={i}
-                            style={{ 
-                              fontFamily: "'Nunito', sans-serif", 
-                              color: '#C8FAEA',
-                              fontSize: '0.9rem',
-                              paddingLeft: '0.5rem',
-                            }}
-                            whileHover={{
-                              color: '#91F0D2',
-                              textShadow: '0 0 8px rgba(145, 240, 210, 0.5)',
-                            }}
-                          >
-                            <span style={{ color: '#91F0D2', marginRight: '0.5rem' }}>●</span>
-                            {item}
-                          </motion.p>
-                        ))}
+                      <div className="space-y-2 text-sm">
+                        <p>• CIIWAS: Dashboards used by 100+ women | Registration efficiency ↑ 25% | MySQL pipelines automated</p>
+                        <p>• GMP MachPro: Downtime ↓ 8% | Power BI KPI visibility | Forecast accuracy ↑ 15%</p>
+                        <p>• ORANGESNGO: Donor participation ↑ 25% in 2 months | 2,000+ beneficiaries tracked | 80+ regions standardized</p>
+                        <p>• ISU GTA: Led labs for 150+ students | MS Suite (Excel, Word, Access, PowerPoint) | Enhanced communication & mentorship</p>
                       </div>
                     </div>
 
                     {/* Tech Stack */}
                     <div>
                       <h3
-                        className="text-lg font-semibold mb-2"
-                        style={{ 
-                          fontFamily: "'Nunito', sans-serif", 
-                          color: '#E7FDFB',
-                          fontSize: '1.1rem',
-                        }}
+                        className="text-lg font-bold mb-2"
+                        style={{ fontFamily: "'Nunito', sans-serif", color: BYTE_BUBBLES_THEME.text }}
                       >
-                        🧩 Tech Stack
+                        Tech Stack:
                       </h3>
-                      <p style={{ 
-                        fontFamily: "'Nunito', sans-serif", 
-                        color: '#C8FAEA',
-                        fontSize: '0.9rem',
-                      }}>
+                      <p className="text-sm">
                         React | MySQL | Python | Power BI | SQL | ETL | Data Visualization | MS Suite | Statistical Analysis
                       </p>
                     </div>
 
                     {/* XP and Badge */}
-                    <div 
-                      className="pt-4 space-y-2"
-                      style={{ 
-                        borderTop: '1px solid rgba(255,255,255,0.1)',
-                        textAlign: 'center',
-                      }}
-                    >
-                      <motion.p 
-                        className="text-xl font-bold"
-                        style={{ 
-                          color: '#BDF7E4',
-                          fontFamily: "'Orbitron', sans-serif",
-                          textShadow: '0 0 10px rgba(189, 247, 228, 0.6)',
-                        }}
-                        animate={{
-                          textShadow: [
-                            '0 0 10px rgba(189, 247, 228, 0.6)',
-                            '0 0 20px rgba(189, 247, 228, 0.9)',
-                            '0 0 10px rgba(189, 247, 228, 0.6)',
-                          ],
-                        }}
-                        transition={{ duration: 2, repeat: Infinity }}
-                      >
+                    <div className="border-t pt-4 space-y-2">
+                      <p className="text-lg font-bold" style={{ color: '#FFD36E' }}>
                         XP Earned: +200
-                      </motion.p>
-                      <p 
-                        className="text-base"
-                        style={{ 
-                          color: '#E7FDFB',
-                          fontFamily: "'Nunito', sans-serif",
-                        }}
-                      >
-                        Badge Unlocked: 🧠 "Field-Tested Analyst"
+                      </p>
+                      <p className="text-base">
+                        New Badge: "Field-Tested Analyst" ⚡
                       </p>
                     </div>
 
                     {/* Achievement */}
-                    <div className="text-center py-3">
+                    <div className="text-center py-4">
                       <p
                         className="text-lg font-bold"
                         style={{
                           fontFamily: "'Orbitron', sans-serif",
-                          color: '#E7FDFB',
-                          textShadow: '0 0 8px rgba(159, 240, 224, 0.5)',
+                          color: BYTE_BUBBLES_THEME.text,
                         }}
                       >
-                        🏆 Achievement: "Mission Complete — You've Decoded Her Story!"
+                        🏆 Achievement Unlocked: "Mission Complete — You've Decoded Her Story!"
                       </p>
                     </div>
 
                     {/* Continue Button */}
-                    <motion.div
-                      animate={{
-                        y: [0, -5, 0],
-                      }}
-                      transition={{
-                        duration: 2,
-                        repeat: Infinity,
-                        ease: "easeInOut",
+                    <Button
+                      size="lg"
+                      onClick={() => onComplete(facts)}
+                      className="w-full text-lg"
+                      style={{
+                        background: 'linear-gradient(135deg, #CFF8EE 0%, #A4E5D9 100%)',
+                        fontFamily: "'Nunito', sans-serif",
+                        fontWeight: 700,
+                        color: '#093845',
+                        border: '2px solid #A4E5D9',
+                        boxShadow: '0 4px 16px rgba(126,212,196,0.3), inset 0 2px 6px rgba(255,255,255,0.4)',
                       }}
                     >
-                      <Button
-                        size="lg"
-                        onClick={() => onComplete(facts)}
-                        className="w-full text-lg"
-                        style={{
-                          background: 'linear-gradient(135deg, #7EE3C7, #52D1B0)',
-                          fontFamily: "'Nunito', sans-serif",
-                          fontWeight: 700,
-                          color: '#04393E',
-                          border: 'none',
-                          borderRadius: '9999px',
-                          padding: '0.75rem 2rem',
-                          boxShadow: '0 4px 12px rgba(82, 209, 176, 0.4)',
-                          transition: 'all 0.3s ease',
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.boxShadow = '0 0 15px rgba(126, 227, 199, 0.8)';
-                          e.currentTarget.style.transform = 'scale(1.02)';
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.boxShadow = '0 4px 12px rgba(82, 209, 176, 0.4)';
-                          e.currentTarget.style.transform = 'scale(1)';
-                        }}
-                      >
-                        Continue → Next Mission
-                      </Button>
-                    </motion.div>
+                      Continue → Next Mission
+                    </Button>
                   </CardContent>
                 </Card>
               </motion.div>
