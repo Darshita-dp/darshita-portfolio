@@ -400,71 +400,164 @@ export function DecodeJourney({ levelId, facts, onComplete, onBack }: DecodeJour
           <AnimatePresence>
             {showReveal && (
               <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
+                initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.8 }}
-                className="w-full max-w-2xl mx-2 sm:mx-0"
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ duration: 0.8, ease: "easeInOut" }}
+                className="w-full max-w-2xl mx-2 sm:mx-0 relative"
               >
+                {/* Outer glow background */}
+                <div
+                  className="absolute inset-0 rounded-2xl"
+                  style={{
+                    background: 'linear-gradient(135deg, #C5F5E8 0%, #AEE6D4 100%)',
+                    filter: 'blur(20px)',
+                    opacity: 0.6,
+                    zIndex: -1,
+                  }}
+                />
+                
+                {/* Floating bubble particles behind card */}
+                {Array.from({ length: 8 }).map((_, i) => (
+                  <motion.div
+                    key={`reveal-bubble-${i}`}
+                    className="absolute rounded-full pointer-events-none"
+                    style={{
+                      width: `${15 + Math.random() * 25}px`,
+                      height: `${15 + Math.random() * 25}px`,
+                      left: `${Math.random() * 100}%`,
+                      top: `${Math.random() * 100}%`,
+                      background: 'radial-gradient(circle at 35% 25%, rgba(255,255,255,0.4), rgba(164,229,217,0.2))',
+                      opacity: 0.15,
+                      zIndex: -1,
+                    }}
+                    animate={{
+                      y: [0, -40 - Math.random() * 30],
+                      opacity: [0.1, 0.2, 0],
+                    }}
+                    transition={{
+                      duration: 4 + Math.random() * 2,
+                      repeat: Infinity,
+                      delay: Math.random() * 2,
+                    }}
+                  />
+                ))}
+
+                {/* XP Star Float */}
+                <motion.div
+                  className="absolute -top-8 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full text-sm font-semibold"
+                  style={{
+                    background: '#B8F1D2',
+                    color: '#025B47',
+                    fontFamily: "'Nunito', sans-serif",
+                  }}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: [0, 1, 1, 0], y: [20, -10, -10, -30] }}
+                  transition={{ duration: 2, ease: "easeOut" }}
+                >
+                  +30 XP
+                </motion.div>
+
                 <Card
                   style={{
-                    background: 'rgba(255,255,255,0.95)',
-                    border: '3px solid #9ED8E0',
-                    backdropFilter: 'blur(16px)',
-                    boxShadow: '0 0 30px #9ED8E080',
+                    background: 'rgba(255, 255, 255, 0.8)',
+                    border: '1px solid rgba(255, 255, 255, 0.4)',
+                    borderRadius: '16px',
+                    backdropFilter: 'blur(8px)',
+                    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.05)',
+                    padding: '2rem',
                   }}
                 >
-                  <CardHeader className="p-3 sm:p-6">
+                  <CardHeader className="p-0 mb-4">
                     <CardTitle
                       className="text-lg sm:text-xl md:text-2xl"
                       style={{
                         fontFamily: "'Orbitron', sans-serif",
-                        color: BYTE_BUBBLES_THEME.text,
+                        color: '#02394A',
+                        fontWeight: 700,
                       }}
                     >
                       {currentChallenge.reveal.title}
                     </CardTitle>
                   </CardHeader>
-                  <CardContent className="space-y-3 sm:space-y-4 p-3 sm:p-6">
+                  <CardContent className="space-y-4 p-0">
                     <p
                       style={{
                         fontFamily: "'Nunito', sans-serif",
                         fontSize: 'clamp(0.875rem, 2vw, 1rem)',
                         lineHeight: '1.6',
+                        color: '#1F3C45',
                       }}
                     >
                       {currentChallenge.reveal.summary}
                     </p>
                     <div>
-                      <h4 className="font-bold mb-1 sm:mb-2 text-sm sm:text-base" style={{ fontFamily: "'Nunito', sans-serif" }}>
+                      <h4 
+                        className="font-bold mb-2 text-sm sm:text-base" 
+                        style={{ 
+                          fontFamily: "'Nunito', sans-serif",
+                          color: '#007E7E',
+                        }}
+                      >
                         Impact:
                       </h4>
-                      <ul className="space-y-1 text-xs sm:text-sm">
+                      <ul className="space-y-1 text-xs sm:text-sm" style={{ color: '#0E3A42' }}>
                         {currentChallenge.reveal.impact.map((item, i) => (
                           <li key={i}>• {item}</li>
                         ))}
                       </ul>
                     </div>
                     <div>
-                      <h4 className="font-bold mb-1 text-sm sm:text-base" style={{ fontFamily: "'Nunito', sans-serif" }}>
+                      <h4 
+                        className="font-bold mb-2 text-sm sm:text-base" 
+                        style={{ 
+                          fontFamily: "'Nunito', sans-serif",
+                          color: '#007E7E',
+                        }}
+                      >
                         Skills:
                       </h4>
-                      <p className="text-xs sm:text-sm">{currentChallenge.reveal.skills}</p>
+                      <p className="text-xs sm:text-sm" style={{ color: '#0E3A42' }}>
+                        {currentChallenge.reveal.skills}
+                      </p>
                     </div>
-                    <Button
-                      size="lg"
-                      onClick={handleNextChallenge}
-                      className="w-full text-base sm:text-lg"
-                      style={{
-                        background: 'linear-gradient(135deg, #CFF8EE 0%, #A4E5D9 100%)',
-                        fontFamily: "'Nunito', sans-serif",
-                        fontWeight: 700,
-                        color: '#093845',
-                        border: '2px solid #A4E5D9',
-                        boxShadow: '0 4px 16px rgba(126,212,196,0.3), inset 0 2px 6px rgba(255,255,255,0.4)',
+                    <motion.div
+                      animate={{
+                        y: [0, -2, 0],
+                      }}
+                      transition={{
+                        duration: 2,
+                        repeat: Infinity,
+                        repeatType: "reverse",
                       }}
                     >
-                      {questionIndex < CHALLENGES.length - 1 ? "Next Challenge →" : "Complete Mission →"}
-                    </Button>
+                      <Button
+                        size="lg"
+                        onClick={handleNextChallenge}
+                        className="w-full text-base sm:text-lg mt-4"
+                        style={{
+                          background: 'linear-gradient(135deg, #A2E2D1, #6FDCC2)',
+                          fontFamily: "'Nunito', sans-serif",
+                          fontWeight: 600,
+                          color: '#053E45',
+                          border: 'none',
+                          borderRadius: '9999px',
+                          padding: '0.8rem 2rem',
+                          boxShadow: '0 0 10px rgba(111, 220, 194, 0.6)',
+                          transition: 'all 0.3s ease',
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.background = 'linear-gradient(135deg, #7FE9D0, #53C8AE)';
+                          e.currentTarget.style.transform = 'translateY(-2px)';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.background = 'linear-gradient(135deg, #A2E2D1, #6FDCC2)';
+                          e.currentTarget.style.transform = 'translateY(0)';
+                        }}
+                      >
+                        {questionIndex < CHALLENGES.length - 1 ? "Next Challenge →" : "Complete Mission →"}
+                      </Button>
+                    </motion.div>
                   </CardContent>
                 </Card>
               </motion.div>
