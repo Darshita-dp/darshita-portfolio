@@ -1,10 +1,1 @@
-if (view === "level" && selectedLevel !== null) {
-  return (
-    <RunnerQuest
-      levelId={selectedLevel}
-      facts={getLevelFacts(selectedLevel)}
-      onComplete={handleLevelComplete}
-      onBack={handleBackToMap}
-    />
-  );
-}
+if (!card || card.isFlipped || card.isMatched) return;

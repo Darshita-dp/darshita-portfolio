@@ -95,7 +95,17 @@ export function EducationMemory({ levelId, facts, onComplete, onBack }: Educatio
     if (isLocked || isPaused || showComplete) return;
     
     const card = cards.find(c => c.id === cardId);
-    if (!card || card.isFlipped || card.isMatched) return;
+    if (!card || card.isMatched) return;
+    
+    // If card is already flipped, unflip it
+    if (card.isFlipped) {
+      const newCards = cards.map(c => 
+        c.id === cardId ? { ...c, isFlipped: false } : c
+      );
+      setCards(newCards);
+      setFlippedCards(prev => prev.filter(id => id !== cardId));
+      return;
+    }
     
     // Flip the card
     const newCards = cards.map(c => 
