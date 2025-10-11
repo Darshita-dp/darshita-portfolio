@@ -239,8 +239,8 @@ export function DecodeJourney({ levelId, facts, onComplete, onBack }: DecodeJour
         }}
         className="w-[96vw] max-w-[500px] sm:w-[90vw] sm:max-w-4xl flex flex-col rounded-2xl sm:rounded-3xl overflow-hidden"
         style={{
-          height: 'auto',
-          maxHeight: '92vh',
+          height: '85vh',
+          maxHeight: '85vh',
           background: 'transparent',
           border: `3px solid #9ED8E080`,
           boxShadow: `0 0 30px #9ED8E040, 0 8px 32px rgba(0,0,0,0.2)`,
