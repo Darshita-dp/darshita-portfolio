@@ -272,15 +272,15 @@ export function EducationMemory({ levelId, facts, onComplete, onBack }: Educatio
           ))}
 
           {/* Card Grid */}
-          <div className="grid grid-cols-5 gap-3 md:gap-4 max-w-4xl mx-auto">
+          <div className="grid grid-cols-5 gap-2 md:gap-3 max-w-3xl mx-auto">
             {cards.map((card) => (
               <motion.div
                 key={card.id}
                 className="aspect-[3/4] cursor-pointer"
-                style={{ perspective: '1000px' }}
+                style={{ perspective: '800px' }}
                 onClick={() => handleCardClick(card.id)}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
               >
                 <motion.div
                   className="w-full h-full relative"
@@ -290,32 +290,32 @@ export function EducationMemory({ levelId, facts, onComplete, onBack }: Educatio
                 >
                   {/* Card Back */}
                   <div
-                    className="absolute inset-0 rounded-xl flex items-center justify-center"
+                    className="absolute inset-0 rounded-lg flex items-center justify-center"
                     style={{
                       backfaceVisibility: 'hidden',
                       background: BYTE_BUBBLES_THEME.bgEnd,
                       border: `2px solid ${BYTE_BUBBLES_THEME.accent}`,
-                      boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+                      boxShadow: '0 3px 10px rgba(0,0,0,0.15)',
                     }}
                   >
-                    <div className="text-4xl">🔒</div>
+                    <div className="text-2xl md:text-3xl">🔒</div>
                   </div>
                   
                   {/* Card Front */}
                   <div
-                    className="absolute inset-0 rounded-xl flex items-center justify-center p-2"
+                    className="absolute inset-0 rounded-lg flex items-center justify-center p-1.5"
                     style={{
                       backfaceVisibility: 'hidden',
                       transform: 'rotateY(180deg)',
                       background: `linear-gradient(135deg, ${BYTE_BUBBLES_THEME.bgStart} 0%, ${BYTE_BUBBLES_THEME.bgMid} 100%)`,
-                      border: card.isMatched ? `3px solid ${BYTE_BUBBLES_THEME.seafoam}` : `2px solid ${BYTE_BUBBLES_THEME.accent}`,
+                      border: card.isMatched ? `2.5px solid ${BYTE_BUBBLES_THEME.seafoam}` : `2px solid ${BYTE_BUBBLES_THEME.accent}`,
                       boxShadow: card.isMatched 
-                        ? `0 0 20px ${BYTE_BUBBLES_THEME.seafoam}80, 0 4px 12px rgba(0,0,0,0.2)`
-                        : '0 4px 12px rgba(0,0,0,0.15)',
+                        ? `0 0 16px ${BYTE_BUBBLES_THEME.seafoam}80, 0 3px 10px rgba(0,0,0,0.2)`
+                        : '0 3px 10px rgba(0,0,0,0.15)',
                     }}
                   >
                     <span
-                      className="text-center text-xs md:text-sm font-semibold"
+                      className="text-center text-[10px] md:text-xs font-semibold leading-tight"
                       style={{
                         fontFamily: "'Nunito', sans-serif",
                         color: BYTE_BUBBLES_THEME.text,
