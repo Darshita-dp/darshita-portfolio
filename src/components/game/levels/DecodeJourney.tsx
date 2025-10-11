@@ -282,6 +282,7 @@ export function DecodeJourney({ levelId, facts, onComplete, onBack }: DecodeJour
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat',
+            boxShadow: `inset 0 0 40px ${BYTE_BUBBLES_THEME.accent}60, inset 0 0 80px ${BYTE_BUBBLES_THEME.seafoam}40`,
           }}
         >
           {/* Floating bubbles background */}
