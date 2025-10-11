@@ -319,35 +319,74 @@ export function DecodeJourney({ levelId, facts, onComplete, onBack }: DecodeJour
                 style={{
                   fontFamily: "'Nunito', sans-serif",
                   fontSize: 'clamp(0.875rem, 2.5vw, 1.25rem)',
-                  color: BYTE_BUBBLES_THEME.text,
-                  background: 'rgba(255,255,255,0.85)',
+                  color: '#093845',
+                  background: 'rgba(207,248,238,0.85)',
                   backdropFilter: 'blur(12px)',
-                  border: '2px solid rgba(255,255,255,0.3)',
-                  boxShadow: '0 4px 20px rgba(0,0,0,0.15)',
+                  border: '2px solid rgba(164,229,217,0.4)',
+                  boxShadow: '0 4px 20px rgba(0,0,0,0.15), inset 0 2px 8px rgba(255,255,255,0.3)',
                 }}
               >
                 {currentChallenge.prompt}
               </div>
-              <div className="space-y-1.5 sm:space-y-2.5 px-1 sm:px-3">
+              <div className="space-y-1.5 sm:space-y-2.5 px-1 sm:px-3 relative">
+                {/* Floating bubble particles */}
+                {Array.from({ length: 8 }).map((_, i) => (
+                  <motion.div
+                    key={`particle-${i}`}
+                    className="absolute rounded-full pointer-events-none"
+                    style={{
+                      width: `${8 + Math.random() * 12}px`,
+                      height: `${8 + Math.random() * 12}px`,
+                      left: `${Math.random() * 100}%`,
+                      top: `${Math.random() * 100}%`,
+                      background: 'radial-gradient(circle at 35% 25%, rgba(255,255,255,0.4), rgba(164,229,217,0.2))',
+                      opacity: 0.3,
+                    }}
+                    animate={{
+                      y: [0, -30 - Math.random() * 20],
+                      opacity: [0.2, 0.4, 0],
+                    }}
+                    transition={{
+                      duration: 3 + Math.random() * 2,
+                      repeat: Infinity,
+                      delay: Math.random() * 2,
+                    }}
+                  />
+                ))}
+                
                 {currentChallenge.options.map((option, index) => (
                   <motion.button
                     key={index}
                     onClick={() => handleAnswerSelect(index)}
                     disabled={selectedAnswer !== null}
-                    className="w-full p-1.5 sm:p-3 rounded-lg text-left transition-all disabled:cursor-not-allowed"
+                    className="w-full p-1.5 sm:p-3 rounded-lg text-left transition-all disabled:cursor-not-allowed relative z-10"
                     style={{
                       background: selectedAnswer === index
-                        ? (isCorrect ? '#B2F2BB' : '#FAD4D4')
-                        : 'rgba(255,211,110,0.95)',
-                      border: '2px solid rgba(255,255,255,0.4)',
-                      backdropFilter: 'blur(8px)',
+                        ? (isCorrect 
+                            ? 'linear-gradient(135deg, #CFF8EE 0%, #A4E5D9 100%)' 
+                            : 'linear-gradient(135deg, #FFE5E5 0%, #FFD2D2 100%)')
+                        : 'linear-gradient(135deg, #CFF8EE 0%, #A4E5D9 100%)',
+                      border: selectedAnswer === index
+                        ? (isCorrect 
+                            ? '2px solid #A0F1CE' 
+                            : '2px solid #FFD2D2')
+                        : '2px solid rgba(164,229,217,0.5)',
+                      backdropFilter: 'blur(4px)',
                       fontFamily: "'Nunito', sans-serif",
                       fontSize: 'clamp(0.875rem, 2vw, 1rem)',
                       fontWeight: 600,
-                      color: BYTE_BUBBLES_THEME.text,
-                      boxShadow: '0 2px 12px rgba(0,0,0,0.1)',
+                      color: '#093845',
+                      boxShadow: selectedAnswer === index
+                        ? (isCorrect 
+                            ? '0 0 20px #A0F1CE80, inset 0 2px 6px rgba(255,255,255,0.4)' 
+                            : '0 0 20px #FFD2D280, inset 0 2px 6px rgba(255,255,255,0.4)')
+                        : '0 2px 12px rgba(0,0,0,0.1), inset 0 2px 6px rgba(255,255,255,0.4)',
                     }}
-                    whileHover={selectedAnswer === null ? { scale: 1.02, boxShadow: '0 0 20px #FFD36E80' } : {}}
+                    whileHover={selectedAnswer === null ? { 
+                      scale: 1.02, 
+                      boxShadow: '0 0 20px #7ED4C480, inset 0 2px 6px rgba(255,255,255,0.5)',
+                      background: 'linear-gradient(135deg, #A4E5D9 0%, #7ED4C4 100%)'
+                    } : {}}
                     whileTap={selectedAnswer === null ? { scale: 0.98 } : {}}
                   >
                     {option}
@@ -416,9 +455,12 @@ export function DecodeJourney({ levelId, facts, onComplete, onBack }: DecodeJour
                       onClick={handleNextChallenge}
                       className="w-full text-base sm:text-lg"
                       style={{
-                        background: '#FFD36E',
+                        background: 'linear-gradient(135deg, #CFF8EE 0%, #A4E5D9 100%)',
                         fontFamily: "'Nunito', sans-serif",
                         fontWeight: 700,
+                        color: '#093845',
+                        border: '2px solid #A4E5D9',
+                        boxShadow: '0 4px 16px rgba(126,212,196,0.3), inset 0 2px 6px rgba(255,255,255,0.4)',
                       }}
                     >
                       {questionIndex < CHALLENGES.length - 1 ? "Next Challenge →" : "Complete Mission →"}
@@ -675,9 +717,12 @@ export function DecodeJourney({ levelId, facts, onComplete, onBack }: DecodeJour
                       onClick={() => onComplete(facts)}
                       className="w-full text-lg"
                       style={{
-                        background: '#FFD36E',
+                        background: 'linear-gradient(135deg, #CFF8EE 0%, #A4E5D9 100%)',
                         fontFamily: "'Nunito', sans-serif",
                         fontWeight: 700,
+                        color: '#093845',
+                        border: '2px solid #A4E5D9',
+                        boxShadow: '0 4px 16px rgba(126,212,196,0.3), inset 0 2px 6px rgba(255,255,255,0.4)',
                       }}
                     >
                       Continue → Next Mission
