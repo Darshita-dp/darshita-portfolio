@@ -303,26 +303,51 @@ export function EducationMemory({ levelId, facts, onComplete, onBack }: Educatio
                   
                   {/* Card Front */}
                   <div
-                    className="absolute inset-0 rounded-lg flex items-center justify-center p-1.5"
+                    className="absolute inset-0 rounded-lg flex flex-col items-center justify-end p-1.5"
                     style={{
                       backfaceVisibility: 'hidden',
                       transform: 'rotateY(180deg)',
-                      background: `linear-gradient(135deg, ${BYTE_BUBBLES_THEME.bgStart} 0%, ${BYTE_BUBBLES_THEME.bgMid} 100%)`,
+                      background: (card.value === 'html' || card.value === 'webdev')
+                        ? `url('https://harmless-tapir-303.convex.cloud/api/storage/1eb3fc27-d593-4c37-92bd-2cd7b3a6ecfc')`
+                        : `linear-gradient(135deg, ${BYTE_BUBBLES_THEME.bgStart} 0%, ${BYTE_BUBBLES_THEME.bgMid} 100%)`,
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center',
                       border: card.isMatched ? `2.5px solid ${BYTE_BUBBLES_THEME.seafoam}` : `2px solid ${BYTE_BUBBLES_THEME.accent}`,
                       boxShadow: card.isMatched 
                         ? `0 0 16px ${BYTE_BUBBLES_THEME.seafoam}80, 0 3px 10px rgba(0,0,0,0.2)`
                         : '0 3px 10px rgba(0,0,0,0.15)',
                     }}
                   >
-                    <span
-                      className="text-center text-[10px] md:text-xs font-semibold leading-tight"
-                      style={{
-                        fontFamily: "'Nunito', sans-serif",
-                        color: BYTE_BUBBLES_THEME.text,
-                      }}
-                    >
-                      {card.display}
-                    </span>
+                    {(card.value === 'html' || card.value === 'webdev') ? (
+                      <div
+                        className="w-full px-1 py-1 rounded"
+                        style={{
+                          background: 'rgba(0,0,0,0.7)',
+                          backdropFilter: 'blur(4px)',
+                        }}
+                      >
+                        <span
+                          className="text-center text-[10px] md:text-xs font-bold leading-tight block"
+                          style={{
+                            fontFamily: "'Nunito', sans-serif",
+                            color: '#FFD700',
+                            textShadow: '0 1px 3px rgba(0,0,0,0.8)',
+                          }}
+                        >
+                          {card.display}
+                        </span>
+                      </div>
+                    ) : (
+                      <span
+                        className="text-center text-[10px] md:text-xs font-semibold leading-tight"
+                        style={{
+                          fontFamily: "'Nunito', sans-serif",
+                          color: BYTE_BUBBLES_THEME.text,
+                        }}
+                      >
+                        {card.display}
+                      </span>
+                    )}
                   </div>
                 </motion.div>
               </motion.div>
