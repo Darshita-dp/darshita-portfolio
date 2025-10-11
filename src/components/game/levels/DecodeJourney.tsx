@@ -731,9 +731,9 @@ export function DecodeJourney({ levelId, facts, onComplete, onBack }: DecodeJour
                 <Card
                   className="overflow-hidden"
                   style={{
-                    background: 'rgba(255,255,255,0.98)',
-                    border: '3px solid #9ED8E0',
-                    boxShadow: '0 0 40px #9ED8E0',
+                    background: `linear-gradient(135deg, ${BYTE_BUBBLES_THEME.bubble}98 0%, ${BYTE_BUBBLES_THEME.seafoam}95 100%)`,
+                    border: `3px solid ${BYTE_BUBBLES_THEME.accent}`,
+                    boxShadow: `0 0 40px ${BYTE_BUBBLES_THEME.accent}`,
                   }}
                 >
                   <CardHeader className="text-center border-b pb-4">
@@ -783,7 +783,7 @@ export function DecodeJourney({ levelId, facts, onComplete, onBack }: DecodeJour
 
                     {/* XP and Badge */}
                     <div className="border-t pt-4 space-y-2">
-                      <p className="text-lg font-bold" style={{ color: '#FFD36E' }}>
+                      <p className="text-lg font-bold" style={{ color: BYTE_BUBBLES_THEME.star }}>
                         XP Earned: +200
                       </p>
                       <p className="text-base">
@@ -810,12 +810,8 @@ export function DecodeJourney({ levelId, facts, onComplete, onBack }: DecodeJour
                       onClick={() => onComplete(facts)}
                       className="w-full text-lg"
                       style={{
-                        background: 'linear-gradient(135deg, #CFF8EE 0%, #A4E5D9 100%)',
-                        fontFamily: "'Nunito', sans-serif",
-                        fontWeight: 700,
-                        color: '#093845',
-                        border: '2px solid #A4E5D9',
-                        boxShadow: '0 4px 16px rgba(126,212,196,0.3), inset 0 2px 6px rgba(255,255,255,0.4)',
+                        background: `linear-gradient(135deg, ${BYTE_BUBBLES_THEME.star} 0%, #FFC94A 100%)`,
+                        fontFamily: "'Anton', sans-serif",
                       }}
                     >
                       Continue → Next Mission
