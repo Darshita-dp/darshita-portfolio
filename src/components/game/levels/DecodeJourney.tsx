@@ -272,7 +272,15 @@ export function DecodeJourney({ levelId, facts, onComplete, onBack }: DecodeJour
         </div>
 
         {/* Game Area */}
-        <div className="flex-1 relative p-4 md:p-6 overflow-hidden flex items-center justify-center">
+        <div 
+          className="flex-1 relative p-4 md:p-6 overflow-hidden flex items-center justify-center"
+          style={{
+            backgroundImage: 'url(https://harmless-tapir-303.convex.cloud/api/storage/d2d82577-719f-4e83-933c-9a4e6c68f892)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+          }}
+        >
           {/* Floating bubbles background */}
           {Array.from({ length: 15 }).map((_, i) => (
             <motion.div
