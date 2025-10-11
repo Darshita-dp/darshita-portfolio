@@ -303,7 +303,9 @@ export function EducationMemory({ levelId, facts, onComplete, onBack }: Educatio
                     className="absolute inset-0 rounded-lg flex items-center justify-center"
                     style={{
                       backfaceVisibility: 'hidden',
-                      background: BYTE_BUBBLES_THEME.bgEnd,
+                      backgroundImage: `url('https://harmless-tapir-303.convex.cloud/api/storage/9835dd29-1c38-4215-ac90-4276110dc314')`,
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center',
                       border: `2px solid ${BYTE_BUBBLES_THEME.accent}`,
                       boxShadow: '0 3px 10px rgba(0,0,0,0.15)',
                     }}
