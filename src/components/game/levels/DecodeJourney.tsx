@@ -251,7 +251,7 @@ export function DecodeJourney({ levelId, facts, onComplete, onBack }: DecodeJour
           className="flex items-center justify-between px-2 py-2 sm:px-4 sm:py-3 border-b"
           style={{
             borderColor: `rgba(255,255,255,0.2)`,
-            background: `linear-gradient(135deg, ${BYTE_BUBBLES_THEME.seafoam}90 0%, ${BYTE_BUBBLES_THEME.accent}80 100%)`,
+            background: 'linear-gradient(135deg, #CFF8EE 0%, #A4E5D9 100%)',
             backdropFilter: 'blur(8px)',
           }}
         >
