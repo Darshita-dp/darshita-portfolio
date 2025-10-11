@@ -289,7 +289,7 @@ export function EducationMemory({ levelId, facts, onComplete, onBack }: Educatio
                 className="aspect-[3/4] cursor-pointer"
                 style={{ perspective: '800px' }}
                 onClick={() => handleCardClick(card.id)}
-                whileHover={{ scale: 1.02 }}
+                whileHover={!card.isFlipped && !card.isMatched ? { scale: 1.02 } : {}}
                 whileTap={{ scale: 0.98 }}
               >
                 <motion.div
