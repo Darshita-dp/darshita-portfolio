@@ -240,9 +240,9 @@ export function DecodeJourney({ levelId, facts, onComplete, onBack }: DecodeJour
         style={{
           height: 'auto',
           maxHeight: '92vh',
-          background: `linear-gradient(180deg, #DFF6FF 0%, #A3D5F2 100%)`,
-          border: `3px solid #9ED8E0`,
-          boxShadow: `0 0 30px #9ED8E080, 0 8px 32px rgba(0,0,0,0.3)`,
+          background: 'transparent',
+          border: `3px solid #9ED8E080`,
+          boxShadow: `0 0 30px #9ED8E040, 0 8px 32px rgba(0,0,0,0.2)`,
         }}
       >
         {/* Header */}
