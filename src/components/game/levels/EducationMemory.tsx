@@ -274,13 +274,13 @@ export function EducationMemory({ levelId, facts, onComplete, onBack }: Educatio
           {/* Card Grid */}
           <div className="grid grid-cols-5 gap-2 md:gap-3 max-w-3xl mx-auto">
             {cards.map((card) => (
-              <motion.div
+                <motion.div
                 key={card.id}
                 className="aspect-[3/4] cursor-pointer"
                 style={{ perspective: '800px' }}
                 onClick={() => handleCardClick(card.id)}
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.97 }}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
               >
                 <motion.div
                   className="w-full h-full relative"
@@ -330,8 +330,7 @@ export function EducationMemory({ levelId, facts, onComplete, onBack }: Educatio
                       <div
                         className="w-full px-1 py-1 rounded"
                         style={{
-                          background: 'rgba(0,0,0,0.7)',
-                          backdropFilter: 'blur(4px)',
+                          background: 'rgba(0,0,0,0.75)',
                         }}
                       >
                         <span
