@@ -61,26 +61,12 @@ export const LEVEL_DATA = {
     ],
   },
   quiz: {
-    questions: [
-      {
-        q: "Students mentored as GTA?",
-        options: ["50+", "120+", "300+"],
-        answer: 1,
-        fact: "Mentored 120+ students",
-      },
-      {
-        q: "Teaching style?",
-        options: ["Slides", "Simple words + examples", "Only code"],
-        answer: 1,
-        fact: "I simplify complex topics",
-      },
-      {
-        q: "Biggest boost?",
-        options: ["Drawing", "Communication", "Hardware"],
-        answer: 1,
-        fact: "Communication upgraded",
-      },
-    ] as QuizQuestion[],
+    facts: [
+      "Graduate Teaching Assistant — ISU",
+      "Data & Web Development Intern — CIIWAS NGO",
+      "Data Analyst Intern — GMP MachPro",
+      "IT Data Analyst Intern — ORANGESNGO",
+    ],
   },
   puzzle: {
     pairs: [

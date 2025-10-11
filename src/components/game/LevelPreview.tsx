@@ -34,6 +34,20 @@ export function LevelPreview({ levelId, onStart, onClose }: LevelPreviewProps) {
           icon: "",
           buttonText: "Start Mission →",
         };
+      case 3: // Experience
+        return {
+          title: "⚡ INITIALIZING EXPERIENCE ARENA…",
+          body: (
+            <>
+              <p className="mb-3">Recruiter-in-training detected.</p>
+              <p className="mb-2">🧩 <strong>Mission:</strong> Decode Darshita's real-world missions by choosing the most likely outcomes.</p>
+              <p className="mb-2">💠 <strong>Goal:</strong> Clear 5 field challenges to unlock her Experience File.</p>
+              <p>💡 <strong>Tip:</strong> Guess freely — every reveal adds to your XP stream.</p>
+            </>
+          ),
+          icon: "",
+          buttonText: "Start Battle →",
+        };
       default:
         return {
           title: "Level Preview",
@@ -75,8 +89,8 @@ export function LevelPreview({ levelId, onStart, onClose }: LevelPreviewProps) {
             boxShadow: `0 8px 32px rgba(0,0,0,0.2), 0 0 0 1px ${BYTE_BUBBLES_THEME.accent}40`,
           }}
         >
-          {/* Animated grid background for Education level */}
-          {levelId === 2 && (
+          {/* Animated grid background for Education and Experience levels */}
+          {(levelId === 2 || levelId === 3) && (
             <motion.div
               className="absolute inset-0 opacity-10"
               style={{
