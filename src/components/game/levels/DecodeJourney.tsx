@@ -236,7 +236,7 @@ export function DecodeJourney({ levelId, facts, onComplete, onBack }: DecodeJour
           damping: 25,
           opacity: { duration: 0.2 }
         }}
-        className="w-[90vw] h-[80vh] max-w-4xl max-h-[700px] flex flex-col rounded-3xl overflow-hidden"
+        className="w-[95vw] h-[85vh] sm:w-[90vw] sm:h-[80vh] max-w-4xl max-h-[700px] flex flex-col rounded-2xl sm:rounded-3xl overflow-hidden"
         style={{
           background: `linear-gradient(180deg, #DFF6FF 0%, #A3D5F2 100%)`,
           border: `3px solid #9ED8E0`,
@@ -245,35 +245,35 @@ export function DecodeJourney({ levelId, facts, onComplete, onBack }: DecodeJour
       >
         {/* Header */}
         <div
-          className="flex items-center justify-between px-4 py-3 border-b"
+          className="flex items-center justify-between px-2 py-2 sm:px-4 sm:py-3 border-b"
           style={{
             borderColor: `rgba(255,255,255,0.2)`,
             background: `rgba(255,255,255,0.3)`,
             backdropFilter: 'blur(8px)',
           }}
         >
-          <Button variant="ghost" size="sm" onClick={onBack}>
-            ← Back to Map
+          <Button variant="ghost" size="sm" onClick={onBack} className="text-xs sm:text-sm">
+            ← Back
           </Button>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-1 sm:gap-3">
             <span
               style={{
                 fontFamily: "'Orbitron', sans-serif",
                 color: BYTE_BUBBLES_THEME.text,
-                fontSize: '1.1rem',
+                fontSize: 'clamp(0.75rem, 2.5vw, 1.1rem)',
               }}
             >
-              Experience Arena — Challenges ⭐ {questionIndex + (showReveal ? 1 : 0)} / 5
+              <span className="hidden sm:inline">Experience Arena — </span>Challenges ⭐ {questionIndex + (showReveal ? 1 : 0)} / 5
             </span>
           </div>
-          <Button variant="ghost" size="sm" onClick={() => setIsPaused(!isPaused)}>
+          <Button variant="ghost" size="sm" onClick={() => setIsPaused(!isPaused)} className="text-xs sm:text-sm">
             {isPaused ? "Resume" : "Pause"}
           </Button>
         </div>
 
         {/* Game Area */}
         <div 
-          className="flex-1 relative p-4 md:p-6 overflow-hidden flex items-center justify-center"
+          className="flex-1 relative p-2 sm:p-4 md:p-6 overflow-y-auto overflow-x-hidden flex items-center justify-center"
           style={{
             backgroundImage: 'url(https://harmless-tapir-303.convex.cloud/api/storage/d2d82577-719f-4e83-933c-9a4e6c68f892)',
             backgroundSize: 'cover',
@@ -312,10 +312,10 @@ export function DecodeJourney({ levelId, facts, onComplete, onBack }: DecodeJour
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
-              className="w-full max-w-2xl space-y-6"
+              className="w-full max-w-2xl space-y-3 sm:space-y-6"
             >
               <div
-                className="text-xl md:text-2xl text-center px-6 py-4 rounded-2xl"
+                className="text-base sm:text-xl md:text-2xl text-center px-3 py-3 sm:px-6 sm:py-4 rounded-xl sm:rounded-2xl"
                 style={{
                   fontFamily: "'Nunito', sans-serif",
                   color: BYTE_BUBBLES_THEME.text,
@@ -327,13 +327,13 @@ export function DecodeJourney({ levelId, facts, onComplete, onBack }: DecodeJour
               >
                 {currentChallenge.prompt}
               </div>
-              <div className="space-y-3 px-4">
+              <div className="space-y-2 sm:space-y-3 px-2 sm:px-4">
                 {currentChallenge.options.map((option, index) => (
                   <motion.button
                     key={index}
                     onClick={() => handleAnswerSelect(index)}
                     disabled={selectedAnswer !== null}
-                    className="w-full p-4 rounded-lg text-left transition-all disabled:cursor-not-allowed"
+                    className="w-full p-2 sm:p-4 rounded-lg text-left transition-all disabled:cursor-not-allowed"
                     style={{
                       background: selectedAnswer === index
                         ? (isCorrect ? '#B2F2BB' : '#FAD4D4')
@@ -341,7 +341,7 @@ export function DecodeJourney({ levelId, facts, onComplete, onBack }: DecodeJour
                       border: '2px solid rgba(255,255,255,0.4)',
                       backdropFilter: 'blur(8px)',
                       fontFamily: "'Nunito', sans-serif",
-                      fontSize: '1rem',
+                      fontSize: 'clamp(0.875rem, 2vw, 1rem)',
                       fontWeight: 600,
                       color: BYTE_BUBBLES_THEME.text,
                       boxShadow: '0 2px 12px rgba(0,0,0,0.1)',
@@ -363,7 +363,7 @@ export function DecodeJourney({ levelId, facts, onComplete, onBack }: DecodeJour
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.8 }}
-                className="w-full max-w-2xl"
+                className="w-full max-w-2xl mx-2 sm:mx-0"
               >
                 <Card
                   style={{
@@ -373,9 +373,9 @@ export function DecodeJourney({ levelId, facts, onComplete, onBack }: DecodeJour
                     boxShadow: '0 0 30px #9ED8E080',
                   }}
                 >
-                  <CardHeader>
+                  <CardHeader className="p-3 sm:p-6">
                     <CardTitle
-                      className="text-xl md:text-2xl"
+                      className="text-lg sm:text-xl md:text-2xl"
                       style={{
                         fontFamily: "'Orbitron', sans-serif",
                         color: BYTE_BUBBLES_THEME.text,
@@ -384,36 +384,36 @@ export function DecodeJourney({ levelId, facts, onComplete, onBack }: DecodeJour
                       {currentChallenge.reveal.title}
                     </CardTitle>
                   </CardHeader>
-                  <CardContent className="space-y-4">
+                  <CardContent className="space-y-3 sm:space-y-4 p-3 sm:p-6">
                     <p
                       style={{
                         fontFamily: "'Nunito', sans-serif",
-                        fontSize: '1rem',
+                        fontSize: 'clamp(0.875rem, 2vw, 1rem)',
                         lineHeight: '1.6',
                       }}
                     >
                       {currentChallenge.reveal.summary}
                     </p>
                     <div>
-                      <h4 className="font-bold mb-2" style={{ fontFamily: "'Nunito', sans-serif" }}>
+                      <h4 className="font-bold mb-1 sm:mb-2 text-sm sm:text-base" style={{ fontFamily: "'Nunito', sans-serif" }}>
                         Impact:
                       </h4>
-                      <ul className="space-y-1 text-sm">
+                      <ul className="space-y-1 text-xs sm:text-sm">
                         {currentChallenge.reveal.impact.map((item, i) => (
                           <li key={i}>• {item}</li>
                         ))}
                       </ul>
                     </div>
                     <div>
-                      <h4 className="font-bold mb-1" style={{ fontFamily: "'Nunito', sans-serif" }}>
+                      <h4 className="font-bold mb-1 text-sm sm:text-base" style={{ fontFamily: "'Nunito', sans-serif" }}>
                         Skills:
                       </h4>
-                      <p className="text-sm">{currentChallenge.reveal.skills}</p>
+                      <p className="text-xs sm:text-sm">{currentChallenge.reveal.skills}</p>
                     </div>
                     <Button
                       size="lg"
                       onClick={handleNextChallenge}
-                      className="w-full text-lg"
+                      className="w-full text-base sm:text-lg"
                       style={{
                         background: '#FFD36E',
                         fontFamily: "'Nunito', sans-serif",
