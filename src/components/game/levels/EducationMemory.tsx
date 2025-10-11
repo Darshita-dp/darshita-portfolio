@@ -309,9 +309,7 @@ export function EducationMemory({ levelId, facts, onComplete, onBack }: Educatio
                       border: `2px solid ${BYTE_BUBBLES_THEME.accent}`,
                       boxShadow: '0 3px 10px rgba(0,0,0,0.15)',
                     }}
-                  >
-                    <div className="text-2xl md:text-3xl">🔒</div>
-                  </div>
+                  />
                   
                   {/* Card Front */}
                   <div
