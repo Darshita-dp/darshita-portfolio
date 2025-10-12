@@ -604,7 +604,7 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
               <motion.div
                 initial={{ scale: 0.8, y: 20 }}
                 animate={{ scale: 1, y: 0 }}
-                className="w-full max-w-3xl my-8"
+                className="w-full max-w-2xl my-4"
               >
                 <Card
                   style={{
@@ -613,9 +613,9 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
                     boxShadow: `0 0 40px ${BYTE_BUBBLES_THEME.accent}`,
                   }}
                 >
-                  <CardHeader className="text-center border-b pb-4">
+                  <CardHeader className="text-center border-b pb-3">
                     <CardTitle
-                      className="text-2xl md:text-3xl"
+                      className="text-xl md:text-2xl"
                       style={{
                         fontFamily: "'Orbitron', sans-serif",
                         color: BYTE_BUBBLES_THEME.text,
@@ -624,12 +624,12 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
                       PROJECT FILE: VERIFIED ✅
                     </CardTitle>
                   </CardHeader>
-                  <CardContent className="space-y-6 pt-6">
+                  <CardContent className="space-y-4 pt-4 pb-4">
                     <div>
-                      <h3 className="text-lg font-bold mb-3" style={{ fontFamily: "'Nunito', sans-serif", color: BYTE_BUBBLES_THEME.text }}>
+                      <h3 className="text-base font-bold mb-2" style={{ fontFamily: "'Nunito', sans-serif", color: BYTE_BUBBLES_THEME.text }}>
                         Recovered Project Nodes:
                       </h3>
-                      <div className="space-y-2 text-sm" style={{ color: BYTE_BUBBLES_THEME.textSecondary }}>
+                      <div className="space-y-1 text-xs" style={{ color: BYTE_BUBBLES_THEME.textSecondary }}>
                         {PROJECTS.map((project) => (
                           <p key={project.id}>
                             {project.emoji} <strong>{project.name}</strong> — {project.tech.join(" | ")}
@@ -638,25 +638,25 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
                       </div>
                     </div>
 
-                    <div className="border-t pt-4">
-                      <h3 className="text-lg font-bold mb-3" style={{ fontFamily: "'Nunito', sans-serif", color: BYTE_BUBBLES_THEME.text }}>
+                    <div className="border-t pt-3">
+                      <h3 className="text-base font-bold mb-2" style={{ fontFamily: "'Nunito', sans-serif", color: BYTE_BUBBLES_THEME.text }}>
                         Impact Highlights:
                       </h3>
-                      <div className="space-y-2 text-sm" style={{ color: BYTE_BUBBLES_THEME.textSecondary }}>
+                      <div className="space-y-1 text-xs" style={{ color: BYTE_BUBBLES_THEME.textSecondary }}>
                         <p>• 5 project modules reactivated from system archives</p>
                         <p>• Restored full cross-domain functionality: mobile, web, data, and visualization</p>
                         <p>• Demonstrated blend of creativity + logic powering every build</p>
                       </div>
                     </div>
 
-                    <div className="border-t pt-4 space-y-2">
-                      <p className="text-lg font-bold" style={{ color: BYTE_BUBBLES_THEME.star }}>
+                    <div className="border-t pt-3 space-y-1">
+                      <p className="text-base font-bold" style={{ color: BYTE_BUBBLES_THEME.star }}>
                         XP Earned: +250
                       </p>
-                      <p className="text-base" style={{ color: BYTE_BUBBLES_THEME.textSecondary }}>
+                      <p className="text-sm" style={{ color: BYTE_BUBBLES_THEME.textSecondary }}>
                         Badge Unlocked: 💻 "Full-Stack Innovator"
                       </p>
-                      <p className="text-base font-bold" style={{ color: BYTE_BUBBLES_THEME.text }}>
+                      <p className="text-sm font-bold" style={{ color: BYTE_BUBBLES_THEME.text }}>
                         🏆 Achievement: "System Restored — All Projects Online!"
                       </p>
                     </div>
@@ -664,7 +664,7 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
                     <Button
                       size="lg"
                       onClick={() => onComplete(facts)}
-                      className="w-full text-lg"
+                      className="w-full text-base mt-3"
                       style={{
                         background: `linear-gradient(135deg, ${BYTE_BUBBLES_THEME.star} 0%, #FFC94A 100%)`,
                         fontFamily: "'Anton', sans-serif",
