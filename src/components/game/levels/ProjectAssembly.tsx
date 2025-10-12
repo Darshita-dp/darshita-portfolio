@@ -621,15 +621,15 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
                         color: BYTE_BUBBLES_THEME.text,
                       }}
                     >
-                      PROJECTS FILE: VERIFIED ✅
+                      PROJECT FILE: VERIFIED ✅
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-6 pt-6">
                     <div>
-                      <h3 className="text-lg font-bold mb-3" style={{ fontFamily: "'Nunito', sans-serif" }}>
-                        Projects Assembled:
+                      <h3 className="text-lg font-bold mb-3" style={{ fontFamily: "'Nunito', sans-serif", color: BYTE_BUBBLES_THEME.text }}>
+                        Recovered Project Nodes:
                       </h3>
-                      <div className="space-y-2 text-sm">
+                      <div className="space-y-2 text-sm" style={{ color: BYTE_BUBBLES_THEME.textSecondary }}>
                         {PROJECTS.map((project) => (
                           <p key={project.id}>
                             {project.emoji} <strong>{project.name}</strong> — {project.tech.join(" | ")}
@@ -638,22 +638,26 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
                       </div>
                     </div>
 
-                    <div className="border-t pt-4 space-y-2">
-                      <p className="text-lg font-bold" style={{ color: BYTE_BUBBLES_THEME.star }}>
-                        XP Earned: +200
-                      </p>
-                      <p className="text-base">New Badge: "Master Builder" 🛠️</p>
+                    <div className="border-t pt-4">
+                      <h3 className="text-lg font-bold mb-3" style={{ fontFamily: "'Nunito', sans-serif", color: BYTE_BUBBLES_THEME.text }}>
+                        Impact Highlights:
+                      </h3>
+                      <div className="space-y-2 text-sm" style={{ color: BYTE_BUBBLES_THEME.textSecondary }}>
+                        <p>• 5 project modules reactivated from system archives</p>
+                        <p>• Restored full cross-domain functionality: mobile, web, data, and visualization</p>
+                        <p>• Demonstrated blend of creativity + logic powering every build</p>
+                      </div>
                     </div>
 
-                    <div className="text-center py-4">
-                      <p
-                        className="text-lg font-bold"
-                        style={{
-                          fontFamily: "'Orbitron', sans-serif",
-                          color: BYTE_BUBBLES_THEME.text,
-                        }}
-                      >
-                        🏆 Achievement Unlocked: "Portfolio Navigator!"
+                    <div className="border-t pt-4 space-y-2">
+                      <p className="text-lg font-bold" style={{ color: BYTE_BUBBLES_THEME.star }}>
+                        XP Earned: +250
+                      </p>
+                      <p className="text-base" style={{ color: BYTE_BUBBLES_THEME.textSecondary }}>
+                        Badge Unlocked: 💻 "Full-Stack Innovator"
+                      </p>
+                      <p className="text-base font-bold" style={{ color: BYTE_BUBBLES_THEME.text }}>
+                        🏆 Achievement: "System Restored — All Projects Online!"
                       </p>
                     </div>
 
