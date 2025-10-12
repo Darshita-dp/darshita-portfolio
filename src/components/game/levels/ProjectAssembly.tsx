@@ -32,7 +32,7 @@ const PROJECTS: Project[] = [
     challenge: "Built an iOS task management app with local data persistence",
     impact: "Streamlined personal productivity with intuitive UI",
     x: 150,
-    y: 250,
+    y: 150,
   },
   {
     id: 2,
@@ -41,8 +41,8 @@ const PROJECTS: Project[] = [
     tech: ["Python", "Machine Learning", "Data Analysis"],
     challenge: "Developed predictive models for business forecasting",
     impact: "Achieved 87% prediction accuracy for key metrics",
-    x: 280,
-    y: 250,
+    x: 350,
+    y: 120,
   },
   {
     id: 3,
@@ -51,8 +51,8 @@ const PROJECTS: Project[] = [
     tech: ["SQL", "Power BI", "Process Analysis"],
     challenge: "Analyzed and optimized IT service workflows",
     impact: "Reduced ticket resolution time by 30%, targeted 99.9% uptime",
-    x: 410,
-    y: 250,
+    x: 250,
+    y: 350,
   },
   {
     id: 4,
@@ -61,8 +61,8 @@ const PROJECTS: Project[] = [
     tech: ["Excel", "Data Visualization", "Forecasting"],
     challenge: "Built analytics dashboard for local candle business",
     impact: "Increased forecast accuracy by 20%",
-    x: 540,
-    y: 250,
+    x: 500,
+    y: 280,
   },
   {
     id: 5,
@@ -71,8 +71,8 @@ const PROJECTS: Project[] = [
     tech: ["React", "API Integration", "UI/UX"],
     challenge: "Created movie discovery web application",
     impact: "Seamless browsing experience with real-time data",
-    x: 670,
-    y: 250,
+    x: 600,
+    y: 180,
   },
 ];
 
@@ -156,7 +156,7 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
   const [transitionStep, setTransitionStep] = useState(0);
 
   const gameStateRef = useRef({
-    player: { x: 80, y: 80, vx: 0, vy: 0, direction: 1, animFrame: 0 },
+    player: { x: 750, y: 250, vx: 0, vy: 0, direction: 1, animFrame: 0 },
     keys: { left: false, right: false, up: false, down: false },
     bubbleTrail: [] as { x: number; y: number; life: number }[],
     sparkles: [] as { x: number; y: number; vx: number; vy: number; life: number }[],
@@ -177,7 +177,13 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
   useEffect(() => {
     const cols = 12;
     const rows = 8;
-    gameStateRef.current.maze = generateMaze(cols, rows);
+    const maze = generateMaze(cols, rows);
+    
+    // Create entrance on the right side (middle row)
+    const entranceRow = Math.floor(rows / 2);
+    maze[entranceRow][cols - 1].walls.right = false;
+    
+    gameStateRef.current.maze = maze;
   }, []);
 
   // Load images
