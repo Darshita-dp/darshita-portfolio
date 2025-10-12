@@ -10,6 +10,7 @@ import { LevelPreview } from "@/components/game/LevelPreview";
 import { RunnerQuest } from "@/components/game/levels/RunnerQuest";
 import { EducationMemory } from "@/components/game/levels/EducationMemory";
 import { DecodeJourney } from "@/components/game/levels/DecodeJourney";
+import { ProjectAssembly } from "@/components/game/levels/ProjectAssembly";
 import { CrabCursor } from "@/components/game/CrabCursor";
 import { BUBBLE_NODES, BYTE_BUBBLES_THEME, LEVEL_DATA, loadGameProgress, saveGameProgress, type GameProgress } from "@/lib/byteBubblesData";
 
@@ -130,6 +131,16 @@ export default function Play() {
       console.log("Rendering DecodeJourney");
       return (
         <DecodeJourney
+          levelId={selectedLevel}
+          facts={getLevelFacts(selectedLevel)}
+          onComplete={handleLevelComplete}
+          onBack={handleBackToMap}
+        />
+      );
+    } else if (node?.type === "puzzle") {
+      console.log("Rendering ProjectAssembly");
+      return (
+        <ProjectAssembly
           levelId={selectedLevel}
           facts={getLevelFacts(selectedLevel)}
           onComplete={handleLevelComplete}
