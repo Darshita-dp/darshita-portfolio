@@ -31,7 +31,7 @@ const PROJECTS: Project[] = [
     challenge: "Built an iOS task management app with local data persistence",
     impact: "Streamlined personal productivity with intuitive UI",
     x: 150,
-    y: 120,
+    y: 250,
   },
   {
     id: 2,
@@ -40,8 +40,8 @@ const PROJECTS: Project[] = [
     tech: ["Python", "Machine Learning", "Data Analysis"],
     challenge: "Developed predictive models for business forecasting",
     impact: "Achieved 87% prediction accuracy for key metrics",
-    x: 380,
-    y: 280,
+    x: 280,
+    y: 250,
   },
   {
     id: 3,
@@ -50,8 +50,8 @@ const PROJECTS: Project[] = [
     tech: ["SQL", "Power BI", "Process Analysis"],
     challenge: "Analyzed and optimized IT service workflows",
     impact: "Reduced ticket resolution time by 30%, targeted 99.9% uptime",
-    x: 220,
-    y: 380,
+    x: 410,
+    y: 250,
   },
   {
     id: 4,
@@ -60,8 +60,8 @@ const PROJECTS: Project[] = [
     tech: ["Excel", "Data Visualization", "Forecasting"],
     challenge: "Built analytics dashboard for local candle business",
     impact: "Increased forecast accuracy by 20%",
-    x: 480,
-    y: 180,
+    x: 540,
+    y: 250,
   },
   {
     id: 5,
@@ -70,8 +70,8 @@ const PROJECTS: Project[] = [
     tech: ["React", "API Integration", "UI/UX"],
     challenge: "Created movie discovery web application",
     impact: "Seamless browsing experience with real-time data",
-    x: 320,
-    y: 320,
+    x: 670,
+    y: 250,
   },
 ];
 
@@ -160,62 +160,27 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
       // Clear canvas
       ctx.clearRect(0, 0, rect.width, rect.height);
 
-      // Draw background image - ensure it covers the entire canvas
+      // Draw background - simple and direct
       if (bgImg.complete) {
-        // Force cover behavior - image fills entire canvas
         ctx.drawImage(bgImg, 0, 0, rect.width, rect.height);
       } else {
-        // Fallback gradient while image loads
-        const gradient = ctx.createLinearGradient(0, 0, 0, rect.height);
-        gradient.addColorStop(0, "#A8F7E3");
-        gradient.addColorStop(0.4, "#85D8E4");
-        gradient.addColorStop(1, "#A7C8FF");
-        ctx.fillStyle = gradient;
+        ctx.fillStyle = "#A8F7E3";
         ctx.fillRect(0, 0, rect.width, rect.height);
       }
 
-      // Draw coral outlines
-      ctx.strokeStyle = "rgba(255,255,255,0.12)";
-      ctx.lineWidth = 2;
-      for (let i = 0; i < 5; i++) {
-        ctx.beginPath();
-        ctx.moveTo(i * 250, rect.height);
-        ctx.quadraticCurveTo(i * 250 + 50, rect.height - 100, i * 250 + 100, rect.height - 150);
-        ctx.stroke();
-      }
-
-      // Draw glowing paths between nodes
+      // Draw straight connecting line between nodes
       ctx.strokeStyle = "#BDF7E4";
       ctx.lineWidth = 3;
-      ctx.shadowBlur = 15;
-      ctx.shadowColor = "#9EF1C8";
-      
-      for (let i = 0; i < PROJECTS.length - 1; i++) {
-        const p1 = PROJECTS[i];
-        const p2 = PROJECTS[i + 1];
-        
-        ctx.beginPath();
-        ctx.moveTo(p1.x, p1.y);
-        ctx.quadraticCurveTo(
-          (p1.x + p2.x) / 2,
-          Math.min(p1.y, p2.y) - 50,
-          p2.x,
-          p2.y
-        );
-        
-        // Pulse effect when player is near
-        const distToPath = Math.min(
-          Math.hypot(state.player.x - p1.x, state.player.y - p1.y),
-          Math.hypot(state.player.x - p2.x, state.player.y - p2.y)
-        );
-        if (distToPath < 150) {
-          ctx.shadowBlur = 20 + Math.sin(now / 200) * 10;
-        }
-        
-        ctx.stroke();
-      }
-      
       ctx.shadowBlur = 0;
+      ctx.filter = "drop-shadow(0 0 5px #9EF1C8)";
+      
+      ctx.beginPath();
+      ctx.moveTo(PROJECTS[0].x, PROJECTS[0].y);
+      for (let i = 1; i < PROJECTS.length; i++) {
+        ctx.lineTo(PROJECTS[i].x, PROJECTS[i].y);
+      }
+      ctx.stroke();
+      ctx.filter = "none";
 
       // Update and draw floating bubbles
       for (let i = 0; i < 15; i++) {
@@ -598,11 +563,15 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
         </div>
 
         {/* Game Canvas */}
-        <div className="flex-1 relative">
+        <div className="flex-1 relative" style={{ background: 'transparent' }}>
           <canvas
             ref={canvasRef}
             className="w-full h-full"
-            style={{ display: "block" }}
+            style={{ 
+              display: "block",
+              transform: "translateZ(0)",
+              imageRendering: "auto"
+            }}
           />
           
           {/* Controls hint */}
