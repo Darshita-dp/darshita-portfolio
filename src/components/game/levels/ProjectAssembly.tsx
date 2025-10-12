@@ -103,9 +103,12 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    // Load Plankton sprite
+    // Load images
     const planktonImg = new Image();
     planktonImg.src = "https://harmless-tapir-303.convex.cloud/api/storage/70c020a8-c7b3-40f9-9742-b8b5d690b178";
+    
+    const bgImg = new Image();
+    bgImg.src = "https://harmless-tapir-303.convex.cloud/api/storage/26b7bf6f-f869-42d0-8186-692b6ccd81dd";
 
     const resizeCanvas = () => {
       const container = canvas.parentElement;
@@ -148,13 +151,18 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
       // Clear canvas
       ctx.clearRect(0, 0, rect.width, rect.height);
 
-      // Draw underwater gradient background
-      const gradient = ctx.createLinearGradient(0, 0, 0, rect.height);
-      gradient.addColorStop(0, "#A8F7E3");
-      gradient.addColorStop(0.4, "#85D8E4");
-      gradient.addColorStop(1, "#A7C8FF");
-      ctx.fillStyle = gradient;
-      ctx.fillRect(0, 0, rect.width, rect.height);
+      // Draw background image
+      if (bgImg.complete) {
+        ctx.drawImage(bgImg, 0, 0, rect.width, rect.height);
+      } else {
+        // Fallback gradient while image loads
+        const gradient = ctx.createLinearGradient(0, 0, 0, rect.height);
+        gradient.addColorStop(0, "#A8F7E3");
+        gradient.addColorStop(0.4, "#85D8E4");
+        gradient.addColorStop(1, "#A7C8FF");
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, rect.width, rect.height);
+      }
 
       // Draw coral outlines
       ctx.strokeStyle = "rgba(255,255,255,0.12)";
