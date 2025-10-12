@@ -76,6 +76,75 @@ const PROJECTS: Project[] = [
   },
 ];
 
+// Maze generation using DFS
+interface MazeCell {
+  x: number;
+  y: number;
+  walls: { top: boolean; right: boolean; bottom: boolean; left: boolean };
+  visited: boolean;
+}
+
+const generateMaze = (cols: number, rows: number): MazeCell[][] => {
+  const maze: MazeCell[][] = [];
+  
+  // Initialize grid
+  for (let y = 0; y < rows; y++) {
+    maze[y] = [];
+    for (let x = 0; x < cols; x++) {
+      maze[y][x] = {
+        x,
+        y,
+        walls: { top: true, right: true, bottom: true, left: true },
+        visited: false,
+      };
+    }
+  }
+
+  // DFS maze generation
+  const stack: MazeCell[] = [];
+  const startCell = maze[0][0];
+  startCell.visited = true;
+  stack.push(startCell);
+
+  while (stack.length > 0) {
+    const current = stack[stack.length - 1];
+    const neighbors: { cell: MazeCell; dir: string }[] = [];
+
+    // Check unvisited neighbors
+    const { x, y } = current;
+    if (y > 0 && !maze[y - 1][x].visited) neighbors.push({ cell: maze[y - 1][x], dir: "top" });
+    if (x < cols - 1 && !maze[y][x + 1].visited) neighbors.push({ cell: maze[y][x + 1], dir: "right" });
+    if (y < rows - 1 && !maze[y + 1][x].visited) neighbors.push({ cell: maze[y + 1][x], dir: "bottom" });
+    if (x > 0 && !maze[y][x - 1].visited) neighbors.push({ cell: maze[y][x - 1], dir: "left" });
+
+    if (neighbors.length > 0) {
+      const { cell: next, dir } = neighbors[Math.floor(Math.random() * neighbors.length)];
+      
+      // Remove walls between current and next
+      if (dir === "top") {
+        current.walls.top = false;
+        next.walls.bottom = false;
+      } else if (dir === "right") {
+        current.walls.right = false;
+        next.walls.left = false;
+      } else if (dir === "bottom") {
+        current.walls.bottom = false;
+        next.walls.top = false;
+      } else if (dir === "left") {
+        current.walls.left = false;
+        next.walls.right = false;
+      }
+
+      next.visited = true;
+      stack.push(next);
+    } else {
+      stack.pop();
+    }
+  }
+
+  return maze;
+};
+
 export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectAssemblyProps) {
   const canvasHandleRef = useRef<GameCanvasHandle>(null);
   const [collectedProjects, setCollectedProjects] = useState<number[]>([]);
@@ -95,12 +164,21 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
     playerSpeed: 4,
     playerSize: 50,
     nodeRadius: 28,
+    cellSize: 60,
+    maze: null as MazeCell[][] | null,
     images: {
       plankton: null as HTMLImageElement | null,
       background: null as HTMLImageElement | null,
       window: null as HTMLImageElement | null,
     },
   });
+
+  // Generate maze on mount
+  useEffect(() => {
+    const cols = 12;
+    const rows = 8;
+    gameStateRef.current.maze = generateMaze(cols, rows);
+  }, []);
 
   // Load images
   useEffect(() => {
@@ -164,17 +242,48 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
       ctx.fillRect(0, 0, rect.width, rect.height);
     }
 
-    // Draw connecting line
-    ctx.strokeStyle = "#BDF7E4";
-    ctx.lineWidth = 3;
-    ctx.filter = "drop-shadow(0 0 5px #9EF1C8)";
-    ctx.beginPath();
-    ctx.moveTo(PROJECTS[0].x, PROJECTS[0].y);
-    for (let i = 1; i < PROJECTS.length; i++) {
-      ctx.lineTo(PROJECTS[i].x, PROJECTS[i].y);
+    // Draw maze corridors
+    if (state.maze) {
+      const cellSize = state.cellSize;
+      const wallThickness = 4;
+      
+      ctx.strokeStyle = "#7EE3C7";
+      ctx.lineWidth = wallThickness;
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+      ctx.shadowColor = "#9EF1C8";
+      ctx.shadowBlur = 8;
+
+      for (let y = 0; y < state.maze.length; y++) {
+        for (let x = 0; x < state.maze[y].length; x++) {
+          const cell = state.maze[y][x];
+          const px = x * cellSize + 20;
+          const py = y * cellSize + 20;
+
+          // Draw walls
+          ctx.beginPath();
+          if (cell.walls.top) {
+            ctx.moveTo(px, py);
+            ctx.lineTo(px + cellSize, py);
+          }
+          if (cell.walls.right) {
+            ctx.moveTo(px + cellSize, py);
+            ctx.lineTo(px + cellSize, py + cellSize);
+          }
+          if (cell.walls.bottom) {
+            ctx.moveTo(px, py + cellSize);
+            ctx.lineTo(px + cellSize, py + cellSize);
+          }
+          if (cell.walls.left) {
+            ctx.moveTo(px, py);
+            ctx.lineTo(px, py + cellSize);
+          }
+          ctx.stroke();
+        }
+      }
+      
+      ctx.shadowBlur = 0;
     }
-    ctx.stroke();
-    ctx.filter = "none";
 
     // Draw floating bubbles
     for (let i = 0; i < 15; i++) {
@@ -187,7 +296,7 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
       ctx.fill();
     }
 
-    // Handle player movement
+    // Handle player movement with wall collision
     if (state.keys.left) state.player.vx = -state.playerSpeed;
     else if (state.keys.right) state.player.vx = state.playerSpeed;
     else state.player.vx *= 0.85;
@@ -196,8 +305,46 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
     else if (state.keys.down) state.player.vy = state.playerSpeed;
     else state.player.vy *= 0.85;
 
-    state.player.x += state.player.vx * deltaTime;
-    state.player.y += state.player.vy * deltaTime;
+    // Calculate new position
+    const newX = state.player.x + state.player.vx * deltaTime;
+    const newY = state.player.y + state.player.vy * deltaTime;
+
+    // Wall collision detection
+    let canMoveX = true;
+    let canMoveY = true;
+
+    if (state.maze) {
+      const cellSize = state.cellSize;
+      const playerRadius = state.playerSize / 2;
+      
+      // Check collision with maze walls
+      const checkCollision = (x: number, y: number): boolean => {
+        const cellX = Math.floor((x - 20) / cellSize);
+        const cellY = Math.floor((y - 20) / cellSize);
+        
+        if (cellY < 0 || cellY >= state.maze!.length || cellX < 0 || cellX >= state.maze![0].length) {
+          return true; // Out of bounds
+        }
+        
+        const cell = state.maze![cellY][cellX];
+        const px = cellX * cellSize + 20;
+        const py = cellY * cellSize + 20;
+        
+        // Check each wall
+        if (cell.walls.top && y - playerRadius < py + 5) return true;
+        if (cell.walls.bottom && y + playerRadius > py + cellSize - 5) return true;
+        if (cell.walls.left && x - playerRadius < px + 5) return true;
+        if (cell.walls.right && x + playerRadius > px + cellSize - 5) return true;
+        
+        return false;
+      };
+
+      canMoveX = !checkCollision(newX, state.player.y);
+      canMoveY = !checkCollision(state.player.x, newY);
+    }
+
+    if (canMoveX) state.player.x = newX;
+    if (canMoveY) state.player.y = newY;
 
     // Boundary collision
     state.player.x = Math.max(state.playerSize / 2, Math.min(rect.width - state.playerSize / 2, state.player.x));
