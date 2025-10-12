@@ -109,6 +109,9 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
     
     const bgImg = new Image();
     bgImg.src = "https://harmless-tapir-303.convex.cloud/api/storage/26b7bf6f-f869-42d0-8186-692b6ccd81dd";
+    
+    const windowImg = new Image();
+    windowImg.src = "https://harmless-tapir-303.convex.cloud/api/storage/e644d5fd-4bd9-47f8-93f7-66911a1cb47a";
 
     const resizeCanvas = () => {
       const container = canvas.parentElement;
@@ -329,12 +332,24 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
         
         ctx.shadowBlur = 0;
         
-        // Draw emoji
-        ctx.font = "32px Arial";
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.fillStyle = "#072C3E";
-        ctx.fillText(project.emoji, project.x, project.y);
+        // Draw window image instead of emoji
+        if (windowImg.complete) {
+          const imgSize = state.nodeRadius * 1.5;
+          ctx.drawImage(
+            windowImg,
+            project.x - imgSize / 2,
+            project.y - imgSize / 2,
+            imgSize,
+            imgSize
+          );
+        } else {
+          // Fallback to emoji while image loads
+          ctx.font = "32px Arial";
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
+          ctx.fillStyle = "#072C3E";
+          ctx.fillText(project.emoji, project.x, project.y);
+        }
         
         // Expansion effect when near
         if (state.nodeGlow[project.id] > 0.5) {
