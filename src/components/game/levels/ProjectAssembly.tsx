@@ -190,7 +190,7 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
         <div 
           className="flex-1 relative p-3 sm:p-4 md:p-6 overflow-hidden flex items-center justify-center"
           style={{
-            backgroundImage: 'url(https://harmless-tapir-303.convex.cloud/api/storage/d2d82577-719f-4e83-933c-9a4e6c68f892)',
+            backgroundImage: 'url(https://harmless-tapir-303.convex.cloud/api/storage/4c392381-5251-4ad6-bb02-802a765e325c)',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat',
