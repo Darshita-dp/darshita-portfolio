@@ -93,7 +93,7 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
     nodeGlow: {} as Record<number, number>,
     playerSpeed: 4,
     playerSize: 50,
-    nodeRadius: 20,
+    nodeRadius: 28,
   });
 
   useEffect(() => {
