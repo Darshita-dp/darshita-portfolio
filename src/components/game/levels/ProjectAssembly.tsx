@@ -341,8 +341,8 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
           ctx.arc(project.x, project.y, state.nodeRadius, 0, Math.PI * 2);
           ctx.clip();
           
-          // Draw image to fill the entire circle with extra size
-          const imgSize = state.nodeRadius * 2.5;
+          // Draw image to fill the entire circle
+          const imgSize = state.nodeRadius * 2.2;
           ctx.drawImage(
             windowImg,
             project.x - imgSize / 2,
