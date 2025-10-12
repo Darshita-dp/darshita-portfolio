@@ -332,9 +332,17 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
         
         ctx.shadowBlur = 0;
         
-        // Draw window image instead of emoji
+        // Draw window image as circular clipped image
         if (windowImg.complete) {
-          const imgSize = state.nodeRadius * 1.5;
+          ctx.save();
+          
+          // Create circular clipping path
+          ctx.beginPath();
+          ctx.arc(project.x, project.y, state.nodeRadius * 0.7, 0, Math.PI * 2);
+          ctx.clip();
+          
+          // Draw image to fill the circle
+          const imgSize = state.nodeRadius * 1.4;
           ctx.drawImage(
             windowImg,
             project.x - imgSize / 2,
@@ -342,6 +350,8 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
             imgSize,
             imgSize
           );
+          
+          ctx.restore();
         } else {
           // Fallback to emoji while image loads
           ctx.font = "32px Arial";
