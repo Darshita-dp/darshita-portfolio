@@ -336,13 +336,13 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
         if (windowImg.complete) {
           ctx.save();
           
-          // Create circular clipping path
+          // Create circular clipping path matching the full bubble size
           ctx.beginPath();
-          ctx.arc(project.x, project.y, state.nodeRadius * 0.85, 0, Math.PI * 2);
+          ctx.arc(project.x, project.y, state.nodeRadius, 0, Math.PI * 2);
           ctx.clip();
           
-          // Draw image to fill the circle
-          const imgSize = state.nodeRadius * 1.7;
+          // Draw image to fill the entire circle
+          const imgSize = state.nodeRadius * 2;
           ctx.drawImage(
             windowImg,
             project.x - imgSize / 2,
