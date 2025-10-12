@@ -541,7 +541,7 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
           className="flex items-center justify-between px-2 py-2 sm:px-4 sm:py-3 border-b"
           style={{
             borderColor: `rgba(158,241,200,0.3)`,
-            background: 'linear-gradient(180deg, #EAFBF5 0%, #CFF6E7 100%)',
+            background: 'linear-gradient(180deg, #D7F8EF 0%, #B8F1D2 100%)',
             backdropFilter: 'blur(8px)',
           }}
         >
