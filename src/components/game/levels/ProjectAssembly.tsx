@@ -125,7 +125,13 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
       ctx.scale(dpr, dpr);
     };
 
-    resizeCanvas();
+    // Initial resize with delay to ensure DOM is ready
+    const initialResize = () => {
+      resizeCanvas();
+      setTimeout(resizeCanvas, 100);
+    };
+
+    initialResize();
     window.addEventListener("resize", resizeCanvas);
 
     // Game loop
