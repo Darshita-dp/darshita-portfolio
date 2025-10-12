@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -30,8 +30,8 @@ const PROJECTS: Project[] = [
     tech: ["SwiftUI", "Core Data", "MVVM"],
     challenge: "Built an iOS task management app with local data persistence",
     impact: "Streamlined personal productivity with intuitive UI",
-    x: 20,
-    y: 50,
+    x: 150,
+    y: 300,
   },
   {
     id: 2,
@@ -40,8 +40,8 @@ const PROJECTS: Project[] = [
     tech: ["Python", "Machine Learning", "Data Analysis"],
     challenge: "Developed predictive models for business forecasting",
     impact: "Achieved 87% prediction accuracy for key metrics",
-    x: 35,
-    y: 30,
+    x: 350,
+    y: 200,
   },
   {
     id: 3,
@@ -50,8 +50,8 @@ const PROJECTS: Project[] = [
     tech: ["SQL", "Power BI", "Process Analysis"],
     challenge: "Analyzed and optimized IT service workflows",
     impact: "Reduced ticket resolution time by 30%, targeted 99.9% uptime",
-    x: 50,
-    y: 60,
+    x: 550,
+    y: 350,
   },
   {
     id: 4,
@@ -60,8 +60,8 @@ const PROJECTS: Project[] = [
     tech: ["Excel", "Data Visualization", "Forecasting"],
     challenge: "Built analytics dashboard for local candle business",
     impact: "Increased forecast accuracy by 20%",
-    x: 65,
-    y: 35,
+    x: 750,
+    y: 250,
   },
   {
     id: 5,
@@ -70,57 +70,398 @@ const PROJECTS: Project[] = [
     tech: ["React", "API Integration", "UI/UX"],
     challenge: "Created movie discovery web application",
     impact: "Seamless browsing experience with real-time data",
-    x: 80,
-    y: 55,
+    x: 950,
+    y: 300,
   },
 ];
 
 export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectAssemblyProps) {
-  const [currentProjectIndex, setCurrentProjectIndex] = useState(0);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const [collectedProjects, setCollectedProjects] = useState<number[]>([]);
   const [showProjectCard, setShowProjectCard] = useState(false);
-  const [xp, setXp] = useState(0);
+  const [currentProject, setCurrentProject] = useState<Project | null>(null);
+  const [isPaused, setIsPaused] = useState(false);
   const [showComplete, setShowComplete] = useState(false);
   const [showTransition, setShowTransition] = useState(false);
   const [transitionStep, setTransitionStep] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
 
-  const currentProject = PROJECTS[currentProjectIndex];
+  const gameStateRef = useRef({
+    player: { x: 100, y: 300, vx: 0, vy: 0, direction: 1, animFrame: 0 },
+    keys: { left: false, right: false, up: false, down: false },
+    bubbleTrail: [] as { x: number; y: number; life: number }[],
+    sparkles: [] as { x: number; y: number; vx: number; vy: number; life: number }[],
+    nodeGlow: {} as Record<number, number>,
+    playerSpeed: 4,
+    playerSize: 50,
+    nodeRadius: 40,
+  });
 
-  const handleCollectProject = () => {
-    setCollectedProjects([...collectedProjects, currentProject.id]);
-    setXp(prev => prev + 40);
-    setShowProjectCard(true);
-  };
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    // Load Plankton sprite
+    const planktonImg = new Image();
+    planktonImg.src = "https://harmless-tapir-303.convex.cloud/api/storage/70c020a8-c7b3-40f9-9742-b8b5d690b178";
+
+    const resizeCanvas = () => {
+      const container = canvas.parentElement;
+      if (!container) return;
+      
+      const dpr = window.devicePixelRatio || 1;
+      const rect = container.getBoundingClientRect();
+      
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      canvas.style.width = `${rect.width}px`;
+      canvas.style.height = `${rect.height}px`;
+      
+      ctx.scale(dpr, dpr);
+    };
+
+    resizeCanvas();
+    window.addEventListener("resize", resizeCanvas);
+
+    // Game loop
+    let animationId: number;
+    let lastTime = Date.now();
+
+    const gameLoop = () => {
+      if (isPaused) {
+        animationId = requestAnimationFrame(gameLoop);
+        return;
+      }
+
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      
+      const rect = canvas.getBoundingClientRect();
+      const now = Date.now();
+      const deltaTime = (now - lastTime) / 16.67;
+      lastTime = now;
+
+      const state = gameStateRef.current;
+
+      // Clear canvas
+      ctx.clearRect(0, 0, rect.width, rect.height);
+
+      // Draw underwater gradient background
+      const gradient = ctx.createLinearGradient(0, 0, 0, rect.height);
+      gradient.addColorStop(0, "#A8F7E3");
+      gradient.addColorStop(0.4, "#85D8E4");
+      gradient.addColorStop(1, "#A7C8FF");
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, rect.width, rect.height);
+
+      // Draw coral outlines
+      ctx.strokeStyle = "rgba(255,255,255,0.12)";
+      ctx.lineWidth = 2;
+      for (let i = 0; i < 5; i++) {
+        ctx.beginPath();
+        ctx.moveTo(i * 250, rect.height);
+        ctx.quadraticCurveTo(i * 250 + 50, rect.height - 100, i * 250 + 100, rect.height - 150);
+        ctx.stroke();
+      }
+
+      // Draw glowing paths between nodes
+      ctx.strokeStyle = "#9EF1C8";
+      ctx.lineWidth = 3;
+      ctx.shadowBlur = 10;
+      ctx.shadowColor = "#9EF1C8";
+      
+      for (let i = 0; i < PROJECTS.length - 1; i++) {
+        const p1 = PROJECTS[i];
+        const p2 = PROJECTS[i + 1];
+        
+        ctx.beginPath();
+        ctx.moveTo(p1.x, p1.y);
+        ctx.quadraticCurveTo(
+          (p1.x + p2.x) / 2,
+          Math.min(p1.y, p2.y) - 50,
+          p2.x,
+          p2.y
+        );
+        
+        // Pulse effect when player is near
+        const distToPath = Math.min(
+          Math.hypot(state.player.x - p1.x, state.player.y - p1.y),
+          Math.hypot(state.player.x - p2.x, state.player.y - p2.y)
+        );
+        if (distToPath < 150) {
+          ctx.shadowBlur = 20 + Math.sin(now / 200) * 10;
+        }
+        
+        ctx.stroke();
+      }
+      
+      ctx.shadowBlur = 0;
+
+      // Update and draw floating bubbles
+      for (let i = 0; i < 15; i++) {
+        const x = (i * 80 + now / 50) % rect.width;
+        const y = rect.height - ((now / 30 + i * 50) % rect.height);
+        const size = 10 + (i % 3) * 5;
+        
+        ctx.fillStyle = "rgba(164,238,210,0.3)";
+        ctx.beginPath();
+        ctx.arc(x, y, size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // Handle player movement
+      if (state.keys.left) state.player.vx = -state.playerSpeed;
+      else if (state.keys.right) state.player.vx = state.playerSpeed;
+      else state.player.vx *= 0.85;
+
+      if (state.keys.up) state.player.vy = -state.playerSpeed;
+      else if (state.keys.down) state.player.vy = state.playerSpeed;
+      else state.player.vy *= 0.85;
+
+      state.player.x += state.player.vx * deltaTime;
+      state.player.y += state.player.vy * deltaTime;
+
+      // Boundary collision
+      state.player.x = Math.max(state.playerSize / 2, Math.min(rect.width - state.playerSize / 2, state.player.x));
+      state.player.y = Math.max(state.playerSize / 2, Math.min(rect.height - state.playerSize / 2, state.player.y));
+
+      // Update direction
+      if (state.player.vx < -0.5) state.player.direction = -1;
+      else if (state.player.vx > 0.5) state.player.direction = 1;
+
+      // Update animation frame
+      if (Math.abs(state.player.vx) > 0.5 || Math.abs(state.player.vy) > 0.5) {
+        state.player.animFrame = (state.player.animFrame + 0.2 * deltaTime) % 2;
+      }
+
+      // Emit bubble trail
+      if (Math.abs(state.player.vx) > 1 || Math.abs(state.player.vy) > 1) {
+        if (Math.random() < 0.3) {
+          state.bubbleTrail.push({
+            x: state.player.x,
+            y: state.player.y,
+            life: 1,
+          });
+        }
+      }
+
+      // Update and draw bubble trail
+      state.bubbleTrail = state.bubbleTrail.filter(bubble => {
+        bubble.life -= 0.02 * deltaTime;
+        if (bubble.life <= 0) return false;
+        
+        ctx.fillStyle = `rgba(164,238,210,${bubble.life * 0.4})`;
+        ctx.beginPath();
+        ctx.arc(bubble.x, bubble.y, 3, 0, Math.PI * 2);
+        ctx.fill();
+        
+        return true;
+      });
+
+      // Draw project nodes
+      PROJECTS.forEach(project => {
+        const isCollected = collectedProjects.includes(project.id);
+        const dist = Math.hypot(state.player.x - project.x, state.player.y - project.y);
+        
+        // Initialize glow
+        if (!state.nodeGlow[project.id]) state.nodeGlow[project.id] = 0;
+        
+        // Update glow
+        if (dist < state.nodeRadius + state.playerSize / 2 && !isCollected) {
+          state.nodeGlow[project.id] = Math.min(1, state.nodeGlow[project.id] + 0.05 * deltaTime);
+          
+          // Trigger collection
+          if (state.nodeGlow[project.id] >= 1 && !showProjectCard) {
+            setCurrentProject(project);
+            setShowProjectCard(true);
+            setIsPaused(true);
+            
+            // Create sparkles
+            for (let i = 0; i < 6; i++) {
+              const angle = (i / 6) * Math.PI * 2;
+              state.sparkles.push({
+                x: project.x,
+                y: project.y,
+                vx: Math.cos(angle) * 3,
+                vy: Math.sin(angle) * 3,
+                life: 1,
+              });
+            }
+          }
+        } else {
+          state.nodeGlow[project.id] *= 0.95;
+        }
+        
+        // Draw node
+        const baseGlow = isCollected ? 30 : 15;
+        const glowIntensity = baseGlow + state.nodeGlow[project.id] * 20;
+        
+        ctx.shadowBlur = glowIntensity;
+        ctx.shadowColor = "#7EE3C7";
+        
+        // Outer glow
+        ctx.fillStyle = isCollected ? "rgba(255,211,110,0.6)" : "rgba(232,250,244,0.8)";
+        ctx.beginPath();
+        ctx.arc(project.x, project.y, state.nodeRadius + 5, 0, Math.PI * 2);
+        ctx.fill();
+        
+        // Inner core
+        ctx.fillStyle = isCollected ? "#FFD36E" : "#7EE3C7";
+        ctx.beginPath();
+        ctx.arc(project.x, project.y, state.nodeRadius, 0, Math.PI * 2);
+        ctx.fill();
+        
+        ctx.shadowBlur = 0;
+        
+        // Draw emoji
+        ctx.font = "32px Arial";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillStyle = "#072C3E";
+        ctx.fillText(project.emoji, project.x, project.y);
+        
+        // Expansion effect when near
+        if (state.nodeGlow[project.id] > 0.5) {
+          const scale = 1 + state.nodeGlow[project.id] * 0.3;
+          ctx.save();
+          ctx.translate(project.x, project.y);
+          ctx.scale(scale, scale);
+          ctx.globalAlpha = 0.5;
+          ctx.strokeStyle = "#7EE3C7";
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.arc(0, 0, state.nodeRadius + 10, 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.restore();
+        }
+      });
+
+      // Update and draw sparkles
+      state.sparkles = state.sparkles.filter(sparkle => {
+        sparkle.x += sparkle.vx * deltaTime;
+        sparkle.y += sparkle.vy * deltaTime;
+        sparkle.life -= 0.03 * deltaTime;
+        
+        if (sparkle.life <= 0) return false;
+        
+        ctx.fillStyle = `rgba(231,253,251,${sparkle.life})`;
+        ctx.beginPath();
+        ctx.arc(sparkle.x, sparkle.y, 4, 0, Math.PI * 2);
+        ctx.fill();
+        
+        return true;
+      });
+
+      // Draw Plankton
+      ctx.save();
+      ctx.translate(state.player.x, state.player.y);
+      
+      // Flip horizontally if moving left
+      if (state.player.direction < 0) {
+        ctx.scale(-1, 1);
+      }
+      
+      // Bobbing animation
+      const bobOffset = Math.sin(now / 300) * 3;
+      ctx.translate(0, bobOffset);
+      
+      // Movement tilt
+      if (Math.abs(state.player.vx) > 1 || Math.abs(state.player.vy) > 1) {
+        const tilt = Math.sin(state.player.animFrame * Math.PI) * 0.07;
+        ctx.rotate(tilt);
+      }
+      
+      // Scale pulse
+      const scale = 1 + Math.sin(now / 400) * 0.05;
+      ctx.scale(scale, scale);
+      
+      if (planktonImg.complete) {
+        ctx.drawImage(
+          planktonImg,
+          -state.playerSize / 2,
+          -state.playerSize / 2,
+          state.playerSize,
+          state.playerSize
+        );
+      } else {
+        // Fallback
+        ctx.fillStyle = "#4CAF50";
+        ctx.fillRect(-state.playerSize / 2, -state.playerSize / 2, state.playerSize, state.playerSize);
+      }
+      
+      ctx.restore();
+
+      animationId = requestAnimationFrame(gameLoop);
+    };
+
+    animationId = requestAnimationFrame(gameLoop);
+
+    // Input handlers
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const state = gameStateRef.current;
+      if (e.key === "ArrowLeft" || e.key === "a" || e.key === "A") state.keys.left = true;
+      if (e.key === "ArrowRight" || e.key === "d" || e.key === "D") state.keys.right = true;
+      if (e.key === "ArrowUp" || e.key === "w" || e.key === "W") state.keys.up = true;
+      if (e.key === "ArrowDown" || e.key === "s" || e.key === "S") state.keys.down = true;
+    };
+
+    const handleKeyUp = (e: KeyboardEvent) => {
+      const state = gameStateRef.current;
+      if (e.key === "ArrowLeft" || e.key === "a" || e.key === "A") state.keys.left = false;
+      if (e.key === "ArrowRight" || e.key === "d" || e.key === "D") state.keys.right = false;
+      if (e.key === "ArrowUp" || e.key === "w" || e.key === "W") state.keys.up = false;
+      if (e.key === "ArrowDown" || e.key === "s" || e.key === "S") state.keys.down = false;
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("keyup", handleKeyUp);
+
+    return () => {
+      cancelAnimationFrame(animationId);
+      window.removeEventListener("resize", resizeCanvas);
+      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("keyup", handleKeyUp);
+    };
+  }, [isPaused, showProjectCard, collectedProjects]);
 
   const handleNextProject = () => {
-    setShowProjectCard(false);
+    if (!currentProject) return;
     
-    if (currentProjectIndex < PROJECTS.length - 1) {
-      setCurrentProjectIndex(prev => prev + 1);
-    } else {
-      // Start completion sequence
-      setShowTransition(true);
-
-      const steps = [
-        "Compiling Project Data...",
-        "Verifying Tech Stacks...",
-        "Generating Portfolio Report..."
-      ];
-
-      let currentStep = 0;
-      const interval = setInterval(() => {
-        if (currentStep < steps.length) {
-          setTransitionStep(currentStep);
-          currentStep++;
-        } else {
-          clearInterval(interval);
-          setTimeout(() => {
-            setShowTransition(false);
-            setShowComplete(true);
-          }, 800);
-        }
-      }, 1200);
+    setCollectedProjects([...collectedProjects, currentProject.id]);
+    setShowProjectCard(false);
+    setCurrentProject(null);
+    setIsPaused(false);
+    
+    // Reset node glow
+    gameStateRef.current.nodeGlow[currentProject.id] = 0;
+    
+    // Check completion
+    if (collectedProjects.length + 1 >= PROJECTS.length) {
+      setTimeout(() => {
+        setShowTransition(true);
+        
+        const steps = [
+          "Compiling Project Data...",
+          "Verifying Tech Stacks...",
+          "Generating Portfolio Report..."
+        ];
+        
+        let currentStep = 0;
+        const interval = setInterval(() => {
+          if (currentStep < steps.length) {
+            setTransitionStep(currentStep);
+            currentStep++;
+          } else {
+            clearInterval(interval);
+            setTimeout(() => {
+              setShowTransition(false);
+              setShowComplete(true);
+            }, 800);
+          }
+        }, 1200);
+      }, 500);
     }
   };
 
@@ -174,11 +515,11 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
             <span
               style={{
                 fontFamily: "'Orbitron', sans-serif",
-                color: BYTE_BUBBLES_THEME.text,
+                color: "#072C3E",
                 fontSize: 'clamp(0.75rem, 2.5vw, 1.1rem)',
               }}
             >
-              Projects ⭐ {collectedProjects.length} / 5
+              Badges Collected ⭐ {collectedProjects.length} / 5
             </span>
           </div>
           <Button variant="ghost" size="sm" onClick={() => setIsPaused(!isPaused)} className="text-xs sm:text-sm">
@@ -186,141 +527,40 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
           </Button>
         </div>
 
-        {/* Game Area */}
-        <div 
-          className="flex-1 relative p-3 sm:p-4 md:p-6 overflow-hidden flex items-center justify-center"
-          style={{
-            backgroundImage: 'url(https://harmless-tapir-303.convex.cloud/api/storage/4c392381-5251-4ad6-bb02-802a765e325c)',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat',
-            boxShadow: `inset 0 0 40px ${BYTE_BUBBLES_THEME.accent}60, inset 0 0 80px ${BYTE_BUBBLES_THEME.seafoam}40`,
-          }}
-        >
-          {/* Floating bubbles background */}
-          {Array.from({ length: 20 }).map((_, i) => (
-            <motion.div
-              key={`bubble-${i}`}
-              className="absolute rounded-full pointer-events-none"
-              style={{
-                width: `${20 + Math.random() * 30}px`,
-                height: `${20 + Math.random() * 30}px`,
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                background: `radial-gradient(circle at 35% 25%, rgba(255,255,255,0.6), rgba(135,206,250,0.4))`,
-                border: '1px solid rgba(255,255,255,0.3)',
-              }}
-              animate={{
-                y: [0, -50 - Math.random() * 100],
-                opacity: [0.3, 0.6, 0],
-              }}
-              transition={{
-                duration: 4 + Math.random() * 3,
-                repeat: Infinity,
-                delay: Math.random() * 3,
-              }}
-            />
-          ))}
+        {/* Game Canvas */}
+        <div className="flex-1 relative">
+          <canvas
+            ref={canvasRef}
+            className="w-full h-full"
+            style={{ display: "block" }}
+          />
+          
+          {/* Controls hint */}
+          <div
+            className="absolute bottom-4 left-1/2 -translate-x-1/2 px-4 py-2 rounded-full text-xs"
+            style={{
+              background: 'rgba(255,255,255,0.9)',
+              color: '#072C3E',
+              fontFamily: "'Nunito', sans-serif",
+            }}
+          >
+            Use Arrow Keys or WASD to move Plankton
+          </div>
+        </div>
 
-          {/* Project Path Map */}
-          {!showProjectCard && (
+        {/* Project Detail Card */}
+        <AnimatePresence>
+          {showProjectCard && currentProject && (
             <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="relative w-full h-full"
+              className="absolute inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
             >
-              {/* Connection lines */}
-              <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 1 }}>
-                {PROJECTS.slice(0, -1).map((project, i) => {
-                  const nextProject = PROJECTS[i + 1];
-                  return (
-                    <motion.line
-                      key={`line-${i}`}
-                      x1={`${project.x}%`}
-                      y1={`${project.y}%`}
-                      x2={`${nextProject.x}%`}
-                      y2={`${nextProject.y}%`}
-                      stroke={collectedProjects.includes(project.id) ? BYTE_BUBBLES_THEME.star : BYTE_BUBBLES_THEME.accent}
-                      strokeWidth="3"
-                      strokeDasharray="8 4"
-                      initial={{ pathLength: 0, opacity: 0.3 }}
-                      animate={{ pathLength: 1, opacity: collectedProjects.includes(project.id) ? 0.8 : 0.3 }}
-                      transition={{ duration: 1 }}
-                    />
-                  );
-                })}
-              </svg>
-
-              {/* Project nodes */}
-              {PROJECTS.map((project, index) => {
-                const isCollected = collectedProjects.includes(project.id);
-                const isCurrent = index === currentProjectIndex;
-                const isLocked = index > currentProjectIndex;
-
-                return (
-                  <motion.div
-                    key={project.id}
-                    className="absolute"
-                    style={{
-                      left: `${project.x}%`,
-                      top: `${project.y}%`,
-                      transform: 'translate(-50%, -50%)',
-                      zIndex: 10,
-                    }}
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ delay: index * 0.2 }}
-                  >
-                    <motion.button
-                      onClick={() => isCurrent && !isCollected && handleCollectProject()}
-                      disabled={isLocked || isCollected}
-                      className="relative"
-                      whileHover={isCurrent && !isCollected ? { scale: 1.1 } : {}}
-                      whileTap={isCurrent && !isCollected ? { scale: 0.95 } : {}}
-                    >
-                      <div
-                        className="w-16 h-16 sm:w-20 sm:h-20 rounded-full flex items-center justify-center text-2xl sm:text-3xl"
-                        style={{
-                          background: isCollected 
-                            ? `linear-gradient(135deg, ${BYTE_BUBBLES_THEME.star} 0%, #FFC94A 100%)`
-                            : isCurrent
-                            ? `radial-gradient(circle at 35% 25%, rgba(255,255,255,0.9), rgba(135,206,250,0.7) 40%, rgba(70,130,180,0.8))`
-                            : 'rgba(200,200,200,0.5)',
-                          border: `3px solid ${isCollected ? BYTE_BUBBLES_THEME.star : isCurrent ? '#fff' : '#999'}`,
-                          boxShadow: isCollected 
-                            ? `0 0 20px ${BYTE_BUBBLES_THEME.star}80`
-                            : isCurrent
-                            ? '0 0 20px rgba(135,206,250,0.8)'
-                            : 'none',
-                          cursor: isCurrent && !isCollected ? 'pointer' : 'default',
-                        }}
-                      >
-                        {isLocked ? '🔒' : project.emoji}
-                      </div>
-                      {isCurrent && !isCollected && (
-                        <motion.div
-                          className="absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap text-xs font-bold"
-                          style={{ color: BYTE_BUBBLES_THEME.text }}
-                          animate={{ y: [0, -5, 0] }}
-                          transition={{ duration: 1, repeat: Infinity }}
-                        >
-                          Click to explore!
-                        </motion.div>
-                      )}
-                    </motion.button>
-                  </motion.div>
-                );
-              })}
-            </motion.div>
-          )}
-
-          {/* Project Detail Card */}
-          <AnimatePresence>
-            {showProjectCard && (
               <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
+                initial={{ scale: 0.95, y: 20 }}
+                animate={{ scale: 1, y: 0 }}
+                exit={{ scale: 0.95, y: 20 }}
                 className="w-full max-w-[92vw] sm:max-w-2xl mx-auto relative"
               >
                 {/* Floating bubbles behind popup */}
@@ -384,17 +624,32 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
                   </motion.div>
                 ))}
 
+                {/* "Tech Badge Acquired!" floating text */}
+                <motion.div
+                  className="absolute -top-8 left-1/2 -translate-x-1/2 text-lg font-bold"
+                  style={{
+                    color: '#E7FDFB',
+                    fontFamily: "'Orbitron', sans-serif",
+                    textShadow: '0 0 10px #7EE3C7',
+                  }}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: [0, 1, 1, 0], y: [20, -10, -10, -30] }}
+                  transition={{ duration: 2, ease: "easeOut" }}
+                >
+                  Tech Badge Acquired!
+                </motion.div>
+
                 {/* XP Float */}
                 <motion.div
-                  className="absolute -top-6 sm:-top-8 left-1/2 -translate-x-1/2 px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-semibold"
+                  className="absolute -top-14 left-1/2 -translate-x-1/2 px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-semibold"
                   style={{
                     background: '#B8F1D2',
                     color: '#025B47',
                     fontFamily: "'Nunito', sans-serif",
                   }}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: [0, 1, 1, 0], y: [20, -10, -10, -30] }}
-                  transition={{ duration: 2, ease: "easeOut" }}
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: [0, 1, 1, 0], y: [30, 0, 0, -20] }}
+                  transition={{ duration: 2, ease: "easeOut", delay: 0.3 }}
                 >
                   +40 XP
                 </motion.div>
@@ -514,18 +769,18 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
                         e.currentTarget.style.transform = 'scale(1)';
                       }}
                     >
-                      {currentProjectIndex < PROJECTS.length - 1 ? "Next Project →" : "Complete Assembly →"}
+                      {collectedProjects.length + 1 < PROJECTS.length ? "Next Project →" : "Complete Assembly →"}
                     </Button>
                   </CardContent>
                 </Card>
               </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Pause Menu */}
         <AnimatePresence>
-          {isPaused && (
+          {isPaused && !showProjectCard && (
             <motion.div
               className="absolute inset-0 z-30 flex items-center justify-center bg-black/60 backdrop-blur-md"
               initial={{ opacity: 0 }}
