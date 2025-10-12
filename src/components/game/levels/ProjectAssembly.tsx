@@ -318,13 +318,13 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
         ctx.shadowBlur = glowIntensity;
         ctx.shadowColor = "#7EE3C7";
         
-        // Outer glow
-        ctx.fillStyle = isCollected ? "rgba(255,211,110,0.6)" : "rgba(232,250,244,0.8)";
+        // Outer glow (very subtle)
+        ctx.fillStyle = isCollected ? "rgba(255,211,110,0.3)" : "rgba(232,250,244,0.4)";
         ctx.beginPath();
-        ctx.arc(project.x, project.y, state.nodeRadius + 5, 0, Math.PI * 2);
+        ctx.arc(project.x, project.y, state.nodeRadius + 2, 0, Math.PI * 2);
         ctx.fill();
         
-        // Inner core
+        // Inner core (minimal border)
         ctx.fillStyle = isCollected ? "#FFD36E" : "#7EE3C7";
         ctx.beginPath();
         ctx.arc(project.x, project.y, state.nodeRadius, 0, Math.PI * 2);
