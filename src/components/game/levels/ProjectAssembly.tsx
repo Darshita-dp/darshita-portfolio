@@ -162,27 +162,8 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
 
       // Draw background image - ensure it covers the entire canvas
       if (bgImg.complete) {
-        // Calculate aspect ratios to cover the entire canvas
-        const canvasAspect = rect.width / rect.height;
-        const imgAspect = bgImg.width / bgImg.height;
-        
-        let drawWidth, drawHeight, offsetX, offsetY;
-        
-        if (canvasAspect > imgAspect) {
-          // Canvas is wider than image
-          drawWidth = rect.width;
-          drawHeight = rect.width / imgAspect;
-          offsetX = 0;
-          offsetY = (rect.height - drawHeight) / 2;
-        } else {
-          // Canvas is taller than image
-          drawHeight = rect.height;
-          drawWidth = rect.height * imgAspect;
-          offsetX = (rect.width - drawWidth) / 2;
-          offsetY = 0;
-        }
-        
-        ctx.drawImage(bgImg, offsetX, offsetY, drawWidth, drawHeight);
+        // Force cover behavior - image fills entire canvas
+        ctx.drawImage(bgImg, 0, 0, rect.width, rect.height);
       } else {
         // Fallback gradient while image loads
         const gradient = ctx.createLinearGradient(0, 0, 0, rect.height);
