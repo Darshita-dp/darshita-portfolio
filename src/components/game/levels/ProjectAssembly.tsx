@@ -128,13 +128,12 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
       ctx.scale(dpr, dpr);
     };
 
-    // Initial resize with delay to ensure DOM is ready
-    const initialResize = () => {
-      resizeCanvas();
-      setTimeout(resizeCanvas, 100);
-    };
-
-    initialResize();
+    // Force immediate resize
+    resizeCanvas();
+    // Add a small delay to ensure DOM is fully ready
+    setTimeout(resizeCanvas, 50);
+    setTimeout(resizeCanvas, 150);
+    
     window.addEventListener("resize", resizeCanvas);
 
     // Game loop
@@ -160,10 +159,15 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
       // Clear canvas
       ctx.clearRect(0, 0, rect.width, rect.height);
 
-      // Draw background - simple and direct
-      if (bgImg.complete) {
+      // Draw background - ensure it covers entire canvas
+      if (bgImg.complete && bgImg.width > 0) {
+        // Save context state
+        ctx.save();
+        // Draw background to fill entire canvas
         ctx.drawImage(bgImg, 0, 0, rect.width, rect.height);
+        ctx.restore();
       } else {
+        // Fallback color while loading
         ctx.fillStyle = "#A8F7E3";
         ctx.fillRect(0, 0, rect.width, rect.height);
       }
@@ -563,14 +567,16 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
         </div>
 
         {/* Game Canvas */}
-        <div className="flex-1 relative" style={{ background: 'transparent' }}>
+        <div className="flex-1 relative" style={{ background: '#A8F7E3', overflow: 'hidden' }}>
           <canvas
             ref={canvasRef}
             className="w-full h-full"
             style={{ 
               display: "block",
               transform: "translateZ(0)",
-              imageRendering: "auto"
+              imageRendering: "auto",
+              width: "100%",
+              height: "100%"
             }}
           />
           
