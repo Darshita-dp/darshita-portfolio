@@ -204,9 +204,9 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
       }
 
       // Draw glowing paths between nodes
-      ctx.strokeStyle = "#9EF1C8";
+      ctx.strokeStyle = "#BDF7E4";
       ctx.lineWidth = 3;
-      ctx.shadowBlur = 10;
+      ctx.shadowBlur = 15;
       ctx.shadowColor = "#9EF1C8";
       
       for (let i = 0; i < PROJECTS.length - 1; i++) {
@@ -331,21 +331,40 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
           state.nodeGlow[project.id] *= 0.95;
         }
         
-        // Draw node
-        const baseGlow = isCollected ? 30 : 15;
-        const glowIntensity = baseGlow + state.nodeGlow[project.id] * 20;
+        // Draw node with enhanced glow
+        const baseGlow = isCollected ? 15 : 12;
+        const glowIntensity = baseGlow + state.nodeGlow[project.id] * 8;
         
         ctx.shadowBlur = glowIntensity;
-        ctx.shadowColor = "#7EE3C7";
+        ctx.shadowColor = "#9EF1C8";
         
-        // Outer glow (very subtle)
-        ctx.fillStyle = isCollected ? "rgba(255,211,110,0.3)" : "rgba(232,250,244,0.4)";
+        // Outer glow ring
+        ctx.fillStyle = isCollected ? "rgba(255,211,110,0.4)" : "rgba(189,247,228,0.5)";
         ctx.beginPath();
-        ctx.arc(project.x, project.y, state.nodeRadius + 2, 0, Math.PI * 2);
+        ctx.arc(project.x, project.y, state.nodeRadius + 3, 0, Math.PI * 2);
         ctx.fill();
         
-        // Inner core (minimal border)
-        ctx.fillStyle = isCollected ? "#FFD36E" : "#7EE3C7";
+        // White rim
+        ctx.strokeStyle = "rgba(255,255,255,0.4)";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(project.x, project.y, state.nodeRadius + 1, 0, Math.PI * 2);
+        ctx.stroke();
+        
+        // Inner core with radial gradient
+        const gradient = ctx.createRadialGradient(
+          project.x - state.nodeRadius * 0.3,
+          project.y - state.nodeRadius * 0.3,
+          0,
+          project.x,
+          project.y,
+          state.nodeRadius
+        );
+        gradient.addColorStop(0, isCollected ? "#FFE89D" : "#E8FAF4");
+        gradient.addColorStop(0.7, isCollected ? "#FFD36E" : "#BDF7E4");
+        gradient.addColorStop(1, isCollected ? "#FFC94A" : "#9EF1C8");
+        
+        ctx.fillStyle = gradient;
         ctx.beginPath();
         ctx.arc(project.x, project.y, state.nodeRadius, 0, Math.PI * 2);
         ctx.fill();
@@ -413,7 +432,7 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
         return true;
       });
 
-      // Draw Plankton
+      // Draw Plankton with shadow
       ctx.save();
       ctx.translate(state.player.x, state.player.y);
       
@@ -436,6 +455,11 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
       const scale = 1 + Math.sin(now / 400) * 0.05;
       ctx.scale(scale, scale);
       
+      // Add drop shadow
+      ctx.shadowColor = "rgba(19,58,46,0.45)";
+      ctx.shadowBlur = 6;
+      ctx.shadowOffsetY = 3;
+      
       if (planktonImg.complete) {
         ctx.drawImage(
           planktonImg,
@@ -449,6 +473,10 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
         ctx.fillStyle = "#4CAF50";
         ctx.fillRect(-state.playerSize / 2, -state.playerSize / 2, state.playerSize, state.playerSize);
       }
+      
+      ctx.shadowColor = "transparent";
+      ctx.shadowBlur = 0;
+      ctx.shadowOffsetY = 0;
       
       ctx.restore();
 
@@ -554,16 +582,16 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
           height: '85vh',
           maxHeight: '85vh',
           background: 'transparent',
-          border: `3px solid #9ED8E080`,
-          boxShadow: `0 0 30px #9ED8E040, 0 8px 32px rgba(0,0,0,0.2)`,
+          border: `3px solid #9EF1C8`,
+          boxShadow: `0 0 30px rgba(158,241,200,0.6), 0 8px 32px rgba(0,0,0,0.3), inset 0 0 60px rgba(0,0,0,0.1)`,
         }}
       >
         {/* Header */}
         <div
           className="flex items-center justify-between px-2 py-2 sm:px-4 sm:py-3 border-b"
           style={{
-            borderColor: `rgba(255,255,255,0.2)`,
-            background: '#FFD36E',
+            borderColor: `rgba(158,241,200,0.3)`,
+            background: 'linear-gradient(180deg, #EAFBF5 0%, #CFF6E7 100%)',
             backdropFilter: 'blur(8px)',
           }}
         >
@@ -574,8 +602,10 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
             <span
               style={{
                 fontFamily: "'Orbitron', sans-serif",
-                color: "#072C3E",
+                color: "#17202A",
                 fontSize: 'clamp(0.75rem, 2.5vw, 1.1rem)',
+                fontWeight: 700,
+                textShadow: '0 0 6px #9EF1C8',
               }}
             >
               Badges Collected ⭐ {collectedProjects.length} / 5
@@ -598,9 +628,13 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
           <div
             className="absolute bottom-4 left-1/2 -translate-x-1/2 px-4 py-2 rounded-full text-xs"
             style={{
-              background: 'rgba(255,255,255,0.9)',
-              color: '#072C3E',
+              background: 'rgba(255,255,255,0.95)',
+              backdropFilter: 'blur(10px)',
+              border: '2px solid #9EF1C8',
+              color: '#17202A',
               fontFamily: "'Nunito', sans-serif",
+              fontWeight: 600,
+              boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
             }}
           >
             Use Arrow Keys or WASD to move Plankton
