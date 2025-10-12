@@ -523,10 +523,10 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
           damping: 25,
           opacity: { duration: 0.2 }
         }}
-        className="w-[96vw] max-w-[500px] sm:w-[90vw] sm:max-w-4xl flex flex-col rounded-2xl sm:rounded-3xl overflow-hidden"
+        className="w-[96vw] max-w-[600px] sm:w-[92vw] sm:max-w-5xl flex flex-col rounded-2xl sm:rounded-3xl overflow-hidden"
         style={{
-          height: '110vh',
-          maxHeight: '110vh',
+          height: '100vh',
+          maxHeight: '100vh',
           background: 'transparent',
           border: `3px solid #9EF1C8`,
           boxShadow: `0 0 30px rgba(158,241,200,0.6), 0 8px 32px rgba(0,0,0,0.3), inset 0 0 60px rgba(0,0,0,0.1)`,
