@@ -30,8 +30,8 @@ const PROJECTS: Project[] = [
     tech: ["SwiftUI", "Core Data", "MVVM"],
     challenge: "Built an iOS task management app with local data persistence",
     impact: "Streamlined personal productivity with intuitive UI",
-    x: 150,
-    y: 150,
+    x: 200,
+    y: 120,
   },
   {
     id: 2,
@@ -40,8 +40,8 @@ const PROJECTS: Project[] = [
     tech: ["Python", "Machine Learning", "Data Analysis"],
     challenge: "Developed predictive models for business forecasting",
     impact: "Achieved 87% prediction accuracy for key metrics",
-    x: 250,
-    y: 300,
+    x: 450,
+    y: 280,
   },
   {
     id: 3,
@@ -50,8 +50,8 @@ const PROJECTS: Project[] = [
     tech: ["SQL", "Power BI", "Process Analysis"],
     challenge: "Analyzed and optimized IT service workflows",
     impact: "Reduced ticket resolution time by 30%, targeted 99.9% uptime",
-    x: 350,
-    y: 150,
+    x: 320,
+    y: 400,
   },
   {
     id: 4,
@@ -60,8 +60,8 @@ const PROJECTS: Project[] = [
     tech: ["Excel", "Data Visualization", "Forecasting"],
     challenge: "Built analytics dashboard for local candle business",
     impact: "Increased forecast accuracy by 20%",
-    x: 450,
-    y: 300,
+    x: 580,
+    y: 150,
   },
   {
     id: 5,
@@ -70,8 +70,8 @@ const PROJECTS: Project[] = [
     tech: ["React", "API Integration", "UI/UX"],
     challenge: "Created movie discovery web application",
     impact: "Seamless browsing experience with real-time data",
-    x: 550,
-    y: 200,
+    x: 380,
+    y: 220,
   },
 ];
 
