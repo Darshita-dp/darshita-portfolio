@@ -1,1 +1,6 @@
-if (!card || card.isFlipped || card.isMatched) return;
+const initialResize = () => {
+  resizeCanvas();
+  setTimeout(resizeCanvas, 100);
+};
+
+initialResize();
