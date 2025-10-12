@@ -48,6 +48,21 @@ export function LevelPreview({ levelId, onStart, onClose }: LevelPreviewProps) {
           icon: "",
           buttonText: "Start Battle →",
         };
+      case 4: // Projects
+        return {
+          title: "💻 INITIALIZING PROJECT PATHFINDER…",
+          body: (
+            <>
+              <p className="mb-3">System Map Offline.</p>
+              <p className="mb-3">The coral data maze has scattered Darshita's project archives across the ocean grid.</p>
+              <p className="mb-2">🧩 <strong>Mission:</strong> Navigate through the maze to locate five lost project nodes and recover their tech badges.</p>
+              <p className="mb-2">🪄 <strong>Goal:</strong> Collect all badges to reactivate the Project File and restore full system visibility.</p>
+              <p>💡 <strong>Tip:</strong> Follow the glowing trails — every pulse points to a project waiting to be rediscovered.</p>
+            </>
+          ),
+          icon: "",
+          buttonText: "Start Exploration →",
+        };
       default:
         return {
           title: "Level Preview",
