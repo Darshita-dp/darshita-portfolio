@@ -32,18 +32,38 @@
   z-index: 1;
 }
 
-/* Flip animations */
-.flip-right {
+/* Underlay transforms - resting state */
+.underlay-left {
   transform-origin: left center;
-  animation: flipRight 0.8s cubic-bezier(0.43, 0.13, 0.23, 0.96) forwards;
+  transform: rotateY(180deg);
+  backface-visibility: hidden;
 }
 
-.flip-left {
+.underlay-right {
   transform-origin: right center;
-  animation: flipLeft 0.8s cubic-bezier(0.43, 0.13, 0.23, 0.96) forwards;
+  transform: rotateY(0deg);
+  backface-visibility: hidden;
 }
 
-@keyframes flipRight {
+/* Flipping layer - higher z-index */
+.flipping-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+
+/* Next flip: right to left (0deg → -180deg) */
+.flip-next {
+  transform-origin: right center;
+  animation: flipNext 0.85s cubic-bezier(0.43, 0.13, 0.23, 0.96) forwards;
+}
+
+@keyframes flipNext {
   from {
     transform: rotateY(0deg);
   }
@@ -52,7 +72,13 @@
   }
 }
 
-@keyframes flipLeft {
+/* Previous flip: left to right (180deg → 0deg) */
+.flip-prev {
+  transform-origin: left center;
+  animation: flipPrev 0.85s cubic-bezier(0.43, 0.13, 0.23, 0.96) forwards;
+}
+
+@keyframes flipPrev {
   from {
     transform: rotateY(180deg);
   }
@@ -63,13 +89,13 @@
 
 /* Cover to page transition */
 .cover-flip-exit {
-  transform-origin: left center;
-  animation: coverFlipOut 0.8s cubic-bezier(0.43, 0.13, 0.23, 0.96) forwards;
+  transform-origin: right center;
+  animation: coverFlipOut 0.85s cubic-bezier(0.43, 0.13, 0.23, 0.96) forwards;
 }
 
 .page-flip-enter {
   transform-origin: left center;
-  animation: pageFlipIn 0.8s cubic-bezier(0.43, 0.13, 0.23, 0.96) forwards;
+  animation: pageFlipIn 0.85s cubic-bezier(0.43, 0.13, 0.23, 0.96) forwards;
 }
 
 @keyframes coverFlipOut {
@@ -94,14 +120,58 @@
   }
 }
 
+/* Fold and shadow effects during flip */
+.fold-highlight {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(to left, rgba(255,255,255,0.35), transparent);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.1s;
+}
+
+.fold-shadow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(to right, rgba(0,0,0,0.55), transparent);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.1s;
+}
+
+.receiving-shadow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.18);
+  pointer-events: none;
+  opacity: 0;
+  filter: blur(12px);
+  transition: opacity 0.1s;
+}
+
 /* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
   .book-page,
-  .flip-right,
-  .flip-left,
+  .flip-next,
+  .flip-prev,
   .cover-flip-exit,
   .page-flip-enter {
-    animation: none;
-    transition: opacity 0.3s ease;
+    animation: none !important;
+    transition: opacity 0.3s ease !important;
+  }
+  
+  .underlay-left,
+  .underlay-right,
+  .flipping-layer {
+    transition: none !important;
   }
 }
