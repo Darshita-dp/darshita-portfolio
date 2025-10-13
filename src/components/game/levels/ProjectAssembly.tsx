@@ -156,7 +156,7 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
   const [transitionStep, setTransitionStep] = useState(0);
 
   const gameStateRef = useRef({
-    player: { x: 780, y: 250, vx: 0, vy: 0, direction: 1, animFrame: 0 },
+    player: { x: 740, y: 250, vx: 0, vy: 0, direction: 1, animFrame: 0 },
     keys: { left: false, right: false, up: false, down: false },
     bubbleTrail: [] as { x: number; y: number; life: number }[],
     sparkles: [] as { x: number; y: number; vx: number; vy: number; life: number }[],
