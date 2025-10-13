@@ -316,9 +316,9 @@ export default function Story() {
               {/* Current Page with Flip Animation */}
               <motion.div
                 key={`page-${currentPage}`}
-                initial={{ opacity: 0, rotateY: -90, transformOrigin: "left center" }}
-                animate={{ opacity: 1, rotateY: 0, transformOrigin: "left center" }}
-                exit={{ opacity: 0, rotateY: 90, transformOrigin: "left center" }}
+                initial={{ opacity: 0, rotateY: 90, transformOrigin: "right center" }}
+                animate={{ opacity: 1, rotateY: 0, transformOrigin: "right center" }}
+                exit={{ opacity: 0, rotateY: -90, transformOrigin: "right center" }}
                 transition={{ 
                   duration: 0.8,
                   ease: [0.43, 0.13, 0.23, 0.96]
