@@ -329,17 +329,10 @@ export default function Story() {
                 <motion.div
                   key={`page-${currentPage}`}
                   className="relative w-[80vw] max-w-sm aspect-[2/3] mx-auto"
-                  initial={{ opacity: 0, scale: 0.95 }}
+                  initial={{ opacity: 1, scale: 1 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  exit={
-                    direction === 'next'
-                      ? { opacity: 0, scale: 1.2, rotateY: -90 }
-                      : { opacity: 1, scale: 1 }
-                  }
-                  transition={{ 
-                    duration: direction === 'next' ? 0.8 : 0,
-                    ease: [0.43, 0.13, 0.23, 0.96] 
-                  }}
+                  exit={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0 }}
                   style={{
                     transformStyle: "preserve-3d",
                     backfaceVisibility: "hidden",
