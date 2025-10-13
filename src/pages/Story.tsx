@@ -50,6 +50,7 @@ export default function Story() {
   const [currentPage, setCurrentPage] = useState<PageState>("cover");
   const [isMuted, setIsMuted] = useState(true);
   const [isBookOpen, setIsBookOpen] = useState(false);
+  const [direction, setDirection] = useState<'next' | 'prev'>('next');
 
   const openBook = () => {
     setIsBookOpen(true);
@@ -69,6 +70,16 @@ export default function Story() {
       setCurrentPage("cover");
       setIsBookOpen(false);
     }
+  };
+
+  const nextPageWithDirection = () => {
+    setDirection('next');
+    nextPage();
+  };
+
+  const prevPageWithDirection = () => {
+    setDirection('prev');
+    prevPage();
   };
 
   return (
@@ -316,9 +327,21 @@ export default function Story() {
               {/* Current Page with Flip Animation */}
               <motion.div
                 key={`page-${currentPage}`}
-                initial={{ opacity: 0, rotateY: 90, transformOrigin: "right center" }}
-                animate={{ opacity: 1, rotateY: 0, transformOrigin: "right center" }}
-                exit={{ opacity: 0, rotateY: -90, transformOrigin: "right center" }}
+                initial={{ 
+                  opacity: 0, 
+                  rotateY: direction === 'next' ? 90 : -90, 
+                  transformOrigin: direction === 'next' ? "left center" : "right center" 
+                }}
+                animate={{ 
+                  opacity: 1, 
+                  rotateY: 0, 
+                  transformOrigin: direction === 'next' ? "left center" : "right center" 
+                }}
+                exit={{ 
+                  opacity: 0, 
+                  rotateY: direction === 'next' ? -90 : 90, 
+                  transformOrigin: direction === 'next' ? "left center" : "right center" 
+                }}
                 transition={{ 
                   duration: 0.8,
                   ease: [0.43, 0.13, 0.23, 0.96]
@@ -403,7 +426,7 @@ export default function Story() {
                 className="flex justify-between items-center mt-6 w-[80vw] max-w-sm mx-auto"
               >
                 <Button
-                  onClick={prevPage}
+                  onClick={prevPageWithDirection}
                   variant="outline"
                   size="sm"
                   className="bg-amber-50/80 hover:bg-amber-100 border-amber-600 backdrop-blur-sm"
@@ -412,7 +435,7 @@ export default function Story() {
                 </Button>
                 {currentPage < storyPages.length - 1 && (
                   <Button
-                    onClick={nextPage}
+                    onClick={nextPageWithDirection}
                     variant="outline"
                     size="sm"
                     className="bg-amber-50/80 hover:bg-amber-100 border-amber-600 backdrop-blur-sm"
