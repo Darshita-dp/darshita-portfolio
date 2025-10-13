@@ -149,7 +149,7 @@ export function GameModals({
                   >
                     Recovered Project Nodes:
                   </h3>
-                  <div className="space-y-1 text-xs" style={{ color: BYTE_BUBBLES_THEME.textSecondary }}>
+                  <div className="space-y-1 text-xs" style={{ color: "#4A5568" }}>
                     {projects.map((project) => (
                       <p key={project.id}>
                         {project.emoji} <strong>{project.name}</strong> — {project.tech.join(" | ")}
@@ -165,7 +165,7 @@ export function GameModals({
                   >
                     Impact Highlights:
                   </h3>
-                  <div className="space-y-1 text-xs" style={{ color: BYTE_BUBBLES_THEME.textSecondary }}>
+                  <div className="space-y-1 text-xs" style={{ color: "#4A5568" }}>
                     <p>• 5 project modules reactivated from system archives</p>
                     <p>• Restored full cross-domain functionality: mobile, web, data, and visualization</p>
                     <p>• Demonstrated blend of creativity + logic powering every build</p>
@@ -176,7 +176,7 @@ export function GameModals({
                   <p className="text-base font-bold" style={{ color: BYTE_BUBBLES_THEME.star }}>
                     XP Earned: +250
                   </p>
-                  <p className="text-sm" style={{ color: BYTE_BUBBLES_THEME.textSecondary }}>
+                  <p className="text-sm" style={{ color: "#4A5568" }}>
                     Badge Unlocked: 💻 "Full-Stack Innovator"
                   </p>
                   <p className="text-sm font-bold" style={{ color: BYTE_BUBBLES_THEME.text }}>
