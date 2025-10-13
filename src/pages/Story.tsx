@@ -72,7 +72,7 @@ export default function Story() {
   };
 
   return (
-    <div className="min-h-screen relative overflow-hidden bg-gradient-to-br from-pink-100 via-yellow-50 to-blue-100">
+    <div className="min-h-screen relative overflow-hidden bg-gradient-to-br from-pink-200 via-yellow-100 to-blue-200">
       {/* Floating Particles Background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {[...Array(20)].map((_, i) => (
@@ -102,6 +102,7 @@ export default function Story() {
             style={{
               left: `${Math.random() * 100}%`,
               top: `-10%`,
+              filter: "drop-shadow(0 0 3px rgba(255, 192, 203, 0.6))",
             }}
             animate={{
               y: ["0vh", "110vh"],
@@ -112,11 +113,34 @@ export default function Story() {
               duration: 8 + Math.random() * 4,
               repeat: Infinity,
               delay: Math.random() * 5,
-              ease: "linear",
+              ease: "easeInOut",
             }}
           >
             🌸
           </motion.div>
+        ))}
+        {/* Glowing Particles */}
+        {[...Array(15)].map((_, i) => (
+          <motion.div
+            key={`glow-particle-${i}`}
+            className="absolute w-1 h-1 bg-white rounded-full"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              boxShadow: "0 0 8px rgba(255,255,255,0.8), 0 0 12px rgba(255,215,0,0.5)",
+            }}
+            animate={{
+              y: [0, -40, 0],
+              opacity: [0.3, 1, 0.3],
+              scale: [0.5, 1.2, 0.5],
+            }}
+            transition={{
+              duration: 4 + Math.random() * 3,
+              repeat: Infinity,
+              delay: Math.random() * 3,
+              ease: "easeInOut",
+            }}
+          />
         ))}
       </div>
 
@@ -162,16 +186,62 @@ export default function Story() {
                   backgroundImage: "url('https://harmless-tapir-303.convex.cloud/api/storage/22a08587-dd5c-4b71-9f6e-4f377f58745b')",
                   backgroundSize: "cover",
                   backgroundPosition: "center",
-                  boxShadow: "0 0 0 4px rgba(255, 215, 0, 0.3), 0 0 0 8px rgba(255, 192, 203, 0.2), 0 20px 50px rgba(0,0,0,0.3)"
+                  boxShadow: "0 0 0 4px rgba(255, 215, 0, 0.3), 0 0 0 8px rgba(255, 192, 203, 0.2), 0 20px 50px rgba(0,0,0,0.3), 0 30px 80px rgba(255, 192, 203, 0.4)",
+                  transform: "perspective(1000px) rotateX(2deg)",
                 }}>
-                {/* Glow Effect */}
+                {/* Sunlight Glow from Top-Left */}
                 <motion.div
-                  className="absolute inset-0 bg-gradient-to-br from-yellow-200/30 to-pink-200/30"
+                  className="absolute inset-0 bg-gradient-to-br from-yellow-100/60 via-transparent to-transparent"
+                  style={{
+                    mixBlendMode: "overlay",
+                  }}
                   animate={{
-                    opacity: [0.2, 0.4, 0.2],
+                    opacity: [0.4, 0.7, 0.4],
                   }}
                   transition={{
-                    duration: 2,
+                    duration: 3,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                />
+
+                {/* Soft Vignette */}
+                <div 
+                  className="absolute inset-0"
+                  style={{
+                    background: "radial-gradient(circle at center, transparent 40%, rgba(0,0,0,0.15) 100%)",
+                  }}
+                />
+
+                {/* Diagonal Shine Animation */}
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-br from-transparent via-white/30 to-transparent"
+                  style={{
+                    transform: "translateX(-100%) translateY(-100%) rotate(45deg)",
+                    width: "200%",
+                    height: "200%",
+                  }}
+                  animate={{
+                    transform: [
+                      "translateX(-100%) translateY(-100%) rotate(45deg)",
+                      "translateX(100%) translateY(100%) rotate(45deg)",
+                    ],
+                  }}
+                  transition={{
+                    duration: 8,
+                    repeat: Infinity,
+                    ease: "linear",
+                  }}
+                />
+
+                {/* Enhanced Glow Effect */}
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-br from-yellow-200/40 to-pink-200/40"
+                  animate={{
+                    opacity: [0.3, 0.5, 0.3],
+                  }}
+                  transition={{
+                    duration: 2.5,
                     repeat: Infinity,
                   }}
                 />
