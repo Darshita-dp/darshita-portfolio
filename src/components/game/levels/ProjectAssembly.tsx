@@ -179,15 +179,15 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
     const rows = 8;
     const maze = generateMaze(cols, rows);
     
-    // Create entrance on the right side (middle row)
+    // Create entrance on the LEFT side (middle row)
     const entranceRow = Math.floor(rows / 2);
-    maze[entranceRow][cols - 1].walls.right = false;
+    maze[entranceRow][0].walls.left = false;
     
     gameStateRef.current.maze = maze;
     
-    // Position player at the entrance (slightly outside the maze)
+    // Position player at the LEFT entrance (slightly outside the maze)
     const cellSize = gameStateRef.current.cellSize;
-    const entranceX = (cols - 1) * cellSize + 20 + cellSize + 10; // Position outside the maze
+    const entranceX = 10; // Position on the left side, outside the maze
     const entranceY = entranceRow * cellSize + 20 + cellSize / 2;
     gameStateRef.current.player.x = entranceX;
     gameStateRef.current.player.y = entranceY;
@@ -337,19 +337,20 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
         const cellX = Math.floor((x - 20) / cellSize);
         const cellY = Math.floor((y - 20) / cellSize);
         
+        // Allow movement outside maze bounds (for entrance area)
         if (cellY < 0 || cellY >= state.maze!.length || cellX < 0 || cellX >= state.maze![0].length) {
-          return true; // Out of bounds
+          return false; // Allow movement outside maze
         }
         
         const cell = state.maze![cellY][cellX];
         const px = cellX * cellSize + 20;
         const py = cellY * cellSize + 20;
         
-        // Check each wall
-        if (cell.walls.top && y - playerRadius < py + 5) return true;
-        if (cell.walls.bottom && y + playerRadius > py + cellSize - 5) return true;
-        if (cell.walls.left && x - playerRadius < px + 5) return true;
-        if (cell.walls.right && x + playerRadius > px + cellSize - 5) return true;
+        // Check each wall with more lenient collision
+        if (cell.walls.top && y - playerRadius < py + 2) return true;
+        if (cell.walls.bottom && y + playerRadius > py + cellSize - 2) return true;
+        if (cell.walls.left && x - playerRadius < px + 2) return true;
+        if (cell.walls.right && x + playerRadius > px + cellSize - 2) return true;
         
         return false;
       };
