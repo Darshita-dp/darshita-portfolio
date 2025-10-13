@@ -304,7 +304,7 @@ export default function Story() {
           )}
 
           {typeof currentPage === "number" && (
-            <div className="relative" style={{ perspective: "2000px" }}>
+            <div className="relative">
               {/* Stacked Pages Effect - Show underlying pages */}
               {[...Array(storyPages.length - currentPage - 1)].map((_, i) => (
                 <div
@@ -324,13 +324,9 @@ export default function Story() {
                 />
               ))}
 
-              {/* Current Page without Flip Animation */}
-              <motion.div
+              {/* Current Page - No Animation */}
+              <div
                 key={`page-${currentPage}`}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.3 }}
                 className="relative w-[80vw] max-w-sm aspect-[2/3] mx-auto"
               >
                 {/* Book Page with Vintage Background */}
@@ -397,13 +393,10 @@ export default function Story() {
                     </motion.div>
                   </div>
                 </div>
-              </motion.div>
+              </div>
 
               {/* Navigation Buttons - Below the page stack */}
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 }}
+              <div
                 className="flex justify-between items-center mt-6 w-[80vw] max-w-sm mx-auto"
               >
                 <Button
@@ -433,7 +426,7 @@ export default function Story() {
                     Return Home 🌻
                   </Button>
                 )}
-              </motion.div>
+              </div>
             </div>
           )}
         </AnimatePresence>
