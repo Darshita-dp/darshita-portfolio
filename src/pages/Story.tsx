@@ -1,54 +1,138 @@
-import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, Volume2, VolumeX } from "lucide-react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
-import { useState, useEffect, useRef } from "react";
+import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { StoryTrack } from "@/components/story/StoryTrack";
+import { WeatherLayer } from "@/components/story/WeatherLayer";
+import { WalkingGirl } from "@/components/story/WalkingGirl";
+import { ChapterContent } from "@/components/story/ChapterContent";
+import { StoryNavigation } from "@/components/story/StoryNavigation";
 
-type PageState = "cover" | number;
-
-const storyPages = [
+const chapters = [
   {
+    id: 1,
     title: "Once Upon a Time...",
-    content: "In a land where sunflowers danced with the wind and stars whispered secrets to dreamers, there lived a curious girl named Darshita. From her earliest days, she saw the world not as it was, but as it could be—a canvas of endless possibilities, where imagination painted reality in hues of wonder and hope."
+    content: "A gentle heart, a bright dream.",
   },
   {
-    title: "The Garden of Solitude",
-    content: "In the quiet embrace of her grandparents' home, surrounded by gentle wisdom and unconditional love, Darshita discovered the beauty of stillness. Here, in this garden of solitude, she nurtured her creative spirit—drawing worlds on paper, weaving stories in her mind, and finding strength in the gentle rhythm of peaceful days."
+    id: 2,
+    title: "Garden of Solitude",
+    content: "She made art from quiet.",
   },
   {
-    title: "The Curious Princess",
-    content: "As she grew, so did her wonder for the magic hidden in technology. She saw in every line of code a spell waiting to be cast, in every algorithm a puzzle yearning to be solved. With the heart of an artist and the mind of a scholar, she embarked on a quest to master the language of machines and the poetry of data."
+    id: 3,
+    title: "Curious Princess",
+    content: "Colors met logic; curiosity grew.",
   },
   {
+    id: 4,
     title: "Crossing Oceans",
-    content: "One day, guided by courage and dreams that stretched beyond horizons, she crossed vast oceans to reach a new land. Leaving behind the familiar warmth of home, she ventured into the unknown—carrying with her the love of her family, the lessons of her past, and a heart full of hope for the adventures that awaited."
+    content: "A suitcase of courage.",
   },
   {
-    title: "The Kingdom of Knowledge",
-    content: "In the hallowed halls of Illinois State University, she found her kingdom of knowledge. As a Graduate Teaching Assistant, she shared her wisdom with 150 eager minds, guiding them through the mysteries of technology. With a perfect 4.0 GPA, she proved that dedication and passion could turn dreams into reality."
+    id: 5,
+    title: "Kingdom of Knowledge",
+    content: "Learning, helping, leading.",
   },
   {
-    title: "The Heart of Kindness",
-    content: "But her journey was never just about herself. At CIIWAS NGO, she used her gifts to empower 100+ women, building bridges of opportunity through technology. Her heart, as vast as her ambition, found joy in lifting others—transforming data into hope, and code into compassion."
+    id: 6,
+    title: "Circle of Friendship",
+    content: "Found her people, found her light.",
   },
   {
-    title: "The Circle of Friendship",
-    content: "Along her path, she gathered treasures more precious than gold—friendships that sparkled like stars, mentors who illuminated her way, and moments of pure joy that made her heart sing. In laughter shared and challenges overcome together, she discovered that the greatest magic lies in human connection."
+    id: 7,
+    title: "Heart of Kindness",
+    content: "Kindness even in storms.",
   },
   {
-    title: "The Dream Blooms",
-    content: "With each passing season, her dreams grew like sunflowers reaching toward the sun. She learned that growth comes not from perfection, but from persistence; not from avoiding failure, but from rising each time she fell. Her vision expanded, her skills deepened, and her spirit soared ever higher."
+    id: 8,
+    title: "Dream Blooms",
+    content: "New skies open.",
   },
   {
-    title: "A Bright and Happy Future",
-    content: "And so, dear reader, this tale continues to unfold—each day a new page, each challenge a new chapter. The story of Darshita is far from over. It's a story of sunflowers and stars, of courage and kindness, of dreams that refuse to dim. To be continued... with a bright and happy future 🌻"
-  }
+    id: 9,
+    title: "Bright & Happy Future",
+    content: "To be continued...",
+  },
 ];
 
 export default function Story() {
+  const navigate = useNavigate();
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const [currentChapter, setCurrentChapter] = useState(0);
+
+  useEffect(() => {
+    const chapter = Math.floor(scrollProgress * 9);
+    setCurrentChapter(Math.min(8, chapter));
+  }, [scrollProgress]);
+
+  useEffect(() => {
+    // Create scroll height for vertical scrolling
+    document.body.style.height = "900vh";
+    return () => {
+      document.body.style.height = "";
+    };
+  }, []);
+
+  const handleNavigate = (chapter: number) => {
+    const targetScroll = (chapter / 9) * (document.body.scrollHeight - window.innerHeight);
+    window.scrollTo({ top: targetScroll, behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "ArrowLeft") {
+        handleNavigate(Math.max(0, currentChapter - 1));
+      } else if (e.key === "ArrowRight") {
+        handleNavigate(Math.min(8, currentChapter + 1));
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [currentChapter]);
+
+  const isRaining = currentChapter === 6;
+
   return (
-    <div className="min-h-screen bg-white">
-      {/* Blank page */}
+    <div className="relative">
+      {/* Back button */}
+      <Button
+        variant="outline"
+        size="sm"
+        onClick={() => navigate("/")}
+        className="fixed top-4 left-4 z-50 bg-white/80 backdrop-blur-sm hover:bg-white/90"
+      >
+        <ArrowLeft className="w-4 h-4 mr-2" />
+        Back
+      </Button>
+
+      {/* Weather and Sky */}
+      <WeatherLayer scrollProgress={scrollProgress} currentChapter={currentChapter} />
+
+      {/* Walking Girl */}
+      <WalkingGirl scrollProgress={scrollProgress} isRaining={isRaining} />
+
+      {/* Story Track with Chapters */}
+      <StoryTrack
+        onProgressChange={setScrollProgress}
+        currentChapter={currentChapter}
+      >
+        {chapters.map((chapter, index) => (
+          <ChapterContent
+            key={chapter.id}
+            chapter={chapter}
+            isActive={currentChapter === index}
+          />
+        ))}
+      </StoryTrack>
+
+      {/* Navigation Controls */}
+      <StoryNavigation
+        currentChapter={currentChapter}
+        totalChapters={chapters.length}
+        onNavigate={handleNavigate}
+      />
     </div>
   );
 }
