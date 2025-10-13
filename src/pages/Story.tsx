@@ -181,7 +181,7 @@ export default function Story() {
               className="relative cursor-pointer group"
             >
               {/* Book Cover */}
-              <div className="relative w-[80vw] max-w-sm aspect-[3/4] rounded-2xl shadow-2xl overflow-hidden border-8 border-double border-yellow-400"
+              <div className="relative w-[80vw] max-w-sm aspect-[2/3] rounded-2xl shadow-2xl overflow-hidden"
                 style={{
                   backgroundImage: "url('https://harmless-tapir-303.convex.cloud/api/storage/22a08587-dd5c-4b71-9f6e-4f377f58745b')",
                   backgroundSize: "cover",
