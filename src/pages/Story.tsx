@@ -324,76 +324,90 @@ export default function Story() {
                 />
               ))}
 
-              {/* Current Page - No Animation */}
-              <div
-                key={`page-${currentPage}`}
-                className="relative w-[80vw] max-w-sm aspect-[2/3] mx-auto"
-              >
-                {/* Book Page with Vintage Background */}
-                <div 
-                  className="relative w-full h-full rounded-2xl shadow-2xl overflow-hidden"
+              {/* Current Page - With Animation */}
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={`page-${currentPage}`}
+                  className="relative w-[80vw] max-w-sm aspect-[2/3] mx-auto"
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={
+                    direction === 'next'
+                      ? { opacity: 0, scale: 1.2, rotateY: -90 }
+                      : { opacity: 0, scale: 0.95 }
+                  }
+                  transition={{ duration: 0.8, ease: [0.43, 0.13, 0.23, 0.96] }}
                   style={{
-                    backgroundImage: "url('https://harmless-tapir-303.convex.cloud/api/storage/0e364737-765e-4e00-8ec0-4e75836671b3')",
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                    boxShadow: "0 20px 40px rgba(0,0,0,0.3), 0 10px 20px rgba(0,0,0,0.2)",
+                    transformStyle: "preserve-3d",
+                    backfaceVisibility: "hidden",
                   }}
                 >
-                  {/* Semi-transparent overlay for text readability */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-white/40 via-amber-50/30 to-pink-50/40" />
+                  {/* Book Page with Vintage Background */}
+                  <div 
+                    className="relative w-full h-full rounded-2xl shadow-2xl overflow-hidden"
+                    style={{
+                      backgroundImage: "url('https://harmless-tapir-303.convex.cloud/api/storage/0e364737-765e-4e00-8ec0-4e75836671b3')",
+                      backgroundSize: "cover",
+                      backgroundPosition: "center",
+                      boxShadow: "0 20px 40px rgba(0,0,0,0.3), 0 10px 20px rgba(0,0,0,0.2)",
+                    }}
+                  >
+                    {/* Semi-transparent overlay for text readability */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-white/40 via-amber-50/30 to-pink-50/40" />
 
-                  {/* Page Content */}
-                  <div className="relative z-10 h-full flex flex-col p-6 md:p-8">
-                    <motion.h2
-                      initial={{ opacity: 0, y: -20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.3 }}
-                      className="text-xl md:text-2xl font-serif mb-4 text-center"
-                      style={{
-                        fontFamily: "'Cinzel Decorative', 'Great Vibes', serif",
-                        color: "#5D4037",
-                        textShadow: "1px 1px 2px rgba(255,255,255,0.8), 0 0 4px rgba(255,255,255,0.5)",
-                      }}
-                    >
-                      {storyPages[currentPage].title}
-                    </motion.h2>
-
-                    <motion.div
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ delay: 0.5 }}
-                      className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-yellow-400 scrollbar-track-yellow-100"
-                    >
-                      <p
-                        className="text-sm md:text-base leading-relaxed font-serif"
+                    {/* Page Content */}
+                    <div className="relative z-10 h-full flex flex-col p-6 md:p-8">
+                      <motion.h2
+                        initial={{ opacity: 0, y: -20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.3 }}
+                        className="text-xl md:text-2xl font-serif mb-4 text-center"
                         style={{
-                          fontFamily: "'Crimson Text', 'Georgia', serif",
-                          textAlign: "justify",
-                          color: "#4E342E",
-                          textShadow: "0.5px 0.5px 1px rgba(255,255,255,0.7)",
+                          fontFamily: "'Cinzel Decorative', 'Great Vibes', serif",
+                          color: "#5D4037",
+                          textShadow: "1px 1px 2px rgba(255,255,255,0.8), 0 0 4px rgba(255,255,255,0.5)",
                         }}
                       >
-                        {storyPages[currentPage].content}
-                      </p>
-                    </motion.div>
+                        {storyPages[currentPage].title}
+                      </motion.h2>
 
-                    {/* Page Number */}
-                    <motion.div
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ delay: 0.7 }}
-                      className="text-xs text-center mt-4"
-                      style={{
-                        fontFamily: "'Crimson Text', 'Georgia', serif",
-                        color: "#6D4C41",
-                        textShadow: "0.5px 0.5px 1px rgba(255,255,255,0.6)",
-                      }}
-                    >
-                      {currentPage + 1} / {storyPages.length}
-                    </motion.div>
+                      <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.5 }}
+                        className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-yellow-400 scrollbar-track-yellow-100"
+                      >
+                        <p
+                          className="text-sm md:text-base leading-relaxed font-serif"
+                          style={{
+                            fontFamily: "'Crimson Text', 'Georgia', serif",
+                            textAlign: "justify",
+                            color: "#4E342E",
+                            textShadow: "0.5px 0.5px 1px rgba(255,255,255,0.7)",
+                          }}
+                        >
+                          {storyPages[currentPage].content}
+                        </p>
+                      </motion.div>
+
+                      {/* Page Number */}
+                      <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.7 }}
+                        className="text-xs text-center mt-4"
+                        style={{
+                          fontFamily: "'Crimson Text', 'Georgia', serif",
+                          color: "#6D4C41",
+                          textShadow: "0.5px 0.5px 1px rgba(255,255,255,0.6)",
+                        }}
+                      >
+                        {currentPage + 1} / {storyPages.length}
+                      </motion.div>
+                    </div>
                   </div>
-                </div>
-              </div>
+                </motion.div>
+              </AnimatePresence>
 
               {/* Navigation Buttons - Below the page stack */}
               <div
