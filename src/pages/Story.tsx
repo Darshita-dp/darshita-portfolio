@@ -157,12 +157,18 @@ export default function Story() {
               className="relative cursor-pointer group"
             >
               {/* Book Cover */}
-              <div className="relative w-[90vw] max-w-md aspect-[3/4] bg-gradient-to-br from-pink-200 via-yellow-100 to-blue-200 rounded-2xl shadow-2xl border-4 border-yellow-300 overflow-hidden">
+              <div className="relative w-[90vw] max-w-md aspect-[3/4] rounded-2xl shadow-2xl overflow-hidden border-8 border-double border-yellow-400"
+                style={{
+                  backgroundImage: "url('https://harmless-tapir-303.convex.cloud/api/storage/22a08587-dd5c-4b71-9f6e-4f377f58745b')",
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                  boxShadow: "0 0 0 4px rgba(255, 215, 0, 0.3), 0 0 0 8px rgba(255, 192, 203, 0.2), 0 20px 50px rgba(0,0,0,0.3)"
+                }}>
                 {/* Glow Effect */}
                 <motion.div
-                  className="absolute inset-0 bg-gradient-to-br from-yellow-200/50 to-pink-200/50"
+                  className="absolute inset-0 bg-gradient-to-br from-yellow-200/30 to-pink-200/30"
                   animate={{
-                    opacity: [0.3, 0.6, 0.3],
+                    opacity: [0.2, 0.4, 0.2],
                   }}
                   transition={{
                     duration: 2,
@@ -196,24 +202,9 @@ export default function Story() {
                     </span>
                   </motion.h1>
 
-                  {/* Illustration Placeholder */}
-                  <motion.div
-                    className="w-32 h-32 md:w-40 md:h-40 rounded-full bg-gradient-to-br from-pink-300 to-yellow-200 flex items-center justify-center text-6xl mb-6 shadow-lg"
-                    animate={{
-                      boxShadow: [
-                        "0 10px 30px rgba(255,192,203,0.4)",
-                        "0 10px 40px rgba(255,215,0,0.6)",
-                        "0 10px 30px rgba(255,192,203,0.4)",
-                      ],
-                    }}
-                    transition={{ duration: 2, repeat: Infinity }}
-                  >
-                    🌻
-                  </motion.div>
-
                   {/* Click Prompt */}
                   <motion.p
-                    className="text-sm md:text-base text-gray-700 font-medium"
+                    className="text-sm md:text-base text-gray-700 font-medium mt-8"
                     animate={{
                       opacity: [0.5, 1, 0.5],
                     }}
