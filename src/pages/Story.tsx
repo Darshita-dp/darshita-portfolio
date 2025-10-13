@@ -183,7 +183,7 @@ export default function Story() {
               {/* Book Cover */}
               <div className="relative w-[80vw] max-w-sm aspect-[3/4] rounded-2xl shadow-2xl overflow-hidden border-8 border-double border-yellow-400"
                 style={{
-                  backgroundImage: "url('https://harmless-tapir-303.convex.cloud/api/storage/1e21ec27-9a43-4cdd-af21-c26827789f99')",
+                  backgroundImage: "url('https://harmless-tapir-303.convex.cloud/api/storage/22a08587-dd5c-4b71-9f6e-4f377f58745b')",
                   backgroundSize: "cover",
                   backgroundPosition: "center",
                   boxShadow: "0 0 0 4px rgba(255, 215, 0, 0.3), 0 0 0 8px rgba(255, 192, 203, 0.2), 0 20px 50px rgba(0,0,0,0.3), 0 30px 80px rgba(255, 192, 203, 0.4)",
