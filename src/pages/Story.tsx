@@ -3,9 +3,6 @@ import { ArrowLeft, Volume2, VolumeX } from "lucide-react";
 import { useNavigate } from "react-router";
 import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
-import { Book } from "@/components/story/Book";
-import { Paper } from "@/components/story/Paper";
-import "./Story.book.css";
 
 type PageState = "cover" | number;
 
@@ -54,15 +51,10 @@ export default function Story() {
   const [isMuted, setIsMuted] = useState(true);
   const [isBookOpen, setIsBookOpen] = useState(false);
   const [direction, setDirection] = useState<'next' | 'prev'>('next');
-  const [isFlipping, setIsFlipping] = useState(false);
 
   const openBook = () => {
-    setIsFlipping(true);
-    setTimeout(() => {
-      setIsBookOpen(true);
-      setCurrentPage(0);
-      setIsFlipping(false);
-    }, 800);
+    setIsBookOpen(true);
+    setCurrentPage(0);
   };
 
   const nextPage = () => {
@@ -174,16 +166,10 @@ export default function Story() {
               key="cover"
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
-              exit={{ 
-                opacity: 0, 
-                rotateY: -180,
-                scale: 0.95,
-                transformOrigin: "left center"
-              }}
-              transition={{ duration: 0.8, ease: [0.43, 0.13, 0.23, 0.96] }}
+              exit={{ opacity: 0, scale: 1.2, rotateY: -90 }}
+              transition={{ duration: 0.8 }}
               onClick={openBook}
-              className={`relative cursor-pointer group ${isFlipping ? 'cover-flip-exit' : ''}`}
-              style={{ transformStyle: "preserve-3d" }}
+              className="relative cursor-pointer group"
             >
               {/* Book Cover */}
               <div className="relative w-[80vw] max-w-sm aspect-[2/3] rounded-2xl shadow-2xl overflow-hidden"
@@ -318,7 +304,7 @@ export default function Story() {
           )}
 
           {typeof currentPage === "number" && (
-            <Book className="relative">
+            <div className="relative" style={{ perspective: "2000px" }}>
               {/* Stacked Pages Effect - Show underlying pages */}
               {[...Array(storyPages.length - currentPage - 1)].map((_, i) => (
                 <div
@@ -342,16 +328,16 @@ export default function Story() {
               <motion.div
                 key={`page-${currentPage}`}
                 initial={{ 
-                  opacity: currentPage === 0 && isFlipping ? 0 : 0,
-                  rotateY: currentPage === 0 && isFlipping ? 180 : (direction === 'next' ? 0 : -90),
-                  scale: currentPage === 0 && isFlipping ? 0.95 : (direction === 'next' ? 1.2 : 1),
-                  transformOrigin: "left center"
+                  opacity: 0, 
+                  rotateY: direction === 'next' ? 0 : -90,
+                  scale: direction === 'next' ? 1.2 : 1,
+                  transformOrigin: direction === 'next' ? "left center" : "right center" 
                 }}
                 animate={{ 
                   opacity: 1, 
                   rotateY: 0,
                   scale: 1,
-                  transformOrigin: "left center"
+                  transformOrigin: direction === 'next' ? "left center" : "right center" 
                 }}
                 exit={{ 
                   opacity: 0, 
@@ -363,7 +349,7 @@ export default function Story() {
                   duration: 0.8,
                   ease: [0.43, 0.13, 0.23, 0.96]
                 }}
-                className={`relative w-[80vw] max-w-sm aspect-[2/3] mx-auto ${currentPage === 0 && isFlipping ? 'page-flip-enter' : ''}`}
+                className="relative w-[80vw] max-w-sm aspect-[2/3] mx-auto"
                 style={{
                   transformStyle: "preserve-3d",
                   backfaceVisibility: "hidden",
@@ -470,7 +456,7 @@ export default function Story() {
                   </Button>
                 )}
               </motion.div>
-            </Book>
+            </div>
           )}
         </AnimatePresence>
       </div>
