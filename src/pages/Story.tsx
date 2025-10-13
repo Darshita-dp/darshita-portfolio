@@ -329,17 +329,20 @@ export default function Story() {
                 key={`page-${currentPage}`}
                 initial={{ 
                   opacity: 0, 
-                  rotateY: direction === 'next' ? 90 : -90, 
+                  rotateY: direction === 'next' ? 0 : -90,
+                  scale: direction === 'next' ? 1.2 : 1,
                   transformOrigin: direction === 'next' ? "left center" : "right center" 
                 }}
                 animate={{ 
                   opacity: 1, 
-                  rotateY: 0, 
+                  rotateY: 0,
+                  scale: 1,
                   transformOrigin: direction === 'next' ? "left center" : "right center" 
                 }}
                 exit={{ 
                   opacity: 0, 
-                  rotateY: direction === 'next' ? -90 : 90, 
+                  rotateY: direction === 'next' ? -90 : 90,
+                  scale: direction === 'next' ? 1 : 1,
                   transformOrigin: direction === 'next' ? "left center" : "right center" 
                 }}
                 transition={{ 
