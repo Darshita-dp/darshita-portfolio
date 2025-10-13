@@ -329,8 +329,8 @@ export default function Story() {
                 key={`page-${currentPage}`}
                 initial={{ 
                   opacity: 0, 
-                  rotateY: direction === 'next' ? 0 : -90,
-                  scale: direction === 'next' ? 1.2 : 1,
+                  rotateY: direction === 'next' ? 180 : -180,
+                  scale: 1,
                   transformOrigin: direction === 'next' ? "left center" : "right center" 
                 }}
                 animate={{ 
@@ -341,12 +341,12 @@ export default function Story() {
                 }}
                 exit={{ 
                   opacity: 0, 
-                  rotateY: direction === 'next' ? -90 : 90,
-                  scale: direction === 'next' ? 1 : 1,
-                  transformOrigin: direction === 'next' ? "left center" : "right center" 
+                  rotateY: direction === 'next' ? -180 : 180,
+                  scale: 1,
+                  transformOrigin: direction === 'next' ? "right center" : "left center" 
                 }}
                 transition={{ 
-                  duration: 0.8,
+                  duration: 0.85,
                   ease: [0.43, 0.13, 0.23, 0.96]
                 }}
                 className="relative w-[80vw] max-w-sm aspect-[2/3] mx-auto"
