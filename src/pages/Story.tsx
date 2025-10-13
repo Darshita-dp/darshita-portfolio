@@ -305,6 +305,20 @@ export default function Story() {
                   />
                 ))}
               </div>
+
+              {/* Click Prompt - Below Cover */}
+              <motion.p
+                className="text-sm md:text-base text-gray-700 font-medium mt-6"
+                style={{
+                  fontFamily: "'Great Vibes', 'Gwendolyn', cursive",
+                }}
+                animate={{
+                  opacity: [0.5, 1, 0.5],
+                }}
+                transition={{ duration: 1.5, repeat: Infinity }}
+              >
+                ✨ Tap to open your story…
+              </motion.p>
             </motion.div>
           )}
 
