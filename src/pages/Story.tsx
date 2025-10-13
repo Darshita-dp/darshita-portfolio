@@ -334,10 +334,10 @@ export default function Story() {
                   exit={
                     direction === 'next'
                       ? { opacity: 0, scale: 1.2, rotateY: -90 }
-                      : { opacity: 0, x: '100%' }
+                      : { opacity: 1, scale: 1 }
                   }
                   transition={{ 
-                    duration: direction === 'next' ? 0.8 : 0.4,
+                    duration: direction === 'next' ? 0.8 : 0,
                     ease: [0.43, 0.13, 0.23, 0.96] 
                   }}
                   style={{
