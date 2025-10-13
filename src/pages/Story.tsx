@@ -125,7 +125,7 @@ export default function Story() {
       </div>
 
       {/* Header */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-white/60 backdrop-blur-md border-b border-pink-200">
+      <header className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-pink-100/70 via-yellow-50/70 to-blue-100/70 backdrop-blur-md border-b border-pink-300/40 shadow-sm">
         <div className="container mx-auto px-4 py-3 flex items-center justify-between">
           <Button
             variant="ghost"
