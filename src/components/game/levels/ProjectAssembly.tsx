@@ -184,6 +184,13 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
     maze[entranceRow][cols - 1].walls.right = false;
     
     gameStateRef.current.maze = maze;
+    
+    // Position player at the entrance
+    const cellSize = gameStateRef.current.cellSize;
+    const entranceX = (cols - 1) * cellSize + 20 + cellSize / 2;
+    const entranceY = entranceRow * cellSize + 20 + cellSize / 2;
+    gameStateRef.current.player.x = entranceX;
+    gameStateRef.current.player.y = entranceY;
   }, []);
 
   // Load images
