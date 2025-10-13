@@ -17,14 +17,6 @@ const modes = [
     path: "/classic",
   },
   {
-    id: "story",
-    title: "Story",
-    description: "Immersive scroll-driven narrative experience",
-    symbol: "🎐", // wind chime
-    color: "#F8CBA6", // pastel orange
-    path: "/story",
-  },
-  {
     id: "play",
     title: "Play",
     description: "Gamified exploration of projects and skills",

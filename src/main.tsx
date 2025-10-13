@@ -10,7 +10,6 @@ import { BrowserRouter, Route, Routes, useLocation } from "react-router";
 import "./index.css";
 import Landing from "./pages/Landing.tsx";
 import Classic from "./pages/Classic.tsx";
-import Story from "./pages/Story.tsx";
 import Play from "@/pages/Play.tsx";
 import AiPage from "@/pages/Ai.tsx";
 import NotFound from "./pages/NotFound.tsx";
@@ -51,7 +50,6 @@ createRoot(document.getElementById("root")!).render(
           <Routes>
             <Route path="/" element={<Landing />} />
             <Route path="/classic" element={<Classic />} />
-            <Route path="/story" element={<Story />} />
             <Route path="/play" element={<Play />} />
             <Route path="/ai" element={<AiPage />} />
             <Route path="/auth" element={<AuthPage redirectAfterAuth="/" />} />
