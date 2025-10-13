@@ -1,0 +1,107 @@
+/* Book 3D Flip Animation Styles */
+
+.book-container {
+  perspective: 2000px;
+  perspective-origin: center;
+}
+
+.book-page {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.8s cubic-bezier(0.43, 0.13, 0.23, 0.96);
+}
+
+.page-face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform-style: preserve-3d;
+}
+
+.page-face-front {
+  transform: rotateY(0deg);
+  z-index: 2;
+}
+
+.page-face-back {
+  transform: rotateY(180deg);
+  z-index: 1;
+}
+
+/* Flip animations */
+.flip-right {
+  transform-origin: left center;
+  animation: flipRight 0.8s cubic-bezier(0.43, 0.13, 0.23, 0.96) forwards;
+}
+
+.flip-left {
+  transform-origin: right center;
+  animation: flipLeft 0.8s cubic-bezier(0.43, 0.13, 0.23, 0.96) forwards;
+}
+
+@keyframes flipRight {
+  from {
+    transform: rotateY(0deg);
+  }
+  to {
+    transform: rotateY(-180deg);
+  }
+}
+
+@keyframes flipLeft {
+  from {
+    transform: rotateY(180deg);
+  }
+  to {
+    transform: rotateY(0deg);
+  }
+}
+
+/* Cover to page transition */
+.cover-flip-exit {
+  transform-origin: left center;
+  animation: coverFlipOut 0.8s cubic-bezier(0.43, 0.13, 0.23, 0.96) forwards;
+}
+
+.page-flip-enter {
+  transform-origin: left center;
+  animation: pageFlipIn 0.8s cubic-bezier(0.43, 0.13, 0.23, 0.96) forwards;
+}
+
+@keyframes coverFlipOut {
+  from {
+    transform: perspective(2000px) rotateY(0deg) scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: perspective(2000px) rotateY(-180deg) scale(0.95);
+    opacity: 0;
+  }
+}
+
+@keyframes pageFlipIn {
+  from {
+    transform: perspective(2000px) rotateY(180deg) scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: perspective(2000px) rotateY(0deg) scale(1);
+    opacity: 1;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .book-page,
+  .flip-right,
+  .flip-left,
+  .cover-flip-exit,
+  .page-flip-enter {
+    animation: none;
+    transition: opacity 0.3s ease;
+  }
+}
