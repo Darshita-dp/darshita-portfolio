@@ -70,6 +70,8 @@ export function WeatherLayer({ scrollProgress, currentChapter }: WeatherLayerPro
         style={{
           background: getSkyGradient(),
           transform: `translateX(${-parallaxOffset}vw)`,
+          width: '900vw',
+          left: 0,
         }}
       />
 
@@ -79,6 +81,8 @@ export function WeatherLayer({ scrollProgress, currentChapter }: WeatherLayerPro
         style={{
           opacity: getCloudOpacity(),
           transform: `translateX(${-parallaxOffset * 0.75}vw)`,
+          width: '900vw',
+          left: 0,
         }}
       >
         {[...Array(8)].map((_, i) => (
@@ -108,7 +112,11 @@ export function WeatherLayer({ scrollProgress, currentChapter }: WeatherLayerPro
       {/* Stars (night only) */}
       <motion.div
         className="fixed inset-0 z-10 pointer-events-none"
-        style={{ opacity: getStarOpacity() }}
+        style={{ 
+          opacity: getStarOpacity(),
+          width: '900vw',
+          left: 0,
+        }}
       >
         {[...Array(30)].map((_, i) => (
           <motion.div
@@ -135,7 +143,11 @@ export function WeatherLayer({ scrollProgress, currentChapter }: WeatherLayerPro
       {getRainIntensity() > 0 && (
         <motion.div
           className="fixed inset-0 z-20 pointer-events-none"
-          style={{ opacity: getRainIntensity() }}
+          style={{ 
+            opacity: getRainIntensity(),
+            width: '900vw',
+            left: 0,
+          }}
         >
           {[...Array(50)].map((_, i) => (
             <motion.div
