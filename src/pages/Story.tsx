@@ -186,40 +186,69 @@ export default function Story() {
                   backgroundImage: "url('https://harmless-tapir-303.convex.cloud/api/storage/22a08587-dd5c-4b71-9f6e-4f377f58745b')",
                   backgroundSize: "cover",
                   backgroundPosition: "center",
-                  boxShadow: "0 0 0 4px rgba(255, 215, 0, 0.3), 0 0 0 8px rgba(255, 192, 203, 0.2), 0 20px 50px rgba(0,0,0,0.3), 0 30px 80px rgba(255, 192, 203, 0.4)",
+                  boxShadow: "0 0 0 4px rgba(255, 215, 0, 0.4), 0 0 0 8px rgba(255, 192, 203, 0.3), 0 0 0 12px rgba(255, 235, 205, 0.2), 0 20px 50px rgba(0,0,0,0.3), 0 30px 80px rgba(255, 192, 203, 0.5), inset 0 0 60px rgba(255, 220, 150, 0.15)",
                   transform: "perspective(1000px) rotateX(2deg)",
+                  filter: "contrast(1.08) saturate(1.15)",
                 }}>
-                {/* Sunlight Glow from Top-Left */}
+                {/* Golden Hour Lighting with Pink/Peach Overtones */}
                 <motion.div
-                  className="absolute inset-0 bg-gradient-to-br from-yellow-100/60 via-transparent to-transparent"
+                  className="absolute inset-0"
                   style={{
+                    background: "radial-gradient(ellipse at 30% 20%, rgba(255, 220, 150, 0.5) 0%, rgba(255, 180, 150, 0.3) 30%, transparent 60%)",
                     mixBlendMode: "overlay",
                   }}
                   animate={{
-                    opacity: [0.4, 0.7, 0.4],
+                    opacity: [0.5, 0.8, 0.5],
                   }}
                   transition={{
-                    duration: 3,
+                    duration: 4,
                     repeat: Infinity,
                     ease: "easeInOut",
                   }}
                 />
 
-                {/* Soft Vignette */}
+                {/* Watercolor Gradient Blend */}
                 <div 
                   className="absolute inset-0"
                   style={{
-                    background: "radial-gradient(circle at center, transparent 40%, rgba(0,0,0,0.15) 100%)",
+                    background: "linear-gradient(135deg, rgba(255, 192, 203, 0.2) 0%, rgba(255, 250, 205, 0.25) 40%, rgba(173, 216, 230, 0.2) 100%)",
+                    mixBlendMode: "soft-light",
                   }}
                 />
 
-                {/* Diagonal Shine Animation */}
+                {/* Soft Vignette with Cozy Shadows */}
+                <div 
+                  className="absolute inset-0"
+                  style={{
+                    background: "radial-gradient(ellipse at center, transparent 35%, rgba(139, 69, 19, 0.12) 100%)",
+                  }}
+                />
+
+                {/* Bloom Effect for Dreamy Glow */}
                 <motion.div
-                  className="absolute inset-0 bg-gradient-to-br from-transparent via-white/30 to-transparent"
+                  className="absolute inset-0"
+                  style={{
+                    background: "radial-gradient(circle at 40% 30%, rgba(255, 255, 255, 0.3) 0%, transparent 50%)",
+                    mixBlendMode: "screen",
+                  }}
+                  animate={{
+                    opacity: [0.3, 0.6, 0.3],
+                  }}
+                  transition={{
+                    duration: 3.5,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                />
+
+                {/* Sunlight Glint - Diagonal Shine */}
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-br from-transparent via-white/40 to-transparent"
                   style={{
                     transform: "translateX(-100%) translateY(-100%) rotate(45deg)",
                     width: "200%",
                     height: "200%",
+                    mixBlendMode: "overlay",
                   }}
                   animate={{
                     transform: [
@@ -228,21 +257,29 @@ export default function Story() {
                     ],
                   }}
                   transition={{
-                    duration: 8,
+                    duration: 10,
                     repeat: Infinity,
                     ease: "linear",
                   }}
                 />
 
-                {/* Enhanced Glow Effect */}
+                {/* Ornate Frame Edge Sparkles */}
                 <motion.div
-                  className="absolute inset-0 bg-gradient-to-br from-yellow-200/40 to-pink-200/40"
+                  className="absolute inset-0 pointer-events-none"
+                  style={{
+                    boxShadow: "inset 0 0 20px rgba(255, 215, 0, 0.4)",
+                  }}
                   animate={{
-                    opacity: [0.3, 0.5, 0.3],
+                    boxShadow: [
+                      "inset 0 0 20px rgba(255, 215, 0, 0.4)",
+                      "inset 0 0 30px rgba(255, 215, 0, 0.7)",
+                      "inset 0 0 20px rgba(255, 215, 0, 0.4)",
+                    ],
                   }}
                   transition={{
-                    duration: 2.5,
+                    duration: 4,
                     repeat: Infinity,
+                    ease: "easeInOut",
                   }}
                 />
 
@@ -250,57 +287,99 @@ export default function Story() {
                 <div className="relative z-10 h-full flex flex-col items-center justify-center p-8 text-center">
                   {/* Title */}
                   <motion.h1
-                    className="text-3xl md:text-4xl font-serif mb-8"
+                    className="text-4xl md:text-5xl font-serif mb-8"
                     style={{
                       fontFamily: "'Great Vibes', 'Gwendolyn', cursive",
                       color: "#D4AF37",
-                      textShadow: "2px 2px 4px rgba(0,0,0,0.3)",
+                      textShadow: "0 0 10px rgba(255, 255, 255, 0.6), 0 0 20px rgba(212, 175, 55, 0.4), 2px 2px 4px rgba(0,0,0,0.3)",
                     }}
                     animate={{
                       textShadow: [
-                        "2px 2px 4px rgba(0,0,0,0.3)",
-                        "2px 2px 8px rgba(212,175,55,0.6)",
-                        "2px 2px 4px rgba(0,0,0,0.3)",
+                        "0 0 10px rgba(255, 255, 255, 0.6), 0 0 20px rgba(212, 175, 55, 0.4), 2px 2px 4px rgba(0,0,0,0.3)",
+                        "0 0 15px rgba(255, 255, 255, 0.8), 0 0 30px rgba(212, 175, 55, 0.6), 2px 2px 6px rgba(0,0,0,0.3)",
+                        "0 0 10px rgba(255, 255, 255, 0.6), 0 0 20px rgba(212, 175, 55, 0.4), 2px 2px 4px rgba(0,0,0,0.3)",
                       ],
                     }}
-                    transition={{ duration: 2, repeat: Infinity }}
+                    transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                   >
                     The Story of Darshita
                     <br />
-                    <span className="text-2xl md:text-3xl">
+                    <span className="text-2xl md:text-3xl" style={{ display: "inline-block", marginTop: "0.5rem" }}>
                       A Tale of Sunflowers and Stars
                     </span>
                   </motion.h1>
 
-                  {/* Click Prompt */}
+                  {/* Tap Prompt */}
                   <motion.p
-                    className="text-sm md:text-base text-gray-700 font-medium mt-8"
-                    animate={{
-                      opacity: [0.5, 1, 0.5],
+                    className="text-base md:text-lg font-medium mt-8"
+                    style={{
+                      fontFamily: "'Great Vibes', 'Gwendolyn', cursive",
+                      color: "#D4AF37",
+                      textShadow: "0 0 8px rgba(255, 255, 255, 0.7), 1px 1px 3px rgba(0,0,0,0.2)",
                     }}
-                    transition={{ duration: 1.5, repeat: Infinity }}
+                    animate={{
+                      opacity: [0.6, 1, 0.6],
+                      textShadow: [
+                        "0 0 8px rgba(255, 255, 255, 0.7), 1px 1px 3px rgba(0,0,0,0.2)",
+                        "0 0 12px rgba(255, 255, 255, 0.9), 1px 1px 4px rgba(0,0,0,0.2)",
+                        "0 0 8px rgba(255, 255, 255, 0.7), 1px 1px 3px rgba(0,0,0,0.2)",
+                      ],
+                    }}
+                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
                   >
-                    Click to open the book ✨
+                    ✨ Tap to open your story…
                   </motion.p>
                 </div>
 
-                {/* Sparkles around cover */}
-                {[...Array(8)].map((_, i) => (
+                {/* Floating Petals & Sunflowers around Darshita */}
+                {[...Array(6)].map((_, i) => (
                   <motion.div
-                    key={`cover-sparkle-${i}`}
-                    className="absolute w-3 h-3 bg-yellow-400 rounded-full"
+                    key={`floating-petal-${i}`}
+                    className="absolute text-xl"
                     style={{
-                      left: `${10 + (i % 4) * 25}%`,
-                      top: `${10 + Math.floor(i / 4) * 70}%`,
+                      left: `${15 + (i % 3) * 30}%`,
+                      top: `${20 + Math.floor(i / 3) * 50}%`,
+                      filter: "drop-shadow(0 0 4px rgba(255, 192, 203, 0.6))",
                     }}
                     animate={{
-                      scale: [0, 1, 0],
-                      opacity: [0, 1, 0],
+                      y: [0, -15, 0],
+                      x: [0, Math.random() * 10 - 5, 0],
+                      rotate: [0, 360],
+                      opacity: [0.6, 1, 0.6],
                     }}
                     transition={{
-                      duration: 2,
+                      duration: 4 + Math.random() * 2,
                       repeat: Infinity,
-                      delay: i * 0.2,
+                      delay: i * 0.5,
+                      ease: "easeInOut",
+                    }}
+                  >
+                    {i % 2 === 0 ? "🌸" : "🌻"}
+                  </motion.div>
+                ))}
+
+                {/* Glowing Sparkles & Bokeh */}
+                {[...Array(12)].map((_, i) => (
+                  <motion.div
+                    key={`cover-sparkle-${i}`}
+                    className="absolute rounded-full"
+                    style={{
+                      width: `${4 + Math.random() * 6}px`,
+                      height: `${4 + Math.random() * 6}px`,
+                      background: "radial-gradient(circle, rgba(255, 255, 255, 0.9) 0%, rgba(255, 215, 0, 0.6) 100%)",
+                      left: `${10 + Math.random() * 80}%`,
+                      top: `${10 + Math.random() * 80}%`,
+                      boxShadow: "0 0 8px rgba(255, 255, 255, 0.8)",
+                    }}
+                    animate={{
+                      scale: [0, 1.2, 0],
+                      opacity: [0, 0.9, 0],
+                    }}
+                    transition={{
+                      duration: 2.5 + Math.random(),
+                      repeat: Infinity,
+                      delay: i * 0.3,
+                      ease: "easeInOut",
                     }}
                   />
                 ))}
