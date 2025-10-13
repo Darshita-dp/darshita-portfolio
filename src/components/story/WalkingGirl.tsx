@@ -29,6 +29,13 @@ export function WalkingGirl({ scrollProgress, isRaining }: WalkingGirlProps) {
 
   const parallaxOffset = scrollProgress * 100;
 
+  // Pixel art color palette
+  const skinColor = "#F5C4A0";
+  const hairColor = "#4A3428";
+  const dressColor = "#E8A5C0";
+  const shoeColor = "#3D2817";
+  const umbrellaColor = "#2C3E50";
+
   return (
     <motion.div
       className="fixed bottom-[20vh] left-[30vw] z-30 pointer-events-none"
@@ -37,76 +44,78 @@ export function WalkingGirl({ scrollProgress, isRaining }: WalkingGirlProps) {
       }}
     >
       <div className="relative w-24 h-32">
-        {/* Girl silhouette */}
-        <svg viewBox="0 0 100 150" className="w-full h-full">
-          <defs>
-            <linearGradient id="girlGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stopColor="#F9D9E0" />
-              <stop offset="100%" stopColor="#E4D7FA" />
-            </linearGradient>
-          </defs>
-          
-          {/* Body */}
-          <ellipse cx="50" cy="100" rx="20" ry="35" fill="url(#girlGradient)" opacity="0.9" />
-          
+        {/* Pixel art girl character */}
+        <svg viewBox="0 0 32 48" className="w-full h-full" style={{ imageRendering: "pixelated" }}>
           {/* Head */}
-          <circle cx="50" cy="40" r="18" fill="url(#girlGradient)" opacity="0.9" />
+          <rect x="12" y="6" width="8" height="8" fill={skinColor} />
           
-          {/* Walking legs (animated) */}
-          <motion.ellipse
-            cx="45"
-            cy="130"
-            rx="8"
-            ry="20"
-            fill="url(#girlGradient)"
-            opacity="0.9"
+          {/* Hair */}
+          <rect x="10" y="4" width="12" height="2" fill={hairColor} />
+          <rect x="10" y="6" width="2" height="6" fill={hairColor} />
+          <rect x="20" y="6" width="2" height="6" fill={hairColor} />
+          <rect x="12" y="12" width="8" height="2" fill={hairColor} />
+          
+          {/* Eyes (tiny pixels) */}
+          <rect x="14" y="9" width="1" height="1" fill="#2C3E50" />
+          <rect x="17" y="9" width="1" height="1" fill="#2C3E50" />
+          
+          {/* Body/Dress */}
+          <rect x="11" y="14" width="10" height="2" fill={dressColor} />
+          <rect x="10" y="16" width="12" height="8" fill={dressColor} />
+          <rect x="9" y="20" width="14" height="4" fill={dressColor} />
+          
+          {/* Arms */}
+          <rect x="8" y="16" width="2" height="6" fill={skinColor} />
+          <rect x="22" y="16" width="2" height="6" fill={skinColor} />
+          
+          {/* Walking legs (animated with walkFrame) */}
+          <motion.g
             animate={prefersReducedMotion ? {} : {
-              cy: [130, 125, 130],
-              rx: [8, 10, 8],
+              y: [0, -1, 0],
             }}
             transition={{
               duration: 0.4,
               repeat: Infinity,
               ease: "easeInOut",
             }}
-          />
-          <motion.ellipse
-            cx="55"
-            cy="130"
-            rx="8"
-            ry="20"
-            fill="url(#girlGradient)"
-            opacity="0.9"
+          >
+            <rect x="12" y="24" width="3" height="8" fill={skinColor} />
+            <rect x="12" y="32" width="3" height="4" fill={shoeColor} />
+          </motion.g>
+          
+          <motion.g
             animate={prefersReducedMotion ? {} : {
-              cy: [125, 130, 125],
-              rx: [10, 8, 10],
+              y: [-1, 0, -1],
             }}
             transition={{
               duration: 0.4,
               repeat: Infinity,
               ease: "easeInOut",
             }}
-          />
+          >
+            <rect x="17" y="24" width="3" height="8" fill={skinColor} />
+            <rect x="17" y="32" width="3" height="4" fill={shoeColor} />
+          </motion.g>
           
-          {/* Umbrella (only when raining) */}
+          {/* Umbrella (only when raining) - pixel art style */}
           {isRaining && (
             <g>
-              <path
-                d="M 50 30 Q 30 20, 30 35 L 50 35 Z"
-                fill="#1D2340"
-                opacity="0.8"
-              />
-              <path
-                d="M 50 30 Q 70 20, 70 35 L 50 35 Z"
-                fill="#1D2340"
-                opacity="0.8"
-              />
-              <line x1="50" y1="35" x2="50" y2="55" stroke="#1D2340" strokeWidth="2" />
+              {/* Umbrella canopy - blocky pixel style */}
+              <rect x="8" y="8" width="2" height="2" fill={umbrellaColor} />
+              <rect x="10" y="6" width="2" height="2" fill={umbrellaColor} />
+              <rect x="12" y="5" width="2" height="2" fill={umbrellaColor} />
+              <rect x="14" y="4" width="4" height="2" fill={umbrellaColor} />
+              <rect x="18" y="5" width="2" height="2" fill={umbrellaColor} />
+              <rect x="20" y="6" width="2" height="2" fill={umbrellaColor} />
+              <rect x="22" y="8" width="2" height="2" fill={umbrellaColor} />
+              
+              {/* Umbrella handle */}
+              <rect x="15" y="6" width="2" height="10" fill={umbrellaColor} />
             </g>
           )}
         </svg>
         
-        {/* Splash effect when raining */}
+        {/* Splash effect when raining - pixel style */}
         {isRaining && (
           <motion.div
             className="absolute bottom-0 left-1/2 -translate-x-1/2"
@@ -120,7 +129,11 @@ export function WalkingGirl({ scrollProgress, isRaining }: WalkingGirlProps) {
               ease: "easeInOut",
             }}
           >
-            <div className="w-8 h-2 rounded-full bg-blue-300/40" />
+            <div className="flex gap-1">
+              <div className="w-1 h-1 bg-blue-300/60" />
+              <div className="w-1 h-1 bg-blue-300/60" />
+              <div className="w-1 h-1 bg-blue-300/60" />
+            </div>
           </motion.div>
         )}
       </div>
