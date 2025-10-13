@@ -247,7 +247,7 @@ export default function Story() {
                 />
 
                 {/* Content */}
-                <div className="relative z-10 h-full flex flex-col items-center justify-center p-8 text-center">
+                <div className="relative z-10 h-full flex flex-col items-center justify-start pt-8 p-8 text-center">
                   {/* Title */}
                   <motion.h1
                     className="text-3xl md:text-4xl font-serif mb-8"
