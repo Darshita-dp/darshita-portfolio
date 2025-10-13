@@ -336,7 +336,10 @@ export default function Story() {
                       ? { opacity: 0, scale: 1.2, rotateY: -90 }
                       : { opacity: 0, x: '100%' }
                   }
-                  transition={{ duration: 0.8, ease: [0.43, 0.13, 0.23, 0.96] }}
+                  transition={{ 
+                    duration: direction === 'next' ? 0.8 : 0.4,
+                    ease: [0.43, 0.13, 0.23, 0.96] 
+                  }}
                   style={{
                     transformStyle: "preserve-3d",
                     backfaceVisibility: "hidden",
