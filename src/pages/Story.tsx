@@ -271,17 +271,6 @@ export default function Story() {
                       A Tale of Sunflowers and Stars
                     </span>
                   </motion.h1>
-
-                  {/* Click Prompt */}
-                  <motion.p
-                    className="text-sm md:text-base text-gray-700 font-medium mt-8"
-                    animate={{
-                      opacity: [0.5, 1, 0.5],
-                    }}
-                    transition={{ duration: 1.5, repeat: Infinity }}
-                  >
-                    Click to open the book ✨
-                  </motion.p>
                 </div>
 
                 {/* Sparkles around cover */}
