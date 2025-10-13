@@ -324,36 +324,14 @@ export default function Story() {
                 />
               ))}
 
-              {/* Current Page with Flip Animation */}
+              {/* Current Page without Flip Animation */}
               <motion.div
                 key={`page-${currentPage}`}
-                initial={{ 
-                  opacity: 0, 
-                  rotateY: direction === 'next' ? 180 : -180,
-                  scale: 1,
-                  transformOrigin: direction === 'next' ? "left center" : "right center" 
-                }}
-                animate={{ 
-                  opacity: 1, 
-                  rotateY: 0,
-                  scale: 1,
-                  transformOrigin: direction === 'next' ? "left center" : "right center" 
-                }}
-                exit={{ 
-                  opacity: 0, 
-                  rotateY: direction === 'next' ? -180 : 180,
-                  scale: 1,
-                  transformOrigin: direction === 'next' ? "right center" : "left center" 
-                }}
-                transition={{ 
-                  duration: 0.85,
-                  ease: [0.43, 0.13, 0.23, 0.96]
-                }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
                 className="relative w-[80vw] max-w-sm aspect-[2/3] mx-auto"
-                style={{
-                  transformStyle: "preserve-3d",
-                  backfaceVisibility: "hidden",
-                }}
               >
                 {/* Book Page with Vintage Background */}
                 <div 
