@@ -166,8 +166,9 @@ export default function Story() {
                   backgroundImage: "url('https://harmless-tapir-303.convex.cloud/api/storage/22a08587-dd5c-4b71-9f6e-4f377f58745b')",
                   backgroundSize: "cover",
                   backgroundPosition: "center",
-                  boxShadow: "0 0 0 4px rgba(255, 215, 0, 0.3), 0 0 0 8px rgba(255, 192, 203, 0.2), 0 20px 50px rgba(0,0,0,0.3), 0 30px 80px rgba(255, 192, 203, 0.4)",
-                  transform: "perspective(1000px) rotateX(2deg)",
+                  boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 15px 30px -10px rgba(0, 0, 0, 0.4), 0 5px 15px rgba(255, 215, 0, 0.3), inset 0 2px 4px rgba(255, 255, 255, 0.2)",
+                  transform: "perspective(1200px) rotateY(-5deg) rotateX(5deg) translateZ(20px)",
+                  transformStyle: "preserve-3d",
                 }}>
                 {/* Sunlight Glow from Top-Left */}
                 <motion.div
