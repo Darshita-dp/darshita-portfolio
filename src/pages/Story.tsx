@@ -8,7 +8,6 @@ import { Paper } from "@/components/story/Paper";
 import "./Story.book.css";
 
 type PageState = "cover" | number;
-type FlipState = null | "next" | "prev";
 
 const storyPages = [
   {
@@ -54,62 +53,41 @@ export default function Story() {
   const [currentPage, setCurrentPage] = useState<PageState>("cover");
   const [isMuted, setIsMuted] = useState(true);
   const [isBookOpen, setIsBookOpen] = useState(false);
-  const [flipState, setFlipState] = useState<FlipState>(null);
-  const [flippingContent, setFlippingContent] = useState<number | null>(null);
+  const [direction, setDirection] = useState<'next' | 'prev'>('next');
+  const [isFlipping, setIsFlipping] = useState(false);
 
   const openBook = () => {
-    if (flipState !== null) return; // Guard against repeated clicks
-    
-    setFlipState("next");
-    setFlippingContent(0); // Cover acts as right page
-    
+    setIsFlipping(true);
     setTimeout(() => {
       setIsBookOpen(true);
       setCurrentPage(0);
-      setFlipState(null);
-      setFlippingContent(null);
-    }, 850);
+      setIsFlipping(false);
+    }, 800);
   };
 
   const nextPage = () => {
-    if (flipState !== null) return; // Lock during animation
-    if (typeof currentPage !== "number") return;
-    if (currentPage >= storyPages.length - 1) return; // Boundary check
-    
-    setFlipState("next");
-    setFlippingContent(currentPage);
-    
-    setTimeout(() => {
+    if (typeof currentPage === "number" && currentPage < storyPages.length - 1) {
       setCurrentPage(currentPage + 1);
-      setFlipState(null);
-      setFlippingContent(null);
-    }, 850);
+    }
   };
 
   const prevPage = () => {
-    if (flipState !== null) return; // Lock during animation
-    if (typeof currentPage !== "number") return;
-    if (currentPage === 0) {
-      // Return to cover
-      setFlipState("prev");
-      setFlippingContent(0);
-      setTimeout(() => {
-        setCurrentPage("cover");
-        setIsBookOpen(false);
-        setFlipState(null);
-        setFlippingContent(null);
-      }, 850);
-      return;
-    }
-    
-    setFlipState("prev");
-    setFlippingContent(currentPage - 1);
-    
-    setTimeout(() => {
+    if (typeof currentPage === "number" && currentPage > 0) {
       setCurrentPage(currentPage - 1);
-      setFlipState(null);
-      setFlippingContent(null);
-    }, 850);
+    } else if (currentPage === 0) {
+      setCurrentPage("cover");
+      setIsBookOpen(false);
+    }
+  };
+
+  const nextPageWithDirection = () => {
+    setDirection('next');
+    nextPage();
+  };
+
+  const prevPageWithDirection = () => {
+    setDirection('prev');
+    prevPage();
   };
 
   return (
@@ -200,11 +178,11 @@ export default function Story() {
                 opacity: 0, 
                 rotateY: -180,
                 scale: 0.95,
-                transformOrigin: "right center"
+                transformOrigin: "left center"
               }}
-              transition={{ duration: 0.85, ease: [0.43, 0.13, 0.23, 0.96] }}
+              transition={{ duration: 0.8, ease: [0.43, 0.13, 0.23, 0.96] }}
               onClick={openBook}
-              className={`relative cursor-pointer group ${flipState === "next" ? 'cover-flip-exit' : ''}`}
+              className={`relative cursor-pointer group ${isFlipping ? 'cover-flip-exit' : ''}`}
               style={{ transformStyle: "preserve-3d" }}
             >
               {/* Book Cover */}
@@ -342,7 +320,7 @@ export default function Story() {
           {typeof currentPage === "number" && (
             <Book className="relative">
               {/* Stacked Pages Effect - Show underlying pages */}
-              {[...Array(Math.max(0, storyPages.length - currentPage - 1))].map((_, i) => (
+              {[...Array(storyPages.length - currentPage - 1)].map((_, i) => (
                 <div
                   key={`stack-${i}`}
                   className="absolute w-[80vw] max-w-sm aspect-[2/3] rounded-2xl"
@@ -360,14 +338,38 @@ export default function Story() {
                 />
               ))}
 
-              {/* Underlay: Current Page (Right Page) */}
-              <div
-                className="relative w-[80vw] max-w-sm aspect-[2/3] mx-auto underlay-right"
+              {/* Current Page with Flip Animation */}
+              <motion.div
+                key={`page-${currentPage}`}
+                initial={{ 
+                  opacity: currentPage === 0 && isFlipping ? 0 : 0,
+                  rotateY: currentPage === 0 && isFlipping ? 180 : (direction === 'next' ? 0 : -90),
+                  scale: currentPage === 0 && isFlipping ? 0.95 : (direction === 'next' ? 1.2 : 1),
+                  transformOrigin: "left center"
+                }}
+                animate={{ 
+                  opacity: 1, 
+                  rotateY: 0,
+                  scale: 1,
+                  transformOrigin: "left center"
+                }}
+                exit={{ 
+                  opacity: 0, 
+                  rotateY: direction === 'next' ? -90 : 90,
+                  scale: direction === 'next' ? 1 : 1,
+                  transformOrigin: direction === 'next' ? "left center" : "right center" 
+                }}
+                transition={{ 
+                  duration: 0.8,
+                  ease: [0.43, 0.13, 0.23, 0.96]
+                }}
+                className={`relative w-[80vw] max-w-sm aspect-[2/3] mx-auto ${currentPage === 0 && isFlipping ? 'page-flip-enter' : ''}`}
                 style={{
                   transformStyle: "preserve-3d",
-                  zIndex: 1,
+                  backfaceVisibility: "hidden",
                 }}
               >
+                {/* Book Page with Vintage Background */}
                 <div 
                   className="relative w-full h-full rounded-2xl shadow-2xl overflow-hidden"
                   style={{
@@ -377,10 +379,15 @@ export default function Story() {
                     boxShadow: "0 20px 40px rgba(0,0,0,0.3), 0 10px 20px rgba(0,0,0,0.2)",
                   }}
                 >
+                  {/* Semi-transparent overlay for text readability */}
                   <div className="absolute inset-0 bg-gradient-to-br from-white/40 via-amber-50/30 to-pink-50/40" />
-                  
+
+                  {/* Page Content */}
                   <div className="relative z-10 h-full flex flex-col p-6 md:p-8">
-                    <h2
+                    <motion.h2
+                      initial={{ opacity: 0, y: -20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.3 }}
                       className="text-xl md:text-2xl font-serif mb-4 text-center"
                       style={{
                         fontFamily: "'Cinzel Decorative', 'Great Vibes', serif",
@@ -389,9 +396,14 @@ export default function Story() {
                       }}
                     >
                       {storyPages[currentPage].title}
-                    </h2>
+                    </motion.h2>
 
-                    <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-yellow-400 scrollbar-track-yellow-100">
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.5 }}
+                      className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-yellow-400 scrollbar-track-yellow-100"
+                    >
                       <p
                         className="text-sm md:text-base leading-relaxed font-serif"
                         style={{
@@ -403,9 +415,13 @@ export default function Story() {
                       >
                         {storyPages[currentPage].content}
                       </p>
-                    </div>
+                    </motion.div>
 
-                    <div
+                    {/* Page Number */}
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.7 }}
                       className="text-xs text-center mt-4"
                       style={{
                         fontFamily: "'Crimson Text', 'Georgia', serif",
@@ -414,91 +430,32 @@ export default function Story() {
                       }}
                     >
                       {currentPage + 1} / {storyPages.length}
-                    </div>
+                    </motion.div>
                   </div>
                 </div>
-              </div>
-
-              {/* Flipping Layer - Appears during animation */}
-              {flipState !== null && flippingContent !== null && (
-                <div
-                  className={`flipping-layer w-[80vw] max-w-sm aspect-[2/3] mx-auto ${
-                    flipState === "next" ? "flip-next" : "flip-prev"
-                  }`}
-                  style={{
-                    transformStyle: "preserve-3d",
-                  }}
-                >
-                  <div 
-                    className="relative w-full h-full rounded-2xl shadow-2xl overflow-hidden"
-                    style={{
-                      backgroundImage: "url('https://harmless-tapir-303.convex.cloud/api/storage/0e364737-765e-4e00-8ec0-4e75836671b3')",
-                      backgroundSize: "cover",
-                      backgroundPosition: "center",
-                      boxShadow: "0 20px 40px rgba(0,0,0,0.3), 0 10px 20px rgba(0,0,0,0.2)",
-                    }}
-                  >
-                    <div className="absolute inset-0 bg-gradient-to-br from-white/40 via-amber-50/30 to-pink-50/40" />
-                    
-                    <div className="relative z-10 h-full flex flex-col p-6 md:p-8">
-                      <h2
-                        className="text-xl md:text-2xl font-serif mb-4 text-center"
-                        style={{
-                          fontFamily: "'Cinzel Decorative', 'Great Vibes', serif",
-                          color: "#5D4037",
-                          textShadow: "1px 1px 2px rgba(255,255,255,0.8), 0 0 4px rgba(255,255,255,0.5)",
-                        }}
-                      >
-                        {storyPages[flippingContent].title}
-                      </h2>
-
-                      <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-yellow-400 scrollbar-track-yellow-100">
-                        <p
-                          className="text-sm md:text-base leading-relaxed font-serif"
-                          style={{
-                            fontFamily: "'Crimson Text', 'Georgia', serif",
-                            textAlign: "justify",
-                            color: "#4E342E",
-                            textShadow: "0.5px 0.5px 1px rgba(255,255,255,0.7)",
-                          }}
-                        >
-                          {storyPages[flippingContent].content}
-                        </p>
-                      </div>
-
-                      <div
-                        className="text-xs text-center mt-4"
-                        style={{
-                          fontFamily: "'Crimson Text', 'Georgia', serif",
-                          color: "#6D4C41",
-                          textShadow: "0.5px 0.5px 1px rgba(255,255,255,0.6)",
-                        }}
-                      >
-                        {flippingContent + 1} / {storyPages.length}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
+              </motion.div>
 
               {/* Navigation Buttons - Below the page stack */}
-              <div className="flex justify-between items-center mt-6 w-[80vw] max-w-sm mx-auto">
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4 }}
+                className="flex justify-between items-center mt-6 w-[80vw] max-w-sm mx-auto"
+              >
                 <Button
-                  onClick={prevPage}
+                  onClick={prevPageWithDirection}
                   variant="outline"
                   size="sm"
-                  disabled={flipState !== null}
-                  className="bg-amber-50/80 hover:bg-amber-100 border-amber-600 backdrop-blur-sm disabled:opacity-50"
+                  className="bg-amber-50/80 hover:bg-amber-100 border-amber-600 backdrop-blur-sm"
                 >
                   ← Previous
                 </Button>
                 {currentPage < storyPages.length - 1 && (
                   <Button
-                    onClick={nextPage}
+                    onClick={nextPageWithDirection}
                     variant="outline"
                     size="sm"
-                    disabled={flipState !== null}
-                    className="bg-amber-50/80 hover:bg-amber-100 border-amber-600 backdrop-blur-sm disabled:opacity-50"
+                    className="bg-amber-50/80 hover:bg-amber-100 border-amber-600 backdrop-blur-sm"
                   >
                     Next →
                   </Button>
@@ -507,13 +464,12 @@ export default function Story() {
                   <Button
                     onClick={() => navigate("/")}
                     size="sm"
-                    disabled={flipState !== null}
-                    className="bg-gradient-to-r from-pink-400 to-yellow-400 hover:from-pink-500 hover:to-yellow-500 text-white disabled:opacity-50"
+                    className="bg-gradient-to-r from-pink-400 to-yellow-400 hover:from-pink-500 hover:to-yellow-500 text-white"
                   >
                     Return Home 🌻
                   </Button>
                 )}
-              </div>
+              </motion.div>
             </Book>
           )}
         </AnimatePresence>
