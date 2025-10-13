@@ -147,6 +147,48 @@ export default function Play() {
           onBack={handleBackToMap}
         />
       );
+    } else if (node?.type === "boss") {
+      console.log("Rendering Future - under construction");
+      // Future bubble - show under construction image
+      return (
+        <motion.div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          onClick={handleBackToMap}
+        >
+          <motion.div
+            initial={{ scale: 0.8, y: 20 }}
+            animate={{ scale: 1, y: 0 }}
+            exit={{ scale: 0.8, y: 20 }}
+            onClick={(e) => e.stopPropagation()}
+            className="relative max-w-2xl mx-4"
+          >
+            <div className="text-center mb-4">
+              <h2
+                className="text-3xl md:text-4xl font-bold"
+                style={{
+                  fontFamily: "'Orbitron', sans-serif",
+                  color: "#FFD36E",
+                  textShadow: "0 0 20px #FFD36E80",
+                }}
+              >
+                🚧 Under Construction 🚧
+              </h2>
+            </div>
+            <img
+              src="https://harmless-tapir-303.convex.cloud/api/storage/8c8dbf9e-2ba0-4272-8571-17e1b3083573"
+              alt="Under Construction"
+              className="w-full h-auto rounded-lg shadow-2xl"
+              style={{
+                border: `3px solid ${BYTE_BUBBLES_THEME.accent}`,
+                boxShadow: `0 0 40px ${BYTE_BUBBLES_THEME.accent}`,
+              }}
+            />
+          </motion.div>
+        </motion.div>
+      );
     } else {
       console.log("Rendering fallback - under construction");
       // Fallback for other game types - show under construction
