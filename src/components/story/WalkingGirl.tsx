@@ -31,7 +31,7 @@ export function WalkingGirl({ scrollProgress, isRaining }: WalkingGirlProps) {
 
   return (
     <motion.div
-      className="fixed bottom-[20vh] left-[30vw] z-30 pointer-events-none"
+      className="fixed bottom-[20vh] right-[10vw] z-30 pointer-events-none"
       style={{
         transform: `translateX(${-parallaxOffset}vw)`,
       }}
