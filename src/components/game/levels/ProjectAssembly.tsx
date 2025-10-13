@@ -185,12 +185,14 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
     
     gameStateRef.current.maze = maze;
     
-    // Position player at the entrance
+    // Position player at the entrance (slightly outside the maze)
     const cellSize = gameStateRef.current.cellSize;
-    const entranceX = (cols - 1) * cellSize + 20 + cellSize / 2;
+    const entranceX = (cols - 1) * cellSize + 20 + cellSize + 10; // Position outside the maze
     const entranceY = entranceRow * cellSize + 20 + cellSize / 2;
     gameStateRef.current.player.x = entranceX;
     gameStateRef.current.player.y = entranceY;
+    
+    console.log("Maze generated. Player position:", { x: entranceX, y: entranceY, entranceRow, cols, rows });
   }, []);
 
   // Load images
