@@ -234,14 +234,14 @@ export default function Story() {
                     className="text-3xl md:text-4xl font-serif mb-8"
                     style={{
                       fontFamily: "'Great Vibes', 'Gwendolyn', cursive",
-                      color: "#D4AF37",
-                      textShadow: "2px 2px 4px rgba(0,0,0,0.3)",
+                      color: "#8B6914",
+                      textShadow: "2px 2px 6px rgba(0,0,0,0.6), 0 0 10px rgba(139,105,20,0.4)",
                     }}
                     animate={{
                       textShadow: [
-                        "2px 2px 4px rgba(0,0,0,0.3)",
-                        "2px 2px 8px rgba(212,175,55,0.6)",
-                        "2px 2px 4px rgba(0,0,0,0.3)",
+                        "2px 2px 6px rgba(0,0,0,0.6), 0 0 10px rgba(139,105,20,0.4)",
+                        "2px 2px 8px rgba(0,0,0,0.7), 0 0 15px rgba(139,105,20,0.6)",
+                        "2px 2px 6px rgba(0,0,0,0.6), 0 0 10px rgba(139,105,20,0.4)",
                       ],
                     }}
                     transition={{ duration: 2, repeat: Infinity }}
