@@ -75,26 +75,6 @@ export default function Story() {
     <div className="min-h-screen relative overflow-hidden bg-gradient-to-br from-pink-200 via-yellow-100 to-blue-200">
       {/* Floating Particles Background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(20)].map((_, i) => (
-          <motion.div
-            key={`sparkle-${i}`}
-            className="absolute w-2 h-2 bg-yellow-300 rounded-full"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-            }}
-            animate={{
-              y: [0, -30, 0],
-              opacity: [0.3, 1, 0.3],
-              scale: [0.5, 1, 0.5],
-            }}
-            transition={{
-              duration: 3 + Math.random() * 2,
-              repeat: Infinity,
-              delay: Math.random() * 2,
-            }}
-          />
-        ))}
         {[...Array(10)].map((_, i) => (
           <motion.div
             key={`petal-${i}`}
