@@ -1519,8 +1519,12 @@ export default function Classic() {
           ].map(([icon, label]) => (
             <div
               key={label}
-              className="group rounded-lg bg-white p-3 border border-slate-200 text-center transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md hover:border-blue-200 hover:bg-blue-50/40 focus-within:-translate-y-0.5 focus-within:shadow-md focus-within:border-blue-200"
+              className="group rounded-lg p-3 border text-center transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md hover:border-blue-300 focus-within:-translate-y-0.5 focus-within:shadow-md focus-within:border-blue-300"
               role="group"
+              style={{ 
+                background: "linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%)",
+                borderColor: "#90CAF9"
+              }}
             >
               <div className="text-2xl transition-transform duration-200 group-hover:scale-110 group-focus-within:scale-110">
                 {icon}
