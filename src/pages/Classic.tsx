@@ -1392,8 +1392,13 @@ export default function Classic() {
               <div className="edu-flip h-40 w-full">
                 {/* FRONT */}
                 <div
-                  className="edu-front rounded-xl border shadow-sm bg-white p-4 grid place-items-start content-start"
-                  style={{ backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden" }}
+                  className="edu-front rounded-xl border shadow-sm p-4 grid place-items-start content-start"
+                  style={{ 
+                    backfaceVisibility: "hidden", 
+                    WebkitBackfaceVisibility: "hidden",
+                    background: "linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%)",
+                    borderColor: "#90CAF9"
+                  }}
                 >
                   <div className="w-full">
                     {/* add two line breaks for extra top spacing */}
@@ -1412,8 +1417,13 @@ export default function Classic() {
 
                 {/* BACK */}
                 <div
-                  className="edu-back rounded-xl border shadow-sm bg-white grid place-items-center"
-                  style={{ backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden" }}
+                  className="edu-back rounded-xl border shadow-sm grid place-items-center"
+                  style={{ 
+                    backfaceVisibility: "hidden", 
+                    WebkitBackfaceVisibility: "hidden",
+                    background: "linear-gradient(135deg, #BBDEFB 0%, #90CAF9 100%)",
+                    borderColor: "#64B5F6"
+                  }}
                 >
                   <CardContent className="text-center whitespace-pre-line text-sm text-slate-700 px-4">
                     {ed.details}
