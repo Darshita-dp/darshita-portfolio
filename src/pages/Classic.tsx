@@ -1199,7 +1199,13 @@ export default function Classic() {
                 <CarouselContent className="flex gap-4 auto-scroll-projects">
                   {ordered.map((p) => {
                     const CardInner = (
-                      <Card className="overflow-hidden border-slate-200 hover:border-blue-300 transition-all shadow-sm hover:shadow-lg hover:-translate-y-0.5">
+                      <Card 
+                        className="overflow-hidden transition-all shadow-sm hover:shadow-lg hover:-translate-y-0.5"
+                        style={{ 
+                          background: "linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%)",
+                          borderColor: "#90CAF9"
+                        }}
+                      >
                         <div className="relative h-40 w-full overflow-hidden">
                           <img
                             src={p.image}
