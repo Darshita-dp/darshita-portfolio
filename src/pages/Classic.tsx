@@ -1526,7 +1526,7 @@ export default function Classic() {
             ["https://harmless-tapir-303.convex.cloud/api/storage/a1db593d-7e17-4171-bdf3-6010706c6beb", "Blogging & Storytelling"],
             ["💡", "Exploring AI & Tech Trends"],
             ["🍳", "Cooking"],
-            ["🎹", "Piano"],
+            ["https://harmless-tapir-303.convex.cloud/api/storage/a968d1fb-a81c-44e9-8768-0c77d1f35624", "Piano"],
             ["https://harmless-tapir-303.convex.cloud/api/storage/616428e2-2399-4bb2-8a0b-9bf9ca40a22d", "Badminton"],
           ].map(([icon, label]) => (
             <div
