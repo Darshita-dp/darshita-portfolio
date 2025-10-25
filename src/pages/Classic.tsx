@@ -1636,7 +1636,12 @@ export default function Classic() {
                         name="name"
                         placeholder="Your name"
                         value={nameVal}
-                        onChange={(e) => setNameVal(e.target.value)}
+                        onChange={(e) => {
+                          setNameVal(e.target.value);
+                          if (e.target.value.trim()) {
+                            setErrors(prev => ({ ...prev, name: undefined }));
+                          }
+                        }}
                         onBlur={validate}
                         aria-invalid={!!errors.name}
                         className={`pl-10 pr-10 ${errors.name ? "border-red-500 focus-visible:ring-red-500" : nameVal ? "border-green-500 focus-visible:ring-green-500" : ""}`}
@@ -1661,7 +1666,12 @@ export default function Classic() {
                         name="email"
                         placeholder="Email"
                         value={emailVal}
-                        onChange={(e) => setEmailVal(e.target.value)}
+                        onChange={(e) => {
+                          setEmailVal(e.target.value);
+                          if (e.target.value.trim() && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e.target.value)) {
+                            setErrors(prev => ({ ...prev, email: undefined }));
+                          }
+                        }}
                         onBlur={validate}
                         aria-invalid={!!errors.email}
                         className={`pl-10 pr-10 ${errors.email ? "border-red-500 focus-visible:ring-red-500" : emailVal ? "border-green-500 focus-visible:ring-green-500" : ""}`}
@@ -1685,7 +1695,12 @@ export default function Classic() {
                         name="message"
                         placeholder="Message"
                         value={messageVal}
-                        onChange={(e) => setMessageVal(e.target.value)}
+                        onChange={(e) => {
+                          setMessageVal(e.target.value);
+                          if (e.target.value.trim().length >= 10) {
+                            setErrors(prev => ({ ...prev, message: undefined }));
+                          }
+                        }}
                         onBlur={validate}
                         aria-invalid={!!errors.message}
                         className={`pl-10 pr-10 pt-3 min-h-[110px] resize-none ${errors.message ? "border-red-500 focus-visible:ring-red-500" : messageVal ? "border-green-500 focus-visible:ring-green-500" : ""}`}
