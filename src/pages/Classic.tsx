@@ -1471,7 +1471,13 @@ export default function Classic() {
                   key={c.title}
                   className="basis-3/4 sm:basis-1/2 md:basis-1/3 lg:basis-1/4"
                 >
-                  <Card className="h-[150px] max-w-[260px] mx-auto rounded-xl shadow-sm transition-transform transition-shadow duration-200 hover:-translate-y-0.5 hover:shadow-md border-slate-200">
+                  <Card 
+                    className="h-[150px] max-w-[260px] mx-auto rounded-xl shadow-sm transition-transform transition-shadow duration-200 hover:-translate-y-0.5 hover:shadow-md"
+                    style={{ 
+                      background: "linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%)",
+                      borderColor: "#90CAF9"
+                    }}
+                  >
                     <div className="h-full p-3 flex flex-col items-center justify-between text-center">
                       <div className="text-xl" aria-hidden="true">{c.icon}</div>
                       <div className="px-1">
