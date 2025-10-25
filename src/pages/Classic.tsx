@@ -1521,7 +1521,7 @@ export default function Classic() {
         <SectionTitle id="hobbies-title">Hobbies & Interests</SectionTitle>
         <div className="mt-6 grid grid-cols-3 sm:grid-cols-4 md:grid-cols-7 gap-3">
           {[
-            ["📸", "Photography & Visual Design"],
+            ["https://harmless-tapir-303.convex.cloud/api/storage/0e998172-1b01-4ab5-956e-42542509a8ac", "Photography & Visual Design"],
             ["🎨", "Creative Designing & Posters"],
             ["✍️", "Blogging & Storytelling"],
             ["💡", "Exploring AI & Tech Trends"],
@@ -1539,7 +1539,16 @@ export default function Classic() {
               }}
             >
               <div className="text-2xl transition-transform duration-200 group-hover:scale-110 group-focus-within:scale-110">
-                {icon}
+                {icon.startsWith("http") ? (
+                  <img 
+                    src={icon} 
+                    alt={label} 
+                    className="w-8 h-8 mx-auto object-contain"
+                    loading="lazy"
+                  />
+                ) : (
+                  icon
+                )}
               </div>
               <div className="mt-1 text-[11px] text-slate-700 truncate group-hover:text-slate-900 group-focus-within:text-slate-900">
                 {label}
