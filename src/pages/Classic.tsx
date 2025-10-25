@@ -1625,69 +1625,78 @@ export default function Classic() {
                 <CardTitle className="text-lg">Let's connect</CardTitle>
               </CardHeader>
               <CardContent>
-                <form onSubmit={onSubmitContact} className="space-y-2.5 relative">
+                <form onSubmit={onSubmitContact} className="space-y-3.5">
                   {/* Name */}
-                  <div className="relative">
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" aria-hidden="true">
-                      <User className="w-[16px] h-[16px]" />
-                    </span>
-                    <Input
-                      name="name"
-                      placeholder="Your name"
-                      value={nameVal}
-                      onChange={(e) => setNameVal(e.target.value)}
-                      onBlur={validate}
-                      aria-invalid={!!errors.name}
-                      className={`pl-9 ${errors.name ? "border-red-500 focus-visible:ring-red-500" : nameVal ? "border-green-500 focus-visible:ring-green-500" : ""}`}
-                      required
-                    />
-                    {nameVal && !errors.name ? (
-                      <span className="absolute right-2 top-1/2 -translate-y-1/2 text-green-600 text-sm">✅</span>
-                    ) : null}
-                    {errors.name ? <div className="mt-1 text-xs text-red-600">{errors.name}</div> : null}
+                  <div>
+                    <div className="relative">
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none z-10" aria-hidden="true">
+                        <User className="w-4 h-4" />
+                      </span>
+                      <Input
+                        name="name"
+                        placeholder="Your name"
+                        value={nameVal}
+                        onChange={(e) => setNameVal(e.target.value)}
+                        onBlur={validate}
+                        aria-invalid={!!errors.name}
+                        className={`pl-10 pr-10 ${errors.name ? "border-red-500 focus-visible:ring-red-500" : nameVal ? "border-green-500 focus-visible:ring-green-500" : ""}`}
+                        required
+                        tabIndex={0}
+                      />
+                      {nameVal && !errors.name ? (
+                        <span className="absolute right-3 top-1/2 -translate-y-1/2 text-green-600 pointer-events-none" aria-hidden="true">✅</span>
+                      ) : null}
+                    </div>
+                    {errors.name ? <div className="mt-1.5 text-xs text-red-600">{errors.name}</div> : null}
                   </div>
 
                   {/* Email */}
-                  <div className="relative">
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" aria-hidden="true">
-                      <Mail className="w-[16px] h-[16px]" />
-                    </span>
-                    <Input
-                      type="email"
-                      name="email"
-                      placeholder="Email"
-                      value={emailVal}
-                      onChange={(e) => setEmailVal(e.target.value)}
-                      onBlur={validate}
-                      aria-invalid={!!errors.email}
-                      className={`pl-9 ${errors.email ? "border-red-500 focus-visible:ring-red-500" : emailVal ? "border-green-500 focus-visible:ring-green-500" : ""}`}
-                      required
-                    />
-                    {emailVal && !errors.email ? (
-                      <span className="absolute right-2 top-1/2 -translate-y-1/2 text-green-600 text-sm">✅</span>
-                    ) : null}
-                    {errors.email ? <div className="mt-1 text-xs text-red-600">{errors.email}</div> : null}
+                  <div>
+                    <div className="relative">
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none z-10" aria-hidden="true">
+                        <Mail className="w-4 h-4" />
+                      </span>
+                      <Input
+                        type="email"
+                        name="email"
+                        placeholder="Email"
+                        value={emailVal}
+                        onChange={(e) => setEmailVal(e.target.value)}
+                        onBlur={validate}
+                        aria-invalid={!!errors.email}
+                        className={`pl-10 pr-10 ${errors.email ? "border-red-500 focus-visible:ring-red-500" : emailVal ? "border-green-500 focus-visible:ring-green-500" : ""}`}
+                        required
+                        tabIndex={0}
+                      />
+                      {emailVal && !errors.email ? (
+                        <span className="absolute right-3 top-1/2 -translate-y-1/2 text-green-600 pointer-events-none" aria-hidden="true">✅</span>
+                      ) : null}
+                    </div>
+                    {errors.email ? <div className="mt-1.5 text-xs text-red-600">{errors.email}</div> : null}
                   </div>
 
                   {/* Message */}
-                  <div className="relative">
-                    <span className="absolute left-3 top-3 text-slate-500" aria-hidden="true">
-                      <MessageSquare className="w-[16px] h-[16px]" />
-                    </span>
-                    <Textarea
-                      name="message"
-                      placeholder="Message"
-                      value={messageVal}
-                      onChange={(e) => setMessageVal(e.target.value)}
-                      onBlur={validate}
-                      aria-invalid={!!errors.message}
-                      className={`pl-9 min-h-[110px] ${errors.message ? "border-red-500 focus-visible:ring-red-500" : messageVal ? "border-green-500 focus-visible:ring-green-500" : ""}`}
-                      required
-                    />
-                    {messageVal && !errors.message ? (
-                      <span className="absolute right-2 top-2 text-green-600 text-sm">✅</span>
-                    ) : null}
-                    {errors.message ? <div className="mt-1 text-xs text-red-600">{errors.message}</div> : null}
+                  <div>
+                    <div className="relative">
+                      <span className="absolute left-3 top-3 text-slate-500 pointer-events-none z-10" aria-hidden="true">
+                        <MessageSquare className="w-4 h-4" />
+                      </span>
+                      <Textarea
+                        name="message"
+                        placeholder="Message"
+                        value={messageVal}
+                        onChange={(e) => setMessageVal(e.target.value)}
+                        onBlur={validate}
+                        aria-invalid={!!errors.message}
+                        className={`pl-10 pr-10 pt-3 min-h-[110px] resize-none ${errors.message ? "border-red-500 focus-visible:ring-red-500" : messageVal ? "border-green-500 focus-visible:ring-green-500" : ""}`}
+                        required
+                        tabIndex={0}
+                      />
+                      {messageVal && !errors.message ? (
+                        <span className="absolute right-3 top-3 text-green-600 pointer-events-none" aria-hidden="true">✅</span>
+                      ) : null}
+                    </div>
+                    {errors.message ? <div className="mt-1.5 text-xs text-red-600">{errors.message}</div> : null}
                   </div>
 
                   {/* Send button with hover + ripple */}
