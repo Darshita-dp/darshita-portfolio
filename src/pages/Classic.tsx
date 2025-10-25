@@ -1522,7 +1522,7 @@ export default function Classic() {
         <div className="mt-6 grid grid-cols-3 sm:grid-cols-4 md:grid-cols-7 gap-3">
           {[
             ["https://harmless-tapir-303.convex.cloud/api/storage/eeab8198-ae99-483c-9e3c-270f3fc0978b", "Photography & Visual Design"],
-            ["🎨", "Creative Designing & Posters"],
+            ["https://harmless-tapir-303.convex.cloud/api/storage/e8159daf-7f00-4b0e-b6a4-73495b057366", "Creative Designing & Posters"],
             ["✍️", "Blogging & Storytelling"],
             ["💡", "Exploring AI & Tech Trends"],
             ["🍳", "Cooking"],
