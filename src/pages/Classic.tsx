@@ -1463,15 +1463,15 @@ export default function Classic() {
           <Carousel className="w-full">
             <CarouselContent className="flex gap-4 auto-scroll-certs">
               {[
-                { title: "Outstanding Graduate Student Award – ISU", year: "2025", icon: "🏅" },
-                { title: "ISU Research Symposium Poster – AI in Banking", year: "2025", icon: "📜" },
-                { title: "System Analyst Certificate – ISU", year: "2025", icon: "🏆" },
-                { title: "LinkedIn Learning – Data Analysis & SQL", year: "", icon: "📘" },
-                { title: "AWS Cloud Practitioner (In Progress)", year: "", icon: "☁️" },
-                { title: "Tableau Desktop Specialist (In Progress)", year: "", icon: "📊" },
-                { title: "Google Data Analytics Professional Certificate (Future)", year: "", icon: "🎓" },
-                { title: "Microsoft Power BI Data Analyst Associate (Future)", year: "", icon: "📈" },
-                { title: "Snowflake SnowPro Core Certification (Future)", year: "", icon: "❄️" },
+                { title: "Outstanding Graduate Student Award – ISU", year: "2025", icon: <Star className="w-5 h-5 text-yellow-600" /> },
+                { title: "ISU Research Symposium Poster – AI in Banking", year: "2025", icon: <Database className="w-5 h-5 text-blue-600" /> },
+                { title: "System Analyst Certificate – ISU", year: "2025", icon: <Star className="w-5 h-5 text-amber-600" /> },
+                { title: "LinkedIn Learning – Data Analysis & SQL", year: "", icon: <Code2 className="w-5 h-5 text-blue-700" /> },
+                { title: "AWS Cloud Practitioner (In Progress)", year: "", icon: <Database className="w-5 h-5 text-orange-600" /> },
+                { title: "Tableau Desktop Specialist (In Progress)", year: "", icon: <BarChart3 className="w-5 h-5 text-blue-600" /> },
+                { title: "Google Data Analytics Professional Certificate (Future)", year: "", icon: <BarChart3 className="w-5 h-5 text-green-600" /> },
+                { title: "Microsoft Power BI Data Analyst Associate (Future)", year: "", icon: <BarChart3 className="w-5 h-5 text-yellow-600" /> },
+                { title: "Snowflake SnowPro Core Certification (Future)", year: "", icon: <Database className="w-5 h-5 text-cyan-600" /> },
               ].map((c) => (
                 <CarouselItem
                   key={c.title}
@@ -1485,7 +1485,7 @@ export default function Classic() {
                     }}
                   >
                     <div className="h-full p-3 flex flex-col items-center justify-between text-center">
-                      <div className="text-xl" aria-hidden="true">{c.icon}</div>
+                      <div className="flex items-center justify-center" aria-hidden="true">{c.icon}</div>
                       <div className="px-1">
                         <div
                           className="font-medium text-[14px] sm:text[15px] leading-snug text-slate-900"
