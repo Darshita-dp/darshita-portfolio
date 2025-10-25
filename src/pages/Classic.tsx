@@ -1060,6 +1060,7 @@ export default function Classic() {
                                 setOpenIdx(isOpen ? null : idx);
                               }
                             }}
+                            style={{ background: "linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%)", borderColor: "#90CAF9" }}
                           >
                             <CardHeader className="pb-1">
                               <CardTitle className="text-base md:text-lg text-slate-900 inline-flex items-center gap-2">
