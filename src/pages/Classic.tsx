@@ -1521,7 +1521,7 @@ export default function Classic() {
         <SectionTitle id="hobbies-title">Hobbies & Interests</SectionTitle>
         <div className="mt-6 grid grid-cols-3 sm:grid-cols-4 md:grid-cols-7 gap-3">
           {[
-            ["https://harmless-tapir-303.convex.cloud/api/storage/0e998172-1b01-4ab5-956e-42542509a8ac", "Photography & Visual Design"],
+            ["https://harmless-tapir-303.convex.cloud/api/storage/eeab8198-ae99-483c-9e3c-270f3fc0978b", "Photography & Visual Design"],
             ["🎨", "Creative Designing & Posters"],
             ["✍️", "Blogging & Storytelling"],
             ["💡", "Exploring AI & Tech Trends"],
