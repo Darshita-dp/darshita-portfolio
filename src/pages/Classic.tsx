@@ -1525,7 +1525,7 @@ export default function Classic() {
             ["https://harmless-tapir-303.convex.cloud/api/storage/e8159daf-7f00-4b0e-b6a4-73495b057366", "Creative Designing & Posters"],
             ["https://harmless-tapir-303.convex.cloud/api/storage/a1db593d-7e17-4171-bdf3-6010706c6beb", "Blogging & Storytelling"],
             ["💡", "Exploring AI & Tech Trends"],
-            ["🍳", "Cooking"],
+            ["https://harmless-tapir-303.convex.cloud/api/storage/2a7d8186-4cb3-4d1d-99a6-c990f42e056f", "Cooking"],
             ["https://harmless-tapir-303.convex.cloud/api/storage/a968d1fb-a81c-44e9-8768-0c77d1f35624", "Piano"],
             ["https://harmless-tapir-303.convex.cloud/api/storage/616428e2-2399-4bb2-8a0b-9bf9ca40a22d", "Badminton"],
           ].map(([icon, label]) => (
