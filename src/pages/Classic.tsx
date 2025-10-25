@@ -1594,7 +1594,7 @@ export default function Classic() {
             <SectionTitle id="contact-title">Contact</SectionTitle>
           </div>
           <div className="mt-5 grid grid-cols-1 md:grid-cols-1 gap-5">
-            <Card className="shadow-sm bg-[#EAF4FF] border-blue-100">
+            <Card className="shadow-sm border-blue-200" style={{ background: "linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%)" }}>
               <CardHeader className="pb-1">
                 <CardTitle className="text-lg">Let's connect</CardTitle>
               </CardHeader>
