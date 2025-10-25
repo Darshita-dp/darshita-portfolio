@@ -345,7 +345,7 @@ export default function Classic() {
     const next: { name?: string; email?: string; message?: string } = {};
     if (!nameVal.trim()) next.name = "Please enter your name.";
     if (!emailVal.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal)) next.email = "Enter a valid email.";
-    if (!messageVal.trim() || messageVal.trim().length < 10) next.message = "Message must be at least 10 characters.";
+    if (messageVal.trim().length > 0 && messageVal.trim().length < 10) next.message = "Message must be at least 10 characters.";
     setErrors(next);
     return Object.keys(next).length === 0;
   };
