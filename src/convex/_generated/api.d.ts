@@ -16,6 +16,7 @@ import type {
 import type * as analytics from "../analytics.js";
 import type * as auth_emailOtp from "../auth/emailOtp.js";
 import type * as auth from "../auth.js";
+import type * as emails from "../emails.js";
 import type * as gameProgress from "../gameProgress.js";
 import type * as guestbook from "../guestbook.js";
 import type * as http from "../http.js";
@@ -33,6 +34,7 @@ declare const fullApi: ApiFromModules<{
   analytics: typeof analytics;
   "auth/emailOtp": typeof auth_emailOtp;
   auth: typeof auth;
+  emails: typeof emails;
   gameProgress: typeof gameProgress;
   guestbook: typeof guestbook;
   http: typeof http;

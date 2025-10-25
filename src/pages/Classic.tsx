@@ -10,6 +10,8 @@ import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
+import { useAction } from "convex/react";
+import { api } from "@/convex/_generated/api";
 import { ArrowRight, Briefcase, Database, Github, Linkedin, Mail, Smartphone, Star, ExternalLink, User, MessageSquare } from "lucide-react";
 import { BarChart3, Code2, Users, Wrench } from "lucide-react";
 
@@ -273,6 +275,8 @@ export default function Classic() {
   const [messageVal, setMessageVal] = useState("");
   const [errors, setErrors] = useState<{ name?: string; email?: string; message?: string }>({});
 
+  const sendContactEmail = useAction(api.emails.sendContactEmail);
+
   // Auto-scroll for Certificates carousels (supports multiple rows; respects reduced motion)
   useEffect(() => {
     const reduced =
@@ -346,20 +350,30 @@ export default function Classic() {
     return Object.keys(next).length === 0;
   };
 
-  const onSubmitContact = (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmitContact = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!validate()) {
-      toast("Please fix the highlighted fields.");
+      toast.error("Please fix the highlighted fields.");
       return;
     }
     setSending(true);
-    setTimeout(() => {
+    try {
+      await sendContactEmail({
+        name: nameVal,
+        email: emailVal,
+        message: messageVal,
+      });
+      toast.success("Message sent successfully! I'll get back to you soon.");
+      setNameVal("");
+      setEmailVal("");
+      setMessageVal("");
+      setErrors({});
+    } catch (error) {
+      toast.error("Failed to send message. Please try again or email me directly.");
+      console.error("Contact form error:", error);
+    } finally {
       setSending(false);
-      toast.success("Thanks! Your message has been prepared in your email app.");
-      const subject = encodeURIComponent(`Portfolio contact from ${nameVal}`);
-      const body = encodeURIComponent(`${messageVal}\n\n— ${nameVal}\n${emailVal}`);
-      window.location.href = `mailto:darshitapatel1506@gmail.com?subject=${subject}&body=${body}`;
-    }, 350);
+    }
   };
 
   // Simple ripple effect for the send button
@@ -455,13 +469,6 @@ export default function Classic() {
               <div className="mt-4 flex flex-wrap items-center justify-center md:justify-start gap-2">
                 <Button
                   asChild
-                  variant="secondary"
-                  className="bg-white text-black hover:bg-white/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
-                >
-                  <a href="#" onClick={(e) => e.preventDefault()}>📄 Resume</a>
-                </Button>
-                <Button
-                  asChild
                   variant="outline"
                   className="bg-white text-black border-white/60 hover:bg-white/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
                 >
@@ -529,7 +536,6 @@ export default function Classic() {
 
       {/* Skills – Blue/White circular chips with radial progress, legends, averages */}
       <motion.section
-        id="skills"
         className="py-10"
         style={{ background: BLUE.bgTint }}
         initial={{ opacity: 0, y: 14 }}
@@ -538,7 +544,9 @@ export default function Classic() {
         transition={{ duration: 0.5 }}
       >
         <div className="container mx-auto max-w-6xl px-4">
-          <SectionTitle id="skills-title">Skills</SectionTitle>
+          <div id="skills" className="scroll-mt-20">
+            <SectionTitle id="skills-title">Skills</SectionTitle>
+          </div>
 
           {(() => {
             type Skill = {
@@ -895,14 +903,15 @@ export default function Classic() {
 
       {/* Experience Timeline - replaces previous Experience grid content */}
       <motion.section
-        id="experience"
         className="container mx-auto max-w-6xl px-4 py-10"
         initial={{ opacity: 0, y: 14 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-80px" }}
         transition={{ duration: 0.5 }}
       >
-        <SectionTitle id="experience-title">Experience Timeline</SectionTitle>
+        <div id="experience" className="scroll-mt-20">
+          <SectionTitle id="experience-title">Experience Timeline</SectionTitle>
+        </div>
 
         {/* Filters */}
         <div className="mt-4 flex flex-wrap gap-2">
@@ -1163,14 +1172,15 @@ export default function Classic() {
 
       {/* Projects */}
       <motion.section
-        id="projects"
         className="container mx-auto max-w-6xl px-4 py-10"
         initial={{ opacity: 0, y: 14 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-80px" }}
         transition={{ duration: 0.5, delay: 0.05 }}
       >
-        <SectionTitle id="projects-title">Projects</SectionTitle>
+        <div id="projects" className="scroll-mt-20">
+          <SectionTitle id="projects-title">Projects</SectionTitle>
+        </div>
 
         {/* UPDATED: Auto-scrolling carousel with prioritized ordering */}
         {(() => {
@@ -1563,7 +1573,6 @@ export default function Classic() {
 
       {/* Contact */}
       <motion.section
-        id="contact"
         className="bg-white border-t"
         initial={{ opacity: 0, y: 14 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -1571,7 +1580,9 @@ export default function Classic() {
         transition={{ duration: 0.5 }}
       >
         <div className="container mx-auto max-w-6xl px-4 py-7">
-          <SectionTitle id="contact-title">Contact</SectionTitle>
+          <div id="contact" className="scroll-mt-20">
+            <SectionTitle id="contact-title">Contact</SectionTitle>
+          </div>
           <div className="mt-5 grid grid-cols-1 md:grid-cols-1 gap-5">
             <Card className="shadow-sm bg-[#EAF4FF] border-blue-100">
               <CardHeader className="pb-1">

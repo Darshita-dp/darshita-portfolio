@@ -1,6 +1,3 @@
-const initialResize = () => {
-  resizeCanvas();
-  setTimeout(resizeCanvas, 100);
-};
-
-initialResize();
+if (!process.env.RESEND_API_KEY) {
+  throw new Error("Email service is not configured. Please contact the site administrator.");
+}
