@@ -1527,7 +1527,7 @@ export default function Classic() {
             ["💡", "Exploring AI & Tech Trends"],
             ["🍳", "Cooking"],
             ["🎹", "Piano"],
-            ["🏸", "Badminton"],
+            ["https://harmless-tapir-303.convex.cloud/api/storage/616428e2-2399-4bb2-8a0b-9bf9ca40a22d", "Badminton"],
           ].map(([icon, label]) => (
             <div
               key={label}
