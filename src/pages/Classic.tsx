@@ -1523,7 +1523,7 @@ export default function Classic() {
           {[
             ["https://harmless-tapir-303.convex.cloud/api/storage/eeab8198-ae99-483c-9e3c-270f3fc0978b", "Photography & Visual Design"],
             ["https://harmless-tapir-303.convex.cloud/api/storage/e8159daf-7f00-4b0e-b6a4-73495b057366", "Creative Designing & Posters"],
-            ["✍️", "Blogging & Storytelling"],
+            ["https://harmless-tapir-303.convex.cloud/api/storage/a1db593d-7e17-4171-bdf3-6010706c6beb", "Blogging & Storytelling"],
             ["💡", "Exploring AI & Tech Trends"],
             ["🍳", "Cooking"],
             ["🎹", "Piano"],
