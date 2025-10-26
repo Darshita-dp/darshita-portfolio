@@ -22,10 +22,12 @@ export const sendContactEmail = action({
 
     try {
       console.log("Attempting to send email from:", args.email);
+      console.log("Using API key:", process.env.RESEND_API_KEY?.substring(0, 10) + "...");
       
-      const { data, error } = await resend.emails.send({
+      const emailPayload = {
         from: "Portfolio Contact <onboarding@resend.dev>",
         to: ["darshitapatel1506@gmail.com"],
+        reply_to: args.email,
         subject: `Portfolio contact from ${args.name}`,
         html: `
           <h2>New Contact Form Submission</h2>
@@ -43,18 +45,23 @@ Email: ${args.email}
 Message:
 ${args.message}
         `,
-      });
+      };
+
+      console.log("Email payload:", JSON.stringify(emailPayload, null, 2));
+
+      const { data, error } = await resend.emails.send(emailPayload);
 
       if (error) {
-        console.error("Resend API error:", error);
-        throw new Error(`Failed to send email: ${error.message}`);
+        console.error("Resend API error details:", JSON.stringify(error, null, 2));
+        throw new Error(`Failed to send email: ${JSON.stringify(error)}`);
       }
 
       console.log("Email sent successfully:", data?.id);
       return { success: true, messageId: data?.id };
     } catch (error) {
       console.error("Email sending error:", error);
-      throw new Error(`Failed to send email: ${error instanceof Error ? error.message : "Unknown error"}`);
+      const errorMessage = error instanceof Error ? error.message : JSON.stringify(error);
+      throw new Error(`Failed to send email: ${errorMessage}`);
     }
   },
 });
