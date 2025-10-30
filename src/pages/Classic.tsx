@@ -1708,7 +1708,7 @@ export default function Classic() {
                         tabIndex={0}
                       />
                       {messageVal && !errors.message ? (
-                        <span className="absolute right-3 top-3 text-green-600 pointer-events-none" aria-hidden="true">✅</span>
+                        <span className="absolute right-3 top-3 text-green-600 pointer-events-none" aria-hidden="true">✔</span>
                       ) : null}
                     </div>
                     {errors.message ? <div className="mt-1.5 text-xs text-red-600">{errors.message}</div> : null}
