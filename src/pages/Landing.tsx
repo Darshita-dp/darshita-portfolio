@@ -451,7 +451,7 @@ function LeavesField({ densityScale = 1 }: { densityScale?: number }) {
       spritesRef.current.push({ el, ...p });
     }
 
-    // Mount emoji leaves (🍃) instead of SVGs
+    // Mount leaf sticker images instead of emojis
     spritesRef.current.forEach((s: {
       el: HTMLDivElement;
       x: number;
@@ -466,15 +466,16 @@ function LeavesField({ densityScale = 1 }: { densityScale?: number }) {
       rotAmp: number;
     }) => {
       const size = 60; // reduced size for subtler leaves while adding more overall
-      const span = document.createElement("span");
-      span.textContent = "🍃";
-      span.setAttribute("aria-hidden", "true");
-      span.style.display = "block";
-      span.style.fontSize = `${size}px`;
-      span.style.lineHeight = `${size}px`;
-      span.style.opacity = String(s.opacity); // match flower transparency behavior
+      const img = document.createElement("img");
+      img.src = "https://harmless-tapir-303.convex.cloud/api/storage/8c452935-023b-4711-a76f-64d60cc8eb87";
+      img.setAttribute("aria-hidden", "true");
+      img.style.display = "block";
+      img.style.width = `${size}px`;
+      img.style.height = `${size}px`;
+      img.style.objectFit = "contain";
+      img.style.opacity = String(s.opacity); // match flower transparency behavior
       // Wrapper already has drop-shadow matching flowers
-      (s.el.firstChild as HTMLDivElement).appendChild(span);
+      (s.el.firstChild as HTMLDivElement).appendChild(img);
     });
 
     const step = (ts: number) => {
