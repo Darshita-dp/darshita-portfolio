@@ -1,10 +1,9 @@
-import { motion, useReducedMotion } from "framer-motion";
 import { useNavigate } from "react-router";
-import { useEffect, useRef, useState, useMemo } from "react";
-import { Button } from "@/components/ui/button";
+import { motion, useReducedMotion } from "framer-motion";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { api } from "@/convex/_generated/api";
 import { useMutation, useQuery } from "convex/react";
+import { api } from "@/convex/_generated/api";
+import { useEffect, useMemo, useRef, useState } from "react";
 import "./Landing.icon-bounce.css";
 
 const modes = [
@@ -761,9 +760,14 @@ function SunflowerCursor() {
     const el = ref.current;
     if (!el) return;
 
-    // Initialize cursor at current mouse position
-    state.current.x = window.innerWidth / 2;
-    state.current.y = window.innerHeight / 2;
+    // Initialize cursor at current mouse position or center of screen
+    const initX = window.innerWidth / 2;
+    const initY = window.innerHeight / 2;
+    state.current.x = initX;
+    state.current.y = initY;
+    
+    // Set initial position immediately
+    el.style.transform = `translate3d(${initX}px, ${initY}px, 0)`;
 
     // Track target pointer position
     const onMove = (e: PointerEvent) => {
