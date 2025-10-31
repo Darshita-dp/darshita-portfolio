@@ -761,6 +761,10 @@ function SunflowerCursor() {
     const el = ref.current;
     if (!el) return;
 
+    // Initialize cursor at current mouse position
+    state.current.x = window.innerWidth / 2;
+    state.current.y = window.innerHeight / 2;
+
     // Track target pointer position
     const onMove = (e: PointerEvent) => {
       state.current.x = e.clientX;
@@ -808,8 +812,8 @@ function SunflowerCursor() {
     // Smooth follow lag + micro-rotation wobble (boosted only)
     const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     let raf = 0;
-    let prevX = -100;
-    let prevY = -100;
+    let prevX = state.current.x;
+    let prevY = state.current.y;
     const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
     const ease = 0.18; // subtle lag
 
