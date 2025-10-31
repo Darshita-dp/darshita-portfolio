@@ -26,7 +26,7 @@ export const sendContactEmail = action({
       
       const emailPayload = {
         from: "Portfolio Contact <onboarding@resend.dev>",
-        to: ["darshitapatel1506@gmail.com"],
+        to: ["darshitaa2001@gmail.com"],
         reply_to: args.email,
         subject: `Portfolio contact from ${args.name}`,
         html: `
