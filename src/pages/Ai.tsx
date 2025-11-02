@@ -369,7 +369,7 @@ function InterviewMe() {
       <div 
         className="container mx-auto max-w-3xl px-4 py-1 relative z-10 h-full flex items-center"
         style={{
-          height: "calc(100dvh - 56px - 56px - 8px)", // 100vh - topbar - footer - minimal padding
+          height: "calc(100dvh - 56px - 56px)", // 100vh - topbar - footer
           minHeight: "545px"
         }}
       >
