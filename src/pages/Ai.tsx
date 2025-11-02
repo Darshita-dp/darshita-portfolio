@@ -362,7 +362,7 @@ function InterviewMe() {
   };
 
   return (
-    <div className="h-full bg-[#D4E8E4] dark:bg-slate-900 relative overflow-hidden flex items-center justify-center">
+    <div className="h-full bg-[#D4E8E4] dark:bg-slate-900 relative overflow-hidden flex justify-center items-stretch">
       {/* Animated grass background */}
       {grassBackground}
 
