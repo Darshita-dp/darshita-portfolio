@@ -369,8 +369,8 @@ function InterviewMe() {
       <div 
         className="container mx-auto max-w-3xl px-4 relative z-10 h-full flex items-stretch"
         style={{
-          // subtract top bar (56px) and footer (~56px)
-          height: "calc(100dvh - 56px - 56px)",
+          // Fill the viewport; footer is fixed and overlays so don't subtract it
+          height: "calc(100dvh - 56px)",
           minHeight: "545px"
         }}
       >
