@@ -367,9 +367,10 @@ function InterviewMe() {
       {grassBackground}
 
       <div 
-        className="container mx-auto max-w-3xl px-4 py-0 relative z-10 h-full flex items-center"
+        className="container mx-auto max-w-3xl px-4 relative z-10 h-full flex items-stretch"
         style={{
-          height: "calc(100dvh - 56px)", // Fill viewport minus top bar; footer is fixed
+          // subtract top bar (56px) and footer (~56px)
+          height: "calc(100dvh - 56px - 56px)",
           minHeight: "545px"
         }}
       >
@@ -391,7 +392,7 @@ function InterviewMe() {
           </div>
 
           {/* Chat area */}
-          <div className="bg-[#EFE7DD]/60 dark:bg-slate-950/60 flex-1 overflow-y-auto p-3 h-[45vh] md:h-[40vh] min-h-[170px]">
+          <div className="bg-[#EFE7DD]/60 dark:bg-slate-950/60 flex-1 overflow-y-auto p-3 min-h-[170px]">
             {messages.map((m, idx) => (
               <div key={idx} className={`flex mb-2 ${m.role === "user" ? "justify-end" : "justify-start"}`}>
                 {m.role === "ai" && (
