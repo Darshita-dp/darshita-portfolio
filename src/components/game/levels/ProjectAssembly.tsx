@@ -647,7 +647,7 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
           <GameCanvas ref={canvasHandleRef} onRender={handleRender} isPaused={isPaused || showProjectCard} />
           
           {/* Mobile Touch Controls */}
-          <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2 sm:hidden pointer-events-auto z-10">
+          <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2 sm:hidden z-50" style={{ pointerEvents: 'auto' }}>
             <div className="flex flex-col gap-2">
               {/* Up button */}
               <button
