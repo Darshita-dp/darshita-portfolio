@@ -166,7 +166,7 @@ function FlowerField({ densityScale = 1 }: { densityScale?: number }) {
       spritesRef.current.push({ el, ...p });
     }
 
-    // mount SVGs after elements exist
+    // mount images after elements exist (use provided sunflower sticker)
     spritesRef.current.forEach((s: {
       el: HTMLDivElement;
       x: number;
@@ -180,79 +180,16 @@ function FlowerField({ densityScale = 1 }: { densityScale?: number }) {
       rotPhase: number;
       rotAmp: number;
     }) => {
-      const size = 96; // base size, scale via transform
-      const svg = (function makeSvg() {
-        const petalCount = 18;
-        const cx = 50;
-        const cy = 50;
-        // build SVG element
-        const ns = "http://www.w3.org/2000/svg";
-        const svg = document.createElementNS(ns, "svg");
-        svg.setAttribute("width", String(size));
-        svg.setAttribute("height", String(size));
-        svg.setAttribute("viewBox", "0 0 100 100");
-        svg.setAttribute("aria-hidden", "true");
-        // petals with gentle gradient
-        const defs = document.createElementNS(ns, "defs");
-        const gPetal = document.createElementNS(ns, "linearGradient");
-        gPetal.setAttribute("id", "petalGrad");
-        gPetal.setAttribute("x1", "0%");
-        gPetal.setAttribute("y1", "0%");
-        gPetal.setAttribute("x2", "0%");
-        gPetal.setAttribute("y2", "100%");
-        const stop1 = document.createElementNS(ns, "stop");
-        stop1.setAttribute("offset", "0%");
-        stop1.setAttribute("stop-color", "#FFE07B");
-        const stop2 = document.createElementNS(ns, "stop");
-        stop2.setAttribute("offset", "100%");
-        stop2.setAttribute("stop-color", "#FFC94A");
-        gPetal.appendChild(stop1);
-        gPetal.appendChild(stop2);
-
-        const gCenter = document.createElementNS(ns, "radialGradient");
-        gCenter.setAttribute("id", "centerGrad");
-        const c1 = document.createElementNS(ns, "stop");
-        c1.setAttribute("offset", "0%");
-        c1.setAttribute("stop-color", "#7A4A2B");
-        const c2 = document.createElementNS(ns, "stop");
-        c2.setAttribute("offset", "100%");
-        c2.setAttribute("stop-color", "#5A3A23");
-        gCenter.appendChild(c1);
-        gCenter.appendChild(c2);
-
-        defs.appendChild(gPetal);
-        defs.appendChild(gCenter);
-        svg.appendChild(defs);
-
-        for (let i = 0; i < petalCount; i++) {
-          const angle = (i * 360) / petalCount;
-          const ellipse = document.createElementNS(ns, "ellipse");
-          ellipse.setAttribute("cx", String(cx));
-          ellipse.setAttribute("cy", String(cy - 28));
-          ellipse.setAttribute("rx", "9.5");
-          ellipse.setAttribute("ry", "23");
-          ellipse.setAttribute("fill", "url(#petalGrad)");
-          ellipse.setAttribute("stroke", "rgba(0,0,0,0.06)");
-          ellipse.setAttribute("stroke-width", "0.5");
-          ellipse.setAttribute("transform", `rotate(${angle} ${cx} ${cy})`);
-          svg.appendChild(ellipse);
-        }
-        const ring = document.createElementNS(ns, "circle");
-        ring.setAttribute("cx", String(cx));
-        ring.setAttribute("cy", String(cy));
-        ring.setAttribute("r", "22");
-        ring.setAttribute("fill", "url(#centerGrad)");
-        svg.appendChild(ring);
-        const center = document.createElementNS(ns, "circle");
-        center.setAttribute("cx", String(cx));
-        center.setAttribute("cy", String(cy));
-        center.setAttribute("r", "16");
-        center.setAttribute("fill", "#5A3A23");
-        svg.appendChild(center);
-        return svg;
-      })();
-      svg.style.opacity = String(s.opacity);
-      (s.el.firstChild as HTMLDivElement).appendChild(svg);
+      const size = 92; // base size, scale via transform
+      const img = document.createElement("img");
+      img.src = "https://harmless-tapir-303.convex.cloud/api/storage/661753be-a350-4324-8eb5-60d69f761ad5";
+      img.setAttribute("aria-hidden", "true");
+      img.style.display = "block";
+      img.style.width = `${size}px`;
+      img.style.height = `${size}px`;
+      img.style.objectFit = "contain";
+      img.style.opacity = String(s.opacity);
+      (s.el.firstChild as HTMLDivElement).appendChild(img);
     });
 
     const step = (ts: number) => {
@@ -291,10 +228,10 @@ function FlowerField({ densityScale = 1 }: { densityScale?: number }) {
           s.rotPhase = p.rotPhase;
           s.rotAmp = p.rotAmp;
 
-          // Update the mounted SVG's opacity to match the new sprite opacity
+          // Update opacity reference on recycle to target the image instead of the SVG
           const wrap = s.el.firstChild as HTMLDivElement | null;
-          const svg = wrap?.firstChild as SVGElement | null;
-          if (svg) svg.style.opacity = String(s.opacity);
+          const imgEl = wrap?.firstChild as HTMLImageElement | null;
+          if (imgEl) imgEl.style.opacity = String(s.opacity);
         }
       }
 
