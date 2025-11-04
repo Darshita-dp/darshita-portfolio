@@ -186,9 +186,9 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
     
     gameStateRef.current.maze = maze;
     
-    // Position player at the LEFT entrance (slightly outside the maze)
+    // Position player INSIDE the first cell of the maze
     const cellSize = gameStateRef.current.cellSize;
-    const entranceX = 10; // Position on the left side, outside the maze
+    const entranceX = 20 + cellSize / 2; // Position inside the first cell
     const entranceY = entranceRow * cellSize + 20 + cellSize / 2;
     gameStateRef.current.player.x = entranceX;
     gameStateRef.current.player.y = entranceY;
@@ -405,18 +405,18 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
         const cellX = Math.floor((x - 20) / cellSize);
         const cellY = Math.floor((y - 20) / cellSize);
         
-        // Allow movement outside maze bounds (for entrance area)
+        // Allow movement outside maze bounds
         if (cellY < 0 || cellY >= state.maze!.length || cellX < 0 || cellX >= state.maze![0].length) {
-          return false; // Allow movement outside maze
+          return false;
         }
         
         const cell = state.maze![cellY][cellX];
         const px = cellX * cellSize + 20;
         const py = cellY * cellSize + 20;
         
-        const wallThreshold = 5; // More lenient collision threshold
+        const wallThreshold = 8; // Even more lenient collision threshold
         
-        // Check each wall with more lenient collision
+        // Check each wall - only block if there's actually a wall
         if (cell.walls.top && y - playerRadius < py + wallThreshold) return true;
         if (cell.walls.bottom && y + playerRadius > py + cellSize - wallThreshold) return true;
         if (cell.walls.left && x - playerRadius < px + wallThreshold) return true;
