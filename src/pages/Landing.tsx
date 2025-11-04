@@ -974,61 +974,10 @@ function SunflowerCursor() {
   const ref = useRef<HTMLDivElement | null>(null);
   const state = useRef<{ x: number; y: number; boost: boolean }>({ x: -100, y: -100, boost: false });
 
-  // Base sunflower (make all stops fully opaque, remove baked shadow)
-  const sunflowerBg = useMemo(() => {
-    const svg = `
-      <svg xmlns='http://www.w3.org/2000/svg' width='44' height='44' viewBox='0 0 100 100'>
-        <defs>
-          <linearGradient id='p' x1='0' y1='0' x2='0' y2='1'>
-            <stop offset='0%' stop-color='#FFE07B' stop-opacity='1'/>
-            <stop offset='100%' stop-color='#FFC94A' stop-opacity='1'/>
-          </linearGradient>
-          <radialGradient id='c'>
-            <stop offset='0%' stop-color='#7A4A2B' stop-opacity='1'/>
-            <stop offset='100%' stop-color='#5A3A23' stop-opacity='1'/>
-          </radialGradient>
-        </defs>
-        <ellipse cx='50' cy='60' rx='30' ry='30' fill='black' opacity='0'/>
-        <g opacity='1'>
-          ${Array.from({length: 18}).map((_,i)=>{
-            const angle = (i*360)/18;
-            return `<ellipse cx='50' cy='22' rx='10' ry='23' fill='url(#p)' stroke='rgba(0,0,0,0.24)' stroke-width='0.65' transform='rotate(${angle} 50 50)'/>`
-          }).join('')}
-          <circle cx='50' cy='50' r='23' fill='url(#c)' stroke='rgba(0,0,0,0.26)' stroke-width='0.65'/>
-          <circle cx='50' cy='50' r='16' fill='#5A3A23' />
-        </g>
-      </svg>
-    `;
-    return `url("data:image/svg+xml;utf8,${encodeURIComponent(svg)}")`;
-  }, []);
-
-  // Hover sunflower (already fully opaque; remove baked shadow)
-  const sunflowerBgHover = useMemo(() => {
-    const svg = `
-      <svg xmlns='http://www.w3.org/2000/svg' width='44' height='44' viewBox='0 0 100 100'>
-        <defs>
-          <linearGradient id='p2' x1='0' y1='0' x2='0' y2='1'>
-            <stop offset='0%' stop-color='#FFE07B' stop-opacity='1'/>
-            <stop offset='100%' stop-color='#FFC94A' stop-opacity='1'/>
-          </linearGradient>
-          <radialGradient id='c2'>
-            <stop offset='0%' stop-color='#7A4A2B' stop-opacity='1'/>
-            <stop offset='100%' stop-color='#5A3A23' stop-opacity='1'/>
-          </radialGradient>
-        </defs>
-        <ellipse cx='50' cy='60' rx='30' ry='30' fill='black' opacity='0'/>
-        <g opacity='1'>
-          ${Array.from({length: 18}).map((_,i)=>{
-            const angle = (i*360)/18;
-            return `<ellipse cx='50' cy='22' rx='10' ry='23' fill='url(#p2)' stroke='rgba(0,0,0,0.24)' stroke-width='0.65' transform='rotate(${angle} 50 50)'/>`
-          }).join('')}
-          <circle cx='50' cy='50' r='23' fill='url(#c2)' stroke='rgba(0,0,0,0.26)' stroke-width='0.65'/>
-          <circle cx='50' cy='50' r='16' fill='#5A3A23' fill-opacity='1'/>
-        </g>
-      </svg>
-    `;
-    return `url("data:image/svg+xml;utf8,${encodeURIComponent(svg)}")`;
-  }, []);
+  // Use provided sticker for the cursor flower (both base and hover)
+  const sunflowerStickerUrl = "https://harmless-tapir-303.convex.cloud/api/storage/e2bd4901-a77f-4767-8132-491818b20b90";
+  const sunflowerBg = useMemo(() => `url("${sunflowerStickerUrl}")`, []);
+  const sunflowerBgHover = useMemo(() => `url("${sunflowerStickerUrl}")`, []);
 
   useEffect(() => {
     const el = ref.current;
@@ -1171,8 +1120,19 @@ export default function Landing() {
 
   const modeCounts = useQuery(api.analytics.getOpenModeCounts, {}); // realtime counts
 
-  // Sunflower cursor (Landing page only)
+  // Replace native cursor image with provided sunflower for consistency
   const sunflowerCursor = useMemo(() => {
+    const url = "https://harmless-tapir-303.convex.cloud/api/storage/e2bd4901-a77f-4767-8132-491818b20b90";
+    return `url("${url}") 16 16, auto`;
+  }, []);
+
+  const sunflowerCursorHover = useMemo(() => {
+    const url = "https://harmless-tapir-303.convex.cloud/api/storage/e2bd4901-a77f-4767-8132-491818b20b90";
+    return `url("${url}") 22 22, auto`;
+  }, []);
+
+  // Sunflower cursor (Landing page only)
+  const sunflowerCursorSVG = useMemo(() => {
     const svg = `
       <svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 100 100'>
         <defs>
@@ -1200,7 +1160,7 @@ export default function Landing() {
   }, []);
 
   // Larger, hover sunflower cursor with #FFC067 petals and subtle transparency
-  const sunflowerCursorHover = useMemo(() => {
+  const sunflowerCursorHoverSVG = useMemo(() => {
     const svg = `
       <svg xmlns='http://www.w3.org/2000/svg' width='44' height='44' viewBox='0 0 100 100'>
         <defs>
@@ -1384,7 +1344,7 @@ export default function Landing() {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.45, delay: 0.08 * index }}
               // Replace tilt hover with lift + glow (no rotate)
-              whileHover={{ y: -6, scale: 1.03, cursor: sunflowerCursorHover }}
+              whileHover={{ y: -6, scale: 1.03, cursor: sunflowerCursorHoverSVG }}
               whileTap={{ scale: 0.98 }}
               onClick={() => {
                 // Track mode open event, then navigate
