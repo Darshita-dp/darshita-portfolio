@@ -154,6 +154,7 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
   const [showComplete, setShowComplete] = useState(false);
   const [showTransition, setShowTransition] = useState(false);
   const [transitionStep, setTransitionStep] = useState(0);
+  const [cameraOffset, setCameraOffset] = useState({ x: 0, y: 0 });
 
   const gameStateRef = useRef({
     player: { x: 740, y: 250, vx: 0, vy: 0, direction: 1, animFrame: 0 },
@@ -246,6 +247,22 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
   const handleRender = (ctx: CanvasRenderingContext2D, rect: DOMRect, deltaTime: number) => {
     const state = gameStateRef.current;
     const now = Date.now();
+
+    // Camera follows player on mobile
+    const isMobile = rect.width < 640;
+    if (isMobile) {
+      const targetX = rect.width / 2 - state.player.x;
+      const targetY = rect.height / 2 - state.player.y;
+      setCameraOffset({ x: targetX, y: targetY });
+    } else {
+      setCameraOffset({ x: 0, y: 0 });
+    }
+
+    // Apply camera transform
+    ctx.save();
+    if (isMobile) {
+      ctx.translate(cameraOffset.x, cameraOffset.y);
+    }
 
     // Draw background
     if (state.images.background?.complete) {
@@ -525,6 +542,15 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
       ctx.fillRect(-state.playerSize / 2, -state.playerSize / 2, state.playerSize, state.playerSize);
     }
     ctx.restore();
+    
+    // Restore camera transform
+    ctx.restore();
+  };
+
+  // Mobile touch controls
+  const handleTouchControl = (direction: 'left' | 'right' | 'up' | 'down', isPressed: boolean) => {
+    const state = gameStateRef.current;
+    state.keys[direction] = isPressed;
   };
 
   const handleNextProject = () => {
@@ -619,6 +645,62 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
         {/* Game Canvas */}
         <div className="flex-1 relative" style={{ background: "#A8F7E3", overflow: "hidden" }}>
           <GameCanvas ref={canvasHandleRef} onRender={handleRender} isPaused={isPaused || showProjectCard} />
+          
+          {/* Mobile Touch Controls */}
+          <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2 sm:hidden pointer-events-auto z-10">
+            <div className="flex flex-col gap-2">
+              {/* Up button */}
+              <button
+                onTouchStart={() => handleTouchControl('up', true)}
+                onTouchEnd={() => handleTouchControl('up', false)}
+                onMouseDown={() => handleTouchControl('up', true)}
+                onMouseUp={() => handleTouchControl('up', false)}
+                onMouseLeave={() => handleTouchControl('up', false)}
+                className="w-14 h-14 rounded-full bg-white/80 backdrop-blur-sm border-2 border-teal-400 shadow-lg active:scale-95 transition-transform flex items-center justify-center text-2xl"
+                style={{ touchAction: 'none' }}
+              >
+                ↑
+              </button>
+              <div className="flex gap-2">
+                {/* Left button */}
+                <button
+                  onTouchStart={() => handleTouchControl('left', true)}
+                  onTouchEnd={() => handleTouchControl('left', false)}
+                  onMouseDown={() => handleTouchControl('left', true)}
+                  onMouseUp={() => handleTouchControl('left', false)}
+                  onMouseLeave={() => handleTouchControl('left', false)}
+                  className="w-14 h-14 rounded-full bg-white/80 backdrop-blur-sm border-2 border-teal-400 shadow-lg active:scale-95 transition-transform flex items-center justify-center text-2xl"
+                  style={{ touchAction: 'none' }}
+                >
+                  ←
+                </button>
+                {/* Down button */}
+                <button
+                  onTouchStart={() => handleTouchControl('down', true)}
+                  onTouchEnd={() => handleTouchControl('down', false)}
+                  onMouseDown={() => handleTouchControl('down', true)}
+                  onMouseUp={() => handleTouchControl('down', false)}
+                  onMouseLeave={() => handleTouchControl('down', false)}
+                  className="w-14 h-14 rounded-full bg-white/80 backdrop-blur-sm border-2 border-teal-400 shadow-lg active:scale-95 transition-transform flex items-center justify-center text-2xl"
+                  style={{ touchAction: 'none' }}
+                >
+                  ↓
+                </button>
+                {/* Right button */}
+                <button
+                  onTouchStart={() => handleTouchControl('right', true)}
+                  onTouchEnd={() => handleTouchControl('right', false)}
+                  onMouseDown={() => handleTouchControl('right', true)}
+                  onMouseUp={() => handleTouchControl('right', false)}
+                  onMouseLeave={() => handleTouchControl('right', false)}
+                  className="w-14 h-14 rounded-full bg-white/80 backdrop-blur-sm border-2 border-teal-400 shadow-lg active:scale-95 transition-transform flex items-center justify-center text-2xl"
+                  style={{ touchAction: 'none' }}
+                >
+                  →
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Project Detail Card */}
