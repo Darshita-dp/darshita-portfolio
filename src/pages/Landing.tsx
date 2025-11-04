@@ -875,6 +875,12 @@ function SparkleEmitter() {
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduced) return;
 
+    // Use provided glitter images for cursor particles
+    const sparkleUrls = [
+      "https://harmless-tapir-303.convex.cloud/api/storage/a34cb6e9-c85e-4ff7-b88c-8c40dd894c9a",
+      "https://harmless-tapir-303.convex.cloud/api/storage/24034358-bb1b-449a-a645-cd132257c609",
+    ] as const;
+
     type P = {
       el: HTMLElement;
       alive: boolean;
@@ -889,11 +895,20 @@ function SparkleEmitter() {
     const pool: Array<P> = [];
     const poolSize = 80;
     for (let i = 0; i < poolSize; i++) {
-      const el = document.createElement("i");
+      // Create <img> particles instead of colored squares
+      const el = document.createElement("img");
       el.className = "sparkle";
+      el.setAttribute("alt", "");
+      (el as HTMLImageElement).src = sparkleUrls[Math.floor(Math.random() * sparkleUrls.length)];
+      el.setAttribute("draggable", "false");
       el.style.opacity = "0";
       el.style.left = "0px";
       el.style.top = "0px";
+      el.style.position = "absolute";
+      el.style.width = "12px";
+      el.style.height = "12px";
+      el.style.pointerEvents = "none";
+      el.style.filter = "drop-shadow(0 0 4px rgba(255,255,255,0.6))";
       ref.current.appendChild(el);
       pool.push({ el, alive: false, life: 0, x: 0, y: 0, vx: 0, vy: 0, scale: 1 });
     }
@@ -930,11 +945,15 @@ function SparkleEmitter() {
         p.vy = 70 + Math.random() * 70; // downward velocity (waterfall)
         p.scale = 0.8 + Math.random() * 0.4;
 
-        const r = Math.random();
-        const color = r < 0.6 ? "#FFC067" : r < 0.85 ? "#FFF6C5" : "#FFFFFF";
-        p.el.style.background = color;
+        // Randomly choose one of the provided glitter images and size it
+        const url = sparkleUrls[Math.random() < 0.5 ? 0 : 1];
+        (p.el as HTMLImageElement).src = url;
+        const baseSize = 8 + Math.random() * 6; // mostly small, 8–14px
+        p.el.style.width = `${baseSize}px`;
+        p.el.style.height = `${baseSize}px`;
+
         p.el.style.opacity = "1";
-        p.el.style.transform = `translate3d(0, 0, 0) scale(${p.scale}) rotate(45deg)`;
+        p.el.style.transform = `translate3d(0, 0, 0) scale(${p.scale}) rotate(0deg)`;
       }
 
       // Animate particles
@@ -947,7 +966,7 @@ function SparkleEmitter() {
 
         const fade = Math.max(0, 1 - p.life / 0.85); // 600–900ms approx.
         p.el.style.opacity = fade.toString();
-        p.el.style.transform = `translate3d(${p.x}px, ${p.y}px, 0) scale(${p.scale}) rotate(45deg)`;
+        p.el.style.transform = `translate3d(${p.x}px, ${p.y}px, 0) scale(${p.scale})`;
 
         if (p.life > 0.9) {
           p.alive = false;
