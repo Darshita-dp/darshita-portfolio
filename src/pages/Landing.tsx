@@ -908,7 +908,7 @@ function SparkleEmitter() {
       el.style.width = "12px";
       el.style.height = "12px";
       el.style.pointerEvents = "none";
-      el.style.filter = "drop-shadow(0 0 4px rgba(255,255,255,0.6))";
+      el.style.filter = "drop-shadow(0 0 6px rgba(255,255,255,0.75))";
       ref.current.appendChild(el);
       pool.push({ el, alive: false, life: 0, x: 0, y: 0, vx: 0, vy: 0, scale: 1 });
     }
@@ -916,8 +916,8 @@ function SparkleEmitter() {
     let rate = 0; // particles per second
     const updateRate = () => {
       const boosted = root.getAttribute("data-boost") === "1";
-      // Increase idle emission so it's visible without hover
-      rate = boosted ? 12 : 3;
+      // Increase emission for visibility
+      rate = boosted ? 18 : 6;
     };
     const mo = new MutationObserver(updateRate);
     mo.observe(root, { attributes: true, attributeFilter: ["data-boost"] });
@@ -949,7 +949,8 @@ function SparkleEmitter() {
         // Randomly choose one of the provided glitter images and size it
         const url = sparkleUrls[Math.random() < 0.5 ? 0 : 1];
         (p.el as HTMLImageElement).src = url;
-        const baseSize = 8 + Math.random() * 6; // mostly small, 8–14px
+        // Slightly larger particles for visibility (still smaller than small leaves)
+        const baseSize = 10 + Math.random() * 6; // 10–16px
         p.el.style.width = `${baseSize}px`;
         p.el.style.height = `${baseSize}px`;
 
@@ -1103,9 +1104,31 @@ function SunflowerCursor() {
       style={{ position: "fixed", top: 0, left: 0, zIndex: 9999, pointerEvents: "none" }}
     >
       {/* Base (yellow) layer */}
-      <div className="cursor-sunflower" style={{ backgroundImage: sunflowerBg }} />
+      <div
+        className="cursor-sunflower"
+        style={{
+          backgroundImage: sunflowerBg,
+          width: 72,
+          height: 72,
+          backgroundSize: "contain",
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "center",
+          filter: "drop-shadow(0 3px 6px rgba(0,0,0,0.18))",
+        }}
+      />
       {/* Hover (yellow vivid) layer that crossfades on boost */}
-      <div className="cursor-sunflower cursor-sunflower--hover" style={{ backgroundImage: sunflowerBgHover }} />
+      <div
+        className="cursor-sunflower cursor-sunflower--hover"
+        style={{
+          backgroundImage: sunflowerBgHover,
+          width: 72,
+          height: 72,
+          backgroundSize: "contain",
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "center",
+          filter: "drop-shadow(0 3px 6px rgba(0,0,0,0.18))",
+        }}
+      />
       <SparkleEmitter />
     </div>
   );
