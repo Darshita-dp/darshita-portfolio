@@ -1,41 +1,14 @@
 import { useMemo, useRef, useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router";
+import { useAction } from "convex/react";
+import { api } from "@/convex/_generated/api";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, Compass, MessageSquare, Waves } from "lucide-react";
 import { KNOWLEDGE, type QA } from "@/lib/aiKnowledge";
-
-function answerFromKB(question: string) {
-  const q = question.toLowerCase();
-  
-  // Boost score for "why" questions
-  const isWhyQuestion = q.includes("why") || q.includes("what motivated") || q.includes("reason for");
-  
-  // lightweight scoring by keyword overlap
-  let best: { score: number; a: string } | null = null;
-  for (const item of KNOWLEDGE) {
-    let score = 0;
-    for (const k of item.keywords) {
-      if (q.includes(k.toLowerCase())) score += 1;
-    }
-    // small title similarity
-    if (item.q.toLowerCase().includes(q) || q.includes(item.q.toLowerCase())) score += 2;
-    
-    // Boost motivational entries for "why" questions
-    if (isWhyQuestion && (item.q.includes("Why") || item.q.includes("motivated"))) {
-      score += 3;
-    }
-    
-    if (!best || score > best.score) best = { score, a: item.a };
-  }
-  if (best && best.score > 0) return best.a;
-
-  // Fallback
-  return "I might not have the exact detail on that. Would you like me to point you to my projects or resume? You can also contact me directly on LinkedIn.";
-}
 
 // Simple message type
 type Msg = { role: "user" | "ai"; text: string; ts: number };
@@ -69,7 +42,7 @@ function AskMeAnything() {
     const userMsg: Msg = { role: "user", text: trimmed, ts: Date.now() };
     const aiMsg: Msg = {
       role: "ai",
-      text: answerFromKB(trimmed),
+      text: "This chat mode is currently using a simple response system. Please use the 'Interview Me' tab below for the full AI-powered experience! 🌼",
       ts: Date.now() + 1,
     };
     setMessages((m) => [...m, userMsg, aiMsg]);
@@ -140,7 +113,7 @@ function InterviewMe() {
     {
       role: "ai",
       text:
-        "Heya! I'm the chat version of Darshita 🌼 fueled by data, design, and a bit of curiosity.\n\nStill training my circuits on her story though, so if I slip up, go easy on me, okay? UwU 🤖",
+        "Heya! I'm the chat version of Darshita 🌼 fueled by data, design, and a bit of curiosity.\n\nI'm powered by real AI now, so feel free to ask me anything about Darshita's background, projects, or skills!",
       ts: Date.now(),
     },
   ]);
@@ -148,6 +121,8 @@ function InterviewMe() {
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const chatAction = useAction(api.ai.chat);
+  const [conversationHistory, setConversationHistory] = useState<Array<{ role: string; content: string }>>([]);
 
   // Auto-scroll to bottom when messages change
   useEffect(() => {
@@ -330,10 +305,6 @@ function InterviewMe() {
     </div>
   ), []); // Empty dependency array means this only renders once
 
-  const formatInterviewAnswer = (q: string) => {
-    return answerFromKB(q);
-  };
-
   const onSend = async () => {
     const trimmed = input.trim();
     if (!trimmed || isTyping) return;
@@ -345,15 +316,38 @@ function InterviewMe() {
     // Show typing indicator
     setIsTyping(true);
     
-    // Simulate bot thinking time
-    await new Promise(resolve => setTimeout(resolve, 800));
-    
-    const aiMsg: Msg = { role: "ai", text: formatInterviewAnswer(trimmed), ts: Date.now() + 1 };
-    setMessages((m) => [...m, aiMsg]);
-    setIsTyping(false);
-    
-    // Refocus input after AI responds
-    inputRef.current?.focus();
+    try {
+      // Call OpenAI via Convex action
+      const result = await chatAction({
+        message: trimmed,
+        conversationHistory: conversationHistory,
+      });
+      
+      // Update conversation history
+      setConversationHistory(prev => [
+        ...prev,
+        { role: "user", content: trimmed },
+        { role: "assistant", content: result.message },
+      ]);
+      
+      const aiMsg: Msg = { 
+        role: "ai", 
+        text: result.message, 
+        ts: Date.now() + 1 
+      };
+      setMessages((m) => [...m, aiMsg]);
+    } catch (error) {
+      console.error("Error getting AI response:", error);
+      const errorMsg: Msg = {
+        role: "ai",
+        text: "Oops! I'm having trouble thinking right now. Please try again, or reach out to Darshita on LinkedIn! 🌼",
+        ts: Date.now() + 1,
+      };
+      setMessages((m) => [...m, errorMsg]);
+    } finally {
+      setIsTyping(false);
+      inputRef.current?.focus();
+    }
   };
 
   const fmtTime = (ts: number) => {
