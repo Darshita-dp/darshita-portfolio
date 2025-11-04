@@ -166,7 +166,6 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
     nodeRadius: 28,
     cellSize: 60,
     maze: null as MazeCell[][] | null,
-    camera: { x: 0, y: 0 },
     images: {
       plankton: null as HTMLImageElement | null,
       background: null as HTMLImageElement | null,
@@ -186,15 +185,14 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
     
     gameStateRef.current.maze = maze;
     
-    // Position player at the LEFT entrance (inside the first cell)
+    // Position player at the LEFT entrance (slightly outside the maze)
     const cellSize = gameStateRef.current.cellSize;
-    const entranceX = 20 + cellSize / 2; // Center of first cell
-    const entranceY = entranceRow * cellSize + 20 + cellSize / 2; // Center of entrance row cell
+    const entranceX = 10; // Position on the left side, outside the maze
+    const entranceY = entranceRow * cellSize + 20 + cellSize / 2;
     gameStateRef.current.player.x = entranceX;
     gameStateRef.current.player.y = entranceY;
     
     console.log("Maze generated. Player position:", { x: entranceX, y: entranceY, entranceRow, cols, rows });
-    console.log("First cell walls:", maze[entranceRow][0].walls);
   }, []);
 
   // Load images
@@ -306,24 +304,14 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
     const state = gameStateRef.current;
     const now = Date.now();
 
-    // Update camera to follow player (smooth follow)
-    const targetCameraX = state.player.x - rect.width / 2;
-    const targetCameraY = state.player.y - rect.height / 2;
-    state.camera.x += (targetCameraX - state.camera.x) * 0.1;
-    state.camera.y += (targetCameraY - state.camera.y) * 0.1;
-
-    // Apply camera transform
-    ctx.save();
-    ctx.translate(-state.camera.x, -state.camera.y);
-
-    // Draw background (extended to cover camera movement)
+    // Draw background
     if (state.images.background?.complete) {
-      const bgWidth = rect.width + Math.abs(state.camera.x) + rect.width;
-      const bgHeight = rect.height + Math.abs(state.camera.y) + rect.height;
-      ctx.drawImage(state.images.background, state.camera.x - rect.width, state.camera.y - rect.height, bgWidth, bgHeight);
+      ctx.save();
+      ctx.drawImage(state.images.background, 0, 0, rect.width, rect.height);
+      ctx.restore();
     } else {
       ctx.fillStyle = "#A8F7E3";
-      ctx.fillRect(state.camera.x - rect.width, state.camera.y - rect.height, rect.width * 3, rect.height * 3);
+      ctx.fillRect(0, 0, rect.width, rect.height);
     }
 
     // Draw maze corridors
@@ -415,34 +403,17 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
         const px = cellX * cellSize + 20;
         const py = cellY * cellSize + 20;
         
-        // More lenient collision detection - only block if clearly hitting a wall
-        const buffer = 10; // Increased buffer zone
-        if (cell.walls.top && y - playerRadius < py + buffer) return true;
-        if (cell.walls.bottom && y + playerRadius > py + cellSize - buffer) return true;
-        if (cell.walls.left && x - playerRadius < px + buffer) return true;
-        if (cell.walls.right && x + playerRadius > px + cellSize - buffer) return true;
+        // Check each wall with more lenient collision
+        if (cell.walls.top && y - playerRadius < py + 2) return true;
+        if (cell.walls.bottom && y + playerRadius > py + cellSize - 2) return true;
+        if (cell.walls.left && x - playerRadius < px + 2) return true;
+        if (cell.walls.right && x + playerRadius > px + cellSize - 2) return true;
         
         return false;
       };
 
       canMoveX = !checkCollision(newX, state.player.y);
       canMoveY = !checkCollision(state.player.x, newY);
-      
-      // Debug logging when stuck
-      if (!canMoveX || !canMoveY) {
-        const cellX = Math.floor((state.player.x - 20) / cellSize);
-        const cellY = Math.floor((state.player.y - 20) / cellSize);
-        if (cellY >= 0 && cellY < state.maze!.length && cellX >= 0 && cellX < state.maze![0].length) {
-          console.log("Collision detected:", {
-            playerPos: { x: state.player.x, y: state.player.y },
-            cell: { x: cellX, y: cellY },
-            walls: state.maze![cellY][cellX].walls,
-            canMoveX,
-            canMoveY,
-            attemptedMove: { newX, newY }
-          });
-        }
-      }
     }
 
     if (canMoveX) state.player.x = newX;
@@ -610,9 +581,6 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
       ctx.fillStyle = "#4CAF50";
       ctx.fillRect(-state.playerSize / 2, -state.playerSize / 2, state.playerSize, state.playerSize);
     }
-    ctx.restore();
-
-    // Restore camera transform
     ctx.restore();
   };
 
