@@ -119,20 +119,20 @@ function FlowerField({ densityScale = 1 }: { densityScale?: number }) {
     const vh = window.innerHeight;
 
     const clamp = (n: number, a: number, b: number) => Math.min(Math.max(n, a), b);
-    // [EDIT] count scaled by density and still respecting reduced motion
+    // Increase total flower count by +5
     const baseCount = prefersReducedMotion ? 4 : clamp(Math.round(vw / 90), 12, 22);
-    const count = Math.max(1, Math.floor(baseCount * densityScale));
+    const count = Math.max(1, Math.floor(baseCount * densityScale)) + 5;
 
-    // helper to create randomized sprite params
+    // helper to create randomized sprite params with larger scales
     const newParams = () => ({
       x: -140 - Math.random() * 100,
-      // [EDIT] baseY staggered using index injection later, here as placeholder
       baseY: Math.random() * vh,
       speed: 20 + Math.random() * 40, // [20, 60] px/s
       amp: 10 + Math.random() * 35, // [10, 45]
       freq: 0.6 + Math.random() * 1.2, // [0.6, 1.8]
       phase: Math.random() * Math.PI * 2, // [0, 2π]
-      scale: 0.7 + Math.random() * 0.45, // [0.7, 1.15]
+      // Larger overall flower sizes
+      scale: 0.9 + Math.random() * 0.5, // [0.9, 1.4]
       opacity: 0.35 + Math.random() * 0.4, // 0.35–0.75
       rotPhase: Math.random() * Math.PI * 2,
       rotAmp: 3 + Math.random() * 3, // 3–6 deg
@@ -166,7 +166,7 @@ function FlowerField({ densityScale = 1 }: { densityScale?: number }) {
       spritesRef.current.push({ el, ...p });
     }
 
-    // mount images after elements exist (use provided sunflower sticker)
+    // Mount sunflower sticker images with a larger base size
     spritesRef.current.forEach((s: {
       el: HTMLDivElement;
       x: number;
@@ -180,7 +180,7 @@ function FlowerField({ densityScale = 1 }: { densityScale?: number }) {
       rotPhase: number;
       rotAmp: number;
     }) => {
-      const size = 92; // base size, scale via transform
+      const size = 110; // increased from 92
       const img = document.createElement("img");
       img.src = "https://harmless-tapir-303.convex.cloud/api/storage/661753be-a350-4324-8eb5-60d69f761ad5";
       img.setAttribute("aria-hidden", "true");
