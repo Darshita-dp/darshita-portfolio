@@ -46,7 +46,7 @@ const WRONG_MESSAGES = [
 ];
 
 const ENCOURAGEMENTS = [
-  "Processing like a pro, Player Darshita.",
+  "Processing like a pro, Player.",
   "XP pathways glowing bright!",
   "Neural data flow stable. Keep matching.",
   "Halfway synced — knowledge circuits aligned!",
