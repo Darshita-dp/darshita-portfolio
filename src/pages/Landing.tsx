@@ -1314,7 +1314,7 @@ export default function Landing() {
       </a>
 
       {/* Content container */}
-      <div className="relative z-20 flex flex-col items-center justify-start min-h-screen px-4 pt-6 md:pt-10">
+      <div className="relative z-20 flex flex-col items-center justify-start min-h-screen px-4 pt-2 md:pt-10">
         {/* Subtle vignette behind content */}
         <div
           className="absolute -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
@@ -1348,10 +1348,10 @@ export default function Landing() {
           initial={{ opacity: 0, y: -24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="text-center mb-10 relative"
+          className="text-center mb-6 md:mb-10 relative"
         >
           <h1
-            className="tracking-tight text-6xl md:text-8xl"
+            className="tracking-tight text-5xl sm:text-6xl md:text-8xl"
             style={{
               fontFamily:
                 '"Great Vibes", "Gwendolyn", ui-serif, Georgia, Cambria, "Times New Roman", Times, serif',
@@ -1485,7 +1485,7 @@ export default function Landing() {
         </motion.div>
 
         {/* Live analytics: mode opens */}
-        <div className="mt-4 md:mt-5 max-w-4xl w-full px-0">
+        <div className="mt-4 md:mt-5 max-w-4xl w-full px-0 hidden sm:block">
           <div className="flex flex-wrap items-center gap-2 text-xs text-slate-700/70">
             <span className="opacity-80">Live mode opens:</span>
             {modes.map((m) => (
