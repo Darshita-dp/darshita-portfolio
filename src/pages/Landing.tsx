@@ -696,6 +696,176 @@ function SmallLeavesField() {
   );
 }
 
+function GlitterField() {
+  const prefersReducedMotion = useReducedMotion();
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const spritesRef = useRef<
+    Array<{
+      el: HTMLDivElement;
+      x: number;
+      baseY: number;
+      speed: number;
+      amp: number;
+      freq: number;
+      phase: number;
+      scale: number;
+      opacity: number;
+      rotPhase: number;
+      rotAmp: number;
+      twinkleFreq: number;
+      twinklePhase: number;
+      size: number;
+    }>
+  >([]);
+  const rafRef = useRef<number | null>(null);
+  const lastTsRef = useRef<number>(0);
+  const hiddenRef = useRef<boolean>(false);
+
+  useEffect(() => {
+    const onVis = () => {
+      hiddenRef.current = document.hidden;
+    };
+    document.addEventListener("visibilitychange", onVis);
+    return () => document.removeEventListener("visibilitychange", onVis);
+  }, []);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+
+    const count = 20; // exactly 20 glitters, mostly smaller than small leaves (36px)
+
+    const newParams = () => {
+      const size = 10 + Math.random() * 12; // 10–22px
+      return {
+        x: -140 - Math.random() * 140,
+        baseY: Math.random() * vh,
+        speed: 12 + Math.random() * 18,
+        amp: 5 + Math.random() * 14,
+        freq: 0.5 + Math.random() * 1.0,
+        phase: Math.random() * Math.PI * 2,
+        scale: 0.8 + Math.random() * 0.4,
+        opacity: 0.5 + Math.random() * 0.35,
+        rotPhase: Math.random() * Math.PI * 2,
+        rotAmp: 4 + Math.random() * 6,
+        twinkleFreq: 2 + Math.random() * 3, // Hz
+        twinklePhase: Math.random() * Math.PI * 2,
+        size,
+      };
+    };
+
+    spritesRef.current = [];
+    container.innerHTML = "";
+    for (let i = 0; i < count; i++) {
+      const el = document.createElement("div");
+      el.style.position = "absolute";
+      el.style.left = "0px";
+      el.style.top = "0px";
+      el.style.willChange = "transform, opacity";
+      el.style.pointerEvents = "none";
+      el.style.filter = "drop-shadow(0 1px 2px rgba(0,0,0,0.10))";
+
+      const img = document.createElement("img");
+      img.src = "https://harmless-tapir-303.convex.cloud/api/storage/d943df10-c9ab-4a26-a8c2-0c6b464f00be";
+      img.setAttribute("aria-hidden", "true");
+      img.style.display = "block";
+      el.appendChild(img);
+
+      container.appendChild(el);
+
+      const p = newParams();
+      img.style.width = `${p.size}px`;
+      img.style.height = `${p.size}px`;
+
+      // distribute vertically to avoid clumping
+      const band = vh / count;
+      p.baseY = Math.max(0, Math.min(vh, band * i + (band * 0.2 + Math.random() * band * 0.6)));
+
+      spritesRef.current.push({ el, ...p });
+    }
+
+    const step = (ts: number) => {
+      if (hiddenRef.current || prefersReducedMotion) {
+        lastTsRef.current = ts;
+        rafRef.current = requestAnimationFrame(step);
+        return;
+      }
+      const last = lastTsRef.current || ts;
+      const dt = (ts - last) / 1000;
+      lastTsRef.current = ts;
+
+      const vwNow = window.innerWidth;
+      const vhNow = window.innerHeight;
+
+      for (const s of spritesRef.current) {
+        s.x += s.speed * dt;
+        const y = s.baseY + s.amp * Math.sin((s.freq * ts) / 1000 + s.phase);
+        const rot = Math.sin((ts / 1000) * 0.7 + s.rotPhase) * s.rotAmp;
+        const twinkle = 0.6 + 0.4 * (0.5 + 0.5 * Math.sin(s.twinkleFreq * (ts / 1000) * Math.PI * 2 + s.twinklePhase)); // 0.6–1
+        s.el.style.transform = `translate(${s.x}px, ${y}px) scale(${s.scale}) rotate(${rot}deg)`;
+        s.el.style.opacity = String(s.opacity * twinkle);
+
+        const limitX = vwNow * 0.5 + 60;
+        if (s.x > limitX) {
+          const p = newParams();
+          s.x = p.x;
+          s.baseY = Math.random() * vhNow;
+          s.speed = p.speed;
+          s.amp = p.amp;
+          s.freq = p.freq;
+          s.phase = p.phase;
+          s.scale = p.scale;
+          s.opacity = p.opacity;
+          s.rotPhase = p.rotPhase;
+          s.rotAmp = p.rotAmp;
+          s.twinkleFreq = p.twinkleFreq;
+          s.twinklePhase = p.twinklePhase;
+
+          const imgEl = s.el.firstChild as HTMLImageElement | null;
+          if (imgEl) {
+            imgEl.style.width = `${p.size}px`;
+            imgEl.style.height = `${p.size}px`;
+          }
+        }
+      }
+      rafRef.current = requestAnimationFrame(step);
+    };
+
+    if (!prefersReducedMotion) {
+      lastTsRef.current = performance.now();
+      rafRef.current = requestAnimationFrame(step);
+    } else {
+      // Static placement for reduced motion
+      spritesRef.current.forEach((s) => {
+        s.x = Math.random() * vw - 60;
+        const y = Math.random() * vh;
+        s.el.style.transform = `translate(${s.x}px, ${y}px) scale(${s.scale})`;
+        s.el.style.opacity = String(s.opacity);
+      });
+    }
+
+    // ensure behind content and clouds like other fields
+    container.style.zIndex = "0";
+
+    return () => {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      spritesRef.current = [];
+      if (container) container.innerHTML = "";
+    };
+  }, [prefersReducedMotion]);
+
+  return (
+    <div
+      ref={containerRef}
+      className="pointer-events-none absolute inset-0 overflow-hidden"
+      aria-hidden="true"
+    />
+  );
+}
+
 function SparkleEmitter() {
   const ref = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
@@ -1104,7 +1274,9 @@ export default function Landing() {
       {/* Flower and Leaves layers behind content */}
       <FlowerField densityScale={densityScale} />
       <SmallLeavesField />
+      <GlitterField />
       <LeavesField densityScale={densityScale} />
+      <GlitterField />
 
       {/* Skip link for keyboard users */}
       <a
