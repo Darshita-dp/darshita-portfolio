@@ -252,11 +252,13 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
       e.preventDefault();
       
       const touch = e.touches[0];
-      const deltaX = touch.clientX - touchStartX;
-      const deltaY = touch.clientY - touchStartY;
+      const currentX = touch.clientX;
+      const currentY = touch.clientY;
+      const deltaX = currentX - touchStartX;
+      const deltaY = currentY - touchStartY;
       
       const state = gameStateRef.current;
-      const threshold = 10;
+      const threshold = 5; // Lower threshold for more responsive controls
       
       // Reset all keys
       state.keys.left = false;
@@ -264,16 +266,20 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
       state.keys.up = false;
       state.keys.down = false;
       
-      // Set direction based on swipe
+      // Set direction based on current touch position relative to start
       if (Math.abs(deltaX) > threshold || Math.abs(deltaY) > threshold) {
         if (Math.abs(deltaX) > Math.abs(deltaY)) {
-          if (deltaX > 0) state.keys.right = true;
-          else state.keys.left = true;
+          if (deltaX > threshold) state.keys.right = true;
+          else if (deltaX < -threshold) state.keys.left = true;
         } else {
-          if (deltaY > 0) state.keys.down = true;
-          else state.keys.up = true;
+          if (deltaY > threshold) state.keys.down = true;
+          else if (deltaY < -threshold) state.keys.up = true;
         }
       }
+      
+      // Update start position for continuous movement
+      touchStartX = currentX;
+      touchStartY = currentY;
     };
 
     const handleTouchEnd = () => {
