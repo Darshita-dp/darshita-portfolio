@@ -264,14 +264,23 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
       ctx.translate(cameraOffset.x, cameraOffset.y);
     }
 
-    // Draw background
+    // Draw background (extended for camera movement)
     if (state.images.background?.complete) {
       ctx.save();
-      ctx.drawImage(state.images.background, 0, 0, rect.width, rect.height);
+      // Draw background larger to cover camera movement
+      const bgPadding = 500;
+      ctx.drawImage(
+        state.images.background, 
+        -bgPadding, 
+        -bgPadding, 
+        rect.width + bgPadding * 2, 
+        rect.height + bgPadding * 2
+      );
       ctx.restore();
     } else {
       ctx.fillStyle = "#A8F7E3";
-      ctx.fillRect(0, 0, rect.width, rect.height);
+      const bgPadding = 500;
+      ctx.fillRect(-bgPadding, -bgPadding, rect.width + bgPadding * 2, rect.height + bgPadding * 2);
     }
 
     // Draw maze corridors
