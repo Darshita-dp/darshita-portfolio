@@ -166,6 +166,7 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
     nodeRadius: 28,
     cellSize: 60,
     maze: null as MazeCell[][] | null,
+    camera: { x: 0, y: 0 },
     images: {
       plankton: null as HTMLImageElement | null,
       background: null as HTMLImageElement | null,
@@ -304,14 +305,24 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
     const state = gameStateRef.current;
     const now = Date.now();
 
-    // Draw background
+    // Update camera to follow player (smooth follow)
+    const targetCameraX = state.player.x - rect.width / 2;
+    const targetCameraY = state.player.y - rect.height / 2;
+    state.camera.x += (targetCameraX - state.camera.x) * 0.1;
+    state.camera.y += (targetCameraY - state.camera.y) * 0.1;
+
+    // Apply camera transform
+    ctx.save();
+    ctx.translate(-state.camera.x, -state.camera.y);
+
+    // Draw background (extended to cover camera movement)
     if (state.images.background?.complete) {
-      ctx.save();
-      ctx.drawImage(state.images.background, 0, 0, rect.width, rect.height);
-      ctx.restore();
+      const bgWidth = rect.width + Math.abs(state.camera.x) + rect.width;
+      const bgHeight = rect.height + Math.abs(state.camera.y) + rect.height;
+      ctx.drawImage(state.images.background, state.camera.x - rect.width, state.camera.y - rect.height, bgWidth, bgHeight);
     } else {
       ctx.fillStyle = "#A8F7E3";
-      ctx.fillRect(0, 0, rect.width, rect.height);
+      ctx.fillRect(state.camera.x - rect.width, state.camera.y - rect.height, rect.width * 3, rect.height * 3);
     }
 
     // Draw maze corridors
@@ -581,6 +592,9 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
       ctx.fillStyle = "#4CAF50";
       ctx.fillRect(-state.playerSize / 2, -state.playerSize / 2, state.playerSize, state.playerSize);
     }
+    ctx.restore();
+
+    // Restore camera transform
     ctx.restore();
   };
 
