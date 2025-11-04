@@ -467,7 +467,7 @@ function LeavesField({ densityScale = 1 }: { densityScale?: number }) {
     }) => {
       const size = 60; // reduced size for subtler leaves while adding more overall
       const img = document.createElement("img");
-      img.src = "https://harmless-tapir-303.convex.cloud/api/storage/5c673655-9704-47b7-8bd0-e12e6ccd11e5";
+      img.src = "https://harmless-tapir-303.convex.cloud/api/storage/0d5b1f7a-604a-4d09-bb88-0deebebc3668";
       img.setAttribute("aria-hidden", "true");
       img.style.display = "block";
       img.style.width = `${size}px`;
