@@ -10,6 +10,23 @@ interface BubbleNodeProps {
 }
 
 export function BubbleNode({ label, x, y, onClick, isCompleted }: BubbleNodeProps) {
+  const playClickSound = () => {
+    const audio = new Audio("https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3");
+    audio.volume = 0.4;
+    audio.play().catch(err => console.log("Sound play failed:", err));
+  };
+
+  const playHoverSound = () => {
+    const audio = new Audio("https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3");
+    audio.volume = 0.2;
+    audio.play().catch(err => console.log("Sound play failed:", err));
+  };
+
+  const handleClick = () => {
+    playClickSound();
+    onClick();
+  };
+
   return (
     <motion.button
       className="absolute"
@@ -25,7 +42,8 @@ export function BubbleNode({ label, x, y, onClick, isCompleted }: BubbleNodeProp
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
       transition={{ duration: 0.3 }}
-      onClick={onClick}
+      onClick={handleClick}
+      onMouseEnter={playHoverSound}
       aria-label={`Play ${label} level`}
     >
       <motion.div
