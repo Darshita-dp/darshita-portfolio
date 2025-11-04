@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { motion, AnimatePresence } from "framer-motion";
 import { Volume2, VolumeX } from "lucide-react";
@@ -24,6 +24,25 @@ export default function Play() {
   const [view, setView] = useState<ViewState>("map");
   const [selectedLevel, setSelectedLevel] = useState<number | null>(null);
   const [showXPGain, setShowXPGain] = useState(false);
+
+  // Background bubbly sound effect
+  useEffect(() => {
+    const audio = new Audio("https://harmless-tapir-303.convex.cloud/api/storage/c8e8f8e8-8e8e-4e8e-8e8e-8e8e8e8e8e8e");
+    audio.loop = true;
+    audio.volume = 0.3;
+
+    if (soundOn && view === "map") {
+      audio.play().catch(err => console.log("Audio play failed:", err));
+    } else {
+      audio.pause();
+      audio.currentTime = 0;
+    }
+
+    return () => {
+      audio.pause();
+      audio.currentTime = 0;
+    };
+  }, [soundOn, view]);
 
   const handleBubbleClick = (nodeId: number) => {
     const node = BUBBLE_NODES.find((n) => n.id === nodeId);
