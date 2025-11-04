@@ -1158,6 +1158,38 @@ export default function Landing() {
     const v = localStorage.getItem("landing_reduce_visuals");
     return v === "1";
   });
+  
+  // Background glitter sound effect
+  useEffect(() => {
+    const audio = new Audio("https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3");
+    audio.loop = true;
+    audio.volume = 0.15; // Subtle volume for ambient effect
+    
+    const playAudio = () => {
+      audio.play().catch(err => console.log("Audio autoplay blocked:", err));
+    };
+    
+    // Try to play immediately
+    playAudio();
+    
+    // Also try on first user interaction
+    const handleInteraction = () => {
+      playAudio();
+      document.removeEventListener("click", handleInteraction);
+      document.removeEventListener("keydown", handleInteraction);
+    };
+    
+    document.addEventListener("click", handleInteraction);
+    document.addEventListener("keydown", handleInteraction);
+    
+    return () => {
+      audio.pause();
+      audio.currentTime = 0;
+      document.removeEventListener("click", handleInteraction);
+      document.removeEventListener("keydown", handleInteraction);
+    };
+  }, []);
+  
   useEffect(() => {
     localStorage.setItem("landing_reduce_visuals", reduced ? "1" : "0");
   }, [reduced]);
