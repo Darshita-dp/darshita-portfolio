@@ -868,21 +868,20 @@ function GlitterField() {
 
 function SparkleEmitter() {
   const ref = useRef<HTMLDivElement | null>(null);
+
   useEffect(() => {
     const root = ref.current?.parentElement as HTMLElement | null;
-    if (!ref.current || !root) return;
+    const container = ref.current;
+    if (!container || !root) return;
 
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduced) return;
-
-    // Use provided glitter images for cursor particles
-    const sparkleUrls = [
+    // Provided glitter images
+    const sparkleUrls: Array<string> = [
       "https://harmless-tapir-303.convex.cloud/api/storage/a34cb6e9-c85e-4ff7-b88c-8c40dd894c9a",
       "https://harmless-tapir-303.convex.cloud/api/storage/24034358-bb1b-449a-a645-cd132257c609",
-    ] as const;
+    ];
 
     type P = {
-      el: HTMLElement;
+      el: HTMLImageElement;
       alive: boolean;
       life: number;
       x: number;
@@ -892,64 +891,73 @@ function SparkleEmitter() {
       scale: number;
     };
 
+    // Build particle pool
     const pool: Array<P> = [];
-    const poolSize = 80;
-    for (let i = 0; i < poolSize; i++) {
-      // Create <img> particles instead of colored squares
-      const el = document.createElement("img");
-      el.className = "sparkle";
-      el.setAttribute("alt", "");
-      (el as HTMLImageElement).src = sparkleUrls[Math.floor(Math.random() * sparkleUrls.length)];
-      el.setAttribute("draggable", "false");
-      el.style.opacity = "0";
-      el.style.left = "0px";
-      el.style.top = "0px";
-      el.style.position = "absolute";
-      el.style.width = "12px";
-      el.style.height = "12px";
-      el.style.pointerEvents = "none";
-      el.style.filter = "drop-shadow(0 0 6px rgba(255,255,255,0.75))";
-      ref.current.appendChild(el);
-      pool.push({ el, alive: false, life: 0, x: 0, y: 0, vx: 0, vy: 0, scale: 1 });
+    const POOL_SIZE = 60;
+    for (let i = 0; i < POOL_SIZE; i++) {
+      const img = document.createElement("img");
+      img.src = sparkleUrls[i % sparkleUrls.length];
+      img.alt = "";
+      img.setAttribute("aria-hidden", "true");
+      img.style.position = "absolute";
+      img.style.left = "0";
+      img.style.top = "0";
+      img.style.opacity = "0";
+      img.style.pointerEvents = "none";
+      img.style.filter = "drop-shadow(0 0 6px rgba(255,255,255,0.75))";
+      container.appendChild(img);
+
+      pool.push({
+        el: img,
+        alive: false,
+        life: 0,
+        x: 0,
+        y: 0,
+        vx: 0,
+        vy: 0,
+        scale: 1,
+      });
     }
 
+    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    // Emission rate tied to boost state
     let rate = 0; // particles per second
     const updateRate = () => {
       const boosted = root.getAttribute("data-boost") === "1";
-      // Increase emission for visibility
-      rate = boosted ? 18 : 6;
+      rate = boosted ? (prefersReduced ? 8 : 18) : (prefersReduced ? 3 : 6);
     };
     const mo = new MutationObserver(updateRate);
     mo.observe(root, { attributes: true, attributeFilter: ["data-boost"] });
     updateRate();
 
     let last = performance.now();
-    let acc = 0;
+    let acc = 1.2; // spawn immediately so user sees sparkles
     let raf = 0;
 
     function loop(now: number) {
       const dt = (now - last) / 1000;
       last = now;
 
+      // Emit particles
       acc += dt * rate;
       while (acc > 1) {
         const p = pool.find((pp) => !pp.alive);
         if (!p) break;
         acc -= 1;
 
-        // Init particle
+        // Initialize particle
         p.alive = true;
         p.life = 0;
         p.x = 0;
         p.y = 0;
         p.vx = (Math.random() - 0.5) * 28; // slight horizontal jitter
-        p.vy = 70 + Math.random() * 70; // downward velocity (waterfall)
+        p.vy = 70 + Math.random() * 70; // downward velocity
         p.scale = 0.8 + Math.random() * 0.4;
 
-        // Randomly choose one of the provided glitter images and size it
+        // Random glitter image and small size (smaller than small leaves)
         const url = sparkleUrls[Math.random() < 0.5 ? 0 : 1];
-        (p.el as HTMLImageElement).src = url;
-        // Slightly larger particles for visibility (still smaller than small leaves)
+        p.el.src = url;
         const baseSize = 10 + Math.random() * 6; // 10–16px
         p.el.style.width = `${baseSize}px`;
         p.el.style.height = `${baseSize}px`;
@@ -958,7 +966,7 @@ function SparkleEmitter() {
         p.el.style.transform = `translate3d(0, 0, 0) scale(${p.scale}) rotate(0deg)`;
       }
 
-      // Animate particles
+      // Animate active particles
       for (const p of pool) {
         if (!p.alive) continue;
         p.life += dt;
@@ -966,7 +974,7 @@ function SparkleEmitter() {
         p.x += p.vx * dt;
         p.y += p.vy * dt;
 
-        const fade = Math.max(0, 1 - p.life / 0.85); // 600–900ms approx.
+        const fade = Math.max(0, 1 - p.life / 0.85); // ~0.85s lifetime
         p.el.style.opacity = fade.toString();
         p.el.style.transform = `translate3d(${p.x}px, ${p.y}px, 0) scale(${p.scale})`;
 
@@ -980,16 +988,23 @@ function SparkleEmitter() {
     }
 
     raf = requestAnimationFrame(loop);
+
     return () => {
       cancelAnimationFrame(raf);
       mo.disconnect();
-      // cleanup children
-      if (ref.current) ref.current.innerHTML = "";
+      container.innerHTML = "";
     };
   }, []);
 
-  // Center the emitter at the cursor
-  return <div ref={ref} className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" aria-hidden="true" />;
+  // Center the emitter at the cursor and ensure it layers above the flower
+  return (
+    <div
+      ref={ref}
+      className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+      aria-hidden="true"
+      style={{ zIndex: 2 }}
+    />
+  );
 }
 
 function SunflowerCursor() {
@@ -1101,7 +1116,7 @@ function SunflowerCursor() {
       className="cursor-root"
       aria-hidden="true"
       // Ensure the cursor + sparkles sit above all content and don't block interactions
-      style={{ position: "fixed", top: 0, left: 0, zIndex: 9999, pointerEvents: "none" }}
+      style={{ position: "fixed", top: 0, left: 0, zIndex: 9999, pointerEvents: "none", overflow: "visible" }}
     >
       {/* Base (yellow) layer */}
       <div
