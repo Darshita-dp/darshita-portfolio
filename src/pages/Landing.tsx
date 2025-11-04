@@ -133,7 +133,7 @@ function FlowerField({ densityScale = 1 }: { densityScale?: number }) {
       phase: Math.random() * Math.PI * 2, // [0, 2π]
       // Larger overall flower sizes
       scale: 0.9 + Math.random() * 0.5, // [0.9, 1.4]
-      opacity: 0.35 + Math.random() * 0.4, // 0.35–0.75
+      opacity: 0.25 + Math.random() * 0.35, // 0.25–0.60
       rotPhase: Math.random() * Math.PI * 2,
       rotAmp: 3 + Math.random() * 3, // 3–6 deg
     });
