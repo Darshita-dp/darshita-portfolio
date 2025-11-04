@@ -186,14 +186,15 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
     
     gameStateRef.current.maze = maze;
     
-    // Position player at the LEFT entrance (slightly outside the maze)
+    // Position player at the LEFT entrance (inside the first cell)
     const cellSize = gameStateRef.current.cellSize;
-    const entranceX = 10; // Position on the left side, outside the maze
-    const entranceY = entranceRow * cellSize + 20 + cellSize / 2;
+    const entranceX = 20 + cellSize / 2; // Center of first cell
+    const entranceY = entranceRow * cellSize + 20 + cellSize / 2; // Center of entrance row cell
     gameStateRef.current.player.x = entranceX;
     gameStateRef.current.player.y = entranceY;
     
     console.log("Maze generated. Player position:", { x: entranceX, y: entranceY, entranceRow, cols, rows });
+    console.log("First cell walls:", maze[entranceRow][0].walls);
   }, []);
 
   // Load images
@@ -414,17 +415,34 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
         const px = cellX * cellSize + 20;
         const py = cellY * cellSize + 20;
         
-        // Check each wall with more lenient collision
-        if (cell.walls.top && y - playerRadius < py + 2) return true;
-        if (cell.walls.bottom && y + playerRadius > py + cellSize - 2) return true;
-        if (cell.walls.left && x - playerRadius < px + 2) return true;
-        if (cell.walls.right && x + playerRadius > px + cellSize - 2) return true;
+        // More lenient collision detection - only block if clearly hitting a wall
+        const buffer = 10; // Increased buffer zone
+        if (cell.walls.top && y - playerRadius < py + buffer) return true;
+        if (cell.walls.bottom && y + playerRadius > py + cellSize - buffer) return true;
+        if (cell.walls.left && x - playerRadius < px + buffer) return true;
+        if (cell.walls.right && x + playerRadius > px + cellSize - buffer) return true;
         
         return false;
       };
 
       canMoveX = !checkCollision(newX, state.player.y);
       canMoveY = !checkCollision(state.player.x, newY);
+      
+      // Debug logging when stuck
+      if (!canMoveX || !canMoveY) {
+        const cellX = Math.floor((state.player.x - 20) / cellSize);
+        const cellY = Math.floor((state.player.y - 20) / cellSize);
+        if (cellY >= 0 && cellY < state.maze!.length && cellX >= 0 && cellX < state.maze![0].length) {
+          console.log("Collision detected:", {
+            playerPos: { x: state.player.x, y: state.player.y },
+            cell: { x: cellX, y: cellY },
+            walls: state.maze![cellY][cellX].walls,
+            canMoveX,
+            canMoveY,
+            attemptedMove: { newX, newY }
+          });
+        }
+      }
     }
 
     if (canMoveX) state.player.x = newX;
