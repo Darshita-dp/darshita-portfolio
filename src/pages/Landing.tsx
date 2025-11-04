@@ -1363,7 +1363,12 @@ export default function Landing() {
         {/* Top-right small control: reduce visuals toggle */}
         <div className="absolute top-4 right-4 z-30">
           <motion.button
-            onClick={() => setReduced((v) => !v)}
+            onClick={() => {
+              const audio = new Audio("https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3");
+              audio.volume = 0.4;
+              audio.play().catch(err => console.log("Sound play failed:", err));
+              setReduced((v) => !v);
+            }}
             className="text-xs rounded-full px-3 py-1 border bg-white/70 backdrop-blur hover:bg-white/90 transition"
             aria-pressed={reduced}
             aria-label={reduced ? "Background visuals: Reduced" : "Background visuals: Full"}
@@ -1446,6 +1451,11 @@ export default function Landing() {
               whileHover={{ y: -6, scale: 1.03, cursor: sunflowerCursorHoverSVG }}
               whileTap={{ scale: 0.98 }}
               onClick={() => {
+                // Play click sound
+                const audio = new Audio("https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3");
+                audio.volume = 0.4;
+                audio.play().catch(err => console.log("Sound play failed:", err));
+                
                 // Track mode open event, then navigate
                 void trackEvent({
                   event: "open_mode",

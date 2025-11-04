@@ -239,7 +239,12 @@ export default function Play() {
       >
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <button
-            onClick={() => navigate("/")}
+            onClick={() => {
+              const audio = new Audio("https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3");
+              audio.volume = 0.4;
+              audio.play().catch(err => console.log("Sound play failed:", err));
+              navigate("/");
+            }}
             className="flex items-center gap-2 px-4 py-2 rounded-full text-sm transition-all hover:scale-105"
             style={{
               background: `radial-gradient(circle at 35% 25%, rgba(255,255,255,0.9), rgba(135,206,250,0.7) 40%, rgba(70,130,180,0.8) 70%, rgba(100,149,237,0.6))`,
@@ -274,7 +279,12 @@ export default function Play() {
           <Button
             variant="ghost"
             size="icon"
-            onClick={() => setSoundOn(!soundOn)}
+            onClick={() => {
+              const audio = new Audio("https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3");
+              audio.volume = 0.4;
+              audio.play().catch(err => console.log("Sound play failed:", err));
+              setSoundOn(!soundOn);
+            }}
             aria-label={soundOn ? "Mute sound" : "Unmute sound"}
           >
             {soundOn ? <Volume2 className="w-5 h-5" /> : <VolumeX className="w-5 h-5" />}
@@ -470,7 +480,12 @@ export default function Play() {
                   >
                     A new world is brewing. Come back soon!
                   </p>
-                  <Button onClick={() => setShowUnderConstruction(false)}>Got it!</Button>
+                  <Button onClick={() => {
+                    const audio = new Audio("https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3");
+                    audio.volume = 0.4;
+                    audio.play().catch(err => console.log("Sound play failed:", err));
+                    setShowUnderConstruction(false);
+                  }}>Got it!</Button>
                 </CardContent>
               </Card>
             </motion.div>
