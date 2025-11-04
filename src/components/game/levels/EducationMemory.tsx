@@ -66,6 +66,12 @@ export function EducationMemory({ levelId, facts, onComplete, onBack }: Educatio
   const [showTransition, setShowTransition] = useState(false);
   const [transitionStep, setTransitionStep] = useState(0);
 
+  const playClickSound = () => {
+    const audio = new Audio("https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3");
+    audio.volume = 0.4;
+    audio.play().catch(err => console.log("Sound play failed:", err));
+  };
+
   // Initialize and shuffle cards
   useEffect(() => {
     const shuffled = [...CARD_PAIRS]
@@ -93,6 +99,8 @@ export function EducationMemory({ levelId, facts, onComplete, onBack }: Educatio
   // Handle card click
   const handleCardClick = (cardId: number) => {
     if (isLocked || isPaused || showComplete) return;
+    
+    playClickSound();
     
     const card = cards.find(c => c.id === cardId);
     if (!card || card.isMatched) return;
@@ -462,8 +470,8 @@ export function EducationMemory({ levelId, facts, onComplete, onBack }: Educatio
                       Take a breather, Player. Resume when your data stream's stable.
                     </p>
                     <div className="flex gap-3 justify-center">
-                      <Button onClick={() => setIsPaused(false)}>Resume Training</Button>
-                      <Button variant="outline" onClick={onBack}>Exit to Map</Button>
+                      <Button onClick={() => { playClickSound(); setIsPaused(false); }}>Resume Training</Button>
+                      <Button variant="outline" onClick={() => { playClickSound(); onBack(); }}>Exit to Map</Button>
                     </div>
                   </CardContent>
                 </Card>
@@ -652,7 +660,7 @@ export function EducationMemory({ levelId, facts, onComplete, onBack }: Educatio
                     {/* Continue Button */}
                     <Button
                       size="lg"
-                      onClick={() => onComplete(facts)}
+                      onClick={() => { playClickSound(); onComplete(facts); }}
                       className="w-full text-lg"
                       style={{
                         background: `linear-gradient(135deg, ${BYTE_BUBBLES_THEME.star} 0%, #FFC94A 100%)`,

@@ -75,6 +75,20 @@ export function LevelPreview({ levelId, onStart, onClose }: LevelPreviewProps) {
 
   const content = getPreviewContent();
 
+  const playClickSound = () => {
+    const audio = new Audio("https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3");
+    audio.volume = 0.4;
+    audio.play().catch(err => console.log("Sound play failed:", err));
+  };
+
+  const handleStartClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    playClickSound();
+    console.log("=== Start Mission button clicked ===");
+    console.log("Calling onStart()");
+    onStart();
+  };
+
   return (
     <motion.div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm"
@@ -160,12 +174,7 @@ export function LevelPreview({ levelId, onStart, onClose }: LevelPreviewProps) {
             ) : null}
             <Button
               size="lg"
-              onClick={(e) => {
-                e.stopPropagation();
-                console.log("=== Start Mission button clicked ===");
-                console.log("Calling onStart()");
-                onStart();
-              }}
+              onClick={handleStartClick}
               className="text-lg px-8 py-6 font-semibold transition-all hover:scale-105 active:scale-95 relative z-10 cursor-pointer"
               style={{
                 background: `linear-gradient(135deg, ${BYTE_BUBBLES_THEME.star} 0%, #FFC94A 100%)`,

@@ -244,6 +244,12 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
     };
   }, []);
 
+  const playClickSound = () => {
+    const audio = new Audio("https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3");
+    audio.volume = 0.4;
+    audio.play().catch(err => console.log("Sound play failed:", err));
+  };
+
   const handleRender = (ctx: CanvasRenderingContext2D, rect: DOMRect, deltaTime: number) => {
     const state = gameStateRef.current;
     const now = Date.now();
@@ -565,6 +571,7 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
   const handleNextProject = () => {
     if (!currentProject) return;
 
+    playClickSound();
     setCollectedProjects([...collectedProjects, currentProject.id]);
     setShowProjectCard(false);
     setCurrentProject(null);
@@ -630,7 +637,7 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
             backdropFilter: "blur(8px)",
           }}
         >
-          <Button variant="ghost" size="sm" onClick={onBack} className="text-xs sm:text-sm">
+          <Button variant="ghost" size="sm" onClick={() => { playClickSound(); onBack(); }} className="text-xs sm:text-sm">
             ← Back
           </Button>
           <div className="flex items-center gap-1 sm:gap-3">
@@ -646,7 +653,7 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
               Badges Collected ⭐ {collectedProjects.length} / 5
             </span>
           </div>
-          <Button variant="ghost" size="sm" onClick={() => setIsPaused(!isPaused)} className="text-xs sm:text-sm">
+          <Button variant="ghost" size="sm" onClick={() => { playClickSound(); setIsPaused(!isPaused); }} className="text-xs sm:text-sm">
             {isPaused ? "Resume" : "Pause"}
           </Button>
         </div>
