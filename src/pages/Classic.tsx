@@ -409,7 +409,49 @@ export default function Classic() {
   );
 
   return (
-    <div className="min-h-screen relative" style={{ background: BLUE.bgTint }}>
+    <div className="classic-page">
+      <style>{`
+        /* Mobile-only compaction for Classic header spacing */
+        @media (max-width: 640px) {
+          /* Pull the top section closer without affecting desktop */
+          .classic-page > *:first-child {
+            margin-top: 0 !important;
+            padding-top: 6px !important;
+          }
+
+          /* Common header containers we might render first */
+          .classic-page header,
+          .classic-page [data-header],
+          .classic-page .hero,
+          .classic-page .profile-header {
+            margin-top: 0 !important;
+            padding-top: 6px !important;
+            padding-bottom: 6px !important;
+          }
+
+          /* Tighter title spacing on mobile */
+          .classic-page h1 {
+            margin-top: 0 !important;
+            margin-bottom: 0.25rem !important;
+            line-height: 1.1 !important;
+          }
+
+          /* Decrease excessive top spacing utilities if present */
+          .classic-page .pt-20,
+          .classic-page .pt-16,
+          .classic-page .py-12 {
+            padding-top: 6px !important;
+            padding-bottom: 8px !important;
+          }
+
+          /* Slightly reduce large gaps that often appear under the header */
+          .classic-page .mt-12,
+          .classic-page .mt-10 {
+            margin-top: 0.5rem !important;
+          }
+        }
+      `}</style>
+
       <StickyNav />
 
       {/* Hero / Profile */}
