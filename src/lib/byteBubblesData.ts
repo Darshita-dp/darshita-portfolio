@@ -126,7 +126,9 @@ export const loadGameProgress = (): GameProgress => {
   return {
     xp: 0,
     factsFound: [],
-    levelStatus: {},
+    levelStatus: {
+      7: "complete" // Future bubble (boss) is marked as complete for XP display
+    },
   };
 };
 

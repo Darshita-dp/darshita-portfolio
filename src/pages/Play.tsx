@@ -149,7 +149,7 @@ export default function Play() {
       );
     } else if (node?.type === "boss") {
       console.log("Rendering Future - under construction");
-      // Future bubble - show under construction image with XP indicator
+      // Future bubble - show under construction image
       return (
         <motion.div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
@@ -165,30 +165,6 @@ export default function Play() {
             onClick={(e) => e.stopPropagation()}
             className="relative max-w-2xl mx-4"
           >
-            {/* XP Star Indicator */}
-            <motion.div
-              className="absolute -top-8 left-1/2 -translate-x-1/2 flex items-center gap-2 px-4 py-2 rounded-full"
-              style={{
-                background: `linear-gradient(135deg, ${BYTE_BUBBLES_THEME.star} 0%, #FFC94A 100%)`,
-                border: `2px solid ${BYTE_BUBBLES_THEME.accent}`,
-                boxShadow: `0 0 20px ${BYTE_BUBBLES_THEME.star}80`,
-              }}
-              initial={{ y: -20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
-            >
-              <span
-                className="text-xl font-bold"
-                style={{
-                  fontFamily: "'Anton', sans-serif",
-                  color: BYTE_BUBBLES_THEME.text,
-                  textShadow: "0 2px 4px rgba(0,0,0,0.3)",
-                }}
-              >
-                ⭐ Future Level
-              </span>
-            </motion.div>
-
             <div className="text-center mb-4">
               <h2
                 className="text-3xl md:text-4xl font-bold"
