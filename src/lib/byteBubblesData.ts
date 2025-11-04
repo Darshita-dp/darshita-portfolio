@@ -118,7 +118,13 @@ export const loadGameProgress = (): GameProgress => {
   try {
     const saved = localStorage.getItem("byteBubblesProgress");
     if (saved) {
-      return JSON.parse(saved);
+      const parsed = JSON.parse(saved);
+      // Ensure Future bubble (ID 7) is always marked as complete
+      if (!parsed.levelStatus) {
+        parsed.levelStatus = {};
+      }
+      parsed.levelStatus[7] = "complete";
+      return parsed;
     }
   } catch (e) {
     console.error("Failed to load game progress:", e);
