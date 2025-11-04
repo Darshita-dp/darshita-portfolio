@@ -619,22 +619,6 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
         {/* Game Canvas */}
         <div className="flex-1 relative" style={{ background: "#A8F7E3", overflow: "hidden" }}>
           <GameCanvas ref={canvasHandleRef} onRender={handleRender} isPaused={isPaused || showProjectCard} />
-
-          {/* Controls hint */}
-          <div
-            className="absolute bottom-4 left-1/2 -translate-x-1/2 px-4 py-2 rounded-full text-xs"
-            style={{
-              background: "rgba(255,255,255,0.95)",
-              backdropFilter: "blur(10px)",
-              border: "2px solid #9EF1C8",
-              color: "#17202A",
-              fontFamily: "'Nunito', sans-serif",
-              fontWeight: 600,
-              boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
-            }}
-          >
-            Use Arrow Keys or WASD to move Plankton
-          </div>
         </div>
 
         {/* Project Detail Card */}
