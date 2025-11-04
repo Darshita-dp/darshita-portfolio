@@ -414,11 +414,13 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
         const px = cellX * cellSize + 20;
         const py = cellY * cellSize + 20;
         
+        const wallThreshold = 5; // More lenient collision threshold
+        
         // Check each wall with more lenient collision
-        if (cell.walls.top && y - playerRadius < py + 2) return true;
-        if (cell.walls.bottom && y + playerRadius > py + cellSize - 2) return true;
-        if (cell.walls.left && x - playerRadius < px + 2) return true;
-        if (cell.walls.right && x + playerRadius > px + cellSize - 2) return true;
+        if (cell.walls.top && y - playerRadius < py + wallThreshold) return true;
+        if (cell.walls.bottom && y + playerRadius > py + cellSize - wallThreshold) return true;
+        if (cell.walls.left && x - playerRadius < px + wallThreshold) return true;
+        if (cell.walls.right && x + playerRadius > px + cellSize - wallThreshold) return true;
         
         return false;
       };
