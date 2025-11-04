@@ -27,7 +27,7 @@ export default function Play() {
 
   // Background bubbly sound effect
   useEffect(() => {
-    const audio = new Audio("https://harmless-tapir-303.convex.cloud/api/storage/c8e8f8e8-8e8e-4e8e-8e8e-8e8e8e8e8e8e");
+    const audio = new Audio("https://assets.mixkit.co/active_storage/sfx/2470/2470-preview.mp3");
     audio.loop = true;
     audio.volume = 0.3;
 
