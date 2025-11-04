@@ -1303,6 +1303,7 @@ export default function Landing() {
       <LeavesField densityScale={densityScale} />
       <GlitterField />
       <GlitterField count={50} />
+      <GlitterField count={100} />
 
       {/* Skip link for keyboard users */}
       <a
