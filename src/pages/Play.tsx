@@ -27,7 +27,7 @@ export default function Play() {
 
   // Background bubbly sound effect
   useEffect(() => {
-    const audio = new Audio("https://assets.mixkit.co/active_storage/sfx/2470/2470-preview.mp3");
+    const audio = new Audio("https://assets.mixkit.co/active_storage/sfx/2413/2413-preview.mp3");
     audio.loop = true;
     audio.volume = 0.3;
 
