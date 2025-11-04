@@ -696,7 +696,7 @@ function SmallLeavesField() {
   );
 }
 
-function GlitterField() {
+function GlitterField({ count = 20 }: { count?: number }) {
   const prefersReducedMotion = useReducedMotion();
   const containerRef = useRef<HTMLDivElement | null>(null);
   const spritesRef = useRef<
@@ -736,7 +736,7 @@ function GlitterField() {
     const vw = window.innerWidth;
     const vh = window.innerHeight;
 
-    const count = 20; // exactly 20 glitters, mostly smaller than small leaves (36px)
+    // using count from props; default 20 (mostly smaller than the small leaves)
 
     const newParams = () => {
       const size = 10 + Math.random() * 12; // 10–22px
@@ -1302,6 +1302,7 @@ export default function Landing() {
       <GlitterField />
       <LeavesField densityScale={densityScale} />
       <GlitterField />
+      <GlitterField count={50} />
 
       {/* Skip link for keyboard users */}
       <a
