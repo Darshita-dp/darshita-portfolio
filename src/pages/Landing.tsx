@@ -916,7 +916,8 @@ function SparkleEmitter() {
     let rate = 0; // particles per second
     const updateRate = () => {
       const boosted = root.getAttribute("data-boost") === "1";
-      rate = boosted ? 12 : 1.5; // 8–14/s boosted, ~0–2/s idle
+      // Increase idle emission so it's visible without hover
+      rate = boosted ? 12 : 3;
     };
     const mo = new MutationObserver(updateRate);
     mo.observe(root, { attributes: true, attributeFilter: ["data-boost"] });
@@ -986,7 +987,8 @@ function SparkleEmitter() {
     };
   }, []);
 
-  return <div ref={ref} className="absolute left-0 top-0 -translate-x-1/2 -translate-y-1/2" aria-hidden="true" />;
+  // Center the emitter at the cursor
+  return <div ref={ref} className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" aria-hidden="true" />;
 }
 
 function SunflowerCursor() {
@@ -1093,7 +1095,13 @@ function SunflowerCursor() {
   }, []);
 
   return (
-    <div ref={ref} className="cursor-root" aria-hidden="true">
+    <div
+      ref={ref}
+      className="cursor-root"
+      aria-hidden="true"
+      // Ensure the cursor + sparkles sit above all content and don't block interactions
+      style={{ position: "fixed", top: 0, left: 0, zIndex: 9999, pointerEvents: "none" }}
+    >
       {/* Base (yellow) layer */}
       <div className="cursor-sunflower" style={{ backgroundImage: sunflowerBg }} />
       {/* Hover (yellow vivid) layer that crossfades on boost */}
