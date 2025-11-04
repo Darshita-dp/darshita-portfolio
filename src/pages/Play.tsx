@@ -25,9 +25,9 @@ export default function Play() {
   const [selectedLevel, setSelectedLevel] = useState<number | null>(null);
   const [showXPGain, setShowXPGain] = useState(false);
 
-  // Background bubbly sound effect
+  // Background bubble pop sound effect
   useEffect(() => {
-    const audio = new Audio("https://assets.mixkit.co/active_storage/sfx/2413/2413-preview.mp3");
+    const audio = new Audio("https://assets.mixkit.co/active_storage/sfx/2470/2470-preview.mp3");
     audio.loop = true;
     audio.volume = 0.3;
 
