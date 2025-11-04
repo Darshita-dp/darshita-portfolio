@@ -216,7 +216,7 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
     };
   }, []);
 
-  // Input handlers
+  // Input handlers (keyboard + touch)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       const state = gameStateRef.current;
@@ -234,12 +234,69 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
       if (e.key === "ArrowDown" || e.key === "s" || e.key === "S") state.keys.down = false;
     };
 
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let isTouching = false;
+
+    const handleTouchStart = (e: TouchEvent) => {
+      const touch = e.touches[0];
+      touchStartX = touch.clientX;
+      touchStartY = touch.clientY;
+      isTouching = true;
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (!isTouching) return;
+      e.preventDefault();
+      
+      const touch = e.touches[0];
+      const deltaX = touch.clientX - touchStartX;
+      const deltaY = touch.clientY - touchStartY;
+      
+      const state = gameStateRef.current;
+      const threshold = 10;
+      
+      // Reset all keys
+      state.keys.left = false;
+      state.keys.right = false;
+      state.keys.up = false;
+      state.keys.down = false;
+      
+      // Set direction based on swipe
+      if (Math.abs(deltaX) > threshold || Math.abs(deltaY) > threshold) {
+        if (Math.abs(deltaX) > Math.abs(deltaY)) {
+          if (deltaX > 0) state.keys.right = true;
+          else state.keys.left = true;
+        } else {
+          if (deltaY > 0) state.keys.down = true;
+          else state.keys.up = true;
+        }
+      }
+    };
+
+    const handleTouchEnd = () => {
+      isTouching = false;
+      const state = gameStateRef.current;
+      state.keys.left = false;
+      state.keys.right = false;
+      state.keys.up = false;
+      state.keys.down = false;
+    };
+
     window.addEventListener("keydown", handleKeyDown);
     window.addEventListener("keyup", handleKeyUp);
+    window.addEventListener("touchstart", handleTouchStart, { passive: false });
+    window.addEventListener("touchmove", handleTouchMove, { passive: false });
+    window.addEventListener("touchend", handleTouchEnd);
+    window.addEventListener("touchcancel", handleTouchEnd);
 
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("keyup", handleKeyUp);
+      window.removeEventListener("touchstart", handleTouchStart);
+      window.removeEventListener("touchmove", handleTouchMove);
+      window.removeEventListener("touchend", handleTouchEnd);
+      window.removeEventListener("touchcancel", handleTouchEnd);
     };
   }, []);
 
