@@ -25,25 +25,6 @@ export default function Play() {
   const [selectedLevel, setSelectedLevel] = useState<number | null>(null);
   const [showXPGain, setShowXPGain] = useState(false);
 
-  // Background bubble pop sound effect
-  useEffect(() => {
-    const audio = new Audio("https://assets.mixkit.co/active_storage/sfx/2470/2470-preview.mp3");
-    audio.loop = true;
-    audio.volume = 0.3;
-
-    if (soundOn && view === "map") {
-      audio.play().catch(err => console.log("Audio play failed:", err));
-    } else {
-      audio.pause();
-      audio.currentTime = 0;
-    }
-
-    return () => {
-      audio.pause();
-      audio.currentTime = 0;
-    };
-  }, [soundOn, view]);
-
   const handleBubbleClick = (nodeId: number) => {
     const node = BUBBLE_NODES.find((n) => n.id === nodeId);
     if (!node) return;
