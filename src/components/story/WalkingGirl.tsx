@@ -9,18 +9,23 @@ interface WalkingGirlProps {
 export function WalkingGirl({ scrollProgress, isRaining }: WalkingGirlProps) {
   const prefersReducedMotion = useReducedMotion();
   
-  // Determine position based on scroll progress
-  const isOnRight = scrollProgress > 0.5;
-  const horizontalPosition = isOnRight ? "right-8" : "left-8";
+  // Calculate horizontal position based on scroll progress (0 = left, 1 = right)
+  // Map scrollProgress (0-1) to horizontal position (8% to 92% of screen width)
+  const horizontalPercent = 8 + (scrollProgress * 84); // 8% to 92%
 
   return (
     <motion.div
-      className={`fixed bottom-8 ${horizontalPosition} z-30 pointer-events-none`}
+      className="fixed bottom-8 z-30 pointer-events-none"
+      style={{
+        left: `${horizontalPercent}%`,
+        transform: 'translateX(-50%)', // Center the character on the position
+      }}
       animate={{
-        x: 0,
+        left: `${horizontalPercent}%`,
       }}
       transition={{
-        x: { duration: 0.8, ease: "easeInOut" },
+        duration: 0.8,
+        ease: "easeInOut",
       }}
     >
       <div className="relative w-48 h-48">
