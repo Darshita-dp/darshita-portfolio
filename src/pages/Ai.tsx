@@ -407,7 +407,13 @@ function InterviewMe() {
                   }`}
                 >
                   <div className="prose prose-sm max-w-none dark:prose-invert prose-p:my-2 prose-p:leading-relaxed prose-strong:font-semibold prose-strong:text-slate-900 dark:prose-strong:text-slate-100 prose-ul:my-2 prose-li:my-1">
-                    <ReactMarkdown>{m.text}</ReactMarkdown>
+                    <ReactMarkdown
+                      components={{
+                        p: ({ children }) => <p className="mb-3 last:mb-0">{children}</p>,
+                      }}
+                    >
+                      {m.text}
+                    </ReactMarkdown>
                   </div>
                   <div className="text-[10px] opacity-60 mt-1 text-right flex items-center justify-end gap-1">
                     <span>{fmtTime(m.ts)}</span>
