@@ -293,6 +293,10 @@ export function WeatherLayer({ scrollProgress, currentChapter }: WeatherLayerPro
   };
 
   const getRainIntensity = () => {
+    if (currentChapter === 3) {
+      // Rain for "Crossing Oceans" (chapter 4, index 3)
+      return 0.6;
+    }
     if (currentChapter !== 7) return 0;
     const chapterProgress = (scrollProgress * 9) - 6;
     if (chapterProgress < 0.6) return chapterProgress / 0.6;
