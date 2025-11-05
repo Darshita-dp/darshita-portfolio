@@ -6,6 +6,48 @@ interface WeatherLayerProps {
   currentChapter: number;
 }
 
+function ShootingStar() {
+  const prefersReducedMotion = useReducedMotion();
+
+  if (prefersReducedMotion) return null;
+
+  return (
+    <motion.div
+      className="fixed z-30 pointer-events-none"
+      style={{
+        width: "4px",
+        height: "4px",
+        borderRadius: "50%",
+        background: "radial-gradient(circle, #FFE07B, #FFC94A)",
+        boxShadow: "0 0 12px rgba(255, 224, 123, 0.8), 0 0 24px rgba(255, 201, 74, 0.4)",
+        filter: "blur(0.5px)",
+      }}
+      initial={{ x: "5vw", y: "-10vh", opacity: 0 }}
+      animate={{ x: "95vw", y: "60vh", opacity: [0, 1, 1, 0] }}
+      transition={{
+        duration: 3,
+        repeat: Infinity,
+        repeatDelay: 4,
+        ease: "easeInOut",
+      }}
+    >
+      {/* Tail */}
+      <div
+        style={{
+          position: "absolute",
+          width: "200px",
+          height: "2px",
+          background: "linear-gradient(90deg, rgba(255, 224, 123, 0.8), transparent)",
+          left: "-200px",
+          top: "50%",
+          transform: "translateY(-50%)",
+          filter: "blur(1px)",
+        }}
+      />
+    </motion.div>
+  );
+}
+
 export function WeatherLayer({ scrollProgress, currentChapter }: WeatherLayerProps) {
   const prefersReducedMotion = useReducedMotion();
   const flowersContainerRef = useRef<HTMLDivElement | null>(null);
@@ -430,7 +472,10 @@ export function WeatherLayer({ scrollProgress, currentChapter }: WeatherLayerPro
         }}
       />
 
-      {/* Moon with Shiny Effect (Chapter 6 - Circle of Friendship) */}
+      {/* Shooting Star (Chapter 5 - Circle of Friendship) */}
+      {currentChapter === 5 && <ShootingStar />}
+
+      {/* Moon with Shiny Effect (Chapter 5 - Circle of Friendship) */}
       {currentChapter === 5 && (
         <motion.div
           className="fixed top-20 left-8 z-10 pointer-events-none"
@@ -456,7 +501,7 @@ export function WeatherLayer({ scrollProgress, currentChapter }: WeatherLayerPro
         </motion.div>
       )}
 
-      {/* Clouds Around Moon (Chapter 6 - Circle of Friendship) */}
+      {/* Clouds Around Moon (Chapter 5 - Circle of Friendship) */}
       {currentChapter === 5 && (
         <>
           {/* Top cloud - covering half of moon */}
