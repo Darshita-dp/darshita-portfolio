@@ -13,7 +13,7 @@ interface ChapterContentProps {
 
 export function ChapterContent({ chapter, isActive }: ChapterContentProps) {
   return (
-    <div className="w-screen h-full flex items-center justify-center px-8 relative z-20">
+    <div className="w-screen h-full flex items-center justify-center px-12 relative z-20">
       <motion.div
         className="max-w-2xl text-center"
         initial={{ opacity: 0, y: 12 }}
