@@ -9,10 +9,9 @@ interface WalkingGirlProps {
 export function WalkingGirl({ scrollProgress, isRaining }: WalkingGirlProps) {
   const prefersReducedMotion = useReducedMotion();
   
-  // Determine position and flip based on scroll progress
+  // Determine position based on scroll progress
   const isOnRight = scrollProgress > 0.5;
   const horizontalPosition = isOnRight ? "right-8" : "left-8";
-  const scaleX = isOnRight ? -1 : 1;
 
   return (
     <motion.div
@@ -25,13 +24,13 @@ export function WalkingGirl({ scrollProgress, isRaining }: WalkingGirlProps) {
       }}
     >
       <div className="relative w-48 h-48">
-        {/* Witch character flying on broom */}
+        {/* Witch character flying on broom - always flipped */}
         <motion.img
           src="https://harmless-tapir-303.convex.cloud/api/storage/d5928fb5-92f1-4106-848f-a9409279aa7e"
           alt="Flying witch"
           className="w-full h-full object-contain drop-shadow-lg"
           style={{
-            scaleX: scaleX,
+            scaleX: -1,
           }}
           animate={prefersReducedMotion ? {} : {
             y: [0, -8, 0],
