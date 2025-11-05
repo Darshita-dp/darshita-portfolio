@@ -99,25 +99,26 @@ export function WeatherLayer({ scrollProgress, currentChapter }: WeatherLayerPro
       >
         {cloudImage ? (
           // Use cloud images for chapters 1 and 2
-          [...Array(8)].map((_, i) => (
+          [...Array(28)].map((_, i) => (
             <motion.img
               key={i}
               src={cloudImage}
               alt=""
               className="absolute"
               style={{
-                width: `${120 + i * 30}px`,
-                height: `${60 + i * 15}px`,
-                left: `${i * 15}%`,
-                top: `${10 + (i % 3) * 15}%`,
+                width: `${80 + Math.random() * 180}px`,
+                height: `${40 + Math.random() * 90}px`,
+                left: `${i * 3.5}%`,
+                top: `${5 + (i % 5) * 12}%`,
                 objectFit: "contain",
+                opacity: 0.4,
               }}
               animate={prefersReducedMotion ? {} : {
-                x: [0, 20, 0],
-                scale: [1, 1.05, 1],
+                x: [0, 15 + Math.random() * 10, 0],
+                scale: [1, 1.03 + Math.random() * 0.04, 1],
               }}
               transition={{
-                duration: 8 + i * 2,
+                duration: 7 + i * 1.5,
                 repeat: Infinity,
                 ease: "easeInOut",
               }}
@@ -125,23 +126,23 @@ export function WeatherLayer({ scrollProgress, currentChapter }: WeatherLayerPro
           ))
         ) : (
           // Use default rounded div clouds for other chapters
-          [...Array(8)].map((_, i) => (
+          [...Array(28)].map((_, i) => (
             <motion.div
               key={i}
-              className="absolute rounded-full bg-white/60"
+              className="absolute rounded-full bg-white/40"
               style={{
-                width: `${80 + i * 20}px`,
-                height: `${40 + i * 10}px`,
-                left: `${i * 15}%`,
-                top: `${10 + (i % 3) * 15}%`,
+                width: `${60 + Math.random() * 140}px`,
+                height: `${30 + Math.random() * 70}px`,
+                left: `${i * 3.5}%`,
+                top: `${5 + (i % 5) * 12}%`,
                 filter: "blur(8px)",
               }}
               animate={prefersReducedMotion ? {} : {
-                x: [0, 20, 0],
-                scale: [1, 1.05, 1],
+                x: [0, 15 + Math.random() * 10, 0],
+                scale: [1, 1.03 + Math.random() * 0.04, 1],
               }}
               transition={{
-                duration: 8 + i * 2,
+                duration: 7 + i * 1.5,
                 repeat: Infinity,
                 ease: "easeInOut",
               }}
