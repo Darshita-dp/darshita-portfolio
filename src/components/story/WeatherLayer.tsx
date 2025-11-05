@@ -62,6 +62,18 @@ export function WeatherLayer({ scrollProgress, currentChapter }: WeatherLayerPro
 
   const parallaxOffset = scrollProgress * 40;
 
+  // Determine which cloud image to use based on chapter
+  const getCloudImage = () => {
+    if (currentChapter === 0) {
+      return "https://harmless-tapir-303.convex.cloud/api/storage/47929630-859f-4372-ad82-040caa3e2d1a";
+    } else if (currentChapter === 1) {
+      return "https://harmless-tapir-303.convex.cloud/api/storage/ac7f8ab5-863f-4896-bcdd-06a37dd01b2e";
+    }
+    return null;
+  };
+
+  const cloudImage = getCloudImage();
+
   return (
     <>
       {/* Sky Background */}
@@ -85,28 +97,57 @@ export function WeatherLayer({ scrollProgress, currentChapter }: WeatherLayerPro
           left: 0,
         }}
       >
-        {[...Array(8)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute rounded-full bg-white/60"
-            style={{
-              width: `${80 + i * 20}px`,
-              height: `${40 + i * 10}px`,
-              left: `${i * 15}%`,
-              top: `${10 + (i % 3) * 15}%`,
-              filter: "blur(8px)",
-            }}
-            animate={prefersReducedMotion ? {} : {
-              x: [0, 20, 0],
-              scale: [1, 1.05, 1],
-            }}
-            transition={{
-              duration: 8 + i * 2,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-          />
-        ))}
+        {cloudImage ? (
+          // Use cloud images for chapters 1 and 2
+          [...Array(8)].map((_, i) => (
+            <motion.img
+              key={i}
+              src={cloudImage}
+              alt=""
+              className="absolute"
+              style={{
+                width: `${120 + i * 30}px`,
+                height: `${60 + i * 15}px`,
+                left: `${i * 15}%`,
+                top: `${10 + (i % 3) * 15}%`,
+                objectFit: "contain",
+              }}
+              animate={prefersReducedMotion ? {} : {
+                x: [0, 20, 0],
+                scale: [1, 1.05, 1],
+              }}
+              transition={{
+                duration: 8 + i * 2,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            />
+          ))
+        ) : (
+          // Use default rounded div clouds for other chapters
+          [...Array(8)].map((_, i) => (
+            <motion.div
+              key={i}
+              className="absolute rounded-full bg-white/60"
+              style={{
+                width: `${80 + i * 20}px`,
+                height: `${40 + i * 10}px`,
+                left: `${i * 15}%`,
+                top: `${10 + (i % 3) * 15}%`,
+                filter: "blur(8px)",
+              }}
+              animate={prefersReducedMotion ? {} : {
+                x: [0, 20, 0],
+                scale: [1, 1.05, 1],
+              }}
+              transition={{
+                duration: 8 + i * 2,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            />
+          ))
+        )}
       </motion.div>
 
       {/* Stars (night only) */}
