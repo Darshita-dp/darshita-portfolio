@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 
 interface WeatherLayerProps {
   scrollProgress: number;
@@ -6,68 +6,171 @@ interface WeatherLayerProps {
 }
 
 export function WeatherLayer({ scrollProgress, currentChapter }: WeatherLayerProps) {
-  const isRaining = currentChapter === 6;
+  const prefersReducedMotion = useReducedMotion();
 
-  // Sky gradient based on chapter progression
+  // Calculate weather states based on scroll progress
   const getSkyGradient = () => {
-    if (currentChapter <= 1) return "from-blue-100 via-blue-50 to-pink-50";
-    if (currentChapter <= 3) return "from-sky-100 via-blue-50 to-amber-50";
-    if (currentChapter <= 5) return "from-amber-50 via-orange-50 to-pink-50";
-    if (currentChapter === 6) return "from-gray-300 via-gray-200 to-gray-100";
-    if (currentChapter === 7) return "from-blue-100 via-sky-100 to-amber-50";
-    return "from-yellow-100 via-amber-50 to-pink-50";
+    const chapterProgress = scrollProgress * 9;
+    
+    if (chapterProgress < 2) {
+      // Dawn (Ch 1-2)
+      return "linear-gradient(180deg, #FFB6C1 0%, #FFF6E7 100%)";
+    } else if (chapterProgress < 3) {
+      // Late Morning (Ch 3)
+      return "linear-gradient(180deg, #CDE7F9 0%, #E8F4FA 100%)";
+    } else if (chapterProgress < 4) {
+      // Afternoon (Ch 4)
+      return "linear-gradient(180deg, #87CEEB 0%, #B0E0E6 100%)";
+    } else if (chapterProgress < 5) {
+      // Evening (Ch 5)
+      return "linear-gradient(180deg, #FFB347 0%, #E4D7FA 100%)";
+    } else if (chapterProgress < 6) {
+      // Night (Ch 6)
+      return "linear-gradient(180deg, #1D2340 0%, #2C3E50 100%)";
+    } else if (chapterProgress < 7) {
+      // Rain (Ch 7)
+      return "linear-gradient(180deg, #2C3E50 0%, #34495E 100%)";
+    } else if (chapterProgress < 8) {
+      // Clearing (Ch 8)
+      return "linear-gradient(180deg, #708090 0%, #B0C4DE 100%)";
+    } else {
+      // New Morning (Ch 9)
+      return "linear-gradient(180deg, #CDE7F9 0%, #FBE6A2 100%)";
+    }
   };
 
-  return (
-    <div className="fixed inset-0 pointer-events-none">
-      {/* Subtle sky gradient */}
-      <div className={`absolute inset-0 bg-gradient-to-b ${getSkyGradient()} opacity-40`} />
+  const getCloudOpacity = () => {
+    if (currentChapter <= 2) return 0.8;
+    if (currentChapter <= 4) return 0.5;
+    if (currentChapter === 7) return 0.9;
+    if (currentChapter >= 8) return 0.7;
+    return 0.3;
+  };
 
-      {/* Conditional rain effect */}
-      {isRaining && (
-        <div className="absolute inset-0">
+  const getRainIntensity = () => {
+    if (currentChapter !== 7) return 0;
+    const chapterProgress = (scrollProgress * 9) - 6;
+    if (chapterProgress < 0.6) return chapterProgress / 0.6;
+    return 1 - ((chapterProgress - 0.6) / 0.4);
+  };
+
+  const getStarOpacity = () => {
+    if (currentChapter === 6) return 0.8;
+    if (currentChapter === 7) return 0.4;
+    return 0;
+  };
+
+  const parallaxOffset = scrollProgress * 40;
+
+  return (
+    <>
+      {/* Sky Background */}
+      <motion.div
+        className="fixed inset-0 z-0"
+        style={{
+          background: getSkyGradient(),
+          transform: `translateX(${-parallaxOffset}vw)`,
+          width: '900vw',
+          left: 0,
+        }}
+      />
+
+      {/* Clouds */}
+      <motion.div
+        className="fixed inset-0 z-10 pointer-events-none"
+        style={{
+          opacity: getCloudOpacity(),
+          transform: `translateX(${-parallaxOffset * 0.75}vw)`,
+          width: '900vw',
+          left: 0,
+        }}
+      >
+        {[...Array(8)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute rounded-full bg-white/60"
+            style={{
+              width: `${80 + i * 20}px`,
+              height: `${40 + i * 10}px`,
+              left: `${i * 15}%`,
+              top: `${10 + (i % 3) * 15}%`,
+              filter: "blur(8px)",
+            }}
+            animate={prefersReducedMotion ? {} : {
+              x: [0, 20, 0],
+              scale: [1, 1.05, 1],
+            }}
+            transition={{
+              duration: 8 + i * 2,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          />
+        ))}
+      </motion.div>
+
+      {/* Stars (night only) */}
+      <motion.div
+        className="fixed inset-0 z-10 pointer-events-none"
+        style={{ 
+          opacity: getStarOpacity(),
+          width: '900vw',
+          left: 0,
+        }}
+      >
+        {[...Array(30)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-1 h-1 bg-white rounded-full"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 60}%`,
+            }}
+            animate={prefersReducedMotion ? {} : {
+              opacity: [0.3, 1, 0.3],
+              scale: [0.8, 1.2, 0.8],
+            }}
+            transition={{
+              duration: 2 + Math.random() * 2,
+              repeat: Infinity,
+              delay: Math.random() * 2,
+            }}
+          />
+        ))}
+      </motion.div>
+
+      {/* Rain */}
+      {getRainIntensity() > 0 && (
+        <motion.div
+          className="fixed inset-0 z-20 pointer-events-none"
+          style={{ 
+            opacity: getRainIntensity(),
+            width: '900vw',
+            left: 0,
+          }}
+        >
           {[...Array(50)].map((_, i) => (
             <motion.div
               key={i}
-              className="absolute w-0.5 h-8 bg-blue-400/30"
+              className="absolute w-0.5 h-8 bg-blue-200/40"
               style={{
                 left: `${Math.random() * 100}%`,
-                top: `${Math.random() * -20}%`,
+                top: `${-10 + Math.random() * 10}%`,
+                transform: "rotate(15deg)",
               }}
               animate={{
-                y: ["0vh", "120vh"],
+                y: ["0vh", "110vh"],
               }}
               transition={{
-                duration: 1 + Math.random() * 0.5,
+                duration: 0.8 + Math.random() * 0.4,
                 repeat: Infinity,
                 ease: "linear",
-                delay: Math.random() * 2,
+                delay: Math.random() * 0.8,
               }}
             />
           ))}
-        </div>
+        </motion.div>
       )}
-
-      {/* Subtle clouds */}
-      {!isRaining && [...Array(4)].map((_, i) => (
-        <motion.div
-          key={i}
-          className="absolute w-32 h-16 rounded-full bg-white/20 blur-xl"
-          style={{
-            left: `${10 + i * 25}%`,
-            top: `${8 + i * 12}%`,
-          }}
-          animate={{
-            x: [0, 30, 0],
-            opacity: [0.2, 0.3, 0.2],
-          }}
-          transition={{
-            duration: 15 + i * 3,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        />
-      ))}
-    </div>
+    </>
   );
 }
