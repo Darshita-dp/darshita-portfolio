@@ -8,6 +8,18 @@ interface WalkingGirlProps {
 
 export function WalkingGirl({ scrollProgress, isRaining }: WalkingGirlProps) {
   const prefersReducedMotion = useReducedMotion();
+  const prevScrollProgress = useRef(scrollProgress);
+  const [isMovingBackward, setIsMovingBackward] = useState(false);
+  
+  // Track scroll direction
+  useEffect(() => {
+    if (scrollProgress < prevScrollProgress.current) {
+      setIsMovingBackward(true);
+    } else if (scrollProgress > prevScrollProgress.current) {
+      setIsMovingBackward(false);
+    }
+    prevScrollProgress.current = scrollProgress;
+  }, [scrollProgress]);
   
   // Calculate horizontal position based on scroll progress (0 = left, 1 = right)
   // Map scrollProgress (0-1) to horizontal position (8% to 92% of screen width)
@@ -29,13 +41,13 @@ export function WalkingGirl({ scrollProgress, isRaining }: WalkingGirlProps) {
       }}
     >
       <div className="relative w-48 h-48">
-        {/* Witch character flying on broom - always flipped */}
+        {/* Witch character flying on broom - flips based on direction */}
         <motion.img
           src="https://harmless-tapir-303.convex.cloud/api/storage/d5928fb5-92f1-4106-848f-a9409279aa7e"
           alt="Flying witch"
           className="w-full h-full object-contain drop-shadow-lg"
           style={{
-            scaleX: -1,
+            scaleX: isMovingBackward ? 1 : -1,
           }}
           animate={prefersReducedMotion ? {} : {
             y: [0, -8, 0],
