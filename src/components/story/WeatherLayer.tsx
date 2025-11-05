@@ -458,28 +458,54 @@ export function WeatherLayer({ scrollProgress, currentChapter }: WeatherLayerPro
 
       {/* Clouds Below Moon (Chapter 6 - Circle of Friendship) */}
       {currentChapter === 5 && (
-        <motion.div
-          className="fixed top-48 left-4 z-10 pointer-events-none"
-          animate={prefersReducedMotion ? {} : {
-            y: [0, 8, 0],
-          }}
-          transition={{
-            duration: 4,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        >
-          <img
-            src="https://harmless-tapir-303.convex.cloud/api/storage/72872462-47f2-418d-9642-403cf2ba11e3"
-            alt="Clouds"
-            style={{
-              width: "200px",
-              height: "120px",
-              opacity: 0.6,
-              filter: "drop-shadow(0 2px 8px rgba(0, 0, 0, 0.1))",
+        <>
+          {/* Back cloud - more transparent */}
+          <motion.div
+            className="fixed top-56 left-2 z-5 pointer-events-none"
+            animate={prefersReducedMotion ? {} : {
+              y: [0, 6, 0],
             }}
-          />
-        </motion.div>
+            transition={{
+              duration: 5,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          >
+            <img
+              src="https://harmless-tapir-303.convex.cloud/api/storage/72872462-47f2-418d-9642-403cf2ba11e3"
+              alt="Back Clouds"
+              style={{
+                width: "240px",
+                height: "140px",
+                opacity: 0.3,
+                filter: "drop-shadow(0 2px 8px rgba(0, 0, 0, 0.05))",
+              }}
+            />
+          </motion.div>
+          {/* Front clouds - larger and more visible */}
+          <motion.div
+            className="fixed top-48 left-4 z-10 pointer-events-none"
+            animate={prefersReducedMotion ? {} : {
+              y: [0, 8, 0],
+            }}
+            transition={{
+              duration: 4,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          >
+            <img
+              src="https://harmless-tapir-303.convex.cloud/api/storage/72872462-47f2-418d-9642-403cf2ba11e3"
+              alt="Clouds"
+              style={{
+                width: "280px",
+                height: "160px",
+                opacity: 0.6,
+                filter: "drop-shadow(0 2px 8px rgba(0, 0, 0, 0.1))",
+              }}
+            />
+          </motion.div>
+        </>
       )}
 
       {/* Stars (night only) */}
