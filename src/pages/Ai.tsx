@@ -364,8 +364,8 @@ function InterviewMe() {
       <div 
         className="container mx-auto max-w-3xl px-4 relative z-10 h-full flex items-stretch"
         style={{
-          height: "570px",
-          minHeight: "570px"
+          height: "580px",
+          minHeight: "580px"
         }}
       >
         <Card className="h-full flex flex-col overflow-hidden border-0 shadow-lg w-[95%] mx-auto">
