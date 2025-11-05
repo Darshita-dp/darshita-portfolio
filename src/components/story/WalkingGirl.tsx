@@ -8,13 +8,20 @@ interface WalkingGirlProps {
 
 export function WalkingGirl({ scrollProgress, isRaining }: WalkingGirlProps) {
   const prefersReducedMotion = useReducedMotion();
-  const parallaxOffset = scrollProgress * 100;
+  
+  // Determine position and flip based on scroll progress
+  const isOnRight = scrollProgress > 0.5;
+  const horizontalPosition = isOnRight ? "right-8" : "left-8";
+  const scaleX = isOnRight ? -1 : 1;
 
   return (
     <motion.div
-      className="fixed bottom-[20vh] left-[30vw] z-30 pointer-events-none"
-      style={{
-        transform: `translateX(${-parallaxOffset}vw)`,
+      className={`fixed bottom-8 ${horizontalPosition} z-30 pointer-events-none`}
+      animate={{
+        x: 0,
+      }}
+      transition={{
+        x: { duration: 0.8, ease: "easeInOut" },
       }}
     >
       <div className="relative w-48 h-48">
@@ -23,6 +30,9 @@ export function WalkingGirl({ scrollProgress, isRaining }: WalkingGirlProps) {
           src="https://harmless-tapir-303.convex.cloud/api/storage/d5928fb5-92f1-4106-848f-a9409279aa7e"
           alt="Flying witch"
           className="w-full h-full object-contain drop-shadow-lg"
+          style={{
+            scaleX: scaleX,
+          }}
           animate={prefersReducedMotion ? {} : {
             y: [0, -8, 0],
             rotate: [0, 2, -2, 0],
