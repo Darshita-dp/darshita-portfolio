@@ -27,7 +27,7 @@ const modes = [
     id: "ai",
     title: "AI Chat",
     description: "Interactive conversation about my work",
-    symbol: "🧠",
+    symbol: "https://harmless-tapir-303.convex.cloud/api/storage/d1f287ee-2b2b-4b50-b2c0-5d1efc983ea2",
     color: "#BAE1FF", // pastel blue
     path: "/ai",
   },
@@ -1469,19 +1469,30 @@ export default function Landing() {
                       ["--shine-delay" as any]: `${120 + ((index * 90) % 260)}ms`,
                     }}
                   >
-                    <span
-                      className="text-3xl"
-                      style={{
-                        // Darken just the Story card icon a bit more for stronger contrast
-                        filter:
-                          mode.id === "story"
-                            ? "brightness(0.78) contrast(1.2) saturate(1.2)"
-                            : "brightness(0.88) contrast(1.1) saturate(1.15)",
-                        textShadow: "0 1px 0 rgba(0,0,0,0.18), 0 6px 12px rgba(0,0,0,0.14)",
-                      }}
-                    >
-                      {mode.symbol}
-                    </span>
+                    {mode.symbol.startsWith("http") ? (
+                      <img
+                        src={mode.symbol}
+                        alt={mode.title}
+                        className="w-10 h-10 object-contain"
+                        style={{
+                          filter: "drop-shadow(0 1px 0 rgba(0,0,0,0.18)) drop-shadow(0 6px 12px rgba(0,0,0,0.14))",
+                        }}
+                      />
+                    ) : (
+                      <span
+                        className="text-3xl"
+                        style={{
+                          // Darken just the Story card icon a bit more for stronger contrast
+                          filter:
+                            mode.id === "story"
+                              ? "brightness(0.78) contrast(1.2) saturate(1.2)"
+                              : "brightness(0.88) contrast(1.1) saturate(1.15)",
+                          textShadow: "0 1px 0 rgba(0,0,0,0.18), 0 6px 12px rgba(0,0,0,0.14)",
+                        }}
+                      >
+                        {mode.symbol}
+                      </span>
+                    )}
                   </div>
                   <CardTitle className="text-2xl text-slate-900 tracking-tight">
                     {mode.title}
