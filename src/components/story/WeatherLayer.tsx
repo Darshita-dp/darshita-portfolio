@@ -199,8 +199,8 @@ export function WeatherLayer({ scrollProgress, currentChapter }: WeatherLayerPro
       phase: number;
     }> = [];
 
-    // Create 22 cloud elements (14 + 8 more with extra transparency and less movement)
-    const cloudCount = 22;
+    // Create 27 cloud elements (14 + 8 + 5 more with extra transparency and less movement)
+    const cloudCount = 27;
     for (let i = 0; i < cloudCount; i++) {
       const img = document.createElement("img");
       img.src = "https://harmless-tapir-303.convex.cloud/api/storage/6ee126fd-20b5-4592-a489-0d46bf521544";
