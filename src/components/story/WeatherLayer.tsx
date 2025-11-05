@@ -433,7 +433,7 @@ export function WeatherLayer({ scrollProgress, currentChapter }: WeatherLayerPro
       {/* Moon with Shiny Effect (Chapter 6 - Circle of Friendship) */}
       {currentChapter === 5 && (
         <motion.div
-          className="fixed top-20 right-16 z-10 pointer-events-none"
+          className="fixed top-20 right-8 z-10 pointer-events-none"
           animate={prefersReducedMotion ? {} : {
             opacity: [0.85, 1, 0.85],
             scale: [1, 1.05, 1],
@@ -459,7 +459,7 @@ export function WeatherLayer({ scrollProgress, currentChapter }: WeatherLayerPro
       {/* Clouds Below Moon (Chapter 6 - Circle of Friendship) */}
       {currentChapter === 5 && (
         <motion.div
-          className="fixed top-48 right-8 z-10 pointer-events-none"
+          className="fixed top-48 right-4 z-10 pointer-events-none"
           animate={prefersReducedMotion ? {} : {
             y: [0, 8, 0],
           }}
