@@ -8,6 +8,9 @@ interface WeatherLayerProps {
 export function WeatherLayer({ scrollProgress, currentChapter }: WeatherLayerProps) {
   const prefersReducedMotion = useReducedMotion();
 
+  // Falling flowers for chapter 1
+  const showFlowers = currentChapter === 0;
+
   // Calculate weather states based on scroll progress
   const getSkyGradient = () => {
     const chapterProgress = scrollProgress * 9;
@@ -89,6 +92,52 @@ export function WeatherLayer({ scrollProgress, currentChapter }: WeatherLayerPro
           />
         ))}
       </motion.div>
+
+      {/* Falling Flowers (Chapter 1 only) */}
+      {showFlowers && (
+        <motion.div
+          className="fixed inset-0 z-20 pointer-events-none"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+        >
+          {[...Array(60)].map((_, i) => {
+            const size = 20 + Math.random() * 30; // 20-50px
+            const opacity = 0.4 + Math.random() * 0.4; // 0.4-0.8
+            const startX = Math.random() * 100;
+            const drift = (Math.random() - 0.5) * 30; // horizontal drift
+            const duration = 4 + Math.random() * 3; // 4-7s
+            const delay = Math.random() * 2;
+            
+            return (
+              <motion.img
+                key={`flower-${i}`}
+                src="https://harmless-tapir-303.convex.cloud/api/storage/18a36123-1921-492d-ad74-35efaf89ab73"
+                alt=""
+                className="absolute"
+                style={{
+                  width: `${size}px`,
+                  height: `${size}px`,
+                  left: `${startX}%`,
+                  top: '-60px',
+                  opacity: opacity,
+                }}
+                animate={prefersReducedMotion ? {} : {
+                  y: ['0vh', '60vh'],
+                  x: [0, drift],
+                  rotate: [0, Math.random() * 360],
+                }}
+                transition={{
+                  duration: duration,
+                  repeat: Infinity,
+                  ease: 'linear',
+                  delay: delay,
+                }}
+              />
+            );
+          })}
+        </motion.div>
+      )}
 
       {/* Rain */}
       {getRainIntensity() > 0 && (
