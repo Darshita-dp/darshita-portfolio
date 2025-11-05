@@ -8,25 +8,13 @@ interface WalkingGirlProps {
 
 export function WalkingGirl({ scrollProgress, isRaining }: WalkingGirlProps) {
   const prefersReducedMotion = useReducedMotion();
-  
-  // Determine which side the witch should be on based on scroll progress
-  // First half: bottom-left, Second half: bottom-right (flipped)
-  const isFlipped = scrollProgress > 0.5;
-  
+  const parallaxOffset = scrollProgress * 100;
+
   return (
     <motion.div
-      className="fixed bottom-8 z-30 pointer-events-none"
+      className="fixed bottom-[20vh] left-[30vw] z-30 pointer-events-none"
       style={{
-        left: isFlipped ? 'auto' : '2rem',
-        right: isFlipped ? '2rem' : 'auto',
-      }}
-      animate={{
-        x: 0,
-        scaleX: isFlipped ? -1 : 1,
-      }}
-      transition={{
-        x: { duration: 0.8, ease: "easeInOut" },
-        scaleX: { duration: 0.6, ease: "easeInOut" },
+        transform: `translateX(${-parallaxOffset}vw)`,
       }}
     >
       <div className="relative w-48 h-48">
