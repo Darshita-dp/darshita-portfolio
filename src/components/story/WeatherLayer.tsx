@@ -72,6 +72,20 @@ export function WeatherLayer({ scrollProgress, currentChapter }: WeatherLayerPro
 
   const cloudImage = getCloudImage();
 
+  // Calculate cloud opacity based on scroll progress for fade out effect
+  const getScrollBasedCloudOpacity = (index: number) => {
+    // Clouds visible in chapters 0-1, fade out as we move to chapter 2
+    const chapterProgress = scrollProgress * 9;
+    
+    if (chapterProgress < 1.5) {
+      return 0.4; // Full visibility in chapters 0-1
+    } else if (chapterProgress < 2.5) {
+      // Fade out between chapter 1.5 and 2.5
+      return 0.4 * (1 - ((chapterProgress - 1.5) / 1));
+    }
+    return 0; // Invisible after chapter 2
+  };
+
   return (
     <>
       {/* Sky Background */}
@@ -82,66 +96,52 @@ export function WeatherLayer({ scrollProgress, currentChapter }: WeatherLayerPro
         }}
       />
 
-      {/* Clouds */}
-      <motion.div
-        className="fixed inset-0 z-10 pointer-events-none"
-        style={{
-          opacity: getCloudOpacity(),
-        }}
-      >
-        {cloudImage ? (
-          // Use cloud images for chapters 1 and 2
-          [...Array(28)].map((_, i) => (
-            <motion.img
-              key={i}
-              src={cloudImage}
-              alt=""
-              className="absolute"
-              style={{
-                width: `${80 + Math.random() * 180}px`,
-                height: `${40 + Math.random() * 90}px`,
-                left: `${i * 3.5}%`,
-                top: `${5 + (i % 5) * 12}%`,
-                objectFit: "contain",
-                opacity: 0.4,
-              }}
-              animate={prefersReducedMotion ? {} : {
-                x: [0, 15 + Math.random() * 10, 0],
-                scale: [1, 1.03 + Math.random() * 0.04, 1],
-              }}
-              transition={{
-                duration: 7 + i * 1.5,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-            />
-          ))
-        ) : (
-          // Use default rounded div clouds for other chapters
-          [...Array(28)].map((_, i) => (
-            <motion.div
-              key={i}
-              className="absolute rounded-full bg-white/40"
-              style={{
-                width: `${60 + Math.random() * 140}px`,
-                height: `${30 + Math.random() * 70}px`,
-                left: `${i * 3.5}%`,
-                top: `${5 + (i % 5) * 12}%`,
-                filter: "blur(8px)",
-              }}
-              animate={prefersReducedMotion ? {} : {
-                x: [0, 15 + Math.random() * 10, 0],
-                scale: [1, 1.03 + Math.random() * 0.04, 1],
-              }}
-              transition={{
-                duration: 7 + i * 1.5,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-            />
-          ))
-        )}
-      </motion.div>
+      {/* Clouds - only show for chapters 0-2 with scroll-based movement */}
+      {cloudImage && (
+        <motion.div
+          className="fixed inset-0 z-10 pointer-events-none"
+          style={{
+            opacity: getCloudOpacity(),
+          }}
+        >
+          {[...Array(18)].map((_, i) => {
+            const cloudOpacity = getScrollBasedCloudOpacity(i);
+            const chapterProgress = scrollProgress * 9;
+            
+            // Calculate horizontal movement: clouds move from left to right as we scroll
+            // Start position at chapter 0, end position at chapter 2
+            const startX = (i * 5.5) - 10; // Initial spread
+            const moveDistance = 120; // How far clouds travel
+            const xPosition = startX + (chapterProgress / 2) * moveDistance;
+            
+            return (
+              <motion.img
+                key={i}
+                src={cloudImage}
+                alt=""
+                className="absolute"
+                style={{
+                  width: `${80 + Math.random() * 180}px`,
+                  height: `${40 + Math.random() * 90}px`,
+                  left: `${xPosition}%`,
+                  top: `${5 + (i % 5) * 12}%`,
+                  objectFit: "contain",
+                  opacity: cloudOpacity,
+                }}
+                animate={prefersReducedMotion ? {} : {
+                  y: [0, 8 + Math.random() * 6, 0],
+                  scale: [1, 1.02 + Math.random() * 0.03, 1],
+                }}
+                transition={{
+                  duration: 6 + i * 1.2,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+              />
+            );
+          })}
+        </motion.div>
+      )}
 
       {/* Stars (night only) */}
       <motion.div
