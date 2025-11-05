@@ -203,13 +203,13 @@ export function WeatherLayer({ scrollProgress, currentChapter }: WeatherLayerPro
     const cloudCount = 8;
     for (let i = 0; i < cloudCount; i++) {
       const img = document.createElement("img");
-      img.src = "https://harmless-tapir-303.convex.cloud/api/storage/ced8fff8-1783-4dee-96b0-98c59360cd9a";
+      img.src = "https://harmless-tapir-303.convex.cloud/api/storage/6ee126fd-20b5-4592-a489-0d46bf521544";
       img.alt = "";
       img.style.position = "absolute";
       img.style.pointerEvents = "none";
       
       const size = 80 + Math.random() * 100; // 80-180px
-      const opacity = 0.5 + Math.random() * 0.3; // 0.5-0.8
+      const opacity = 0.3 + Math.random() * 0.25; // 0.3-0.55 (more transparent)
       img.style.width = `${size}px`;
       img.style.height = "auto";
       img.style.opacity = String(opacity);
@@ -219,9 +219,9 @@ export function WeatherLayer({ scrollProgress, currentChapter }: WeatherLayerPro
       clouds.push({
         el: img,
         x: Math.random() * 100, // vw
-        baseY: Math.random() * 30, // top 30% of screen
+        baseY: Math.random() * 20, // top 20% of screen only
         speed: 5 + Math.random() * 10, // slow horizontal drift
-        amp: 8 + Math.random() * 12, // vertical float amplitude
+        amp: 5 + Math.random() * 8, // reduced vertical float amplitude
         freq: 0.3 + Math.random() * 0.4,
         phase: Math.random() * Math.PI * 2,
       });
@@ -242,7 +242,7 @@ export function WeatherLayer({ scrollProgress, currentChapter }: WeatherLayerPro
         // Reset when cloud goes off right edge
         if (cloud.x > 110) {
           cloud.x = -20;
-          cloud.baseY = Math.random() * 30;
+          cloud.baseY = Math.random() * 20; // keep in top 20%
         }
 
         const y = cloud.baseY + cloud.amp * Math.sin((currentTime / 1000) * cloud.freq + cloud.phase);
