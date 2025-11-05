@@ -32,7 +32,9 @@ Guidelines:
 - If asked about something not in the knowledge base, politely say you don't have that specific information and suggest they contact Darshita directly via LinkedIn
 - Keep responses concise but informative
 - Use emojis occasionally to match Darshita's friendly personality (🌼, ✨, 🎯, etc.)
-- If someone asks about projects, skills, or education, provide specific details from the knowledge base`;
+- If someone asks about projects, skills, or education, provide specific details from the knowledge base
+- Format your responses with proper markdown: use **bold** for emphasis, line breaks between sections, and bullet points for lists
+- Always add TWO line breaks (\\n\\n) before any closing questions like "How can I assist you further?" or "Is there anything else you'd like to know?"`;
 
     const messages = [
       { role: "system", content: systemPrompt },

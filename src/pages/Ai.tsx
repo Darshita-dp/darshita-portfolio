@@ -406,7 +406,7 @@ function InterviewMe() {
                       : "bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border rounded-tl-sm"
                   }`}
                 >
-                  <div className="prose prose-sm max-w-none dark:prose-invert prose-p:my-1 prose-p:leading-relaxed prose-strong:font-semibold prose-strong:text-slate-900 dark:prose-strong:text-slate-100">
+                  <div className="prose prose-sm max-w-none dark:prose-invert prose-p:my-2 prose-p:leading-relaxed prose-strong:font-semibold prose-strong:text-slate-900 dark:prose-strong:text-slate-100 prose-ul:my-2 prose-li:my-1">
                     <ReactMarkdown>{m.text}</ReactMarkdown>
                   </div>
                   <div className="text-[10px] opacity-60 mt-1 text-right flex items-center justify-end gap-1">
