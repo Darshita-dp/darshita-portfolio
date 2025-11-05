@@ -244,8 +244,8 @@ export const KNOWLEDGE: Array<QA> = [
   },
   {
     q: "What is one area you're working to improve?",
-    a: "One area I'm improving is public speaking. I used to feel nervous speaking in front of large groups, but after conducting lab sessions as a Teaching Assistant, I've become much more confident. Now, I try to speak in a structured way — keeping my tone calm, steady, and clear. It's still a work in progress, but I can already see the difference.",
-    keywords: ["weakness", "weaknesses", "area to improve", "improvement", "public speaking", "working on"],
+    a: "I tend to spend extra time making sure everything looks and feels just right. It comes from wanting my work to reflect my best effort — but I've learned how to manage my time better so it never affects delivery.",
+    keywords: ["weakness", "weaknesses", "area to improve", "improvement", "perfectionism", "attention to detail", "working on"],
   },
   {
     q: "How do you handle stress or deadlines?",
