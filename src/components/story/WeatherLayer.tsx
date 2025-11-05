@@ -461,7 +461,7 @@ export function WeatherLayer({ scrollProgress, currentChapter }: WeatherLayerPro
         <>
           {/* Top cloud - covering half of moon */}
           <motion.div
-            className="fixed top-16 left-0 z-20 pointer-events-none"
+            className="fixed top-32 left-0 z-20 pointer-events-none"
             animate={prefersReducedMotion ? {} : {
               y: [0, 4, 0],
             }}
@@ -484,7 +484,7 @@ export function WeatherLayer({ scrollProgress, currentChapter }: WeatherLayerPro
           </motion.div>
           {/* Bottom cloud - below moon */}
           <motion.div
-            className="fixed top-56 left-2 z-10 pointer-events-none"
+            className="fixed top-48 left-2 z-10 pointer-events-none"
             animate={prefersReducedMotion ? {} : {
               y: [0, 6, 0],
             }}
