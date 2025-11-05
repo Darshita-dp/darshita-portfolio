@@ -484,7 +484,7 @@ export function WeatherLayer({ scrollProgress, currentChapter }: WeatherLayerPro
           </motion.div>
           {/* Bottom cloud - below moon */}
           <motion.div
-            className="fixed top-48 left-2 z-10 pointer-events-none"
+            className="fixed top-40 left-2 z-10 pointer-events-none"
             animate={prefersReducedMotion ? {} : {
               y: [0, 6, 0],
             }}
@@ -505,6 +505,27 @@ export function WeatherLayer({ scrollProgress, currentChapter }: WeatherLayerPro
               }}
             />
           </motion.div>
+
+          {/* Smoke effect on bottom cloud */}
+          <motion.div
+            className="fixed top-36 left-0 z-10 pointer-events-none"
+            animate={prefersReducedMotion ? {} : {
+              opacity: [0.2, 0.4, 0.2],
+              y: [-4, 4, -4],
+            }}
+            transition={{
+              duration: 6,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+            style={{
+              width: "280px",
+              height: "160px",
+              background: "radial-gradient(ellipse at center, rgba(200, 220, 240, 0.3), rgba(200, 220, 240, 0.1) 50%, transparent 70%)",
+              borderRadius: "50%",
+              filter: "blur(12px)",
+            }}
+          />
         </>
       )}
 
