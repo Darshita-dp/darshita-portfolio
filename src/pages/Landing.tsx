@@ -1149,57 +1149,6 @@ function SunflowerCursor() {
   );
 }
 
-function ShootingStar() {
-  const prefersReducedMotion = useReducedMotion();
-  
-  return (
-    <>
-      {!prefersReducedMotion && (
-        <motion.div
-          className="fixed pointer-events-none z-30"
-          style={{
-            width: "4px",
-            height: "4px",
-            background: "radial-gradient(circle, #FFE07B 0%, #FFC94A 100%)",
-            borderRadius: "50%",
-            boxShadow: "0 0 20px rgba(255, 224, 123, 0.8), 0 0 40px rgba(255, 201, 74, 0.4)",
-            filter: "drop-shadow(0 0 8px rgba(255, 255, 255, 0.6))",
-          }}
-          initial={{ 
-            x: "5vw", 
-            y: "-10vh",
-            opacity: 0,
-          }}
-          animate={{ 
-            x: "95vw", 
-            y: "60vh",
-            opacity: [0, 1, 1, 0],
-          }}
-          transition={{
-            duration: 3,
-            repeat: Infinity,
-            repeatDelay: 4,
-            ease: "easeInOut",
-          }}
-        >
-          {/* Shooting star tail */}
-          <motion.div
-            className="absolute pointer-events-none"
-            style={{
-              width: "200px",
-              height: "2px",
-              background: "linear-gradient(90deg, rgba(255, 224, 123, 0.8) 0%, rgba(255, 201, 74, 0.4) 50%, transparent 100%)",
-              left: "-200px",
-              top: "1px",
-              filter: "blur(1px)",
-            }}
-          />
-        </motion.div>
-      )}
-    </>
-  );
-}
-
 export default function Landing() {
   const navigate = useNavigate();
   const prefersReducedMotion = useReducedMotion();
@@ -1338,6 +1287,7 @@ export default function Landing() {
   return (
     <div
       className="relative min-h-screen overflow-hidden"
+      // Replace image cursor with hidden native cursor so follower is the only cursor
       style={{ cursor: "none" }}
     >
       {/* Kawaii Sky Gradient */}
@@ -1357,9 +1307,6 @@ export default function Landing() {
       <GlitterField />
       <GlitterField count={50} />
       <GlitterField count={100} />
-
-      {/* Shooting Star */}
-      <ShootingStar />
 
       {/* Skip link for keyboard users */}
       <a
