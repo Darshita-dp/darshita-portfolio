@@ -1,4 +1,5 @@
 import { motion, useReducedMotion } from "framer-motion";
+import { useEffect, useRef } from "react";
 
 interface WeatherLayerProps {
   scrollProgress: number;
@@ -7,9 +8,177 @@ interface WeatherLayerProps {
 
 export function WeatherLayer({ scrollProgress, currentChapter }: WeatherLayerProps) {
   const prefersReducedMotion = useReducedMotion();
+  const flowersContainerRef = useRef<HTMLDivElement | null>(null);
+  const sparklesContainerRef = useRef<HTMLDivElement | null>(null);
 
   // Falling flowers for chapter 1
   const showFlowers = currentChapter === 0;
+
+  // Continuous flower animation using RAF
+  useEffect(() => {
+    if (!showFlowers || prefersReducedMotion) return;
+    
+    const container = flowersContainerRef.current;
+    if (!container) return;
+
+    const flowers: Array<{
+      el: HTMLImageElement;
+      startX: number;
+      y: number;
+      drift: number;
+      speed: number;
+      rotation: number;
+      rotSpeed: number;
+    }> = [];
+
+    // Create 60 flower elements
+    for (let i = 0; i < 60; i++) {
+      const img = document.createElement("img");
+      img.src = "https://harmless-tapir-303.convex.cloud/api/storage/18a36123-1921-492d-ad74-35efaf89ab73";
+      img.alt = "";
+      img.style.position = "absolute";
+      img.style.pointerEvents = "none";
+      
+      const size = 20 + Math.random() * 30;
+      const opacity = 0.4 + Math.random() * 0.4;
+      img.style.width = `${size}px`;
+      img.style.height = `${size}px`;
+      img.style.opacity = String(opacity);
+      
+      container.appendChild(img);
+
+      flowers.push({
+        el: img,
+        startX: Math.random() * 100,
+        y: -60 - Math.random() * 200, // stagger initial positions
+        drift: (Math.random() - 0.5) * 30,
+        speed: 40 + Math.random() * 30, // pixels per second
+        rotation: Math.random() * 360,
+        rotSpeed: (Math.random() - 0.5) * 60, // degrees per second
+      });
+    }
+
+    let lastTime = performance.now();
+    let rafId: number;
+
+    const animate = (currentTime: number) => {
+      const deltaTime = (currentTime - lastTime) / 1000; // seconds
+      lastTime = currentTime;
+
+      const vh = window.innerHeight;
+
+      flowers.forEach((flower) => {
+        flower.y += flower.speed * deltaTime;
+        flower.rotation += flower.rotSpeed * deltaTime;
+
+        // Reset when flower goes off screen
+        if (flower.y > vh + 60) {
+          flower.y = -60;
+          flower.startX = Math.random() * 100;
+          flower.drift = (Math.random() - 0.5) * 30;
+        }
+
+        const x = flower.startX + (flower.drift * (flower.y + 60)) / vh;
+        flower.el.style.transform = `translate(${x}vw, ${flower.y}px) rotate(${flower.rotation}deg)`;
+      });
+
+      rafId = requestAnimationFrame(animate);
+    };
+
+    rafId = requestAnimationFrame(animate);
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      container.innerHTML = "";
+    };
+  }, [showFlowers, prefersReducedMotion]);
+
+  // Continuous sparkle animation using RAF
+  useEffect(() => {
+    if (!showFlowers || prefersReducedMotion) return;
+    
+    const container = sparklesContainerRef.current;
+    if (!container) return;
+
+    const sparkles: Array<{
+      el: HTMLImageElement;
+      startX: number;
+      y: number;
+      speed: number;
+      scale: number;
+      scalePhase: number;
+      rotation: number;
+      rotSpeed: number;
+      opacityBase: number;
+      opacityPhase: number;
+    }> = [];
+
+    // Create 40 sparkle elements
+    for (let i = 0; i < 40; i++) {
+      const img = document.createElement("img");
+      img.src = "https://harmless-tapir-303.convex.cloud/api/storage/97621a6b-9260-4899-a3c2-8af8d2d6ea49";
+      img.alt = "";
+      img.style.position = "absolute";
+      img.style.pointerEvents = "none";
+      
+      const size = 8 + Math.random() * 8;
+      img.style.width = `${size}px`;
+      img.style.height = `${size}px`;
+      
+      container.appendChild(img);
+
+      sparkles.push({
+        el: img,
+        startX: Math.random() * 100,
+        y: -60 - Math.random() * 300, // stagger initial positions
+        speed: 30 + Math.random() * 30,
+        scale: 1,
+        scalePhase: Math.random() * Math.PI * 2,
+        rotation: Math.random() * 360,
+        rotSpeed: 90 + Math.random() * 90,
+        opacityBase: 0.5 + Math.random() * 0.4,
+        opacityPhase: Math.random() * Math.PI * 2,
+      });
+    }
+
+    let lastTime = performance.now();
+    let rafId: number;
+
+    const animate = (currentTime: number) => {
+      const deltaTime = (currentTime - lastTime) / 1000;
+      lastTime = currentTime;
+
+      const vh = window.innerHeight;
+      const time = currentTime / 1000;
+
+      sparkles.forEach((sparkle) => {
+        sparkle.y += sparkle.speed * deltaTime;
+        sparkle.rotation += sparkle.rotSpeed * deltaTime;
+
+        // Reset when sparkle goes off screen
+        if (sparkle.y > vh + 60) {
+          sparkle.y = -60;
+          sparkle.startX = Math.random() * 100;
+        }
+
+        // Pulsing scale and opacity
+        sparkle.scale = 1 + 0.3 * Math.sin(time * 2 + sparkle.scalePhase);
+        const opacity = sparkle.opacityBase * (0.7 + 0.3 * Math.sin(time * 3 + sparkle.opacityPhase));
+
+        sparkle.el.style.transform = `translate(${sparkle.startX}vw, ${sparkle.y}px) scale(${sparkle.scale}) rotate(${sparkle.rotation}deg)`;
+        sparkle.el.style.opacity = String(opacity);
+      });
+
+      rafId = requestAnimationFrame(animate);
+    };
+
+    rafId = requestAnimationFrame(animate);
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      container.innerHTML = "";
+    };
+  }, [showFlowers, prefersReducedMotion]);
 
   // Calculate weather states based on scroll progress
   const getSkyGradient = () => {
@@ -93,86 +262,22 @@ export function WeatherLayer({ scrollProgress, currentChapter }: WeatherLayerPro
         ))}
       </motion.div>
 
-      {/* Falling Flowers (Chapter 1 only) */}
+      {/* Falling Flowers (Chapter 1 only) - RAF animated */}
       {showFlowers && (
-        <motion.div
+        <div
+          ref={flowersContainerRef}
           className="fixed inset-0 z-20 pointer-events-none"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-        >
-          {[...Array(60)].map((_, i) => {
-            const size = 20 + Math.random() * 30; // 20-50px
-            const opacity = 0.4 + Math.random() * 0.4; // 0.4-0.8
-            const startX = Math.random() * 100;
-            const drift = (Math.random() - 0.5) * 30; // horizontal drift
-            const duration = 4 + Math.random() * 3; // 4-7s
-            const delay = Math.random() * 2;
-            
-            return (
-              <motion.img
-                key={`flower-${i}`}
-                src="https://harmless-tapir-303.convex.cloud/api/storage/18a36123-1921-492d-ad74-35efaf89ab73"
-                alt=""
-                className="absolute"
-                style={{
-                  width: `${size}px`,
-                  height: `${size}px`,
-                  left: `${startX}%`,
-                  top: '-60px',
-                  opacity: opacity,
-                }}
-                animate={prefersReducedMotion ? {} : {
-                  y: ['0vh', '60vh'],
-                  x: [0, drift],
-                  rotate: [0, Math.random() * 360],
-                }}
-                transition={{
-                  duration: duration,
-                  repeat: Infinity,
-                  ease: 'linear',
-                  delay: delay,
-                }}
-              />
-            );
-          })}
-          {/* Sparkling Sparkles */}
-          {[...Array(40)].map((_, i) => {
-            const size = 8 + Math.random() * 8; // 8-16px (much smaller)
-            const opacity = 0.5 + Math.random() * 0.4; // 0.5-0.9
-            const startX = Math.random() * 100;
-            const duration = 2 + Math.random() * 2; // 2-4s
-            const delay = Math.random() * 3;
-            
-            return (
-              <motion.img
-                key={`sparkle-${i}`}
-                src="https://harmless-tapir-303.convex.cloud/api/storage/97621a6b-9260-4899-a3c2-8af8d2d6ea49"
-                alt=""
-                className="absolute"
-                style={{
-                  width: `${size}px`,
-                  height: `${size}px`,
-                  left: `${startX}%`,
-                  top: '-60px',
-                  opacity: opacity,
-                }}
-                animate={prefersReducedMotion ? {} : {
-                  y: ['0vh', '60vh'],
-                  opacity: [opacity, opacity * 0.3, opacity],
-                  scale: [1, 1.3, 1],
-                  rotate: [0, 180, 360],
-                }}
-                transition={{
-                  duration: duration,
-                  repeat: Infinity,
-                  ease: 'easeInOut',
-                  delay: delay,
-                }}
-              />
-            );
-          })}
-        </motion.div>
+          aria-hidden="true"
+        />
+      )}
+
+      {/* Sparkling Sparkles (Chapter 1 only) - RAF animated */}
+      {showFlowers && (
+        <div
+          ref={sparklesContainerRef}
+          className="fixed inset-0 z-20 pointer-events-none"
+          aria-hidden="true"
+        />
       )}
 
       {/* Rain */}
