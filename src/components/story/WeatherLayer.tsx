@@ -415,6 +415,11 @@ export function WeatherLayer({ scrollProgress, currentChapter }: WeatherLayerPro
     return 0;
   };
 
+  const getMoonOpacity = () => {
+    if (currentChapter === 5) return 0.9;
+    return 0;
+  };
+
   return (
     <>
       {/* Sky Background */}
@@ -424,6 +429,58 @@ export function WeatherLayer({ scrollProgress, currentChapter }: WeatherLayerPro
           background: getSkyGradient(),
         }}
       />
+
+      {/* Moon with Shiny Effect (Chapter 6 - Circle of Friendship) */}
+      {currentChapter === 5 && (
+        <motion.div
+          className="fixed top-20 right-16 z-10 pointer-events-none"
+          animate={prefersReducedMotion ? {} : {
+            opacity: [0.85, 1, 0.85],
+            scale: [1, 1.05, 1],
+          }}
+          transition={{
+            duration: 3,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        >
+          <img
+            src="https://harmless-tapir-303.convex.cloud/api/storage/0e4e78c1-f7f1-4912-a6df-0014e4ded9cd"
+            alt="Moon"
+            style={{
+              width: "180px",
+              height: "180px",
+              filter: "drop-shadow(0 0 20px rgba(255, 255, 200, 0.6)) drop-shadow(0 0 40px rgba(255, 255, 150, 0.3))",
+            }}
+          />
+        </motion.div>
+      )}
+
+      {/* Clouds Below Moon (Chapter 6 - Circle of Friendship) */}
+      {currentChapter === 5 && (
+        <motion.div
+          className="fixed top-48 right-8 z-10 pointer-events-none"
+          animate={prefersReducedMotion ? {} : {
+            y: [0, 8, 0],
+          }}
+          transition={{
+            duration: 4,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        >
+          <img
+            src="https://harmless-tapir-303.convex.cloud/api/storage/72872462-47f2-418d-9642-403cf2ba11e3"
+            alt="Clouds"
+            style={{
+              width: "200px",
+              height: "120px",
+              opacity: 0.6,
+              filter: "drop-shadow(0 2px 8px rgba(0, 0, 0, 0.1))",
+            }}
+          />
+        </motion.div>
+      )}
 
       {/* Stars (night only) */}
       <motion.div
