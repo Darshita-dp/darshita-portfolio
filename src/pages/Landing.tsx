@@ -1299,35 +1299,6 @@ export default function Landing() {
         }}
       />
 
-      {/* Gentle cloud puffs (ensure clouds above flowers/leaves) */}
-      <div className="pointer-events-none absolute inset-0 z-10">
-        {[...Array(10)].map((_, i) => (
-          <motion.div
-            key={i}
-            initial={{ x: -200 }}
-            animate={{ x: "110%" }}
-            transition={{ duration: 32 + i * 7, repeat: Infinity, ease: "linear", delay: i * 2 }}
-            className="absolute top-10"
-            style={{
-              top: `${8 + i * 12}%`,
-              left: `${-20 - i * 8}%`,
-              opacity: 0.85 - (i % 3) * 0.08,
-            }}
-          >
-            <div className="flex items-center gap-2">
-              <div
-                className="w-28 h-10 rounded-full bg-white/60"
-                style={{ filter: `blur(${1 + (i % 3)}px)` }}
-              />
-              <div
-                className="w-16 h-8 rounded-full bg-white/50"
-                style={{ filter: `blur(${0.5 + ((i + 1) % 3)}px)` }}
-              />
-            </div>
-          </motion.div>
-        ))}
-      </div>
-
       {/* Flower and Leaves layers behind content */}
       <FlowerField densityScale={densityScale} />
       <SmallLeavesField />
