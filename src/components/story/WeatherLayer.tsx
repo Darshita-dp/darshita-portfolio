@@ -141,7 +141,6 @@ export function WeatherLayer({ scrollProgress, currentChapter }: WeatherLayerPro
             const size = 15 + Math.random() * 25; // 15-40px
             const opacity = 0.5 + Math.random() * 0.4; // 0.5-0.9
             const startX = Math.random() * 100;
-            const startY = Math.random() * 50; // Start from top half
             const duration = 2 + Math.random() * 2; // 2-4s
             const delay = Math.random() * 3;
             
@@ -155,10 +154,11 @@ export function WeatherLayer({ scrollProgress, currentChapter }: WeatherLayerPro
                   width: `${size}px`,
                   height: `${size}px`,
                   left: `${startX}%`,
-                  top: `${startY}%`,
+                  top: '-60px',
                   opacity: opacity,
                 }}
                 animate={prefersReducedMotion ? {} : {
+                  y: ['0vh', '60vh'],
                   opacity: [opacity, opacity * 0.3, opacity],
                   scale: [1, 1.3, 1],
                   rotate: [0, 180, 360],
