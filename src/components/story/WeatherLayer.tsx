@@ -11,8 +11,8 @@ export function WeatherLayer({ scrollProgress, currentChapter }: WeatherLayerPro
   const flowersContainerRef = useRef<HTMLDivElement | null>(null);
   const sparklesContainerRef = useRef<HTMLDivElement | null>(null);
 
-  // Falling flowers for chapter 1
-  const showFlowers = currentChapter === 0;
+  // Falling flowers for chapters 1 and 2
+  const showFlowers = currentChapter === 0 || currentChapter === 1;
 
   // Continuous flower animation using RAF
   useEffect(() => {
