@@ -10,9 +10,11 @@ export function WeatherLayer({ scrollProgress, currentChapter }: WeatherLayerPro
   const prefersReducedMotion = useReducedMotion();
   const flowersContainerRef = useRef<HTMLDivElement | null>(null);
   const sparklesContainerRef = useRef<HTMLDivElement | null>(null);
+  const cloudsContainerRef = useRef<HTMLDivElement | null>(null);
 
   // Falling flowers for chapters 1 and 2
   const showFlowers = currentChapter === 0 || currentChapter === 1;
+  const showClouds = currentChapter === 2 || currentChapter === 3;
 
   // Continuous flower animation using RAF
   useEffect(() => {
@@ -180,6 +182,84 @@ export function WeatherLayer({ scrollProgress, currentChapter }: WeatherLayerPro
     };
   }, [showFlowers, prefersReducedMotion]);
 
+  // Floating clouds for chapters 3 and 4
+  useEffect(() => {
+    if (!showClouds || prefersReducedMotion) return;
+    
+    const container = cloudsContainerRef.current;
+    if (!container) return;
+
+    const clouds: Array<{
+      el: HTMLImageElement;
+      x: number;
+      baseY: number;
+      speed: number;
+      amp: number;
+      freq: number;
+      phase: number;
+    }> = [];
+
+    // Create 8 cloud elements
+    const cloudCount = 8;
+    for (let i = 0; i < cloudCount; i++) {
+      const img = document.createElement("img");
+      img.src = "https://harmless-tapir-303.convex.cloud/api/storage/ced8fff8-1783-4dee-96b0-98c59360cd9a";
+      img.alt = "";
+      img.style.position = "absolute";
+      img.style.pointerEvents = "none";
+      
+      const size = 80 + Math.random() * 100; // 80-180px
+      const opacity = 0.5 + Math.random() * 0.3; // 0.5-0.8
+      img.style.width = `${size}px`;
+      img.style.height = "auto";
+      img.style.opacity = String(opacity);
+      
+      container.appendChild(img);
+
+      clouds.push({
+        el: img,
+        x: Math.random() * 100, // vw
+        baseY: Math.random() * 30, // top 30% of screen
+        speed: 5 + Math.random() * 10, // slow horizontal drift
+        amp: 8 + Math.random() * 12, // vertical float amplitude
+        freq: 0.3 + Math.random() * 0.4,
+        phase: Math.random() * Math.PI * 2,
+      });
+    }
+
+    let lastTime = performance.now();
+    let rafId: number;
+
+    const animate = (currentTime: number) => {
+      const deltaTime = (currentTime - lastTime) / 1000;
+      lastTime = currentTime;
+
+      const vw = window.innerWidth;
+
+      clouds.forEach((cloud) => {
+        cloud.x += (cloud.speed * deltaTime) / vw * 100; // convert to vw
+        
+        // Reset when cloud goes off right edge
+        if (cloud.x > 110) {
+          cloud.x = -20;
+          cloud.baseY = Math.random() * 30;
+        }
+
+        const y = cloud.baseY + cloud.amp * Math.sin((currentTime / 1000) * cloud.freq + cloud.phase);
+        cloud.el.style.transform = `translate(${cloud.x}vw, ${y}vh)`;
+      });
+
+      rafId = requestAnimationFrame(animate);
+    };
+
+    rafId = requestAnimationFrame(animate);
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      container.innerHTML = "";
+    };
+  }, [showClouds, prefersReducedMotion]);
+
   // Calculate weather states based on scroll progress
   const getSkyGradient = () => {
     const chapterProgress = scrollProgress * 9;
@@ -275,6 +355,15 @@ export function WeatherLayer({ scrollProgress, currentChapter }: WeatherLayerPro
       {showFlowers && (
         <div
           ref={sparklesContainerRef}
+          className="fixed inset-0 z-20 pointer-events-none"
+          aria-hidden="true"
+        />
+      )}
+
+      {/* Floating Clouds (Chapters 3 & 4) - RAF animated */}
+      {showClouds && (
+        <div
+          ref={cloudsContainerRef}
           className="fixed inset-0 z-20 pointer-events-none"
           aria-hidden="true"
         />
