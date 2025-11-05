@@ -182,6 +182,112 @@ export function WeatherLayer({ scrollProgress, currentChapter }: WeatherLayerPro
     };
   }, [showFlowers, prefersReducedMotion]);
 
+  // Falling autumn leaves for chapter 5 (Kingdom of Knowledge)
+  const leavesContainerRef = useRef<HTMLDivElement | null>(null);
+  const showLeaves = currentChapter === 4;
+
+  useEffect(() => {
+    if (!showLeaves || prefersReducedMotion) return;
+    
+    const container = leavesContainerRef.current;
+    if (!container) return;
+
+    const leaves: Array<{
+      el: HTMLImageElement;
+      x: number;
+      y: number;
+      vx: number;
+      vy: number;
+      size: number;
+      opacity: number;
+      rotation: number;
+      rotSpeed: number;
+      circlePhase: number;
+      circleAmp: number;
+      circleFreq: number;
+    }> = [];
+
+    // Create 50 leaf elements (25 of each type)
+    const leafUrls = [
+      "https://harmless-tapir-303.convex.cloud/api/storage/f9c235f8-b255-480a-9123-e4476d2c8bf0",
+      "https://harmless-tapir-303.convex.cloud/api/storage/3f468c5c-f135-4c59-af6e-1ccf78ace957",
+    ];
+
+    for (let i = 0; i < 50; i++) {
+      const img = document.createElement("img");
+      img.src = leafUrls[i % 2];
+      img.alt = "";
+      img.style.position = "absolute";
+      img.style.pointerEvents = "none";
+      
+      const size = 30 + Math.random() * 50; // 30-80px varied sizes
+      const opacity = 0.3 + Math.random() * 0.5; // 0.3-0.8 transparency
+      img.style.width = `${size}px`;
+      img.style.height = `${size}px`;
+      img.style.opacity = String(opacity);
+      
+      container.appendChild(img);
+
+      leaves.push({
+        el: img,
+        x: Math.random() * window.innerWidth,
+        y: -60 - Math.random() * 200,
+        vx: (Math.random() - 0.5) * 40, // diagonal wind effect
+        vy: 30 + Math.random() * 40, // slow downward fall
+        size,
+        opacity,
+        rotation: Math.random() * 360,
+        rotSpeed: (Math.random() - 0.5) * 180, // degrees per second
+        circlePhase: Math.random() * Math.PI * 2,
+        circleAmp: 20 + Math.random() * 40, // circular motion amplitude
+        circleFreq: 0.5 + Math.random() * 1.0, // circular motion frequency
+      });
+    }
+
+    let lastTime = performance.now();
+    let rafId: number;
+
+    const animate = (currentTime: number) => {
+      const deltaTime = (currentTime - lastTime) / 1000; // seconds
+      lastTime = currentTime;
+
+      const vh = window.innerHeight;
+      const vw = window.innerWidth;
+      const time = currentTime / 1000;
+
+      leaves.forEach((leaf) => {
+        // Diagonal falling with wind effect
+        leaf.x += leaf.vx * deltaTime;
+        leaf.y += leaf.vy * deltaTime;
+        leaf.rotation += leaf.rotSpeed * deltaTime;
+
+        // Add circular motion for some leaves (wind swirl effect)
+        const circleX = leaf.circleAmp * Math.cos(leaf.circleFreq * time + leaf.circlePhase);
+        const circleY = leaf.circleAmp * Math.sin(leaf.circleFreq * time + leaf.circlePhase) * 0.5;
+
+        // Reset when leaf goes off screen
+        if (leaf.y > vh + 60 || leaf.x < -60 || leaf.x > vw + 60) {
+          leaf.y = -60;
+          leaf.x = Math.random() * vw;
+          leaf.vx = (Math.random() - 0.5) * 40;
+          leaf.vy = 30 + Math.random() * 40;
+          leaf.rotation = Math.random() * 360;
+        }
+
+        leaf.el.style.transform = `translate(${leaf.x + circleX}px, ${leaf.y + circleY}px) rotate(${leaf.rotation}deg)`;
+      });
+
+      rafId = requestAnimationFrame(animate);
+    };
+
+    rafId = requestAnimationFrame(animate);
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      container.innerHTML = "";
+    };
+  }, [showLeaves, prefersReducedMotion]);
+
   // Floating clouds for chapters 3 and 4
   useEffect(() => {
     if (!showClouds || prefersReducedMotion) return;
@@ -369,6 +475,15 @@ export function WeatherLayer({ scrollProgress, currentChapter }: WeatherLayerPro
       {showClouds && (
         <div
           ref={cloudsContainerRef}
+          className="fixed inset-0 z-20 pointer-events-none"
+          aria-hidden="true"
+        />
+      )}
+
+      {/* Falling Autumn Leaves (Chapter 5 - Kingdom of Knowledge) - RAF animated */}
+      {showLeaves && (
+        <div
+          ref={leavesContainerRef}
           className="fixed inset-0 z-20 pointer-events-none"
           aria-hidden="true"
         />
