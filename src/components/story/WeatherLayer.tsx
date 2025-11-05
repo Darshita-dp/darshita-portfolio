@@ -382,7 +382,7 @@ export function WeatherLayer({ scrollProgress, currentChapter }: WeatherLayerPro
             opacity: getRainIntensity(),
           }}
         >
-          {[...Array(50)].map((_, i) => (
+          {[...Array(120)].map((_, i) => (
             <motion.div
               key={i}
               className="absolute w-0.5 h-8 bg-blue-200/40"
