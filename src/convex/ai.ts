@@ -13,10 +13,10 @@ export const chat = action({
     }))),
   },
   handler: async (ctx, args) => {
-    const apiKey = process.env.OPENAI_API_KEY;
+    const apiKey = process.env.OPENROUTER_API_KEY;
     
     if (!apiKey) {
-      throw new Error("OPENAI_API_KEY is not configured. Please add it in the API Keys tab.");
+      throw new Error("OPENROUTER_API_KEY is not configured. Please add it in the API Keys tab.");
     }
 
     // Build context from knowledge base
@@ -41,14 +41,16 @@ Guidelines:
     ];
 
     try {
-      const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${apiKey}`,
+          "HTTP-Referer": process.env.CONVEX_SITE_URL || "https://darshita-portfolio.com",
+          "X-Title": "Darshita's Portfolio Chat",
         },
         body: JSON.stringify({
-          model: "gpt-3.5-turbo",
+          model: "openai/gpt-3.5-turbo",
           messages: messages,
           temperature: 0.7,
           max_tokens: 500,
@@ -57,8 +59,8 @@ Guidelines:
 
       if (!response.ok) {
         const error = await response.text();
-        console.error("OpenAI API error:", error);
-        throw new Error(`OpenAI API error: ${response.status}`);
+        console.error("OpenRouter API error:", error);
+        throw new Error(`OpenRouter API error: ${response.status}`);
       }
 
       const data = await response.json();
@@ -67,7 +69,7 @@ Guidelines:
         success: true,
       };
     } catch (error) {
-      console.error("Error calling OpenAI:", error);
+      console.error("Error calling OpenRouter:", error);
       return {
         message: "I'm having trouble connecting right now. Please try again in a moment, or feel free to reach out to Darshita directly on LinkedIn! 🌼",
         success: false,
