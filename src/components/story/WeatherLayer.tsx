@@ -456,14 +456,14 @@ export function WeatherLayer({ scrollProgress, currentChapter }: WeatherLayerPro
         </motion.div>
       )}
 
-      {/* Clouds Below Moon (Chapter 6 - Circle of Friendship) */}
+      {/* Clouds Around Moon (Chapter 6 - Circle of Friendship) */}
       {currentChapter === 5 && (
         <>
-          {/* Back cloud - more transparent */}
+          {/* Top cloud - covering half of moon */}
           <motion.div
-            className="fixed top-56 left-2 z-5 pointer-events-none"
+            className="fixed top-16 left-0 z-20 pointer-events-none"
             animate={prefersReducedMotion ? {} : {
-              y: [0, 6, 0],
+              y: [0, 4, 0],
             }}
             transition={{
               duration: 5,
@@ -473,20 +473,20 @@ export function WeatherLayer({ scrollProgress, currentChapter }: WeatherLayerPro
           >
             <img
               src="https://harmless-tapir-303.convex.cloud/api/storage/72872462-47f2-418d-9642-403cf2ba11e3"
-              alt="Back Clouds"
+              alt="Top Clouds"
               style={{
-                width: "240px",
-                height: "140px",
-                opacity: 0.3,
-                filter: "drop-shadow(0 2px 8px rgba(0, 0, 0, 0.05))",
+                width: "280px",
+                height: "160px",
+                opacity: 0.6,
+                filter: "drop-shadow(0 2px 8px rgba(0, 0, 0, 0.1))",
               }}
             />
           </motion.div>
-          {/* Front clouds - larger and more visible */}
+          {/* Bottom cloud - below moon */}
           <motion.div
-            className="fixed top-48 left-4 z-10 pointer-events-none"
+            className="fixed top-56 left-2 z-10 pointer-events-none"
             animate={prefersReducedMotion ? {} : {
-              y: [0, 8, 0],
+              y: [0, 6, 0],
             }}
             transition={{
               duration: 4,
@@ -496,12 +496,12 @@ export function WeatherLayer({ scrollProgress, currentChapter }: WeatherLayerPro
           >
             <img
               src="https://harmless-tapir-303.convex.cloud/api/storage/72872462-47f2-418d-9642-403cf2ba11e3"
-              alt="Clouds"
+              alt="Bottom Clouds"
               style={{
-                width: "280px",
-                height: "160px",
-                opacity: 0.6,
-                filter: "drop-shadow(0 2px 8px rgba(0, 0, 0, 0.1))",
+                width: "240px",
+                height: "140px",
+                opacity: 0.3,
+                filter: "drop-shadow(0 2px 8px rgba(0, 0, 0, 0.05))",
               }}
             />
           </motion.div>
