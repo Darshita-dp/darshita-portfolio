@@ -39,14 +39,6 @@ export function WeatherLayer({ scrollProgress, currentChapter }: WeatherLayerPro
     }
   };
 
-  const getCloudOpacity = () => {
-    if (currentChapter <= 2) return 0.8;
-    if (currentChapter <= 4) return 0.5;
-    if (currentChapter === 7) return 0.9;
-    if (currentChapter >= 8) return 0.7;
-    return 0.3;
-  };
-
   const getRainIntensity = () => {
     if (currentChapter !== 7) return 0;
     const chapterProgress = (scrollProgress * 9) - 6;
@@ -60,32 +52,6 @@ export function WeatherLayer({ scrollProgress, currentChapter }: WeatherLayerPro
     return 0;
   };
 
-  // Determine which cloud image to use based on chapter
-  const getCloudImage = () => {
-    if (currentChapter === 0) {
-      return "https://harmless-tapir-303.convex.cloud/api/storage/47929630-859f-4372-ad82-040caa3e2d1a";
-    } else if (currentChapter === 1) {
-      return "https://harmless-tapir-303.convex.cloud/api/storage/ac7f8ab5-863f-4896-bcdd-06a37dd01b2e";
-    }
-    return null;
-  };
-
-  const cloudImage = getCloudImage();
-
-  // Calculate cloud opacity based on scroll progress for fade out effect
-  const getScrollBasedCloudOpacity = (index: number) => {
-    // Clouds visible in chapters 0-1, fade out as we move to chapter 2
-    const chapterProgress = scrollProgress * 9;
-    
-    if (chapterProgress < 1.5) {
-      return 0.4; // Full visibility in chapters 0-1
-    } else if (chapterProgress < 2.5) {
-      // Fade out between chapter 1.5 and 2.5
-      return 0.4 * (1 - ((chapterProgress - 1.5) / 1));
-    }
-    return 0; // Invisible after chapter 2
-  };
-
   return (
     <>
       {/* Sky Background */}
@@ -95,53 +61,6 @@ export function WeatherLayer({ scrollProgress, currentChapter }: WeatherLayerPro
           background: getSkyGradient(),
         }}
       />
-
-      {/* Clouds - only show for chapters 0-2 with scroll-based movement */}
-      {cloudImage && (
-        <motion.div
-          className="fixed inset-0 z-10 pointer-events-none"
-          style={{
-            opacity: getCloudOpacity(),
-          }}
-        >
-          {[...Array(18)].map((_, i) => {
-            const cloudOpacity = getScrollBasedCloudOpacity(i);
-            const chapterProgress = scrollProgress * 9;
-            
-            // Calculate horizontal movement: clouds move from left to right as we scroll
-            // Start position at chapter 0, end position at chapter 2
-            const startX = (i * 5.5) - 10; // Initial spread
-            const moveDistance = 120; // How far clouds travel
-            const xPosition = startX + (chapterProgress / 2) * moveDistance;
-            
-            return (
-              <motion.img
-                key={i}
-                src={cloudImage}
-                alt=""
-                className="absolute"
-                style={{
-                  width: `${80 + Math.random() * 180}px`,
-                  height: `${40 + Math.random() * 90}px`,
-                  left: `${xPosition}%`,
-                  top: `${5 + (i % 5) * 12}%`,
-                  objectFit: "contain",
-                  opacity: cloudOpacity,
-                }}
-                animate={prefersReducedMotion ? {} : {
-                  y: [0, 8 + Math.random() * 6, 0],
-                  scale: [1, 1.02 + Math.random() * 0.03, 1],
-                }}
-                transition={{
-                  duration: 6 + i * 1.2,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-              />
-            );
-          })}
-        </motion.div>
-      )}
 
       {/* Stars (night only) */}
       <motion.div
