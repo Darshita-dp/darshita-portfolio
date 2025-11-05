@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, Compass, MessageSquare, Waves } from "lucide-react";
 import { KNOWLEDGE, type QA } from "@/lib/aiKnowledge";
+import ReactMarkdown from "react-markdown";
 
 // Simple message type
 type Msg = { role: "user" | "ai"; text: string; ts: number };
@@ -405,7 +406,9 @@ function InterviewMe() {
                       : "bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border rounded-tl-sm"
                   }`}
                 >
-                  <div>{m.text}</div>
+                  <div className="prose prose-sm max-w-none dark:prose-invert prose-p:my-1 prose-p:leading-relaxed prose-strong:font-semibold prose-strong:text-slate-900 dark:prose-strong:text-slate-100">
+                    <ReactMarkdown>{m.text}</ReactMarkdown>
+                  </div>
                   <div className="text-[10px] opacity-60 mt-1 text-right flex items-center justify-end gap-1">
                     <span>{fmtTime(m.ts)}</span>
                     {m.role === "user" ? <span className="text-blue-500">✓✓</span> : null}
