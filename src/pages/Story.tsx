@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -60,6 +60,9 @@ export default function Story() {
   const navigate = useNavigate();
   const [scrollProgress, setScrollProgress] = useState(0);
   const [currentChapter, setCurrentChapter] = useState(0);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const lastScrollTime = useRef<number>(0);
+  const scrollTimeout = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     const chapter = Math.floor(scrollProgress * 9);
@@ -69,8 +72,54 @@ export default function Story() {
   useEffect(() => {
     // Create scroll height for vertical scrolling
     document.body.style.height = "900vh";
+    
+    // Initialize audio
+    audioRef.current = new Audio("https://assets.mixkit.co/active_storage/sfx/2018/2018-preview.mp3");
+    audioRef.current.volume = 0.15;
+    
     return () => {
       document.body.style.height = "";
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const now = Date.now();
+      
+      // Play sound if enough time has passed since last play (throttle)
+      if (now - lastScrollTime.current > 150) {
+        if (audioRef.current) {
+          audioRef.current.currentTime = 0;
+          audioRef.current.play().catch(() => {
+            // Ignore autoplay errors
+          });
+        }
+        lastScrollTime.current = now;
+      }
+      
+      // Clear existing timeout
+      if (scrollTimeout.current) {
+        clearTimeout(scrollTimeout.current);
+      }
+      
+      // Set new timeout to fade out sound when scrolling stops
+      scrollTimeout.current = setTimeout(() => {
+        if (audioRef.current) {
+          audioRef.current.pause();
+        }
+      }, 200);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      if (scrollTimeout.current) {
+        clearTimeout(scrollTimeout.current);
+      }
     };
   }, []);
 
