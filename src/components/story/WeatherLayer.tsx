@@ -60,8 +60,6 @@ export function WeatherLayer({ scrollProgress, currentChapter }: WeatherLayerPro
     return 0;
   };
 
-  const parallaxOffset = scrollProgress * 40;
-
   // Determine which cloud image to use based on chapter
   const getCloudImage = () => {
     if (currentChapter === 0) {
@@ -81,9 +79,6 @@ export function WeatherLayer({ scrollProgress, currentChapter }: WeatherLayerPro
         className="fixed inset-0 z-0"
         style={{
           background: getSkyGradient(),
-          transform: `translateX(${-parallaxOffset}vw)`,
-          width: '900vw',
-          left: 0,
         }}
       />
 
@@ -92,9 +87,6 @@ export function WeatherLayer({ scrollProgress, currentChapter }: WeatherLayerPro
         className="fixed inset-0 z-10 pointer-events-none"
         style={{
           opacity: getCloudOpacity(),
-          transform: `translateX(${-parallaxOffset * 0.75}vw)`,
-          width: '900vw',
-          left: 0,
         }}
       >
         {cloudImage ? (
@@ -156,8 +148,6 @@ export function WeatherLayer({ scrollProgress, currentChapter }: WeatherLayerPro
         className="fixed inset-0 z-10 pointer-events-none"
         style={{ 
           opacity: getStarOpacity(),
-          width: '900vw',
-          left: 0,
         }}
       >
         {[...Array(30)].map((_, i) => (
@@ -187,8 +177,6 @@ export function WeatherLayer({ scrollProgress, currentChapter }: WeatherLayerPro
           className="fixed inset-0 z-20 pointer-events-none"
           style={{ 
             opacity: getRainIntensity(),
-            width: '900vw',
-            left: 0,
           }}
         >
           {[...Array(50)].map((_, i) => (
