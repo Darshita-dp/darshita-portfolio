@@ -42,8 +42,8 @@ export function WalkingGirl({ scrollProgress, isRaining }: WalkingGirlProps) {
     >
       <div className="relative w-48 h-48">
         {/* Sparkle particles around the character */}
-        {[...Array(8)].map((_, i) => {
-          const angle = (i * 45) + Math.random() * 20;
+        {[...Array(12)].map((_, i) => {
+          const angle = (i * 30) + Math.random() * 20;
           const distance = 60 + Math.random() * 30;
           return (
             <motion.div
@@ -62,37 +62,49 @@ export function WalkingGirl({ scrollProgress, isRaining }: WalkingGirlProps) {
                 duration: 2 + Math.random() * 0.5,
                 repeat: Infinity,
                 ease: "easeOut",
-                delay: i * 0.25,
+                delay: i * 0.15,
               }}
             />
           );
         })}
 
-        {/* Glitter trail effect */}
-        {[...Array(12)].map((_, i) => (
-          <motion.div
-            key={`glitter-${i}`}
-            className="absolute w-1.5 h-1.5 rounded-full"
-            style={{
-              left: '50%',
-              top: '50%',
-              background: i % 3 === 0 ? '#FFD700' : i % 3 === 1 ? '#FFA500' : '#FFFF00',
-              boxShadow: '0 0 6px currentColor',
-            }}
-            animate={{
-              x: [0, (Math.random() - 0.5) * 80],
-              y: [0, (Math.random() - 0.5) * 80],
-              opacity: [0.8, 0],
-              scale: [1, 0],
-            }}
-            transition={{
-              duration: 1.5 + Math.random() * 0.8,
-              repeat: Infinity,
-              ease: "easeOut",
-              delay: i * 0.15,
-            }}
-          />
-        ))}
+        {/* Enhanced glitter trail effect with silver and larger particles */}
+        {[...Array(24)].map((_, i) => {
+          const isSilver = i % 2 === 0;
+          const size = isSilver ? (2 + Math.random() * 2) : (1.5 + Math.random() * 1);
+          return (
+            <motion.div
+              key={`glitter-${i}`}
+              className="absolute rounded-full"
+              style={{
+                left: '50%',
+                top: '50%',
+                width: `${size}px`,
+                height: `${size}px`,
+                background: isSilver 
+                  ? 'linear-gradient(135deg, #E8E8E8, #C0C0C0, #FFFFFF)' 
+                  : i % 4 === 0 ? '#FFD700' : i % 4 === 1 ? '#FFA500' : i % 4 === 2 ? '#FFFF00' : '#FFE55C',
+                boxShadow: isSilver 
+                  ? '0 0 10px rgba(192, 192, 192, 0.9), 0 0 20px rgba(255, 255, 255, 0.6)' 
+                  : '0 0 6px currentColor',
+              }}
+              animate={{
+                x: [0, (Math.random() - 0.5) * 100],
+                y: [0, (Math.random() - 0.5) * 100],
+                opacity: [0.9, 0],
+                scale: [1, 0],
+                rotate: [0, Math.random() * 360],
+              }}
+              transition={{
+                duration: 1.8 + Math.random() * 1,
+                repeat: Infinity,
+                ease: "easeOut",
+                delay: i * 0.08,
+                repeatDelay: 0,
+              }}
+            />
+          );
+        })}
 
         {/* Witch character flying on broom - flips based on direction */}
         <motion.img
