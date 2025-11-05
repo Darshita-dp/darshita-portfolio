@@ -7,6 +7,7 @@ import { WeatherLayer } from "@/components/story/WeatherLayer";
 import { WalkingGirl } from "@/components/story/WalkingGirl";
 import { ChapterContent } from "@/components/story/ChapterContent";
 import { StoryNavigation } from "@/components/story/StoryNavigation";
+import { motion } from "framer-motion";
 
 const chapters = [
   {
@@ -94,6 +95,9 @@ export default function Story() {
   }, [currentChapter]);
 
   const isRaining = currentChapter === 6;
+  
+  // Show welcome message when at the very beginning
+  const showWelcome = scrollProgress < 0.02;
 
   return (
     <div className="relative">
@@ -110,6 +114,60 @@ export default function Story() {
 
       {/* Weather and Sky */}
       <WeatherLayer scrollProgress={scrollProgress} currentChapter={currentChapter} />
+
+      {/* Welcome Message */}
+      {showWelcome && (
+        <motion.div
+          className="fixed inset-0 z-40 flex items-center justify-center pointer-events-none"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+          transition={{ duration: 0.8 }}
+        >
+          <div className="text-center px-6 max-w-2xl">
+            <motion.h1
+              className="text-4xl md:text-6xl font-bold mb-4"
+              style={{
+                fontFamily: '"Great Vibes", "Gwendolyn", cursive',
+                color: "#1D2340",
+                textShadow: "0 2px 8px rgba(255,255,255,0.9)",
+              }}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+            >
+              Welcome to my story
+            </motion.h1>
+            <motion.p
+              className="text-lg md:text-xl mb-6"
+              style={{
+                fontFamily: 'ui-serif, Georgia, serif',
+                color: "#2C3E50",
+                textShadow: "0 1px 4px rgba(255,255,255,0.9)",
+              }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+            >
+              A journey through clouds, courage, and kindness.
+            </motion.p>
+            <motion.p
+              className="text-base md:text-lg flex items-center justify-center gap-2"
+              style={{
+                fontFamily: 'ui-serif, Georgia, serif',
+                color: "#2C3E50",
+                textShadow: "0 1px 4px rgba(255,255,255,0.9)",
+              }}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.6 }}
+            >
+              <span>🌸</span>
+              <span>Scroll down to walk with me...</span>
+            </motion.p>
+          </div>
+        </motion.div>
+      )}
 
       {/* Walking Girl */}
       <WalkingGirl scrollProgress={scrollProgress} isRaining={isRaining} />
