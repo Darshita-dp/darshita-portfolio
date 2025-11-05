@@ -138,7 +138,7 @@ export function WeatherLayer({ scrollProgress, currentChapter }: WeatherLayerPro
           })}
           {/* Sparkling Sparkles */}
           {[...Array(40)].map((_, i) => {
-            const size = 15 + Math.random() * 25; // 15-40px
+            const size = 8 + Math.random() * 8; // 8-16px (much smaller)
             const opacity = 0.5 + Math.random() * 0.4; // 0.5-0.9
             const startX = Math.random() * 100;
             const duration = 2 + Math.random() * 2; // 2-4s
