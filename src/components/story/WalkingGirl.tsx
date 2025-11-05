@@ -25,6 +25,7 @@ export function WalkingGirl({ scrollProgress, isRaining }: WalkingGirlProps) {
         scaleX: isFlipped ? -1 : 1,
       }}
       transition={{
+        x: { duration: 0.8, ease: "easeInOut" },
         scaleX: { duration: 0.6, ease: "easeInOut" },
       }}
     >
