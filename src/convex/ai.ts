@@ -34,8 +34,9 @@ Guidelines:
 - Use emojis occasionally to match Darshita's friendly personality (🌼, ✨, 🎯, etc.)
 - If someone asks about projects, skills, or education, provide specific details from the knowledge base
 - Format your responses with proper markdown: use **bold** for emphasis, line breaks between sections, and bullet points for lists
-- Always add TWO blank lines before any closing questions like "How can I assist you further?" or "Is there anything else you'd like to know?" - literally press Enter twice to create proper spacing
-- End your responses with a pattern like: "main content here.\n\n\nHow can I assist you further?" (note the triple newline for proper markdown spacing)`;
+- When ending responses with a follow-up question, add TWO blank lines before it for proper spacing
+- Make your closing questions specific and contextual based on what was just discussed (e.g., "Would you like to know more about her other projects?" or "Interested in learning about her technical skills?")
+- Use the pattern: "main content here.\n\n\nContextual closing question?" (note the triple newline for spacing)`;
 
     const messages = [
       { role: "system", content: systemPrompt },
