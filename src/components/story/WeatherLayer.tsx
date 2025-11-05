@@ -199,8 +199,8 @@ export function WeatherLayer({ scrollProgress, currentChapter }: WeatherLayerPro
       phase: number;
     }> = [];
 
-    // Create 14 cloud elements (increased from 8)
-    const cloudCount = 14;
+    // Create 22 cloud elements (14 + 8 more with extra transparency and less movement)
+    const cloudCount = 22;
     for (let i = 0; i < cloudCount; i++) {
       const img = document.createElement("img");
       img.src = "https://harmless-tapir-303.convex.cloud/api/storage/6ee126fd-20b5-4592-a489-0d46bf521544";
@@ -209,7 +209,8 @@ export function WeatherLayer({ scrollProgress, currentChapter }: WeatherLayerPro
       img.style.pointerEvents = "none";
       
       const size = 60 + Math.random() * 120; // 60-180px for varied sizes
-      const opacity = 0.2 + Math.random() * 0.2; // 0.2-0.4 (more transparent)
+      // Extra 8 clouds have more transparency (0.15-0.3) vs original (0.2-0.4)
+      const opacity = i < 14 ? (0.2 + Math.random() * 0.2) : (0.15 + Math.random() * 0.15);
       img.style.width = `${size}px`;
       img.style.height = "auto";
       img.style.opacity = String(opacity);
@@ -220,8 +221,8 @@ export function WeatherLayer({ scrollProgress, currentChapter }: WeatherLayerPro
         el: img,
         x: Math.random() * 100, // vw
         baseY: Math.random() * 12, // top 12% of screen only (moved higher)
-        speed: 5 + Math.random() * 10, // slow horizontal drift
-        amp: 3 + Math.random() * 5, // reduced vertical float amplitude
+        speed: i < 14 ? (5 + Math.random() * 10) : (2 + Math.random() * 4), // extra clouds move slower
+        amp: i < 14 ? (3 + Math.random() * 5) : (1 + Math.random() * 2), // extra clouds have less vertical movement
         freq: 0.3 + Math.random() * 0.4,
         phase: Math.random() * Math.PI * 2,
       });
