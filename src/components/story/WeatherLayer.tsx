@@ -404,6 +404,44 @@ export function WeatherLayer({ scrollProgress, currentChapter }: WeatherLayerPro
           ))}
         </motion.div>
       )}
+
+      {/* Lightning Effects for Rain */}
+      {currentChapter === 3 && (
+        <motion.div
+          className="fixed inset-0 z-20 pointer-events-none"
+          animate={{
+            opacity: [0, 0, 0, 0.7, 0.9, 0, 0, 0, 0],
+          }}
+          transition={{
+            duration: 4,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: Math.random() * 2,
+          }}
+          style={{
+            background: "radial-gradient(ellipse at center, rgba(255,255,255,0.8), rgba(200,220,255,0.4) 40%, transparent 70%)",
+          }}
+        />
+      )}
+
+      {/* Secondary Lightning Flash */}
+      {currentChapter === 3 && (
+        <motion.div
+          className="fixed inset-0 z-20 pointer-events-none"
+          animate={{
+            opacity: [0, 0, 0, 0, 0.5, 0.8, 0, 0, 0],
+          }}
+          transition={{
+            duration: 5,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: Math.random() * 3 + 1,
+          }}
+          style={{
+            background: "radial-gradient(ellipse at center, rgba(220,240,255,0.6), rgba(150,180,255,0.3) 50%, transparent 75%)",
+          }}
+        />
+      )}
     </>
   );
 }
