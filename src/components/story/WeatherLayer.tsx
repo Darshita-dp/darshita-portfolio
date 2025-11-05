@@ -136,6 +136,42 @@ export function WeatherLayer({ scrollProgress, currentChapter }: WeatherLayerPro
               />
             );
           })}
+          {/* Sparkling Sparkles */}
+          {[...Array(40)].map((_, i) => {
+            const size = 15 + Math.random() * 25; // 15-40px
+            const opacity = 0.5 + Math.random() * 0.4; // 0.5-0.9
+            const startX = Math.random() * 100;
+            const startY = Math.random() * 50; // Start from top half
+            const duration = 2 + Math.random() * 2; // 2-4s
+            const delay = Math.random() * 3;
+            
+            return (
+              <motion.img
+                key={`sparkle-${i}`}
+                src="https://harmless-tapir-303.convex.cloud/api/storage/97621a6b-9260-4899-a3c2-8af8d2d6ea49"
+                alt=""
+                className="absolute"
+                style={{
+                  width: `${size}px`,
+                  height: `${size}px`,
+                  left: `${startX}%`,
+                  top: `${startY}%`,
+                  opacity: opacity,
+                }}
+                animate={prefersReducedMotion ? {} : {
+                  opacity: [opacity, opacity * 0.3, opacity],
+                  scale: [1, 1.3, 1],
+                  rotate: [0, 180, 360],
+                }}
+                transition={{
+                  duration: duration,
+                  repeat: Infinity,
+                  ease: 'easeInOut',
+                  delay: delay,
+                }}
+              />
+            );
+          })}
         </motion.div>
       )}
 
