@@ -219,7 +219,7 @@ export function WeatherLayer({ scrollProgress, currentChapter }: WeatherLayerPro
 
       clouds.push({
         el: img,
-        x: Math.random() * 100, // vw
+        x: -20 + (i / cloudCount) * 140 + Math.random() * 20, // distribute evenly across full width with slight randomness
         baseY: Math.random() * 12, // top 12% of screen only (moved higher)
         speed: i < 14 ? (5 + Math.random() * 10) : (2 + Math.random() * 4), // extra clouds move slower
         amp: i < 14 ? (3 + Math.random() * 5) : (1 + Math.random() * 2), // extra clouds have less vertical movement
