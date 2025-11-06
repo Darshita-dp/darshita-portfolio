@@ -109,6 +109,7 @@ export function WeatherLayer({ scrollProgress, currentChapter }: WeatherLayerPro
   // Falling flowers for chapters 1 and 2
   const showFlowers = currentChapter === 0 || currentChapter === 1;
   const showClouds = currentChapter === 2 || currentChapter === 3;
+  const showRainbow = currentChapter === 8; // Last slide
 
   // Continuous flower animation using RAF
   useEffect(() => {
@@ -561,6 +562,37 @@ export function WeatherLayer({ scrollProgress, currentChapter }: WeatherLayerPro
           background: getSkyGradient(),
         }}
       />
+
+      {/* Rainbow (Last Slide - Chapter 9) */}
+      {showRainbow && (
+        <motion.div
+          className="fixed bottom-0 left-0 z-20 pointer-events-none"
+          style={{
+            width: "150%",
+            height: "150%",
+          }}
+          animate={{
+            opacity: [0, 1, 1, 0],
+          }}
+          transition={{
+            duration: 6,
+            repeat: Infinity,
+            ease: "easeInOut",
+            times: [0, 0.2, 0.8, 1],
+          }}
+        >
+          <img
+            src="https://harmless-tapir-303.convex.cloud/api/storage/5df4ebed-57e3-4afd-b77d-505f94c00133"
+            alt="Rainbow"
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              objectPosition: "bottom left",
+            }}
+          />
+        </motion.div>
+      )}
 
       {/* Blinking Stars (Chapter 5 - Circle of Friendship) */}
       {currentChapter === 5 && <BlinkingStars />}
