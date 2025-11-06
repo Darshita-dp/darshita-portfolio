@@ -357,7 +357,7 @@ function InterviewMe() {
   };
 
   return (
-    <div className="h-screen bg-[#D4E8E4] dark:bg-slate-900 relative overflow-hidden flex flex-col pb-20">
+    <div className="h-screen bg-[#D4E8E4] dark:bg-slate-900 relative overflow-hidden flex flex-col">
       {/* Animated grass background */}
       {grassBackground}
 
@@ -366,7 +366,7 @@ function InterviewMe() {
       >
         <Card className="flex flex-col overflow-hidden border-0 shadow-lg w-full">
           {/* WhatsApp-style Header */}
-          <div className="bg-[#0B6A5B] text-white px-4 py-3 flex items-center gap-3 h-14 flex-shrink-0">
+          <div className="bg-[#0B6A5B] text-white px-4 py-3 flex items-center gap-3 h-12 flex-shrink-0">
             <img 
               src="https://harmless-tapir-303.convex.cloud/api/storage/fbbcab3e-d3b1-4639-99b4-311c5e1ab7ca" 
               alt="Darshita" 
@@ -382,7 +382,7 @@ function InterviewMe() {
           </div>
 
           {/* Chat area */}
-          <div className="bg-[#EFE7DD]/60 dark:bg-slate-950/60 flex-1 overflow-y-auto p-3 min-h-[170px] max-h-[calc(100vh-280px)]">
+          <div className="bg-[#EFE7DD]/60 dark:bg-slate-950/60 flex-1 overflow-y-auto p-3 min-h-[100px]">
             {messages.map((m, idx) => (
               <div key={idx} className={`flex mb-2 ${m.role === "user" ? "justify-end" : "justify-start"}`}>
                 {m.role === "ai" && (
@@ -663,7 +663,7 @@ export default function AiPage() {
         {tab === "guide" && <GuideMe />}
       </main>
 
-      <footer className="bg-[#0B6A5B] text-white px-4 py-3 text-center text-xs">
+      <footer className="bg-[#0B6A5B] text-white px-4 py-2 text-center text-xs flex-shrink-0">
         When I can't answer something precisely, I'll point you to my{" "}
         <a 
           href="/classic#projects" 
