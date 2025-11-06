@@ -22,7 +22,7 @@ function FallingShootingStar() {
       initial={{ x: "10vw", y: "-100px", opacity: 0 }}
       animate={{ x: "40vw", y: "100vh", opacity: [0, 0.7, 0.7, 0] }}
       transition={{
-        duration: 4,
+        duration: 2.2,
         repeat: Infinity,
         repeatDelay: 5,
         ease: "easeIn",
@@ -68,6 +68,34 @@ function FallingShootingStar() {
           }}
         />
       </motion.div>
+      {/* Sparkle particles around star */}
+      {[...Array(8)].map((_, i) => (
+        <motion.div
+          key={`sparkle-${i}`}
+          style={{
+            position: "absolute",
+            width: "6px",
+            height: "6px",
+            background: "radial-gradient(circle, rgba(255, 224, 123, 0.9), rgba(255, 201, 74, 0.4))",
+            borderRadius: "50%",
+            left: "50%",
+            top: "50%",
+            filter: "drop-shadow(0 0 4px rgba(255, 224, 123, 0.8))",
+          }}
+          animate={{
+            x: [0, Math.cos((i * Math.PI * 2) / 8) * 30],
+            y: [0, Math.sin((i * Math.PI * 2) / 8) * 30],
+            opacity: [1, 0],
+            scale: [1, 0.3],
+          }}
+          transition={{
+            duration: 0.8,
+            repeat: Infinity,
+            delay: (i * 0.1),
+            ease: "easeOut",
+          }}
+        />
+      ))}
     </motion.div>
   );
 }
