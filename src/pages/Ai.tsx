@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, Compass, MessageSquare, Waves } from "lucide-react";
 import { KNOWLEDGE, type QA } from "@/lib/aiKnowledge";
 import ReactMarkdown from "react-markdown";
+import { ChatInput } from "@/components/ai/ChatInput";
 
 // Simple message type
 type Msg = { role: "user" | "ai"; text: string; ts: number };
@@ -440,43 +441,12 @@ function InterviewMe() {
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Input bar with WhatsApp-style send button */}
-          <div className="bg-[#F0F0F0] dark:bg-slate-900 p-2 flex items-center gap-2 border-t flex-shrink-0 sticky bottom-0">
-            <Input
-              ref={inputRef}
-              placeholder="Type your question before my code daydreams again..."
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" && !e.shiftKey) {
-                  e.preventDefault();
-                  onSend();
-                }
-              }}
-              disabled={isTyping}
-              className="bg-white dark:bg-slate-800 flex-1"
-            />
-            <button
-              type="button"
-              onClick={onSend}
-              disabled={isTyping}
-              aria-label="Send"
-              className="h-12 w-12 shrink-0 grid place-items-center rounded-full bg-[#128C7E] text-white hover:bg-[#90EE90] active:scale-95 transition shadow focus:outline-none focus:ring-2 focus:ring-[rgba(18,140,126,.35)] disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              <svg 
-                className="-rotate-6 h-5 w-5" 
-                viewBox="0 0 24 24" 
-                fill="none" 
-                stroke="currentColor" 
-                strokeWidth="2.2"
-                strokeLinecap="round" 
-                strokeLinejoin="round"
-              >
-                <path d="M22 2L11 13"></path>
-                <path d="M22 2l-7 20-4-9-9-4 20-7z"></path>
-              </svg>
-            </button>
-          </div>
+          <ChatInput
+            input={input}
+            isTyping={isTyping}
+            onInputChange={setInput}
+            onSend={onSend}
+          />
         </Card>
       </div>
     </div>
