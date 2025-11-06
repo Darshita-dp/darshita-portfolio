@@ -1356,7 +1356,7 @@ export default function Landing() {
           initial={{ opacity: 0, y: -24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="text-center mb-6 md:mb-10 relative"
+          className="text-center mb-6 md:mb-10 relative mt-8 md:mt-12"
         >
           <h1
             className="tracking-tight text-5xl sm:text-6xl md:text-8xl"
