@@ -10,7 +10,7 @@ interface MemoryGameCardsProps {
 
 export function MemoryGameCards({ cards, onCardClick, isLocked }: MemoryGameCardsProps) {
   return (
-    <div className="grid grid-cols-5 gap-1.5 sm:gap-2 md:gap-3 md:grid-cols-5 max-w-[95%] sm:max-w-3xl mx-auto w-full auto-rows-max">
+    <div className="grid grid-cols-2 sm:grid-cols-5 gap-1.5 sm:gap-2 md:gap-3 max-w-[95%] sm:max-w-3xl mx-auto w-full auto-rows-max">
       {cards.map((card) => (
         <motion.div
           key={card.id}
