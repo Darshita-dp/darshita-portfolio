@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BYTE_BUBBLES_THEME } from "@/lib/byteBubblesData";
+import { MEMORY_CONFIG, GameCard } from "./memory/MemoryGameConfig";
+import { MemoryGameCards } from "./memory/MemoryGameCards";
+import { MemoryGameModals } from "./memory/MemoryGameModals";
 
 interface EducationMemoryProps {
   levelId: number;
@@ -10,47 +12,6 @@ interface EducationMemoryProps {
   onComplete: (factsCollected: string[]) => void;
   onBack: () => void;
 }
-
-interface GameCard {
-  id: number;
-  value: string;
-  display: string;
-  isFlipped: boolean;
-  isMatched: boolean;
-}
-
-const CARD_PAIRS = [
-  { value: "html", display: "HTML", pair: "webdev" },
-  { value: "webdev", display: "Web Development", pair: "html" },
-  { value: "sql", display: "SQL", pair: "database" },
-  { value: "database", display: "Database", pair: "sql" },
-  { value: "python", display: "Python", pair: "dataanalysis" },
-  { value: "dataanalysis", display: "Data Analysis", pair: "python" },
-  { value: "powerbi", display: "Power BI", pair: "visualization" },
-  { value: "visualization", display: "Visualization", pair: "powerbi" },
-  { value: "agile", display: "Agile", pair: "projectmgmt" },
-  { value: "projectmgmt", display: "Project Management", pair: "agile" },
-];
-
-const CORRECT_MESSAGES = [
-  "🧩 Skill Synced!\nKnowledge Node Connected.",
-  "⚡ Data Flow Stabilized.",
-  "📊 Skill Matrix Updated.",
-  "💻 Module Linked Successfully.",
-];
-
-const WRONG_MESSAGES = [
-  "❗ Desync Detected\nTry another pair, Player.",
-  "Connection Lost – Recalibrating…",
-  "Mismatch! Reattempt Required.",
-];
-
-const ENCOURAGEMENTS = [
-  "Processing like a pro, Player.",
-  "XP pathways glowing bright!",
-  "Neural data flow stable. Keep matching.",
-  "Halfway synced — knowledge circuits aligned!",
-];
 
 export function EducationMemory({ levelId, facts, onComplete, onBack }: EducationMemoryProps) {
   const [cards, setCards] = useState<GameCard[]>([]);
@@ -67,14 +28,20 @@ export function EducationMemory({ levelId, facts, onComplete, onBack }: Educatio
   const [transitionStep, setTransitionStep] = useState(0);
 
   const playClickSound = () => {
-    const audio = new Audio("https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3");
-    audio.volume = 0.4;
-    audio.play().catch(err => console.log("Sound play failed:", err));
+    try {
+      const audio = new Audio(MEMORY_CONFIG.CLICK_SOUND_URL);
+      audio.volume = MEMORY_CONFIG.CLICK_SOUND_VOLUME;
+      void audio.play().catch(() => {
+        // noop: ignore playback errors
+      });
+    } catch {
+      // noop
+    }
   };
 
   // Initialize and shuffle cards
   useEffect(() => {
-    const shuffled = [...CARD_PAIRS]
+    const shuffled = [...MEMORY_CONFIG.CARD_PAIRS]
       .sort(() => Math.random() - 0.5)
       .map((card, index) => ({
         id: index,
@@ -89,80 +56,99 @@ export function EducationMemory({ levelId, facts, onComplete, onBack }: Educatio
   // Show encouragement at halfway point
   useEffect(() => {
     if (matchedPairs === 2 || matchedPairs === 3) {
-      const randomEncouragement = ENCOURAGEMENTS[Math.floor(Math.random() * ENCOURAGEMENTS.length)];
+      const randomEncouragement = 
+        MEMORY_CONFIG.ENCOURAGEMENTS[
+          Math.floor(Math.random() * MEMORY_CONFIG.ENCOURAGEMENTS.length)
+        ];
       setEncouragementText(randomEncouragement);
       setShowEncouragement(true);
-      setTimeout(() => setShowEncouragement(false), 2500);
+      setTimeout(() => setShowEncouragement(false), MEMORY_CONFIG.ENCOURAGEMENT_DELAY);
     }
   }, [matchedPairs]);
 
   // Handle card click
   const handleCardClick = (cardId: number) => {
     if (isLocked || isPaused || showComplete) return;
-    
+
     playClickSound();
-    
-    const card = cards.find(c => c.id === cardId);
+
+    const card = cards.find((c) => c.id === cardId);
     if (!card || card.isMatched) return;
-    
+
     // If card is already flipped, unflip it
     if (card.isFlipped) {
-      const newCards = cards.map(c => 
+      const newCards = cards.map((c) => 
         c.id === cardId ? { ...c, isFlipped: false } : c
       );
       setCards(newCards);
-      setFlippedCards(prev => prev.filter(id => id !== cardId));
+      setFlippedCards((prev) => prev.filter((id) => id !== cardId));
       return;
     }
-    
+
     // Flip the card
-    const newCards = cards.map(c => 
+    const newCards = cards.map((c) => 
       c.id === cardId ? { ...c, isFlipped: true } : c
     );
     setCards(newCards);
-    
+
     const newFlipped = [...flippedCards, cardId];
     setFlippedCards(newFlipped);
-    
+
     // Check for match when 2 cards are flipped
     if (newFlipped.length === 2) {
       setIsLocked(true);
       const [firstId, secondId] = newFlipped;
-      const firstCard = newCards.find(c => c.id === firstId);
-      const secondCard = newCards.find(c => c.id === secondId);
-      
+      const firstCard = newCards.find((c) => c.id === firstId);
+      const secondCard = newCards.find((c) => c.id === secondId);
+
       if (firstCard && secondCard) {
-        const firstPair = CARD_PAIRS.find(p => p.value === firstCard.value);
+        const firstPair = MEMORY_CONFIG.CARD_PAIRS.find(
+          (p) => p.value === firstCard.value
+        );
         const isMatch = firstPair?.pair === secondCard.value;
-        
+
         if (isMatch) {
           // Correct match
-          const randomMessage = CORRECT_MESSAGES[Math.floor(Math.random() * CORRECT_MESSAGES.length)];
+          const randomMessage = 
+            MEMORY_CONFIG.CORRECT_MESSAGES[
+              Math.floor(Math.random() * MEMORY_CONFIG.CORRECT_MESSAGES.length)
+            ];
           setFeedbackMessage(randomMessage);
-          
+
           setTimeout(() => {
-            setCards(prev => prev.map(c => 
-              c.id === firstId || c.id === secondId ? { ...c, isMatched: true } : c
-            ));
-            setMatchedPairs(prev => prev + 1);
-            setXp(prev => prev + 30);
+            setCards((prev) => 
+              prev.map((c) => 
+                c.id === firstId || c.id === secondId 
+                  ? { ...c, isMatched: true } 
+                  : c
+              )
+            );
+            setMatchedPairs((prev) => prev + 1);
+            setXp((prev) => prev + MEMORY_CONFIG.XP_PER_MATCH);
             setFlippedCards([]);
             setIsLocked(false);
             setFeedbackMessage(null);
-          }, 1200);
+          }, MEMORY_CONFIG.MATCH_DELAY);
         } else {
           // Wrong match
-          const randomMessage = WRONG_MESSAGES[Math.floor(Math.random() * WRONG_MESSAGES.length)];
+          const randomMessage = 
+            MEMORY_CONFIG.WRONG_MESSAGES[
+              Math.floor(Math.random() * MEMORY_CONFIG.WRONG_MESSAGES.length)
+            ];
           setFeedbackMessage(randomMessage);
-          
+
           setTimeout(() => {
-            setCards(prev => prev.map(c => 
-              c.id === firstId || c.id === secondId ? { ...c, isFlipped: false } : c
-            ));
+            setCards((prev) => 
+              prev.map((c) => 
+                c.id === firstId || c.id === secondId 
+                  ? { ...c, isFlipped: false } 
+                  : c
+              )
+            );
             setFlippedCards([]);
             setIsLocked(false);
             setFeedbackMessage(null);
-          }, 1500);
+          }, MEMORY_CONFIG.WRONG_DELAY);
         }
       }
     }
@@ -170,21 +156,13 @@ export function EducationMemory({ levelId, facts, onComplete, onBack }: Educatio
 
   // Handle completion
   useEffect(() => {
-    if (matchedPairs === 5 && !showComplete) {
+    if (matchedPairs === MEMORY_CONFIG.TOTAL_PAIRS && !showComplete) {
       setIsLocked(true);
       setShowTransition(true);
-      
-      // Transition sequence
-      const steps = [
-        "Uploading Education File…",
-        "Verifying academic credentials... ✅",
-        "Decrypting skill upgrades... ⚙️",
-        "Generating Level Report…"
-      ];
-      
+
       let currentStep = 0;
       const interval = setInterval(() => {
-        if (currentStep < steps.length) {
+        if (currentStep < MEMORY_CONFIG.TRANSITION_MESSAGES.length) {
           setTransitionStep(currentStep);
           currentStep++;
         } else {
@@ -194,18 +172,11 @@ export function EducationMemory({ levelId, facts, onComplete, onBack }: Educatio
             setShowComplete(true);
           }, 800);
         }
-      }, 1200);
-      
+      }, MEMORY_CONFIG.TRANSITION_DELAY);
+
       return () => clearInterval(interval);
     }
   }, [matchedPairs, showComplete]);
-
-  const transitionMessages = [
-    "Uploading Education File…",
-    "Verifying academic credentials... ✅",
-    "Decrypting skill upgrades... ⚙️",
-    "Generating Level Report…"
-  ];
 
   return (
     <motion.div
@@ -227,9 +198,9 @@ export function EducationMemory({ levelId, facts, onComplete, onBack }: Educatio
         }}
         className="w-[90vw] h-[80vh] max-w-5xl max-h-[700px] flex flex-col rounded-3xl overflow-hidden"
         style={{
-          backgroundImage: `url('https://harmless-tapir-303.convex.cloud/api/storage/1a671974-29ce-4d1d-bd92-640e3bce7ed6')`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
+          backgroundImage: `url('${MEMORY_CONFIG.GAME_BG_IMAGE}')`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
           border: `3px solid ${BYTE_BUBBLES_THEME.accent}`,
           boxShadow: `0 0 30px ${BYTE_BUBBLES_THEME.accent}80, 0 8px 32px rgba(0,0,0,0.3)`,
         }}
@@ -254,7 +225,7 @@ export function EducationMemory({ levelId, facts, onComplete, onBack }: Educatio
                 fontSize: '1.1rem',
               }}
             >
-              Skill Sync Progress ⭐ {matchedPairs} / 5
+              Skill Sync Progress ⭐ {matchedPairs} / {MEMORY_CONFIG.TOTAL_PAIRS}
             </span>
           </div>
           <Button variant="ghost" size="sm" onClick={() => setIsPaused(!isPaused)}>
@@ -264,8 +235,8 @@ export function EducationMemory({ levelId, facts, onComplete, onBack }: Educatio
 
         {/* Game Area */}
         <div className="flex-1 relative p-2 md:p-4 overflow-hidden flex items-center justify-center">
-          {/* Floating bubbles background effect */}
-          {Array.from({ length: 15 }).map((_, i) => (
+          {/* Floating bubbles background effect - reduced for mobile */}
+          {Array.from({ length: 8 }).map((_, i) => (
             <motion.div
               key={`bubble-${i}`}
               className="absolute rounded-full pointer-events-none"
@@ -290,94 +261,11 @@ export function EducationMemory({ levelId, facts, onComplete, onBack }: Educatio
           ))}
 
           {/* Card Grid */}
-          <div className="grid grid-cols-5 gap-1.5 sm:gap-2 md:gap-3 max-w-[95%] sm:max-w-3xl mx-auto w-full">
-            {cards.map((card) => (
-                <motion.div
-                key={card.id}
-                className="aspect-[3/4] cursor-pointer w-full"
-                style={{ perspective: '800px' }}
-                onClick={() => handleCardClick(card.id)}
-                whileHover={!card.isFlipped && !card.isMatched ? { scale: 1.02 } : {}}
-                whileTap={{ scale: 0.98 }}
-              >
-                <motion.div
-                  className="w-full h-full relative"
-                  style={{ transformStyle: 'preserve-3d' }}
-                  animate={{ rotateY: card.isFlipped || card.isMatched ? 180 : 0 }}
-                  transition={{ duration: 0.6, ease: 'easeInOut' }}
-                >
-                  {/* Card Back */}
-                  <div
-                    className="absolute inset-0 rounded-md md:rounded-lg flex items-center justify-center"
-                    style={{
-                      backfaceVisibility: 'hidden',
-                      backgroundImage: `url('https://harmless-tapir-303.convex.cloud/api/storage/9835dd29-1c38-4215-ac90-4276110dc314')`,
-                      backgroundSize: 'cover',
-                      backgroundPosition: 'center',
-                      border: `2px solid ${BYTE_BUBBLES_THEME.accent}`,
-                      boxShadow: '0 3px 10px rgba(0,0,0,0.15)',
-                    }}
-                  />
-                  
-                  {/* Card Front */}
-                  <div
-                    className="absolute inset-0 rounded-md md:rounded-lg flex flex-col items-center justify-end p-1 sm:p-1.5"
-                    style={{
-                      backfaceVisibility: 'hidden',
-                      transform: 'rotateY(180deg)',
-                      background: (card.value === 'html' || card.value === 'webdev')
-                        ? `url('https://harmless-tapir-303.convex.cloud/api/storage/1eb3fc27-d593-4c37-92bd-2cd7b3a6ecfc')`
-                        : (card.value === 'sql' || card.value === 'database')
-                        ? `url('https://harmless-tapir-303.convex.cloud/api/storage/a04d42f1-00e1-486b-8232-28954a6e86f0')`
-                        : (card.value === 'python' || card.value === 'dataanalysis')
-                        ? `url('https://harmless-tapir-303.convex.cloud/api/storage/8068e115-c02d-43dd-9ac1-09cf93ed9a6d')`
-                        : (card.value === 'powerbi' || card.value === 'visualization')
-                        ? `url('https://harmless-tapir-303.convex.cloud/api/storage/ede9107b-55a3-4ed1-ab07-e7b2994c987d')`
-                        : (card.value === 'agile' || card.value === 'projectmgmt')
-                        ? `url('https://harmless-tapir-303.convex.cloud/api/storage/1e878333-42a1-4456-8515-faf38f2b8bb1')`
-                        : `linear-gradient(135deg, ${BYTE_BUBBLES_THEME.bgStart} 0%, ${BYTE_BUBBLES_THEME.bgMid} 100%)`,
-                      backgroundSize: 'cover',
-                      backgroundPosition: 'center',
-                      border: card.isMatched ? `2.5px solid ${BYTE_BUBBLES_THEME.seafoam}` : `2px solid ${BYTE_BUBBLES_THEME.accent}`,
-                      boxShadow: card.isMatched 
-                        ? `0 0 16px ${BYTE_BUBBLES_THEME.seafoam}80, 0 3px 10px rgba(0,0,0,0.2)`
-                        : '0 3px 10px rgba(0,0,0,0.15)',
-                    }}
-                  >
-                    {(card.value === 'html' || card.value === 'webdev' || card.value === 'sql' || card.value === 'database' || card.value === 'python' || card.value === 'dataanalysis' || card.value === 'powerbi' || card.value === 'visualization' || card.value === 'agile' || card.value === 'projectmgmt') ? (
-                      <div
-                        className="w-full px-0.5 sm:px-1 py-0.5 sm:py-1 rounded"
-                        style={{
-                          background: 'rgba(0,0,0,0.75)',
-                        }}
-                      >
-                        <span
-                          className="text-center text-[8px] sm:text-[10px] md:text-xs font-bold leading-tight block"
-                          style={{
-                            fontFamily: "'Nunito', sans-serif",
-                            color: '#FFD700',
-                            textShadow: '0 1px 3px rgba(0,0,0,0.8)',
-                          }}
-                        >
-                          {card.display}
-                        </span>
-                      </div>
-                    ) : (
-                      <span
-                        className="text-center text-[8px] sm:text-[10px] md:text-xs font-semibold leading-tight"
-                        style={{
-                          fontFamily: "'Nunito', sans-serif",
-                          color: BYTE_BUBBLES_THEME.text,
-                        }}
-                      >
-                        {card.display}
-                      </span>
-                    )}
-                  </div>
-                </motion.div>
-              </motion.div>
-            ))}
-          </div>
+          <MemoryGameCards
+            cards={cards}
+            onCardClick={handleCardClick}
+            isLocked={isLocked}
+          />
 
           {/* Feedback Message */}
           <AnimatePresence>
@@ -410,7 +298,7 @@ export function EducationMemory({ levelId, facts, onComplete, onBack }: Educatio
                       transition={{ duration: 1, delay: 0.3 }}
                       style={{ color: BYTE_BUBBLES_THEME.star }}
                     >
-                      +30 XP
+                      +{MEMORY_CONFIG.XP_PER_MATCH} XP
                     </motion.div>
                   )}
                 </div>
@@ -442,239 +330,18 @@ export function EducationMemory({ levelId, facts, onComplete, onBack }: Educatio
           </AnimatePresence>
         </div>
 
-        {/* Pause Menu */}
-        <AnimatePresence>
-          {isPaused && (
-            <motion.div
-              className="absolute inset-0 z-30 flex items-center justify-center bg-black/60 backdrop-blur-md"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-            >
-              <motion.div
-                initial={{ scale: 0.8, y: 20 }}
-                animate={{ scale: 1, y: 0 }}
-                exit={{ scale: 0.8, y: 20 }}
-              >
-                <Card className="max-w-md mx-4">
-                  <CardHeader>
-                    <CardTitle
-                      className="text-center text-xl"
-                      style={{ fontFamily: "'Orbitron', sans-serif" }}
-                    >
-                      Training Sequence Paused
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="text-center space-y-4">
-                    <p style={{ fontFamily: "'Nunito', sans-serif" }}>
-                      Take a breather, Player. Resume when your data stream's stable.
-                    </p>
-                    <div className="flex gap-3 justify-center">
-                      <Button onClick={() => { playClickSound(); setIsPaused(false); }}>Resume Training</Button>
-                      <Button variant="outline" onClick={() => { playClickSound(); onBack(); }}>Exit to Map</Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* Transition Sequence */}
-        <AnimatePresence>
-          {showTransition && (
-            <motion.div
-              className="absolute inset-0 z-40 flex flex-col items-center justify-center bg-black/70 backdrop-blur-lg"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-            >
-              <motion.div
-                className="text-center space-y-6"
-                initial={{ scale: 0.8 }}
-                animate={{ scale: 1 }}
-              >
-                <motion.div
-                  className="text-3xl md:text-4xl font-bold mb-8"
-                  style={{
-                    fontFamily: "'Orbitron', sans-serif",
-                    color: BYTE_BUBBLES_THEME.star,
-                    textShadow: `0 0 20px ${BYTE_BUBBLES_THEME.star}80`,
-                  }}
-                >
-                  💡 DATA CUBE ASSEMBLED
-                </motion.div>
-                <div className="text-xl" style={{ color: BYTE_BUBBLES_THEME.seafoam }}>
-                  Training Sequence Complete.
-                </div>
-                <div className="space-y-3 mt-8">
-                  {transitionMessages.slice(0, transitionStep + 1).map((msg, i) => (
-                    <motion.div
-                      key={i}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: i * 0.3 }}
-                      className="text-lg"
-                      style={{
-                        fontFamily: "'Nunito', sans-serif",
-                        color: '#fff',
-                      }}
-                    >
-                      {msg}
-                    </motion.div>
-                  ))}
-                </div>
-              </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* Victory Card */}
-        <AnimatePresence>
-          {showComplete && (
-            <motion.div
-              className="absolute inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4 overflow-y-auto"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-            >
-              <motion.div
-                initial={{ scale: 0.8, y: 20 }}
-                animate={{ scale: 1, y: 0 }}
-                exit={{ scale: 0.8, y: 20 }}
-                className="w-full max-w-3xl my-8"
-              >
-                <Card
-                  className="overflow-hidden"
-                  style={{
-                    background: `linear-gradient(135deg, ${BYTE_BUBBLES_THEME.bubble}98 0%, ${BYTE_BUBBLES_THEME.seafoam}95 100%)`,
-                    border: `3px solid ${BYTE_BUBBLES_THEME.accent}`,
-                    boxShadow: `0 0 40px ${BYTE_BUBBLES_THEME.accent}`,
-                  }}
-                >
-                  <CardHeader className="text-center border-b pb-4">
-                    <CardTitle
-                      className="text-2xl md:text-3xl"
-                      style={{
-                        fontFamily: "'Orbitron', sans-serif",
-                        color: BYTE_BUBBLES_THEME.text,
-                      }}
-                    >
-                      EDUCATION FILE: VERIFIED ✅
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-6 pt-6 max-h-[60vh] overflow-y-auto">
-                    {/* Level-Up Path */}
-                    <div>
-                      <h3
-                        className="text-lg font-bold mb-2"
-                        style={{ fontFamily: "'Nunito', sans-serif", color: BYTE_BUBBLES_THEME.text }}
-                      >
-                        Level-Up Path:
-                      </h3>
-                      <div className="space-y-1 text-sm">
-                        <p>Master's in Information Systems – Illinois State University</p>
-                        <p>📘 GPA: 4.0 — MAX RANK</p>
-                      </div>
-                    </div>
-
-                    {/* Core Modules */}
-                    <div>
-                      <h3
-                        className="text-lg font-bold mb-2"
-                        style={{ fontFamily: "'Nunito', sans-serif", color: BYTE_BUBBLES_THEME.text }}
-                      >
-                        Core Modules Unlocked:
-                      </h3>
-                      <div className="space-y-1 text-sm">
-                        <p>📊 Data Analysis | Data Visualization | Business Analytics</p>
-                        <p>⚙️ Web Development Technologies | Systems Analysis & Design</p>
-                        <p>🗂️ IT Project Management | Advanced System Design</p>
-                      </div>
-                    </div>
-
-                    {/* Skill Upgrades */}
-                    <div>
-                      <h3
-                        className="text-lg font-bold mb-3"
-                        style={{ fontFamily: "'Nunito', sans-serif", color: BYTE_BUBBLES_THEME.text }}
-                      >
-                        Skill Upgrades:
-                      </h3>
-                      <div className="space-y-3 text-sm">
-                        <div>
-                          <p className="font-semibold">🧮 Data Engineering & Databases:</p>
-                          <p className="ml-4">- ETL Pipelines</p>
-                          <p className="ml-4">- Dimensional Data Modeling (Star | Snowflake Schemas)</p>
-                          <p className="ml-4">- Data Warehousing</p>
-                          <p className="ml-4">- SQL (MySQL | Oracle)</p>
-                          <p className="ml-4">- Cloud Platforms</p>
-                        </div>
-                        <div>
-                          <p className="font-semibold">💻 Programming & Analysis:</p>
-                          <p className="ml-4">- Python | R | C++ | Java</p>
-                          <p className="ml-4">- Statistical Analysis | Forecasting</p>
-                          <p className="ml-4">- Advanced Excel | MS Office Suite</p>
-                        </div>
-                        <div>
-                          <p className="font-semibold">📊 BI & Visualization:</p>
-                          <p className="ml-4">- Power BI (DAX | M Code | Dataflows | Publishing)</p>
-                          <p className="ml-4">- Tableau | Looker Studio | Google Data Studio</p>
-                        </div>
-                        <div>
-                          <p className="font-semibold">🧰 Tools & Methodologies:</p>
-                          <p className="ml-4">- Git | JIRA | Agile (Scrum) | SDLC</p>
-                          <p className="ml-4">- Requirements Elicitation | Systems Analysis</p>
-                          <p className="ml-4">- UNIX/Linux | Windows OS</p>
-                        </div>
-                        <div>
-                          <p className="font-semibold">🧩 Soft Skill Enhancements:</p>
-                          <p className="ml-4">- Teamwork | Leadership | Critical Thinking</p>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* XP and Badge */}
-                    <div className="border-t pt-4 space-y-2">
-                      <p className="text-lg font-bold" style={{ color: BYTE_BUBBLES_THEME.star }}>
-                        XP Earned: +150
-                      </p>
-                      <p className="text-base">
-                        New Badge: "Data Architect Apprentice" 🧠
-                      </p>
-                    </div>
-
-                    {/* Achievement */}
-                    <div className="text-center py-4">
-                      <p
-                        className="text-lg font-bold"
-                        style={{
-                          fontFamily: "'Orbitron', sans-serif",
-                          color: BYTE_BUBBLES_THEME.text,
-                        }}
-                      >
-                        🏆 Achievement Unlocked: "From Learner to Level-Up Master!"
-                      </p>
-                    </div>
-
-                    {/* Continue Button */}
-                    <Button
-                      size="lg"
-                      onClick={() => { playClickSound(); onComplete(facts); }}
-                      className="w-full text-lg"
-                      style={{
-                        background: `linear-gradient(135deg, ${BYTE_BUBBLES_THEME.star} 0%, #FFC94A 100%)`,
-                        fontFamily: "'Anton', sans-serif",
-                      }}
-                    >
-                      Continue → Next Mission
-                    </Button>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+        {/* Modals */}
+        <MemoryGameModals
+          isPaused={isPaused}
+          showTransition={showTransition}
+          showComplete={showComplete}
+          transitionStep={transitionStep}
+          xp={xp}
+          onResume={() => setIsPaused(false)}
+          onExit={onBack}
+          onComplete={onComplete}
+          facts={facts}
+        />
       </motion.div>
     </motion.div>
   );
