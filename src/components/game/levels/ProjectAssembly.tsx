@@ -664,7 +664,19 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
           
           {/* Mobile Touch Controls */}
           <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2 sm:hidden z-50" style={{ pointerEvents: 'auto' }}>
-            <div className="flex flex-col gap-2">
+            <div className="flex gap-2">
+              {/* Left button */}
+              <button
+                onTouchStart={() => handleTouchControl('left', true)}
+                onTouchEnd={() => handleTouchControl('left', false)}
+                onMouseDown={() => handleTouchControl('left', true)}
+                onMouseUp={() => handleTouchControl('left', false)}
+                onMouseLeave={() => handleTouchControl('left', false)}
+                className="w-14 h-14 rounded-full bg-white/80 backdrop-blur-sm border-2 border-teal-400 shadow-lg active:scale-95 transition-transform flex items-center justify-center text-2xl"
+                style={{ touchAction: 'none' }}
+              >
+                ←
+              </button>
               {/* Up button */}
               <button
                 onTouchStart={() => handleTouchControl('up', true)}
@@ -677,44 +689,30 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
               >
                 ↑
               </button>
-              <div className="flex gap-2">
-                {/* Left button */}
-                <button
-                  onTouchStart={() => handleTouchControl('left', true)}
-                  onTouchEnd={() => handleTouchControl('left', false)}
-                  onMouseDown={() => handleTouchControl('left', true)}
-                  onMouseUp={() => handleTouchControl('left', false)}
-                  onMouseLeave={() => handleTouchControl('left', false)}
-                  className="w-14 h-14 rounded-full bg-white/80 backdrop-blur-sm border-2 border-teal-400 shadow-lg active:scale-95 transition-transform flex items-center justify-center text-2xl"
-                  style={{ touchAction: 'none' }}
-                >
-                  ←
-                </button>
-                {/* Down button */}
-                <button
-                  onTouchStart={() => handleTouchControl('down', true)}
-                  onTouchEnd={() => handleTouchControl('down', false)}
-                  onMouseDown={() => handleTouchControl('down', true)}
-                  onMouseUp={() => handleTouchControl('down', false)}
-                  onMouseLeave={() => handleTouchControl('down', false)}
-                  className="w-14 h-14 rounded-full bg-white/80 backdrop-blur-sm border-2 border-teal-400 shadow-lg active:scale-95 transition-transform flex items-center justify-center text-2xl"
-                  style={{ touchAction: 'none' }}
-                >
-                  ↓
-                </button>
-                {/* Right button */}
-                <button
-                  onTouchStart={() => handleTouchControl('right', true)}
-                  onTouchEnd={() => handleTouchControl('right', false)}
-                  onMouseDown={() => handleTouchControl('right', true)}
-                  onMouseUp={() => handleTouchControl('right', false)}
-                  onMouseLeave={() => handleTouchControl('right', false)}
-                  className="w-14 h-14 rounded-full bg-white/80 backdrop-blur-sm border-2 border-teal-400 shadow-lg active:scale-95 transition-transform flex items-center justify-center text-2xl"
-                  style={{ touchAction: 'none' }}
-                >
-                  →
-                </button>
-              </div>
+              {/* Down button */}
+              <button
+                onTouchStart={() => handleTouchControl('down', true)}
+                onTouchEnd={() => handleTouchControl('down', false)}
+                onMouseDown={() => handleTouchControl('down', true)}
+                onMouseUp={() => handleTouchControl('down', false)}
+                onMouseLeave={() => handleTouchControl('down', false)}
+                className="w-14 h-14 rounded-full bg-white/80 backdrop-blur-sm border-2 border-teal-400 shadow-lg active:scale-95 transition-transform flex items-center justify-center text-2xl"
+                style={{ touchAction: 'none' }}
+              >
+                ↓
+              </button>
+              {/* Right button */}
+              <button
+                onTouchStart={() => handleTouchControl('right', true)}
+                onTouchEnd={() => handleTouchControl('right', false)}
+                onMouseDown={() => handleTouchControl('right', true)}
+                onMouseUp={() => handleTouchControl('right', false)}
+                onMouseLeave={() => handleTouchControl('right', false)}
+                className="w-14 h-14 rounded-full bg-white/80 backdrop-blur-sm border-2 border-teal-400 shadow-lg active:scale-95 transition-transform flex items-center justify-center text-2xl"
+                style={{ touchAction: 'none' }}
+              >
+                →
+              </button>
             </div>
           </div>
         </div>
