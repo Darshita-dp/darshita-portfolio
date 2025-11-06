@@ -20,8 +20,9 @@ export function StickyNav() {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-40 border-b bg-white/85 backdrop-blur supports-[backdrop-filter]:bg-white/60">
-      <div className="container mx-auto max-w-6xl px-4 py-3 flex items-center justify-between">
+    <>
+      <header className="fixed top-0 left-0 right-0 z-40 border-b bg-white/85 backdrop-blur supports-[backdrop-filter]:bg-white/60">
+        <div className="container mx-auto max-w-6xl px-4 py-3 flex items-center justify-between">
         <button
           className="text-sm font-semibold hidden md:block"
           onClick={() => navigate("/")}
@@ -66,5 +67,7 @@ export function StickyNav() {
         </nav>
       </div>
     </header>
+    <div className="h-16" />
+    </>
   );
 }

@@ -258,7 +258,7 @@ export default function Classic() {
   );
 
   return (
-    <div className="classic-page">
+    <div className="classic-page pt-16">
       <style>{`
         /* Mobile-only compaction for Classic header spacing */
         @media (max-width: 640px) {
