@@ -439,11 +439,11 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
         const py = cellY * cellSize + mazePadding;
         
         // Only check walls that are actually present, with proper tolerance
-        // Tolerance of 4px to allow smooth movement through corridors
-        if (cell.walls.top && y - playerRadius < py + 4) return true;
-        if (cell.walls.bottom && y + playerRadius > py + cellSize - 4) return true;
-        if (cell.walls.left && x - playerRadius < px + 4) return true;
-        if (cell.walls.right && x + playerRadius > px + cellSize - 4) return true;
+        // Tolerance of 6px for smoother mobile movement
+        if (cell.walls.top && y - playerRadius < py + 6) return true;
+        if (cell.walls.bottom && y + playerRadius > py + cellSize - 6) return true;
+        if (cell.walls.left && x - playerRadius < px + 6) return true;
+        if (cell.walls.right && x + playerRadius > px + cellSize - 6) return true;
         
         return false;
       };
@@ -498,6 +498,27 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
       if (!collides) {
         gameStateRef.current.player.x = reducedX;
         gameStateRef.current.player.y = reducedY;
+      } else {
+        // If diagonal still blocked, try moving just horizontally or vertically
+        const checkCollisionX = (() => {
+          const maze = gameStateRef.current.maze;
+          if (!maze) return false;
+          const cellSize = gameStateRef.current.cellSize;
+          const playerRadius = gameStateRef.current.playerSize / 2;
+          const mazePadding = 80;
+          const cellX = Math.floor((reducedX - mazePadding) / cellSize);
+          const cellY = Math.floor((state.player.y - mazePadding) / cellSize);
+          if (cellY < 0 || cellY >= maze.length || cellX < 0 || cellX >= maze[0].length) return false;
+          const cell = maze[cellY][cellX];
+          const px = cellX * cellSize + mazePadding;
+          if (cell.walls.left && reducedX - playerRadius < px + 6) return true;
+          if (cell.walls.right && reducedX + playerRadius > px + cellSize - 6) return true;
+          return false;
+        })();
+        
+        if (!checkCollisionX) {
+          gameStateRef.current.player.x = reducedX;
+        }
       }
     }
 
