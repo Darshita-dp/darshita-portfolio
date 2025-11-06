@@ -357,18 +357,14 @@ function InterviewMe() {
   };
 
   return (
-    <div className="h-full bg-[#D4E8E4] dark:bg-slate-900 relative overflow-hidden flex justify-center items-stretch">
+    <div className="h-screen bg-[#D4E8E4] dark:bg-slate-900 relative overflow-hidden flex flex-col">
       {/* Animated grass background */}
       {grassBackground}
 
       <div 
-        className="container mx-auto max-w-3xl px-4 relative z-10 h-full flex items-stretch"
-        style={{
-          height: "calc(100vh - 140px)",
-          minHeight: "calc(100vh - 140px)"
-        }}
+        className="container mx-auto max-w-3xl px-4 relative z-10 flex-1 flex items-stretch"
       >
-        <Card className="h-full flex flex-col overflow-hidden border-0 shadow-lg w-full mx-auto md:w-[95%]">
+        <Card className="h-full flex flex-col overflow-hidden border-0 shadow-lg w-full">
           {/* WhatsApp-style Header */}
           <div className="bg-[#0B6A5B] text-white px-4 py-3 flex items-center gap-3 h-14 flex-shrink-0">
             <img 
