@@ -1,5 +1,4 @@
 import { useMemo, useRef, useState, useEffect } from "react";
-import { useNavigate } from "react-router";
 import { motion, useInView } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -14,6 +13,10 @@ import { useAction } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { ArrowRight, Briefcase, Database, Github, Linkedin, Mail, Smartphone, Star, ExternalLink, User, MessageSquare } from "lucide-react";
 import { BarChart3, Code2, Users, Wrench } from "lucide-react";
+import { CountUpNumber } from "@/components/classic/CountUpNumber";
+import { SectionTitle } from "@/components/classic/SectionTitle";
+import { SkillBar } from "@/components/classic/SkillBar";
+import { StickyNav } from "@/components/classic/StickyNav";
 
 type Project = {
   id: string;
@@ -112,161 +115,7 @@ const techSkills: Array<{ name: string; level: number; icon?: React.ReactNode }>
 
 const softSkills: Array<string> = ["Communication", "Problem‑Solving", "Teamwork"];
 
-function CountUpNumber({
-  to,
-  duration = 1200,
-  suffix = "",
-  className = "",
-}: {
-  to: number;
-  duration?: number;
-  suffix?: string;
-  className?: string;
-}) {
-  const ref = useRef<HTMLSpanElement | null>(null);
-  const containerRef = useRef<HTMLDivElement | null>(null);
-  const inView = useInView(containerRef, { once: true, margin: "-80px" });
-
-  useEffect(() => {
-    if (!inView || !ref.current) return;
-    let start: number | null = null;
-    const from = 0;
-    const target = to;
-    const step = (ts: number) => {
-      if (start === null) start = ts;
-      const elapsed = ts - start;
-      const t = Math.min(1, elapsed / duration);
-      const eased = 1 - Math.pow(1 - t, 3);
-      const val = Math.floor(from + (target - from) * eased);
-      if (ref.current) ref.current.textContent = val.toLocaleString();
-      if (t < 1) requestAnimationFrame(step);
-    };
-    const r = requestAnimationFrame(step);
-    return () => cancelAnimationFrame(r);
-  }, [inView, to, duration]);
-
-  return (
-    <div ref={containerRef} className={className}>
-      <span ref={ref} />
-      {suffix ? <span className="ml-0.5">{suffix}</span> : null}
-    </div>
-  );
-}
-
-function SectionTitle({ id, children }: { id: string; children: React.ReactNode }) {
-  return (
-    <div id={id} className="scroll-mt-24">
-      <h2
-        className="text-2xl md:text-3xl font-semibold tracking-wide"
-        style={{
-          fontFamily: '"Montserrat", "Inter", ui-sans-serif, system-ui',
-          letterSpacing: "0.02em",
-          background: `linear-gradient(90deg, ${BLUE.headerFrom}, ${BLUE.headerTo})`,
-          WebkitBackgroundClip: "text",
-          color: "transparent",
-        }}
-      >
-        {children}
-      </h2>
-      <div className="mt-2 h-[4px] w-20 rounded-full" style={{ background: BLUE.accent }} />
-    </div>
-  );
-}
-
-function SkillBar({ label, value, delay = 0 }: { label: string; value: number; delay?: number }) {
-  const ref = useRef<HTMLDivElement | null>(null);
-  const inView = useInView(ref, { once: true, margin: "-80px" });
-
-  // varying shades of blue
-  const shades = ["#BBDEFB", "#90CAF9", "#64B5F6", "#42A5F5", "#1E88E5", "#1976D2"];
-  const shade = shades[Math.min(Math.floor((value / 100) * shades.length), shades.length - 1)];
-
-  return (
-    <div ref={ref} className="space-y-1">
-      <div className="flex items-center justify-between text-sm">
-        <span className="font-medium">{label}</span>
-        <span className="opacity-70">{value}%</span>
-      </div>
-      <div className="h-2 w-full rounded-full bg-slate-200/60 overflow-hidden">
-        <motion.div
-          initial={{ width: 0 }}
-          animate={{ width: inView ? `${value}%` : 0 }}
-          transition={{ duration: 0.8, delay }}
-          className="h-full rounded-full"
-          style={{ background: `linear-gradient(90deg, ${shade}, ${BLUE.headerTo})` }}
-        />
-      </div>
-    </div>
-  );
-}
-
-function StickyNav() {
-  const navigate = useNavigate();
-  const items = [
-    { id: "profile", label: "Profile" },
-    { id: "projects", label: "Projects" },
-    { id: "skills", label: "Skills" },
-    { id: "experience", label: "Experience" },
-    { id: "contact", label: "Contact" },
-  ];
-  const go = (id: string) => {
-    const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
-  };
-  return (
-    <header className="sticky top-0 z-40 border-b bg-white/85 backdrop-blur supports-[backdrop-filter]:bg-white/60">
-      <div className="container mx-auto max-w-6xl px-4 py-3 flex items-center justify-between">
-        <button
-          className="text-sm font-semibold"
-          onClick={() => navigate("/")}
-          style={{ color: BLUE.headerTo }}
-        >
-          ← Modes
-        </button>
-        <nav className="flex gap-2 md:gap-4">
-          {items.map((it) => (
-            <button
-              key={it.id}
-              onClick={() => go(it.id)}
-              className="px-3 py-1.5 rounded-full text-sm border transition"
-              style={{
-                borderColor: "rgba(13, 71, 161, 0.18)",
-                color: "#0D47A1",
-              }}
-              onMouseEnter={(e) => {
-                (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#0D47A1";
-                (e.currentTarget as HTMLButtonElement).style.color = "#FFFFFF";
-                (e.currentTarget as HTMLButtonElement).style.borderColor = "#0D47A1";
-              }}
-              onMouseLeave={(e) => {
-                (e.currentTarget as HTMLButtonElement).style.backgroundColor = "transparent";
-                (e.currentTarget as HTMLButtonElement).style.color = "#0D47A1";
-                (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(13, 71, 161, 0.18)";
-              }}
-              onFocus={(e) => {
-                (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#0D47A1";
-                (e.currentTarget as HTMLButtonElement).style.color = "#FFFFFF";
-                (e.currentTarget as HTMLButtonElement).style.borderColor = "#0D47A1";
-              }}
-              onBlur={(e) => {
-                (e.currentTarget as HTMLButtonElement).style.backgroundColor = "transparent";
-                (e.currentTarget as HTMLButtonElement).style.color = "#0D47A1";
-                (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(13, 71, 161, 0.18)";
-              }}
-            >
-              {it.label}
-            </button>
-          ))}
-        </nav>
-      </div>
-    </header>
-  );
-}
-
-function BubblesBackground() {
-  // Disable bubbles completely
-  return null;
-}
+// ... keep existing code (component imports and helper functions)
 
 export default function Classic() {
   const [sending, setSending] = useState(false);
