@@ -378,11 +378,11 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
         const px = cellX * cellSize + 20;
         const py = cellY * cellSize + 20;
         
-        // Check each wall with more lenient collision
-        if (cell.walls.top && y - playerRadius < py + 2) return true;
-        if (cell.walls.bottom && y + playerRadius > py + cellSize - 2) return true;
-        if (cell.walls.left && x - playerRadius < px + 2) return true;
-        if (cell.walls.right && x + playerRadius > px + cellSize - 2) return true;
+        // Check each wall with even more lenient collision (increased tolerance)
+        if (cell.walls.top && y - playerRadius < py + 8) return true;
+        if (cell.walls.bottom && y + playerRadius > py + cellSize - 8) return true;
+        if (cell.walls.left && x - playerRadius < px + 8) return true;
+        if (cell.walls.right && x + playerRadius > px + cellSize - 8) return true;
         
         return false;
       };
