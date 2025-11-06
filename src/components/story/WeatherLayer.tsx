@@ -496,7 +496,7 @@ export function WeatherLayer({ scrollProgress, currentChapter }: WeatherLayerPro
       />
 
       {/* Falling Shooting Star (Chapter 5 - Circle of Friendship) */}
-      {currentChapter === 4 && <FallingShootingStar />}
+      {currentChapter === 5 && <FallingShootingStar />}
 
       {/* Moon with Shiny Effect (Chapter 5 - Circle of Friendship) */}
       {currentChapter === 5 && (
