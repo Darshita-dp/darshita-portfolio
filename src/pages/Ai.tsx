@@ -655,10 +655,10 @@ export default function AiPage() {
   );
 
   return (
-    <div className="min-h-screen bg-background" style={{ height: '100%', overflow: 'hidden' }}>
+    <div className="h-screen bg-background flex flex-col overflow-hidden">
       <TopBar title="AI Chat" />
 
-      <main aria-live="polite">
+      <main aria-live="polite" className="flex-1 overflow-hidden">
         {tab === "interview" && <InterviewMe />}
         {tab === "guide" && <GuideMe />}
       </main>
