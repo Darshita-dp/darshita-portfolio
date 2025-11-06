@@ -1,18 +1,22 @@
 import { useNavigate } from "react-router";
 import { motion, useReducedMotion } from "framer-motion";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { useMutation, useQuery } from "convex/react";
+import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useEffect, useMemo, useRef, useState } from "react";
 import "./Landing.icon-bounce.css";
+import { FlowerField as BgFlowerField, LeavesField as BgLeavesField, SmallLeavesField as BgSmallLeavesField, GlitterField as BgGlitterField } from "@/components/landing/BackgroundFields";
+import { SunflowerCursor as GlobalSunflowerCursor } from "@/components/landing/SunflowerCursor";
+import { ModeCard } from "@/components/landing/ModeCard";
+import { AnalyticsDisplay } from "@/components/landing/AnalyticsDisplay";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 const modes = [
   {
     id: "classic",
     title: "Classic",
     description: "Traditional portfolio view with clean design",
-    symbol: "📜", // kawaii vibe
-    color: "#F5D1C3", // pastel pink
+    symbol: "📜",
+    color: "#F5D1C3",
     path: "/classic",
   },
   {
@@ -20,7 +24,7 @@ const modes = [
     title: "Play",
     description: "Gamified exploration of projects and skills",
     symbol: "🎮",
-    color: "#FDE7A9", // pastel yellow
+    color: "#FDE7A9",
     path: "/play",
   },
   {
@@ -28,60 +32,149 @@ const modes = [
     title: "AI Chat",
     description: "Interactive conversation about my work",
     symbol: "https://harmless-tapir-303.convex.cloud/api/storage/d1f287ee-2b2b-4b50-b2c0-5d1efc983ea2",
-    color: "#BAE1FF", // pastel blue
+    color: "#BAE1FF",
     path: "/ai",
   },
   {
     id: "story",
     title: "Story",
     description: "Immersive scroll-driven narrative experience",
-    symbol: "🎐", // wind chime
-    color: "#F8CBA6", // pastel orange
+    symbol: "🎐",
+    color: "#F8CBA6",
     path: "/story",
   },
 ];
 
-function SunflowerHead({ size = 96 }: { size: number }) {
-  // Pure flower face (no stem), kawaii style: yellow petals + warm center
-  const petalCount = 12;
-  const petals = Array.from({ length: petalCount });
-  const cx = 50;
-  const cy = 50;
-
+function ReduceVisualsButton({ reduced, onToggle }: { reduced: boolean; onToggle: () => void }) {
   return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 100 100"
-      aria-hidden="true"
-      focusable="false"
-      style={{ filter: "drop-shadow(0 2px 2px rgba(0,0,0,0.12))" }}
-    >
-      {/* Petals */}
-      {petals.map((_, i) => {
-        const angle = (i * 360) / petalCount;
-        return (
-          <ellipse
-            key={i}
-            cx={cx}
-            cy={cy - 28}
-            rx="10"
-            ry="24"
-            fill="#FDE68A"
-            stroke="rgba(0,0,0,0.06)"
-            strokeWidth="0.5"
-            transform={`rotate(${angle} ${cx} ${cy})`}
-          />
-        );
-      })}
-      {/* Inner ring */}
-      <circle cx={cx} cy={cy} r="22" fill="#A16207" />
-      {/* Center */}
-      <circle cx={cx} cy={cy} r="16" fill="#8B5E34" />
-    </svg>
+    <div className="absolute top-4 right-4 z-30">
+      <motion.button
+        onClick={onToggle}
+        className="text-xs rounded-full px-3 py-1 border bg-white/70 backdrop-blur hover:bg-white/90 transition"
+        aria-pressed={reduced}
+        aria-label={reduced ? "Background visuals: Reduced" : "Background visuals: Full"}
+        title="Toggle background visuals"
+        whileHover={{ scale: 1.05 }}
+      >
+        {reduced ? "Background: Reduced" : "Background: Full"}
+      </motion.button>
+    </div>
   );
 }
 
+function Header() {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: -24 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8 }}
+      className="text-center mb-6 md:mb-10 relative mt-8 md:mt-12"
+    >
+      <h1
+        className="tracking-tight text-5xl sm:text-6xl md:text-8xl"
+        style={{
+          fontFamily: '"Great Vibes", "Gwendolyn", ui-serif, Georgia, Cambria, "Times New Roman", Times, serif',
+          letterSpacing: "0.4px",
+          color: "oklch(20% 0.04 150)",
+          textShadow: "0 2px 0 rgba(248,203,166,0.85), 0 10px 24px rgba(34, 85, 54, 0.18), 0 1px 0 rgba(0,0,0,0.05)",
+        }}
+      >
+        <span className="inline-block select-none">Darshita Patel</span>
+      </h1>
+      <span
+        aria-hidden="true"
+        className="absolute -top-2 left-1/2 -translate-x-[56%] text-2xl"
+        style={{ filter: "drop-shadow(0 2px 2px rgba(0,0,0,0.12))", opacity: 0.9 }}
+      >
+        🍃
+      </span>
+      <p
+        className="mt-3 text-lg md:text-xl text-slate-700/90"
+        style={{
+          fontFamily: "ui-serif, Georgia, Cambria, Times New Roman, Times, serif",
+          letterSpacing: "0.2px",
+          textShadow: "0 1px 0 rgba(255,255,255,0.45), 0 10px 24px rgba(34,85,54,0.10)",
+        }}
+      >
+        — where data finds its story in pastel hues
+      </p>
+    </motion.div>
+  );
+}
+
+function ModesGrid({
+  sunflowerCursor,
+  sunflowerCursorHover,
+  onModeSelect,
+}: {
+  sunflowerCursor: string;
+  sunflowerCursorHover: string;
+  onModeSelect: (mode: (typeof modes)[0]) => void;
+}) {
+  const gridRef = useRef<HTMLDivElement | null>(null);
+
+  const onGridMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const el = gridRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    const dx = (e.clientX - cx) / rect.width;
+    const dy = (e.clientY - cy) / rect.height;
+    el.style.setProperty("--dx", String(dx));
+    el.style.setProperty("--dy", String(dy));
+  };
+
+  const onGridMouseLeave = () => {
+    const el = gridRef.current;
+    if (!el) return;
+    el.style.setProperty("--dx", "0");
+    el.style.setProperty("--dy", "0");
+  };
+
+  return (
+    <motion.div
+      id="modes-grid"
+      ref={gridRef}
+      onMouseMove={onGridMouseMove}
+      onMouseLeave={onGridMouseLeave}
+      initial={{ opacity: 0, y: 26 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8, delay: 0.1 }}
+      className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5 max-w-4xl w-full"
+      style={{
+        "--dx": 0,
+        "--dy": 0,
+      } as React.CSSProperties}
+    >
+      {modes.map((mode, index) => (
+        <ModeCard
+          key={mode.id}
+          {...mode}
+          index={index}
+          onSelect={() => onModeSelect(mode)}
+          sunflowerCursor={sunflowerCursor}
+          sunflowerCursorHover={sunflowerCursorHover}
+        />
+      ))}
+    </motion.div>
+  );
+}
+
+function Footer() {
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.8, delay: 0.3 }}
+      className="mt-10 text-center"
+    >
+      <p className="text-slate-700/70 text-sm">Built with React, Convex, and a sprinkle of kawaii ✨</p>
+    </motion.div>
+  );
+}
+
+// Keep the old components for backward compatibility but they're now in separate files
 function FlowerField({ densityScale = 1 }: { densityScale?: number }) {
   const prefersReducedMotion = useReducedMotion();
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -1159,36 +1252,7 @@ export default function Landing() {
     return v === "1";
   });
   
-  // Background glitter sound effect
-  useEffect(() => {
-    const audio = new Audio("https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3");
-    audio.loop = true;
-    audio.volume = 0.15; // Subtle volume for ambient effect
-    
-    const playAudio = () => {
-      audio.play().catch(err => console.log("Audio autoplay blocked:", err));
-    };
-    
-    // Try to play immediately
-    playAudio();
-    
-    // Also try on first user interaction
-    const handleInteraction = () => {
-      playAudio();
-      document.removeEventListener("click", handleInteraction);
-      document.removeEventListener("keydown", handleInteraction);
-    };
-    
-    document.addEventListener("click", handleInteraction);
-    document.addEventListener("keydown", handleInteraction);
-    
-    return () => {
-      audio.pause();
-      audio.currentTime = 0;
-      document.removeEventListener("click", handleInteraction);
-      document.removeEventListener("keydown", handleInteraction);
-    };
-  }, []);
+  // Removed background audio autoplay per request
   
   useEffect(() => {
     localStorage.setItem("landing_reduce_visuals", reduced ? "1" : "0");
@@ -1215,7 +1279,7 @@ export default function Landing() {
     el.style.setProperty("--dy", "0");
   };
 
-  const modeCounts = useQuery(api.analytics.getOpenModeCounts, {}); // realtime counts
+  // Counts are handled within the AnalyticsDisplay component
 
   // Replace native cursor image with provided sunflower for consistency
   const sunflowerCursor = useMemo(() => {
@@ -1300,13 +1364,13 @@ export default function Landing() {
       />
 
       {/* Flower and Leaves layers behind content */}
-      <FlowerField densityScale={densityScale} />
-      <SmallLeavesField />
-      <GlitterField />
-      <LeavesField densityScale={densityScale} />
-      <GlitterField />
-      <GlitterField count={50} />
-      <GlitterField count={100} />
+      <BgFlowerField densityScale={densityScale} />
+      <BgSmallLeavesField />
+      <BgGlitterField />
+      <BgLeavesField densityScale={densityScale} />
+      <BgGlitterField />
+      <BgGlitterField count={50} />
+      <BgGlitterField count={100} />
 
       {/* Skip link for keyboard users */}
       <a
@@ -1509,21 +1573,7 @@ export default function Landing() {
         </motion.div>
 
         {/* Live analytics: mode opens */}
-        <div className="mt-4 md:mt-5 max-w-4xl w-full px-0 hidden sm:block">
-          <div className="flex flex-wrap items-center gap-2 text-xs text-slate-700/70">
-            <span className="opacity-80">Live mode opens:</span>
-            {modes.map((m) => (
-              <span
-                key={`count-${m.id}`}
-                className="rounded-full border px-2 py-1 bg-white/70 backdrop-blur-sm"
-                title={`${m.title} opens`}
-                aria-label={`${m.title} opens ${modeCounts?.[m.id] ?? 0}`}
-              >
-                {m.title}: <strong className="ml-1">{modeCounts?.[m.id] ?? 0}</strong>
-              </span>
-            ))}
-          </div>
-        </div>
+        <AnalyticsDisplay modes={modes} />
 
         {/* Footer */}
         <motion.div
@@ -1539,7 +1589,7 @@ export default function Landing() {
       </div>
 
       {/* Global follower cursor for this page */}
-      <SunflowerCursor />
+      <GlobalSunflowerCursor />
     </div>
   );
 }
