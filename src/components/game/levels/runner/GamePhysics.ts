@@ -30,7 +30,7 @@ export class GamePhysics {
         state.player.x + RUNNER_CONFIG.playerWidth > platform.x &&
         state.player.x < platform.x + platform.width &&
         state.player.y + RUNNER_CONFIG.playerHeight >= platform.y &&
-        state.player.y + RUNNER_CONFIG.playerHeight <= platform.y + platform.height + 15 &&
+        state.player.y + RUNNER_CONFIG.playerHeight <= platform.y + platform.height + 20 &&
         state.player.vy >= 0
       ) {
         state.player.y = platform.y - RUNNER_CONFIG.playerHeight;
