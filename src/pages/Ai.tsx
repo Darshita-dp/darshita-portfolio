@@ -382,7 +382,7 @@ function InterviewMe() {
           </div>
 
           {/* Chat area */}
-          <div className="bg-[#EFE7DD]/60 dark:bg-slate-950/60 flex-1 overflow-y-auto p-3 min-h-[100px]">
+          <div className="bg-[#EFE7DD]/60 dark:bg-slate-950/60 flex-1 overflow-y-auto p-3 min-h-[100px] max-h-[calc(100vh-200px)]">
             {messages.map((m, idx) => (
               <div key={idx} className={`flex mb-2 ${m.role === "user" ? "justify-end" : "justify-start"}`}>
                 {m.role === "ai" && (
