@@ -26,13 +26,30 @@ export class GamePhysics {
     state.player.onGround = false;
 
     for (const platform of state.platforms) {
-      if (
+      // Check if player is horizontally aligned with platform
+      const isHorizontallyAligned =
         state.player.x + RUNNER_CONFIG.playerWidth > platform.x &&
-        state.player.x < platform.x + platform.width &&
-        state.player.y + RUNNER_CONFIG.playerHeight >= platform.y &&
-        state.player.y + RUNNER_CONFIG.playerHeight <= platform.y + platform.height + 20 &&
-        state.player.vy >= 0
-      ) {
+        state.player.x < platform.x + platform.width;
+
+      if (!isHorizontallyAligned) continue;
+
+      // Check collision from above (falling down)
+      const playerBottom = state.player.y + RUNNER_CONFIG.playerHeight;
+      const platformTop = platform.y;
+      const isCollidingFromAbove =
+        playerBottom >= platformTop &&
+        playerBottom <= platformTop + platform.height + 20 &&
+        state.player.vy >= 0;
+
+      // Check collision from below (jumping up)
+      const playerTop = state.player.y;
+      const platformBottom = platform.y + platform.height;
+      const isCollidingFromBelow =
+        playerTop <= platformBottom &&
+        playerTop >= platformBottom - 20 &&
+        state.player.vy < 0;
+
+      if (isCollidingFromAbove || isCollidingFromBelow) {
         state.player.y = platform.y - RUNNER_CONFIG.playerHeight;
         state.player.vy = 0;
         state.player.jumping = false;
