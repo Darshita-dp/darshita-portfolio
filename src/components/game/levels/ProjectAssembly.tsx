@@ -186,9 +186,9 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
     
     gameStateRef.current.maze = maze;
     
-    // Position player at the LEFT entrance (slightly outside the maze)
+    // Position player well outside the maze on the left side
     const cellSize = gameStateRef.current.cellSize;
-    const entranceX = 10; // Position on the left side, outside the maze
+    const entranceX = -60; // Position far left, well outside the maze
     const entranceY = entranceRow * cellSize + 20 + cellSize / 2;
     gameStateRef.current.player.x = entranceX;
     gameStateRef.current.player.y = entranceY;
@@ -391,8 +391,53 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
       canMoveY = !checkCollision(state.player.x, newY);
     }
 
+    // Apply movement with diagonal fallback using a self-contained collision check
     if (canMoveX) state.player.x = newX;
     if (canMoveY) state.player.y = newY;
+
+    // If both axes are blocked, try moving diagonally to escape tight corners
+    if (
+      !canMoveX &&
+      !canMoveY &&
+      (Math.abs(state.player.vx) > 0.5 || Math.abs(state.player.vy) > 0.5)
+    ) {
+      const reducedX = state.player.x + state.player.vx * 0.5;
+      const reducedY = state.player.y + state.player.vy * 0.5;
+
+      // Inline, safe collision check with proper null-narrowing for the maze
+      const collides = (() => {
+        const maze = gameStateRef.current.maze;
+        if (!maze) return false;
+
+        const cellSize = gameStateRef.current.cellSize;
+        const playerRadius = gameStateRef.current.playerSize / 2;
+
+        const cellX = Math.floor((reducedX - 20) / cellSize);
+        const cellY = Math.floor((reducedY - 20) / cellSize);
+
+        // Allow movement outside maze bounds (for entrance/left space)
+        if (cellY < 0 || cellY >= maze.length || cellX < 0 || cellX >= maze[0].length) {
+          return false;
+        }
+
+        const cell = maze[cellY][cellX];
+        const px = cellX * cellSize + 20;
+        const py = cellY * cellSize + 20;
+
+        // Lenient wall tolerance to avoid getting stuck on visuals (8px)
+        if (cell.walls.top && reducedY - playerRadius < py + 8) return true;
+        if (cell.walls.bottom && reducedY + playerRadius > py + cellSize - 8) return true;
+        if (cell.walls.left && reducedX - playerRadius < px + 8) return true;
+        if (cell.walls.right && reducedX + playerRadius > px + cellSize - 8) return true;
+
+        return false;
+      })();
+
+      if (!collides) {
+        gameStateRef.current.player.x = reducedX;
+        gameStateRef.current.player.y = reducedY;
+      }
+    }
 
     // Boundary collision
     state.player.x = Math.max(state.playerSize / 2, Math.min(rect.width - state.playerSize / 2, state.player.x));
