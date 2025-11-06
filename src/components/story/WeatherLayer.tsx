@@ -472,9 +472,6 @@ export function WeatherLayer({ scrollProgress, currentChapter }: WeatherLayerPro
         }}
       />
 
-      {/* Shooting Star (Chapter 5 - Circle of Friendship) */}
-      {currentChapter === 5 && <ShootingStar />}
-
       {/* Moon with Shiny Effect (Chapter 5 - Circle of Friendship) */}
       {currentChapter === 5 && (
         <motion.div
