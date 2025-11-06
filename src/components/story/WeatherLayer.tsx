@@ -12,13 +12,13 @@ function FallingShootingStar() {
   if (prefersReducedMotion) return null;
 
   return (
-    <motion.div
-      className="fixed z-30 pointer-events-none"
-      style={{
-        width: "40px",
-        height: "40px",
-        opacity: 0.7,
-      }}
+      <motion.div
+        className="fixed z-30 pointer-events-none"
+        style={{
+          width: "20px",
+          height: "20px",
+          opacity: 0.7,
+        }}
       initial={{ x: "10vw", y: "-100px", opacity: 0 }}
       animate={{ x: "40vw", y: "100vh", opacity: [0, 0.7, 0.7, 0] }}
       transition={{
