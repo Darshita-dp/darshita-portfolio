@@ -11,15 +11,27 @@ interface BubbleNodeProps {
 
 export function BubbleNode({ label, x, y, onClick, isCompleted }: BubbleNodeProps) {
   const playClickSound = () => {
-    const audio = new Audio("https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3");
-    audio.volume = 0.4;
-    audio.play().catch(err => console.log("Sound play failed:", err));
+    try {
+      const audio = new Audio("https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3");
+      audio.volume = 0.4;
+      void audio.play().catch(() => {
+        // noop: ignore playback errors (mobile autoplay policies, etc.)
+      });
+    } catch {
+      // noop
+    }
   };
 
   const playHoverSound = () => {
-    const audio = new Audio("https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3");
-    audio.volume = 0.2;
-    audio.play().catch(err => console.log("Sound play failed:", err));
+    try {
+      const audio = new Audio("https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3");
+      audio.volume = 0.2;
+      void audio.play().catch(() => {
+        // noop
+      });
+    } catch {
+      // noop
+    }
   };
 
   const handleClick = () => {

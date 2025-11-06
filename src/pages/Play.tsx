@@ -13,11 +13,25 @@ import { DecodeJourney } from "@/components/game/levels/DecodeJourney";
 import { ProjectAssembly } from "@/components/game/levels/ProjectAssembly";
 import { CrabCursor } from "@/components/game/CrabCursor";
 import { BUBBLE_NODES, BYTE_BUBBLES_THEME, LEVEL_DATA, loadGameProgress, saveGameProgress, type GameProgress } from "@/lib/byteBubblesData";
+import { useMediaQuery } from "@/hooks/use-mobile";
 
 type ViewState = "map" | "preview" | "level";
 
+const playSound = (url: string, volume: number = 0.4) => {
+  try {
+    const audio = new Audio(url);
+    audio.volume = volume;
+    audio.play().catch(() => {
+      // Silently fail if audio can't play (e.g., on muted devices)
+    });
+  } catch {
+    // Silently fail if audio creation fails
+  }
+};
+
 export default function Play() {
   const navigate = useNavigate();
+  const isMobile = useMediaQuery("(max-width: 768px)");
   const [soundOn, setSoundOn] = useState(false);
   const [showUnderConstruction, setShowUnderConstruction] = useState(false);
   const [progress, setProgress] = useState<GameProgress>(() => loadGameProgress());
@@ -39,14 +53,7 @@ export default function Play() {
   };
 
   const handlePlayLevel = () => {
-    console.log("=== handlePlayLevel called ===");
-    console.log("selectedLevel:", selectedLevel);
-    const node = BUBBLE_NODES.find((n) => n.id === selectedLevel);
-    console.log("Node found:", node);
-    console.log("Node type:", node?.type);
-    console.log("Setting view to 'level'");
     setView("level");
-    console.log("View state after update:", "level");
   };
 
   const handleLevelComplete = (factsCollected: string[]) => {
@@ -61,7 +68,6 @@ export default function Play() {
     setProgress(newProgress);
     saveGameProgress(newProgress);
     
-    // Trigger XP gain animation
     setShowXPGain(true);
     setTimeout(() => {
       setShowXPGain(false);
@@ -101,14 +107,10 @@ export default function Play() {
     }
   };
 
-  // Render based on view state
   if (view === "level" && selectedLevel !== null) {
     const node = BUBBLE_NODES.find((n) => n.id === selectedLevel);
-    console.log("Rendering level view, node:", node, "view:", view);
     
-    // Render different game components based on level type
     if (node?.type === "runner") {
-      console.log("Rendering RunnerQuest");
       return (
         <RunnerQuest
           levelId={selectedLevel}
@@ -118,7 +120,6 @@ export default function Play() {
         />
       );
     } else if (node?.type === "memory") {
-      console.log("Rendering EducationMemory");
       return (
         <EducationMemory
           levelId={selectedLevel}
@@ -128,7 +129,6 @@ export default function Play() {
         />
       );
     } else if (node?.type === "quiz") {
-      console.log("Rendering DecodeJourney");
       return (
         <DecodeJourney
           levelId={selectedLevel}
@@ -138,7 +138,6 @@ export default function Play() {
         />
       );
     } else if (node?.type === "puzzle") {
-      console.log("Rendering ProjectAssembly");
       return (
         <ProjectAssembly
           levelId={selectedLevel}
@@ -148,8 +147,6 @@ export default function Play() {
         />
       );
     } else if (node?.type === "boss") {
-      console.log("Rendering Future - under construction");
-      // Future bubble - show under construction image
       return (
         <motion.div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
@@ -157,6 +154,8 @@ export default function Play() {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onClick={handleBackToMap}
+          role="dialog"
+          aria-label="Future level - Under construction"
         >
           <motion.div
             initial={{ scale: 0.8, y: 20 }}
@@ -190,8 +189,6 @@ export default function Play() {
         </motion.div>
       );
     } else {
-      console.log("Rendering fallback - under construction");
-      // Fallback for other game types - show under construction
       return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
           <Card className="max-w-md mx-4">
@@ -219,8 +216,8 @@ export default function Play() {
         cursor: 'none',
       }}
     >
-      {/* Custom Crab Cursor */}
-      <CrabCursor />
+      {/* Custom Crab Cursor - disabled on mobile */}
+      {!isMobile && <CrabCursor />}
 
       {/* Overlay to maintain theme colors */}
       <div
@@ -240,12 +237,10 @@ export default function Play() {
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <button
             onClick={() => {
-              const audio = new Audio("https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3");
-              audio.volume = 0.4;
-              audio.play().catch(err => console.log("Sound play failed:", err));
+              playSound("https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3");
               navigate("/");
             }}
-            className="flex items-center gap-2 px-4 py-2 rounded-full text-sm transition-all hover:scale-105"
+            className="flex items-center gap-2 px-4 py-2 rounded-full text-sm transition-all hover:scale-105 active:scale-95"
             style={{
               background: `radial-gradient(circle at 35% 25%, rgba(255,255,255,0.9), rgba(135,206,250,0.7) 40%, rgba(70,130,180,0.8) 70%, rgba(100,149,237,0.6))`,
               border: `3px solid rgba(255,255,255,0.5)`,
@@ -260,6 +255,7 @@ export default function Play() {
               fontWeight: 600,
               letterSpacing: "0.02em",
             }}
+            aria-label="Exit to home page"
           >
             ← Exit
           </button>
@@ -280,12 +276,11 @@ export default function Play() {
             variant="ghost"
             size="icon"
             onClick={() => {
-              const audio = new Audio("https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3");
-              audio.volume = 0.4;
-              audio.play().catch(err => console.log("Sound play failed:", err));
+              playSound("https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3");
               setSoundOn(!soundOn);
             }}
             aria-label={soundOn ? "Mute sound" : "Unmute sound"}
+            className="active:scale-90 transition-transform"
           >
             {soundOn ? <Volume2 className="w-5 h-5" /> : <VolumeX className="w-5 h-5" />}
           </Button>
@@ -317,12 +312,12 @@ export default function Play() {
                   .map((n) => `Q ${n.x - 2}% ${n.y - 3}%, ${n.x}% ${n.y}%`)
                   .join(" ")}`}
                 stroke={BYTE_BUBBLES_THEME.accent}
-                strokeWidth="3"
+                strokeWidth={isMobile ? "2" : "3"}
                 fill="none"
-                strokeDasharray="8 4"
-                initial={{ pathLength: 0, opacity: 0 }}
-                animate={{ pathLength: 1, opacity: 0.6 }}
-                transition={{ duration: 2, ease: "easeInOut" }}
+                strokeDasharray={isMobile ? "none" : "8 4"}
+                initial={isMobile ? undefined : { pathLength: 0, opacity: 0 }}
+                animate={isMobile ? { opacity: 0.45 } : { pathLength: 1, opacity: 0.6 }}
+                transition={isMobile ? { duration: 0 } : { duration: 2, ease: "easeInOut" }}
               />
             </svg>
 
@@ -338,8 +333,8 @@ export default function Play() {
               />
             ))}
 
-            {/* Floating background bubbles */}
-            {Array.from({ length: 45 }).map((_, i) => {
+            {/* Floating background bubbles - reduced on mobile */}
+            {Array.from({ length: isMobile ? 20 : 45 }).map((_, i) => {
               const size = 20 + Math.random() * 40;
               const hasOrbiters = i < 15;
               const bubbleLeft = Math.random() * 100;
@@ -376,8 +371,8 @@ export default function Play() {
                     }}
                   />
                   
-                  {/* Small dotted orbiters for first 15 bubbles */}
-                  {hasOrbiters && Array.from({ length: 5 }).map((_, orbiterIndex) => {
+                  {/* Small dotted orbiters - reduced on mobile */}
+                  {hasOrbiters && !isMobile && Array.from({ length: 5 }).map((_, orbiterIndex) => {
                     const angle = (orbiterIndex * 72) + (Math.random() * 30);
                     const distance = size * 0.7 + Math.random() * 10;
                     const orbiterSize = 4 + Math.random() * 4;
@@ -446,6 +441,8 @@ export default function Play() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setShowUnderConstruction(false)}
+            role="dialog"
+            aria-label="Under construction notification"
           >
             <motion.div
               initial={{ scale: 0.8, y: 20 }}
@@ -481,9 +478,7 @@ export default function Play() {
                     A new world is brewing. Come back soon!
                   </p>
                   <Button onClick={() => {
-                    const audio = new Audio("https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3");
-                    audio.volume = 0.4;
-                    audio.play().catch(err => console.log("Sound play failed:", err));
+                    playSound("https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3");
                     setShowUnderConstruction(false);
                   }}>Got it!</Button>
                 </CardContent>
