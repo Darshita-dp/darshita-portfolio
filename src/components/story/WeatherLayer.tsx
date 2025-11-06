@@ -6,7 +6,7 @@ interface WeatherLayerProps {
   currentChapter: number;
 }
 
-function ShootingStar() {
+function FallingShootingStar() {
   const prefersReducedMotion = useReducedMotion();
 
   if (prefersReducedMotion) return null;
@@ -15,35 +15,58 @@ function ShootingStar() {
     <motion.div
       className="fixed z-30 pointer-events-none"
       style={{
-        width: "4px",
-        height: "4px",
-        borderRadius: "50%",
-        background: "radial-gradient(circle, #FFE07B, #FFC94A)",
-        boxShadow: "0 0 12px rgba(255, 224, 123, 0.8), 0 0 24px rgba(255, 201, 74, 0.4)",
-        filter: "blur(0.5px)",
+        width: "80px",
+        height: "80px",
       }}
-      initial={{ x: "5vw", y: "-10vh", opacity: 0 }}
-      animate={{ x: "95vw", y: "60vh", opacity: [0, 1, 1, 0] }}
+      initial={{ x: "10vw", y: "-100px", opacity: 0 }}
+      animate={{ x: "40vw", y: "100vh", opacity: [0, 1, 1, 0] }}
       transition={{
-        duration: 3,
+        duration: 4,
         repeat: Infinity,
-        repeatDelay: 4,
-        ease: "easeInOut",
+        repeatDelay: 5,
+        ease: "easeIn",
       }}
     >
-      {/* Tail */}
-      <div
+      {/* Star image */}
+      <img
+        src="https://harmless-tapir-303.convex.cloud/api/storage/57058605-6ae5-45ea-996d-e690064cc0bc"
+        alt="Falling star"
         style={{
-          position: "absolute",
-          width: "200px",
-          height: "2px",
-          background: "linear-gradient(90deg, rgba(255, 224, 123, 0.8), transparent)",
-          left: "-200px",
-          top: "50%",
-          transform: "translateY(-50%)",
-          filter: "blur(1px)",
+          width: "100%",
+          height: "100%",
+          filter: "drop-shadow(0 0 12px rgba(255, 224, 123, 0.8)) drop-shadow(0 0 24px rgba(255, 201, 74, 0.4))",
         }}
       />
+      {/* Sparkle trail */}
+      <motion.div
+        style={{
+          position: "absolute",
+          width: "100%",
+          height: "100%",
+          top: 0,
+          left: 0,
+        }}
+        animate={{
+          opacity: [0.3, 1, 0.3],
+          scale: [0.8, 1.2, 0.8],
+        }}
+        transition={{
+          duration: 0.6,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+      >
+        <div
+          style={{
+            position: "absolute",
+            width: "100%",
+            height: "100%",
+            background: "radial-gradient(circle, rgba(255, 224, 123, 0.6), transparent 70%)",
+            borderRadius: "50%",
+            filter: "blur(8px)",
+          }}
+        />
+      </motion.div>
     </motion.div>
   );
 }
@@ -471,6 +494,9 @@ export function WeatherLayer({ scrollProgress, currentChapter }: WeatherLayerPro
           background: getSkyGradient(),
         }}
       />
+
+      {/* Falling Shooting Star (Chapter 5 - Circle of Friendship) */}
+      {currentChapter === 4 && <FallingShootingStar />}
 
       {/* Moon with Shiny Effect (Chapter 5 - Circle of Friendship) */}
       {currentChapter === 5 && (
