@@ -33,28 +33,38 @@ export class GamePhysics {
 
       if (!isHorizontallyAligned) continue;
 
-      // Check collision from above (falling down)
       const playerBottom = state.player.y + RUNNER_CONFIG.playerHeight;
-      const platformTop = platform.y;
-      const isCollidingFromAbove =
-        playerBottom >= platformTop &&
-        playerBottom <= platformTop + platform.height + 20 &&
-        state.player.vy >= 0;
-
-      // Check collision from below (jumping up)
       const playerTop = state.player.y;
+      const platformTop = platform.y;
       const platformBottom = platform.y + platform.height;
-      const isCollidingFromBelow =
-        playerTop <= platformBottom &&
-        playerTop >= platformBottom - 20 &&
-        state.player.vy < 0;
 
-      if (isCollidingFromAbove || isCollidingFromBelow) {
-        state.player.y = platform.y - RUNNER_CONFIG.playerHeight;
-        state.player.vy = 0;
-        state.player.jumping = false;
-        state.player.onGround = true;
-        break;
+      // Check collision from above (falling down) - only when moving downward
+      if (state.player.vy >= 0) {
+        const isCollidingFromAbove =
+          playerBottom >= platformTop &&
+          playerBottom <= platformTop + 20 &&
+          state.player.y + RUNNER_CONFIG.playerHeight <= platformTop + 20;
+
+        if (isCollidingFromAbove) {
+          state.player.y = platformTop - RUNNER_CONFIG.playerHeight;
+          state.player.vy = 0;
+          state.player.jumping = false;
+          state.player.onGround = true;
+          break;
+        }
+      }
+
+      // Check collision from below (jumping up) - only when moving upward
+      if (state.player.vy < 0) {
+        const isCollidingFromBelow =
+          playerTop <= platformBottom &&
+          playerTop >= platformBottom - 20;
+
+        if (isCollidingFromBelow) {
+          state.player.y = platformBottom;
+          state.player.vy = 0;
+          break;
+        }
       }
     }
 
