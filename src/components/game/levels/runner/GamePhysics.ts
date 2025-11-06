@@ -42,8 +42,7 @@ export class GamePhysics {
       if (state.player.vy >= 0) {
         const isCollidingFromAbove =
           playerBottom >= platformTop &&
-          playerBottom <= platformTop + 20 &&
-          state.player.y + RUNNER_CONFIG.playerHeight <= platformTop + 20;
+          playerBottom <= platformTop + 25;
 
         if (isCollidingFromAbove) {
           state.player.y = platformTop - RUNNER_CONFIG.playerHeight;
@@ -58,7 +57,7 @@ export class GamePhysics {
       if (state.player.vy < 0) {
         const isCollidingFromBelow =
           playerTop <= platformBottom &&
-          playerTop >= platformBottom - 20;
+          playerTop >= platformBottom - 25;
 
         if (isCollidingFromBelow) {
           state.player.y = platformBottom;
