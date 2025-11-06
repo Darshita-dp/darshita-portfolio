@@ -30,6 +30,7 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
     jumpPower: -14,
     groundY: 0,
     collectedStars: new Set<number>(),
+    processedStars: new Set<number>(),
     missedStars: 0,
     playerWidth: 60,
     playerHeight: 60,
@@ -201,13 +202,13 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
       // Draw and check jellyfish
       const time = Date.now() / 1000;
       state.stars.forEach((star) => {
-        if (state.collectedStars.has(star.id)) return;
+        if (state.processedStars.has(star.id)) return;
         
         const x = star.x - state.scrollOffset;
         
         // If missed
-        if (x < state.player.x - 100 && !state.collectedStars.has(star.id)) {
-          state.collectedStars.add(star.id);
+        if (x < state.player.x - 100 && !state.processedStars.has(star.id)) {
+          state.processedStars.add(star.id);
           state.missedStars++;
 
           // Guard with ref
@@ -270,7 +271,8 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
           const dy = (star.y + Math.sin(time * 2 + star.id * 0.5) * 15) - playerCenterY;
           const distance = Math.sqrt(dx * dx + dy * dy);
           
-          if (distance < 40 && !state.collectedStars.has(star.id)) {
+          if (distance < 40 && !state.processedStars.has(star.id)) {
+            state.processedStars.add(star.id);
             state.collectedStars.add(star.id);
             const newCount = state.collectedStars.size;
             setCollectedCount(newCount);
@@ -354,6 +356,7 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
     const state = gameStateRef.current;
     state.scrollOffset = 0;
     state.collectedStars = new Set<number>();
+    state.processedStars = new Set<number>();
     state.missedStars = 0;
     state.player.y = state.groundY - state.playerHeight;
     state.player.vy = 0;
