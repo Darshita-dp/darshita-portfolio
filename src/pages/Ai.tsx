@@ -357,7 +357,7 @@ function InterviewMe() {
   };
 
   return (
-    <div className="h-screen bg-[#D4E8E4] dark:bg-slate-900 relative overflow-hidden flex flex-col">
+    <div className="bg-[#D4E8E4] dark:bg-slate-900 relative overflow-hidden flex flex-col h-full">
       {/* Animated grass background */}
       {grassBackground}
 
@@ -382,7 +382,7 @@ function InterviewMe() {
           </div>
 
           {/* Chat area */}
-          <div className="bg-[#EFE7DD]/60 dark:bg-slate-950/60 flex-1 overflow-y-auto p-3 min-h-[60px] max-h-[calc(100vh-140px)]">
+          <div className="bg-[#EFE7DD]/60 dark:bg-slate-950/60 flex-1 overflow-y-auto p-3 min-h-[40px]">
             {messages.map((m, idx) => (
               <div key={idx} className={`flex mb-2 ${m.role === "user" ? "justify-end" : "justify-start"}`}>
                 {m.role === "ai" && (
