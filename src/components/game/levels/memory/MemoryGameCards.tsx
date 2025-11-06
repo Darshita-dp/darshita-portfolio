@@ -10,11 +10,11 @@ interface MemoryGameCardsProps {
 
 export function MemoryGameCards({ cards, onCardClick, isLocked }: MemoryGameCardsProps) {
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-5 gap-1.5 sm:gap-2 md:gap-3 max-w-[95%] sm:max-w-3xl mx-auto w-full auto-rows-max">
+    <div className="grid grid-cols-2 sm:grid-cols-5 gap-1 sm:gap-2 md:gap-3 max-w-full mx-auto w-full px-2 sm:px-4">
       {cards.map((card) => (
         <motion.div
           key={card.id}
-          className="aspect-[3/4] cursor-pointer w-full"
+          className="aspect-[3/4] cursor-pointer w-full min-h-0"
           style={{ perspective: "800px" }}
           onClick={() => !isLocked && onCardClick(card.id)}
           whileHover={!card.isFlipped && !card.isMatched ? { scale: 1.02 } : {}}
