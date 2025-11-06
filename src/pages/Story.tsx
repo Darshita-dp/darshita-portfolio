@@ -7,78 +7,69 @@ import { WeatherLayer } from "@/components/story/WeatherLayer";
 import { WalkingGirl } from "@/components/story/WalkingGirl";
 import { ChapterContent } from "@/components/story/ChapterContent";
 import { StoryNavigation } from "@/components/story/StoryNavigation";
+import { chapters } from "@/lib/storyChapters";
 import { motion } from "framer-motion";
-
-const chapters = [
-  {
-    id: 1,
-    title: "Once Upon a Time",
-    content: "In a quiet town where mornings smelled of jasmine, a little girl named Darshita dreamed with wide-open eyes. She believed that even the smallest spark of kindness could light the world.",
-  },
-  {
-    id: 2,
-    title: "Garden of Solitude",
-    content: "She grew up in the hush of her grandparents' home, with stories, sketches, and piano notes for company. In silence, she found the colors that would one day paint her dreams.",
-  },
-  {
-    id: 3,
-    title: "The Curious Princess",
-    content: "Curiosity became her crown. She learned to weave code with creativity — lines and colors dancing together. Each click whispered, 'You're building magic.'",
-  },
-  {
-    id: 4,
-    title: "Crossing Oceans",
-    content: "One fine day, courage packed her suitcase. She crossed oceans with hope folded neatly inside. A new world awaited — big, bright, and beautifully unknown.",
-  },
-  {
-    id: 5,
-    title: "Kingdom of Knowledge",
-    content: "In lecture halls and glowing screens, she found her rhythm. Teaching, learning, leading — her heart beat with purpose. Every project became a little story of growth and grace.",
-  },
-  {
-    id: 6,
-    title: "Circle of Friendship",
-    content: "Between coffee mugs and starlit talks, she met her tribe. Friends who laughed, dreamed, and stayed. Together, they turned long nights into lifelong memories.",
-  },
-  {
-    id: 7,
-    title: "Heart of Kindness",
-    content: "Then came the rains — challenges, change, quiet tears. But she learned that kindness is stronger than any storm. Even under her tiny umbrella, she shared her light.",
-  },
-  {
-    id: 8,
-    title: "Dream Blooms",
-    content: "The storm softened; the world turned gentle again. She looked back and saw how every drop had made her bloom. The sun returned — not just above, but inside her too.",
-  },
-  {
-    id: 9,
-    title: "Bright & Happy Future",
-    content: "Now she walks into a new morning with courage in her step. The pen writes, 'To be continued…' For the girl who once dreamed alone now writes stories of her own sunshine.",
-  },
-];
 
 export default function Story() {
   const navigate = useNavigate();
   const [scrollProgress, setScrollProgress] = useState(0);
   const [currentChapter, setCurrentChapter] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+  const touchStartX = useRef(0);
+  const touchStartY = useRef(0);
+
+  // Detect mobile on mount and window resize
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   useEffect(() => {
-    const chapter = Math.floor(scrollProgress * 9);
-    setCurrentChapter(Math.min(8, chapter));
+    const chapter = Math.floor(scrollProgress * chapters.length);
+    setCurrentChapter(Math.min(chapters.length - 1, chapter));
   }, [scrollProgress]);
 
   useEffect(() => {
-    // Create scroll height for vertical scrolling
-    document.body.style.height = "900vh";
+    // Mobile: 600vh, Desktop: 900vh
+    const scrollHeight = isMobile ? "600vh" : "900vh";
+    document.body.style.height = scrollHeight;
     
     return () => {
       document.body.style.height = "";
     };
-  }, []);
+  }, [isMobile]);
 
   const handleNavigate = (chapter: number) => {
-    const targetScroll = (chapter / 9) * (document.body.scrollHeight - window.innerHeight);
+    const targetScroll = (chapter / chapters.length) * (document.body.scrollHeight - window.innerHeight);
     window.scrollTo({ top: targetScroll, behavior: "smooth" });
+  };
+
+  // Touch swipe gestures for mobile
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+    touchStartY.current = e.touches[0].clientY;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    const touchEndX = e.changedTouches[0].clientX;
+    const touchEndY = e.changedTouches[0].clientY;
+    const deltaX = touchStartX.current - touchEndX;
+    const deltaY = Math.abs(touchStartY.current - touchEndY);
+
+    // Only trigger swipe if horizontal movement is greater than vertical
+    if (Math.abs(deltaX) > 50 && deltaY < 50) {
+      if (deltaX > 0) {
+        // Swiped left - go to next chapter
+        handleNavigate(Math.min(chapters.length - 1, currentChapter + 1));
+      } else {
+        // Swiped right - go to previous chapter
+        handleNavigate(Math.max(0, currentChapter - 1));
+      }
+    }
   };
 
   useEffect(() => {
@@ -86,7 +77,7 @@ export default function Story() {
       if (e.key === "ArrowLeft") {
         handleNavigate(Math.max(0, currentChapter - 1));
       } else if (e.key === "ArrowRight") {
-        handleNavigate(Math.min(8, currentChapter + 1));
+        handleNavigate(Math.min(chapters.length - 1, currentChapter + 1));
       }
     };
 
@@ -97,17 +88,41 @@ export default function Story() {
   const isRaining = currentChapter === 6;
 
   return (
-    <div className="relative">
+    <div 
+      className="relative"
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+      role="main"
+      aria-label="Story mode - Interactive narrative experience"
+    >
       {/* Back button */}
       <Button
         variant="outline"
         size="sm"
         onClick={() => navigate("/")}
         className="fixed top-4 left-4 z-50 bg-white/80 backdrop-blur-sm hover:bg-white/90"
+        aria-label="Return to home page"
       >
         <ArrowLeft className="w-4 h-4 mr-2" />
         Back
       </Button>
+
+      {/* Mobile scroll hint */}
+      {isMobile && (
+        <motion.div
+          className="fixed bottom-8 left-1/2 -translate-x-1/2 z-40 text-center text-xs text-slate-600 dark:text-slate-300 pointer-events-none"
+          animate={{ opacity: [0.5, 1, 0.5] }}
+          transition={{ duration: 2, repeat: Infinity }}
+          aria-live="polite"
+          aria-label="Swipe left or right to navigate chapters"
+        >
+          <div className="flex items-center justify-center gap-2">
+            <span>👈</span>
+            <span>Swipe to navigate</span>
+            <span>👉</span>
+          </div>
+        </motion.div>
+      )}
 
       {/* Weather and Sky */}
       <WeatherLayer scrollProgress={scrollProgress} currentChapter={currentChapter} />

@@ -13,7 +13,11 @@ interface ChapterContentProps {
 
 export function ChapterContent({ chapter, isActive }: ChapterContentProps) {
   return (
-    <div className="w-screen h-full flex items-center justify-center px-8 relative z-20">
+    <div 
+      className="w-screen h-full flex items-center justify-center px-4 md:px-8 relative z-20"
+      role="article"
+      aria-label={`Chapter ${chapter.id}: ${chapter.title}`}
+    >
       <motion.div
         className="max-w-2xl text-center"
         initial={{ opacity: 0, y: 12 }}
@@ -21,9 +25,9 @@ export function ChapterContent({ chapter, isActive }: ChapterContentProps) {
         transition={{ duration: 0.6, delay: isActive ? 0 : 0 }}
       >
         <motion.h2
-          className="text-4xl md:text-6xl font-bold mb-6"
+          className="text-3xl md:text-6xl font-bold mb-4 md:mb-6"
           style={{
-            fontFamily: '"Great Vibes", "Gwendolyn", cursive',
+            fontFamily: '\"Great Vibes\", \"Gwendolyn\", cursive',
             color: "#1D2340",
             textShadow: "0 2px 8px rgba(255,255,255,0.8)",
           }}
@@ -35,14 +39,14 @@ export function ChapterContent({ chapter, isActive }: ChapterContentProps) {
         </motion.h2>
         
         <motion.p
-          className="text-lg md:text-xl leading-relaxed"
+          className="text-base md:text-xl leading-relaxed"
           style={{
             fontFamily: 'ui-serif, Georgia, serif',
             color: "#2C3E50",
             textShadow: "0 1px 4px rgba(255,255,255,0.9)",
             backgroundColor: "rgba(255,255,255,0.6)",
             backdropFilter: "blur(8px)",
-            padding: "1.5rem",
+            padding: "1rem md:1.5rem",
             borderRadius: "1rem",
           }}
           initial={{ opacity: 0, y: 12 }}
