@@ -514,6 +514,44 @@ export function WeatherLayer({ scrollProgress, currentChapter }: WeatherLayerPro
     return 0;
   };
 
+  // Blinking stars for Chapter 5 (Circle of Friendship)
+  const BlinkingStars = () => {
+    return (
+      <div className="fixed inset-0 z-10 pointer-events-none">
+        {[...Array(25)].map((_, i) => (
+          <motion.div
+            key={`blink-star-${i}`}
+            className="absolute"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+            }}
+            animate={{
+              opacity: [0.2, 1, 0.2],
+            }}
+            transition={{
+              duration: 1.5 + Math.random() * 1.5,
+              repeat: Infinity,
+              delay: Math.random() * 3,
+              ease: "easeInOut",
+            }}
+          >
+            <img
+              src="https://harmless-tapir-303.convex.cloud/api/storage/644a69ee-f7b1-48c2-8423-e4052c5d1ed6"
+              alt=""
+              aria-hidden="true"
+              style={{
+                width: "8px",
+                height: "8px",
+                display: "block",
+              }}
+            />
+          </motion.div>
+        ))}
+      </div>
+    );
+  };
+
   return (
     <>
       {/* Sky Background */}
@@ -523,6 +561,9 @@ export function WeatherLayer({ scrollProgress, currentChapter }: WeatherLayerPro
           background: getSkyGradient(),
         }}
       />
+
+      {/* Blinking Stars (Chapter 5 - Circle of Friendship) */}
+      {currentChapter === 5 && <BlinkingStars />}
 
       {/* Falling Shooting Star (Chapter 5 - Circle of Friendship) */}
       {currentChapter === 5 && <FallingShootingStar />}
