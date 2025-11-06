@@ -364,11 +364,11 @@ function InterviewMe() {
       <div 
         className="container mx-auto max-w-3xl px-4 relative z-10 h-full flex items-stretch"
         style={{
-          height: "585px",
-          minHeight: "585px"
+          height: "calc(100vh - 140px)",
+          minHeight: "calc(100vh - 140px)"
         }}
       >
-        <Card className="h-full flex flex-col overflow-hidden border-0 shadow-lg w-[95%] mx-auto">
+        <Card className="h-full flex flex-col overflow-hidden border-0 shadow-lg w-full mx-auto md:w-[95%]">
           {/* WhatsApp-style Header */}
           <div className="bg-[#0B6A5B] text-white px-4 py-3 flex items-center gap-3 h-14 flex-shrink-0">
             <img 
