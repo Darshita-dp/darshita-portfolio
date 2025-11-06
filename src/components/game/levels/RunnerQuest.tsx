@@ -18,6 +18,9 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
   const [showComplete, setShowComplete] = useState(false);
   const [showGameOver, setShowGameOver] = useState(false);
 
+  // Add a ref to guard completion/game-over modal triggering across frames/handlers
+  const completionShownRef = useRef(false);
+
   const gameStateRef = useRef({
     player: { x: 100, y: 0, vy: 0, jumping: false, onGround: false },
     stars: [] as { x: number; y: number; collected: boolean; id: number }[],
@@ -48,6 +51,9 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
     
     const jellyfishImg = new Image();
     jellyfishImg.src = "https://harmless-tapir-303.convex.cloud/api/storage/4969c52c-a6ca-45c0-adf2-c79d6a95fbe9";
+    
+    // Replace local flag with ref so it persists across handlers
+    completionShownRef.current = false;
 
     const resizeCanvas = () => {
       const container = canvas.parentElement;
@@ -199,15 +205,16 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
         
         const x = star.x - state.scrollOffset;
         
-        // Check if jellyfish has been missed (scrolled past the player)
+        // If missed
         if (x < state.player.x - 100 && !state.collectedStars.has(star.id)) {
-          state.collectedStars.add(star.id); // Mark as processed
+          state.collectedStars.add(star.id);
           state.missedStars++;
-          
-          // Check game over condition: missed 8 jellyfish without collecting 5
-          if (state.missedStars >= 8 && collectedCount < 5) {
+
+          // Guard with ref
+          if (state.missedStars >= 8 && collectedCount < 5 && !completionShownRef.current) {
             setShowGameOver(true);
             setIsPaused(true);
+            completionShownRef.current = true;
           }
         }
         
@@ -256,22 +263,23 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
           
           ctx.restore();
 
-          // Check collision with player (center-based, accounting for bobbing)
+          // Collision with player
           const playerCenterX = state.player.x + state.playerWidth / 2;
           const playerCenterY = state.player.y + state.playerHeight / 2;
           const dx = x - playerCenterX;
-          const dy = (star.y + bobOffset) - playerCenterY;
+          const dy = (star.y + Math.sin(time * 2 + star.id * 0.5) * 15) - playerCenterY;
           const distance = Math.sqrt(dx * dx + dy * dy);
           
           if (distance < 40 && !state.collectedStars.has(star.id)) {
             state.collectedStars.add(star.id);
             const newCount = state.collectedStars.size;
             setCollectedCount(newCount);
-            
-            // Check for victory immediately after collection
-            if (newCount === 5 && !showComplete) {
+
+            // Victory guard with ref
+            if (newCount === 5 && !completionShownRef.current) {
               setShowComplete(true);
               setIsPaused(true);
+              completionShownRef.current = true;
             }
           }
         }
@@ -350,7 +358,7 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
     state.player.y = state.groundY - state.playerHeight;
     state.player.vy = 0;
     
-    // Regenerate jellyfish for a fresh attempt
+    // Regenerate jellyfish
     state.stars = [];
     for (let i = 0; i < 15; i++) {
       const baseX = 600 + i * 800;
@@ -362,6 +370,9 @@ export function RunnerQuest({ levelId, facts, onComplete, onBack }: RunnerQuestP
         id: i,
       });
     }
+
+    // Reset guard flag properly
+    completionShownRef.current = false;
   };
 
   return (
