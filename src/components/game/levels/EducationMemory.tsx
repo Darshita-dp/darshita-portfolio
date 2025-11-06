@@ -196,7 +196,7 @@ export function EducationMemory({ levelId, facts, onComplete, onBack }: Educatio
           damping: 25,
           opacity: { duration: 0.2 }
         }}
-        className="w-[90vw] h-[80vh] max-w-5xl max-h-[700px] flex flex-col rounded-3xl overflow-hidden"
+        className="w-[90vw] h-[90vh] max-w-5xl max-h-[800px] flex flex-col rounded-3xl overflow-hidden"
         style={{
           backgroundImage: `url('${MEMORY_CONFIG.GAME_BG_IMAGE}')`,
           backgroundSize: "cover",
