@@ -17,9 +17,10 @@ function FallingShootingStar() {
       style={{
         width: "80px",
         height: "80px",
+        opacity: 0.7,
       }}
       initial={{ x: "10vw", y: "-100px", opacity: 0 }}
-      animate={{ x: "40vw", y: "100vh", opacity: [0, 1, 1, 0] }}
+      animate={{ x: "40vw", y: "100vh", opacity: [0, 0.7, 0.7, 0] }}
       transition={{
         duration: 4,
         repeat: Infinity,
