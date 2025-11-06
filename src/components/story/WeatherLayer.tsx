@@ -15,8 +15,8 @@ function FallingShootingStar() {
     <motion.div
       className="fixed z-30 pointer-events-none"
       style={{
-        width: "80px",
-        height: "80px",
+        width: "40px",
+        height: "40px",
         opacity: 0.7,
       }}
       initial={{ x: "10vw", y: "-100px", opacity: 0 }}
