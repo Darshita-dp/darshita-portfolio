@@ -1270,8 +1270,8 @@ export default function Classic() {
               details: "M.S. in Information Systems | GPA: 4.0 | 2025\nInternet Application Development Sequence",
             },
             {
-              uni: "Devi Ahilya Vishwavidyalaya (DAVV), India",
-              details: "B.C.A. (Hons.) | GPA: 3.5 | 2022",
+              uni: "Devi Ahilya Vishwavidyalaya (DAVV)",
+              details: "Bachelor's of Computer Application (Hons.) | GPA: 3.5 | 2023",
             },
           ].map((ed) => (
             <div key={ed.uni} className="edu-card relative">
