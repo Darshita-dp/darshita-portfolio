@@ -13,7 +13,7 @@ export function ChatInput({ input, isTyping, onInputChange, onSend }: ChatInputP
   const inputRef = useRef<HTMLInputElement>(null);
   const isMobile = useIsMobile();
 
-  const placeholder = isMobile ? "Type your question..." : "Type your question before my code daydreams again...";
+  const placeholder = isMobile ? "Type your question" : "Type your question before my code daydreams again...";
 
   return (
     <div className="bg-[#F0F0F0] dark:bg-slate-900 p-2 flex items-center gap-2 border-t flex-shrink-0 sticky bottom-0">
