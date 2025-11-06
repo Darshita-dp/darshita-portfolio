@@ -186,10 +186,11 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
     
     gameStateRef.current.maze = maze;
     
-    // Position player well outside the maze on the left side
+    // Position player well outside the maze on the left side with proper padding
     const cellSize = gameStateRef.current.cellSize;
-    const entranceX = -60; // Position far left, well outside the maze
-    const entranceY = entranceRow * cellSize + 20 + cellSize / 2;
+    const mazePadding = 80; // Padding on left side
+    const entranceX = mazePadding - 100; // Position far left, well outside the maze
+    const entranceY = entranceRow * cellSize + mazePadding + cellSize / 2;
     gameStateRef.current.player.x = entranceX;
     gameStateRef.current.player.y = entranceY;
     
@@ -289,10 +290,11 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
       ctx.fillRect(-bgPadding, -bgPadding, rect.width + bgPadding * 2, rect.height + bgPadding * 2);
     }
 
-    // Draw maze corridors
+    // Draw maze corridors with padding
     if (state.maze) {
       const cellSize = state.cellSize;
       const wallThickness = 4;
+      const mazePadding = 80;
       
       ctx.strokeStyle = "#7EE3C7";
       ctx.lineWidth = wallThickness;
@@ -304,8 +306,8 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
       for (let y = 0; y < state.maze.length; y++) {
         for (let x = 0; x < state.maze[y].length; x++) {
           const cell = state.maze[y][x];
-          const px = x * cellSize + 20;
-          const py = y * cellSize + 20;
+          const px = x * cellSize + mazePadding;
+          const py = y * cellSize + mazePadding;
 
           // Draw walls
           ctx.beginPath();
@@ -363,11 +365,12 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
     if (state.maze) {
       const cellSize = state.cellSize;
       const playerRadius = state.playerSize / 2;
+      const mazePadding = 80;
       
       // Check collision with maze walls
       const checkCollision = (x: number, y: number): boolean => {
-        const cellX = Math.floor((x - 20) / cellSize);
-        const cellY = Math.floor((y - 20) / cellSize);
+        const cellX = Math.floor((x - mazePadding) / cellSize);
+        const cellY = Math.floor((y - mazePadding) / cellSize);
         
         // Allow movement outside maze bounds (for entrance area)
         if (cellY < 0 || cellY >= state.maze!.length || cellX < 0 || cellX >= state.maze![0].length) {
@@ -375,10 +378,10 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
         }
         
         const cell = state.maze![cellY][cellX];
-        const px = cellX * cellSize + 20;
-        const py = cellY * cellSize + 20;
+        const px = cellX * cellSize + mazePadding;
+        const py = cellY * cellSize + mazePadding;
         
-        // Check each wall with even more lenient collision (increased tolerance)
+        // Check each wall with lenient collision tolerance
         if (cell.walls.top && y - playerRadius < py + 8) return true;
         if (cell.walls.bottom && y + playerRadius > py + cellSize - 8) return true;
         if (cell.walls.left && x - playerRadius < px + 8) return true;
@@ -395,7 +398,7 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
     if (canMoveX) state.player.x = newX;
     if (canMoveY) state.player.y = newY;
 
-    // If both axes are blocked, try moving diagonally to escape tight corners
+      // If both axes are blocked, try moving diagonally to escape tight corners
     if (
       !canMoveX &&
       !canMoveY &&
@@ -411,9 +414,10 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
 
         const cellSize = gameStateRef.current.cellSize;
         const playerRadius = gameStateRef.current.playerSize / 2;
+        const mazePadding = 80;
 
-        const cellX = Math.floor((reducedX - 20) / cellSize);
-        const cellY = Math.floor((reducedY - 20) / cellSize);
+        const cellX = Math.floor((reducedX - mazePadding) / cellSize);
+        const cellY = Math.floor((reducedY - mazePadding) / cellSize);
 
         // Allow movement outside maze bounds (for entrance/left space)
         if (cellY < 0 || cellY >= maze.length || cellX < 0 || cellX >= maze[0].length) {
@@ -421,8 +425,8 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
         }
 
         const cell = maze[cellY][cellX];
-        const px = cellX * cellSize + 20;
-        const py = cellY * cellSize + 20;
+        const px = cellX * cellSize + mazePadding;
+        const py = cellY * cellSize + mazePadding;
 
         // Lenient wall tolerance to avoid getting stuck on visuals (8px)
         if (cell.walls.top && reducedY - playerRadius < py + 8) return true;
