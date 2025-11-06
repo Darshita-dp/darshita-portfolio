@@ -526,7 +526,7 @@ export default function Classic() {
                   variant="outline"
                   className="bg-white text-black border-white/60 hover:bg-white/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
                 >
-                  <a href="https://github.com/" target="_blank" rel="noreferrer" aria-label="Open GitHub profile">
+                  <a href="https://github.com/Darshita-dp" target="_blank" rel="noreferrer" aria-label="Open GitHub profile">
                     <span className="inline-flex items-center gap-2">
                       <Github className="w-4 h-4" aria-hidden="true" />
                       <span>GitHub</span>
@@ -1788,7 +1788,7 @@ export default function Classic() {
                     </a>
 
                     <a
-                      href="https://github.com/"
+                      href="https://github.com/Darshita-dp"
                       target="_blank"
                       rel="noopener"
                       aria-label="Open GitHub"
