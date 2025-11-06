@@ -23,13 +23,13 @@ export function StickyNav() {
     <header className="sticky top-0 z-40 border-b bg-white/85 backdrop-blur supports-[backdrop-filter]:bg-white/60">
       <div className="container mx-auto max-w-6xl px-4 py-3 flex items-center justify-between">
         <button
-          className="text-sm font-semibold"
+          className="text-sm font-semibold hidden md:block"
           onClick={() => navigate("/")}
           style={{ color: BLUE.headerTo }}
         >
           ← Modes
         </button>
-        <nav className="flex gap-1 md:gap-4 flex-wrap justify-center md:justify-end">
+        <nav className="flex gap-1 md:gap-4 flex-wrap justify-center md:justify-end flex-1 md:flex-none">
           {items.map((it) => (
             <button
               key={it.id}
