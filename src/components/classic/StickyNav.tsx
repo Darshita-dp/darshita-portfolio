@@ -29,12 +29,12 @@ export function StickyNav() {
         >
           ← Modes
         </button>
-        <nav className="flex gap-2 md:gap-4 flex-wrap justify-center md:justify-end">
+        <nav className="flex gap-1 md:gap-4 flex-wrap justify-center md:justify-end">
           {items.map((it) => (
             <button
               key={it.id}
               onClick={() => go(it.id)}
-              className="px-3 py-1.5 rounded-full text-sm border transition"
+              className="px-2 md:px-3 py-1.5 rounded-full text-xs md:text-sm border transition focus-visible:outline-2 focus-visible:outline-offset-2"
               style={{
                 borderColor: "rgba(13, 71, 161, 0.18)",
                 color: "#0D47A1",

@@ -15,7 +15,7 @@ export function SkillBar({ label, value, delay = 0 }: { label: string; value: nu
 
   return (
     <div ref={ref} className="space-y-1">
-      <div className="flex items-center justify-between text-sm">
+      <div className="flex items-center justify-between text-xs md:text-sm">
         <span className="font-medium">{label}</span>
         <span className="opacity-70">{value}%</span>
       </div>

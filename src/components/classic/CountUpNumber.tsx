@@ -35,7 +35,7 @@ export function CountUpNumber({
   }, [inView, to, duration]);
 
   return (
-    <div ref={containerRef} className={className}>
+    <div ref={containerRef} className={`${className} text-sm md:text-base`}>
       <span ref={ref} />
       {suffix ? <span className="ml-0.5">{suffix}</span> : null}
     </div>
