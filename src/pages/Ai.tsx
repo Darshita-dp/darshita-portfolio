@@ -357,14 +357,14 @@ function InterviewMe() {
   };
 
   return (
-    <div className="h-screen bg-[#D4E8E4] dark:bg-slate-900 relative overflow-hidden flex flex-col">
+    <div className="h-screen bg-[#D4E8E4] dark:bg-slate-900 relative overflow-hidden flex flex-col pb-20">
       {/* Animated grass background */}
       {grassBackground}
 
       <div 
-        className="container mx-auto max-w-3xl px-4 relative z-10 flex-1 flex items-stretch"
+        className="container mx-auto max-w-3xl px-4 relative z-10 flex-1 flex items-stretch overflow-hidden"
       >
-        <Card className="h-full flex flex-col overflow-hidden border-0 shadow-lg w-full">
+        <Card className="flex flex-col overflow-hidden border-0 shadow-lg w-full">
           {/* WhatsApp-style Header */}
           <div className="bg-[#0B6A5B] text-white px-4 py-3 flex items-center gap-3 h-14 flex-shrink-0">
             <img 
@@ -382,7 +382,7 @@ function InterviewMe() {
           </div>
 
           {/* Chat area */}
-          <div className="bg-[#EFE7DD]/60 dark:bg-slate-950/60 flex-1 overflow-y-auto p-3 min-h-[170px]">
+          <div className="bg-[#EFE7DD]/60 dark:bg-slate-950/60 flex-1 overflow-y-auto p-3 min-h-[170px] max-h-[calc(100vh-280px)]">
             {messages.map((m, idx) => (
               <div key={idx} className={`flex mb-2 ${m.role === "user" ? "justify-end" : "justify-start"}`}>
                 {m.role === "ai" && (
@@ -441,7 +441,7 @@ function InterviewMe() {
           </div>
 
           {/* Input bar with WhatsApp-style send button */}
-          <div className="bg-[#F0F0F0] dark:bg-slate-900 p-2 flex items-center gap-2 border-t flex-shrink-0">
+          <div className="bg-[#F0F0F0] dark:bg-slate-900 p-2 flex items-center gap-2 border-t flex-shrink-0 sticky bottom-0">
             <Input
               ref={inputRef}
               placeholder="Type your question before my code daydreams again..."
