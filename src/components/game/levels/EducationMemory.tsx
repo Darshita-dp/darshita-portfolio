@@ -235,7 +235,7 @@ export function EducationMemory({ levelId, facts, onComplete, onBack }: Educatio
         </div>
 
         {/* Game Area */}
-        <div className="flex-1 relative pt-4 px-2 pb-2 md:pt-6 md:px-4 md:pb-4 overflow-y-auto flex items-center justify-center">
+        <div className="flex-1 relative pt-12 px-2 pb-2 md:pt-6 md:px-4 md:pb-4 overflow-y-auto flex items-center justify-center">
           {/* Floating bubbles background effect - reduced for mobile */}
           {Array.from({ length: 8 }).map((_, i) => (
             <motion.div
