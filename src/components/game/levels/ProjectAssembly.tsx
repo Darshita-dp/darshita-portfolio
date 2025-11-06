@@ -76,74 +76,127 @@ const PROJECTS: Project[] = [
   },
 ];
 
-// Maze generation using DFS
+// Static maze structure
 interface MazeCell {
   x: number;
   y: number;
   walls: { top: boolean; right: boolean; bottom: boolean; left: boolean };
-  visited: boolean;
 }
 
-const generateMaze = (cols: number, rows: number): MazeCell[][] => {
-  const maze: MazeCell[][] = [];
-  
-  // Initialize grid
-  for (let y = 0; y < rows; y++) {
-    maze[y] = [];
-    for (let x = 0; x < cols; x++) {
-      maze[y][x] = {
-        x,
-        y,
-        walls: { top: true, right: true, bottom: true, left: true },
-        visited: false,
-      };
-    }
-  }
-
-  // DFS maze generation
-  const stack: MazeCell[] = [];
-  const startCell = maze[0][0];
-  startCell.visited = true;
-  stack.push(startCell);
-
-  while (stack.length > 0) {
-    const current = stack[stack.length - 1];
-    const neighbors: { cell: MazeCell; dir: string }[] = [];
-
-    // Check unvisited neighbors
-    const { x, y } = current;
-    if (y > 0 && !maze[y - 1][x].visited) neighbors.push({ cell: maze[y - 1][x], dir: "top" });
-    if (x < cols - 1 && !maze[y][x + 1].visited) neighbors.push({ cell: maze[y][x + 1], dir: "right" });
-    if (y < rows - 1 && !maze[y + 1][x].visited) neighbors.push({ cell: maze[y + 1][x], dir: "bottom" });
-    if (x > 0 && !maze[y][x - 1].visited) neighbors.push({ cell: maze[y][x - 1], dir: "left" });
-
-    if (neighbors.length > 0) {
-      const { cell: next, dir } = neighbors[Math.floor(Math.random() * neighbors.length)];
-      
-      // Remove walls between current and next
-      if (dir === "top") {
-        current.walls.top = false;
-        next.walls.bottom = false;
-      } else if (dir === "right") {
-        current.walls.right = false;
-        next.walls.left = false;
-      } else if (dir === "bottom") {
-        current.walls.bottom = false;
-        next.walls.top = false;
-      } else if (dir === "left") {
-        current.walls.left = false;
-        next.walls.right = false;
-      }
-
-      next.visited = true;
-      stack.push(next);
-    } else {
-      stack.pop();
-    }
-  }
-
-  return maze;
-};
+const STATIC_MAZE: MazeCell[][] = [
+  [
+    { x: 0, y: 0, walls: { top: true, right: false, bottom: false, left: true } },
+    { x: 1, y: 0, walls: { top: true, right: false, bottom: true, left: false } },
+    { x: 2, y: 0, walls: { top: true, right: true, bottom: false, left: false } },
+    { x: 3, y: 0, walls: { top: true, right: false, bottom: false, left: true } },
+    { x: 4, y: 0, walls: { top: true, right: false, bottom: true, left: false } },
+    { x: 5, y: 0, walls: { top: true, right: true, bottom: false, left: false } },
+    { x: 6, y: 0, walls: { top: true, right: false, bottom: false, left: true } },
+    { x: 7, y: 0, walls: { top: true, right: false, bottom: true, left: false } },
+    { x: 8, y: 0, walls: { top: true, right: true, bottom: false, left: false } },
+    { x: 9, y: 0, walls: { top: true, right: false, bottom: false, left: true } },
+    { x: 10, y: 0, walls: { top: true, right: false, bottom: true, left: false } },
+    { x: 11, y: 0, walls: { top: true, right: true, bottom: false, left: false } },
+  ],
+  [
+    { x: 0, y: 1, walls: { top: false, right: true, bottom: false, left: true } },
+    { x: 1, y: 1, walls: { top: true, right: false, bottom: false, left: true } },
+    { x: 2, y: 1, walls: { top: false, right: true, bottom: true, left: false } },
+    { x: 3, y: 1, walls: { top: false, right: false, bottom: false, left: true } },
+    { x: 4, y: 1, walls: { top: true, right: true, bottom: false, left: false } },
+    { x: 5, y: 1, walls: { top: false, right: false, bottom: true, left: true } },
+    { x: 6, y: 1, walls: { top: false, right: true, bottom: false, left: false } },
+    { x: 7, y: 1, walls: { top: true, right: false, bottom: false, left: true } },
+    { x: 8, y: 1, walls: { top: false, right: true, bottom: true, left: false } },
+    { x: 9, y: 1, walls: { top: false, right: false, bottom: false, left: true } },
+    { x: 10, y: 1, walls: { top: true, right: true, bottom: false, left: false } },
+    { x: 11, y: 1, walls: { top: false, right: false, bottom: true, left: true } },
+  ],
+  [
+    { x: 0, y: 2, walls: { top: false, right: false, bottom: true, left: true } },
+    { x: 1, y: 2, walls: { top: false, right: true, bottom: false, left: false } },
+    { x: 2, y: 2, walls: { top: true, right: false, bottom: false, left: true } },
+    { x: 3, y: 2, walls: { top: false, right: true, bottom: true, left: false } },
+    { x: 4, y: 2, walls: { top: false, right: false, bottom: false, left: true } },
+    { x: 5, y: 2, walls: { top: true, right: true, bottom: false, left: false } },
+    { x: 6, y: 2, walls: { top: false, right: false, bottom: true, left: true } },
+    { x: 7, y: 2, walls: { top: false, right: true, bottom: false, left: false } },
+    { x: 8, y: 2, walls: { top: true, right: false, bottom: false, left: true } },
+    { x: 9, y: 2, walls: { top: false, right: true, bottom: true, left: false } },
+    { x: 10, y: 2, walls: { top: false, right: false, bottom: false, left: true } },
+    { x: 11, y: 2, walls: { top: true, right: true, bottom: false, left: false } },
+  ],
+  [
+    { x: 0, y: 3, walls: { top: true, right: true, bottom: false, left: true } },
+    { x: 1, y: 3, walls: { top: false, right: false, bottom: true, left: true } },
+    { x: 2, y: 3, walls: { top: false, right: true, bottom: false, left: false } },
+    { x: 3, y: 3, walls: { top: true, right: false, bottom: false, left: true } },
+    { x: 4, y: 3, walls: { top: false, right: true, bottom: true, left: false } },
+    { x: 5, y: 3, walls: { top: false, right: false, bottom: false, left: true } },
+    { x: 6, y: 3, walls: { top: true, right: true, bottom: false, left: false } },
+    { x: 7, y: 3, walls: { top: false, right: false, bottom: true, left: true } },
+    { x: 8, y: 3, walls: { top: false, right: true, bottom: false, left: false } },
+    { x: 9, y: 3, walls: { top: true, right: false, bottom: false, left: true } },
+    { x: 10, y: 3, walls: { top: false, right: true, bottom: true, left: false } },
+    { x: 11, y: 3, walls: { top: false, right: false, bottom: false, left: true } },
+  ],
+  [
+    { x: 0, y: 4, walls: { top: false, right: false, bottom: true, left: true } },
+    { x: 1, y: 4, walls: { top: true, right: true, bottom: false, left: false } },
+    { x: 2, y: 4, walls: { top: false, right: false, bottom: false, left: true } },
+    { x: 3, y: 4, walls: { top: false, right: true, bottom: true, left: false } },
+    { x: 4, y: 4, walls: { top: true, right: false, bottom: false, left: true } },
+    { x: 5, y: 4, walls: { top: false, right: true, bottom: false, left: false } },
+    { x: 6, y: 4, walls: { top: false, right: false, bottom: true, left: true } },
+    { x: 7, y: 4, walls: { top: true, right: true, bottom: false, left: false } },
+    { x: 8, y: 4, walls: { top: false, right: false, bottom: false, left: true } },
+    { x: 9, y: 4, walls: { top: false, right: true, bottom: true, left: false } },
+    { x: 10, y: 4, walls: { top: true, right: false, bottom: false, left: true } },
+    { x: 11, y: 4, walls: { top: false, right: true, bottom: false, left: false } },
+  ],
+  [
+    { x: 0, y: 5, walls: { top: true, right: true, bottom: false, left: true } },
+    { x: 1, y: 5, walls: { top: false, right: false, bottom: true, left: true } },
+    { x: 2, y: 5, walls: { top: false, right: true, bottom: false, left: false } },
+    { x: 3, y: 5, walls: { top: true, right: false, bottom: false, left: true } },
+    { x: 4, y: 5, walls: { top: false, right: true, bottom: true, left: false } },
+    { x: 5, y: 5, walls: { top: false, right: false, bottom: false, left: true } },
+    { x: 6, y: 5, walls: { top: true, right: true, bottom: false, left: false } },
+    { x: 7, y: 5, walls: { top: false, right: false, bottom: true, left: true } },
+    { x: 8, y: 5, walls: { top: false, right: true, bottom: false, left: false } },
+    { x: 9, y: 5, walls: { top: true, right: false, bottom: false, left: true } },
+    { x: 10, y: 5, walls: { top: false, right: true, bottom: true, left: false } },
+    { x: 11, y: 5, walls: { top: false, right: false, bottom: false, left: true } },
+  ],
+  [
+    { x: 0, y: 6, walls: { top: false, right: false, bottom: false, left: true } },
+    { x: 1, y: 6, walls: { top: true, right: true, bottom: false, left: false } },
+    { x: 2, y: 6, walls: { top: false, right: false, bottom: true, left: true } },
+    { x: 3, y: 6, walls: { top: false, right: true, bottom: false, left: false } },
+    { x: 4, y: 6, walls: { top: true, right: false, bottom: false, left: true } },
+    { x: 5, y: 6, walls: { top: false, right: true, bottom: false, left: false } },
+    { x: 6, y: 6, walls: { top: false, right: false, bottom: true, left: true } },
+    { x: 7, y: 6, walls: { top: true, right: true, bottom: false, left: false } },
+    { x: 8, y: 6, walls: { top: false, right: false, bottom: false, left: true } },
+    { x: 9, y: 6, walls: { top: false, right: true, bottom: true, left: false } },
+    { x: 10, y: 6, walls: { top: true, right: false, bottom: false, left: true } },
+    { x: 11, y: 6, walls: { top: false, right: true, bottom: false, left: false } },
+  ],
+  [
+    { x: 0, y: 7, walls: { top: false, right: true, bottom: true, left: true } },
+    { x: 1, y: 7, walls: { top: false, right: false, bottom: true, left: true } },
+    { x: 2, y: 7, walls: { top: true, right: true, bottom: true, left: false } },
+    { x: 3, y: 7, walls: { top: false, right: false, bottom: true, left: true } },
+    { x: 4, y: 7, walls: { top: false, right: true, bottom: true, left: false } },
+    { x: 5, y: 7, walls: { top: false, right: false, bottom: true, left: true } },
+    { x: 6, y: 7, walls: { top: true, right: true, bottom: true, left: false } },
+    { x: 7, y: 7, walls: { top: false, right: false, bottom: true, left: true } },
+    { x: 8, y: 7, walls: { top: false, right: true, bottom: true, left: false } },
+    { x: 9, y: 7, walls: { top: true, right: false, bottom: true, left: true } },
+    { x: 10, y: 7, walls: { top: false, right: true, bottom: true, left: false } },
+    { x: 11, y: 7, walls: { top: false, right: false, bottom: true, left: true } },
+  ],
+];
 
 export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectAssemblyProps) {
   const canvasHandleRef = useRef<GameCanvasHandle>(null);
@@ -174,27 +227,24 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
     },
   });
 
-  // Generate maze on mount
+  // Initialize static maze on mount
   useEffect(() => {
-    const cols = 12;
     const rows = 8;
-    const maze = generateMaze(cols, rows);
+    gameStateRef.current.maze = STATIC_MAZE;
     
     // Create entrance on the LEFT side (middle row)
     const entranceRow = Math.floor(rows / 2);
-    maze[entranceRow][0].walls.left = false;
-    
-    gameStateRef.current.maze = maze;
+    STATIC_MAZE[entranceRow][0].walls.left = false;
     
     // Position player well outside the maze on the left side with proper padding
     const cellSize = gameStateRef.current.cellSize;
-    const mazePadding = 80; // Padding on left side
+    const mazePadding = 80; // Padding on all sides
     const entranceX = mazePadding - 100; // Position far left, well outside the maze
     const entranceY = entranceRow * cellSize + mazePadding + cellSize / 2;
     gameStateRef.current.player.x = entranceX;
     gameStateRef.current.player.y = entranceY;
     
-    console.log("Maze generated. Player position:", { x: entranceX, y: entranceY, entranceRow, cols, rows });
+    console.log("Static maze initialized. Player position:", { x: entranceX, y: entranceY, entranceRow });
   }, []);
 
   // Load images
@@ -290,11 +340,12 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
       ctx.fillRect(-bgPadding, -bgPadding, rect.width + bgPadding * 2, rect.height + bgPadding * 2);
     }
 
-    // Draw maze corridors with padding
+    // Draw maze corridors with padding on all sides
     if (state.maze) {
       const cellSize = state.cellSize;
       const wallThickness = 4;
       const mazePadding = 80;
+      const bottomPadding = 120; // Extra padding at bottom
       
       ctx.strokeStyle = "#7EE3C7";
       ctx.lineWidth = wallThickness;
@@ -330,6 +381,12 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
           ctx.stroke();
         }
       }
+      
+      // Draw bottom boundary with padding
+      ctx.beginPath();
+      ctx.moveTo(mazePadding, state.maze.length * cellSize + mazePadding);
+      ctx.lineTo(state.maze[0].length * cellSize + mazePadding, state.maze.length * cellSize + mazePadding);
+      ctx.stroke();
       
       ctx.shadowBlur = 0;
     }
