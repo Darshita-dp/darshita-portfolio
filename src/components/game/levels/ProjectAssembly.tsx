@@ -438,11 +438,12 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
         const px = cellX * cellSize + mazePadding;
         const py = cellY * cellSize + mazePadding;
         
-        // Check each wall with lenient collision tolerance
-        if (cell.walls.top && y - playerRadius < py + 8) return true;
-        if (cell.walls.bottom && y + playerRadius > py + cellSize - 8) return true;
-        if (cell.walls.left && x - playerRadius < px + 8) return true;
-        if (cell.walls.right && x + playerRadius > px + cellSize - 8) return true;
+        // Only check walls that are actually present, with proper tolerance
+        // Tolerance of 4px to allow smooth movement through corridors
+        if (cell.walls.top && y - playerRadius < py + 4) return true;
+        if (cell.walls.bottom && y + playerRadius > py + cellSize - 4) return true;
+        if (cell.walls.left && x - playerRadius < px + 4) return true;
+        if (cell.walls.right && x + playerRadius > px + cellSize - 4) return true;
         
         return false;
       };
@@ -485,11 +486,11 @@ export function ProjectAssembly({ levelId, facts, onComplete, onBack }: ProjectA
         const px = cellX * cellSize + mazePadding;
         const py = cellY * cellSize + mazePadding;
 
-        // Lenient wall tolerance to avoid getting stuck on visuals (8px)
-        if (cell.walls.top && reducedY - playerRadius < py + 8) return true;
-        if (cell.walls.bottom && reducedY + playerRadius > py + cellSize - 8) return true;
-        if (cell.walls.left && reducedX - playerRadius < px + 8) return true;
-        if (cell.walls.right && reducedX + playerRadius > px + cellSize - 8) return true;
+        // Reduced tolerance (4px) for smoother movement
+        if (cell.walls.top && reducedY - playerRadius < py + 4) return true;
+        if (cell.walls.bottom && reducedY + playerRadius > py + cellSize - 4) return true;
+        if (cell.walls.left && reducedX - playerRadius < px + 4) return true;
+        if (cell.walls.right && reducedX + playerRadius > px + cellSize - 4) return true;
 
         return false;
       })();
