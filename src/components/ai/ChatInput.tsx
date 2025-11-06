@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { Input } from "@/components/ui/input";
-import { useMediaQuery } from "@/hooks/use-mobile";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface ChatInputProps {
   input: string;
@@ -11,7 +11,7 @@ interface ChatInputProps {
 
 export function ChatInput({ input, isTyping, onInputChange, onSend }: ChatInputProps) {
   const inputRef = useRef<HTMLInputElement>(null);
-  const isMobile = useMediaQuery("(max-width: 768px)");
+  const isMobile = useIsMobile();
 
   const placeholder = isMobile ? "Type your question..." : "Type your question before my code daydreams again...";
 
