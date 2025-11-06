@@ -30,7 +30,7 @@ function FallingShootingStar() {
     >
       {/* Star image */}
       <img
-        src="https://harmless-tapir-303.convex.cloud/api/storage/57058605-6ae5-45ea-996d-e690064cc0bc"
+        src="https://harmless-tapir-303.convex.cloud/api/storage/75669a90-bc17-4c80-ab1f-8ab19d66bc1a"
         alt="Falling star"
         style={{
           width: "100%",
