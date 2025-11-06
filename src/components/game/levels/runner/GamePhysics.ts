@@ -26,6 +26,11 @@ export class GamePhysics {
     state.player.onGround = false;
 
     for (const platform of state.platforms) {
+      const playerBottom = state.player.y + RUNNER_CONFIG.playerHeight;
+      const playerTop = state.player.y;
+      const platformTop = platform.y;
+      const platformBottom = platform.y + platform.height;
+
       // Check if player is horizontally aligned with platform
       const isHorizontallyAligned =
         state.player.x + RUNNER_CONFIG.playerWidth > platform.x &&
@@ -33,37 +38,20 @@ export class GamePhysics {
 
       if (!isHorizontallyAligned) continue;
 
-      const playerBottom = state.player.y + RUNNER_CONFIG.playerHeight;
-      const playerTop = state.player.y;
-      const platformTop = platform.y;
-      const platformBottom = platform.y + platform.height;
-
-      // Check collision from above (falling down) - only when moving downward
-      if (state.player.vy >= 0) {
-        const isCollidingFromAbove =
-          playerBottom >= platformTop &&
-          playerBottom <= platformTop + 25;
-
-        if (isCollidingFromAbove) {
-          state.player.y = platformTop - RUNNER_CONFIG.playerHeight;
-          state.player.vy = 0;
-          state.player.jumping = false;
-          state.player.onGround = true;
-          break;
-        }
+      // Landing on platform from above (falling down)
+      if (state.player.vy >= 0 && playerBottom >= platformTop && playerBottom <= platformTop + 20) {
+        state.player.y = platformTop - RUNNER_CONFIG.playerHeight;
+        state.player.vy = 0;
+        state.player.jumping = false;
+        state.player.onGround = true;
+        break;
       }
 
-      // Check collision from below (jumping up) - only when moving upward
-      if (state.player.vy < 0) {
-        const isCollidingFromBelow =
-          playerTop <= platformBottom &&
-          playerTop >= platformBottom - 25;
-
-        if (isCollidingFromBelow) {
-          state.player.y = platformBottom;
-          state.player.vy = 0;
-          break;
-        }
+      // Hitting platform from below (jumping up)
+      if (state.player.vy < 0 && playerTop <= platformBottom && playerTop >= platformBottom - 20) {
+        state.player.y = platformBottom;
+        state.player.vy = 0;
+        break;
       }
     }
 
