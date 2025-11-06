@@ -196,8 +196,9 @@ export function EducationMemory({ levelId, facts, onComplete, onBack }: Educatio
           damping: 25,
           opacity: { duration: 0.2 }
         }}
-        className="w-[90vw] h-[90vh] max-w-5xl max-h-[800px] flex flex-col rounded-3xl overflow-hidden"
+        className="w-[90vw] max-w-5xl flex flex-col rounded-3xl overflow-hidden"
         style={{
+          maxHeight: "90vh",
           backgroundImage: `url('${MEMORY_CONFIG.GAME_BG_IMAGE}')`,
           backgroundSize: "cover",
           backgroundPosition: "center",
@@ -234,7 +235,7 @@ export function EducationMemory({ levelId, facts, onComplete, onBack }: Educatio
         </div>
 
         {/* Game Area */}
-        <div className="flex-1 relative p-2 md:p-4 overflow-hidden flex items-center justify-center">
+        <div className="flex-1 relative p-2 md:p-4 overflow-y-auto flex items-center justify-center">
           {/* Floating bubbles background effect - reduced for mobile */}
           {Array.from({ length: 8 }).map((_, i) => (
             <motion.div
