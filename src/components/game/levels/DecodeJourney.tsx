@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Trophy } from "lucide-react";
 import { BYTE_BUBBLES_THEME } from "@/lib/byteBubblesData";
 
 interface DecodeJourneyProps {
@@ -65,7 +66,7 @@ const CHALLENGES: Challenge[] = [
     }
   },
   {
-    prompt: "🏭 At GMP MachPro (India | 01/2023–06/2023), what production impact did her analysis drive?",
+    prompt: "🏭 At Futurristic (India | 01/2023–06/2023), what production impact did her analysis drive?",
     options: [
       "A) No measurable change",
       "B) Rejection rate increased",
@@ -74,7 +75,7 @@ const CHALLENGES: Challenge[] = [
     ],
     correct: 2,
     reveal: {
-      title: "🏭 Data Analyst Intern — GMP MachPro",
+      title: "🏭 Data Analyst Intern — Futurristic",
       summary: "Analyzed production datasets from granulation and liquid packaging lines to identify efficiency gaps and improve manufacturing performance.",
       impact: [
         "Downtime ↓ 8%",
@@ -759,11 +760,9 @@ export function DecodeJourney({ levelId, facts, onComplete, onBack }: DecodeJour
                         Mission Log:
                       </h3>
                       <div className="space-y-1 text-sm">
-                        <p>🎓 Graduate Teaching Assistant — Illinois State University</p>
-                        <p className="ml-4 text-xs">IT150 Labs | 150+ students | MS Suite (Excel | Word | Access | PowerPoint)</p>
-                        <p>🌊 Data & Web Development Intern — CIIWAS NGO (Normal, IL | 08/2024–12/2024)</p>
-                        <p>🏭 Data Analyst Intern — GMP MachPro (India | 01/2023–06/2023)</p>
-                        <p>🤝 IT Data Analyst Intern — ORANGESNGO (India | 04/2022–12/2022)</p>
+                        <p>🎓 Graduate Teaching Assistant — Illinois State University (08/2023–Present)</p>
+                        <p>🏭 Data Analyst Intern — Futurristic (India | 01/2023–06/2023)</p>
+                        <p>💻 Web Development Intern — The Sparks Foundation (06/2021–07/2021)</p>
                       </div>
                     </div>
 
@@ -777,9 +776,9 @@ export function DecodeJourney({ levelId, facts, onComplete, onBack }: DecodeJour
                       </h3>
                       <div className="space-y-2 text-sm">
                         <p>• CIIWAS: Dashboards used by 100+ women | Registration efficiency ↑ 25% | MySQL pipelines automated</p>
-                        <p>• GMP MachPro: Downtime ↓ 8% | Power BI KPI visibility | Forecast accuracy ↑ 15%</p>
+                        <p>• Futurristic: Downtime ↓ 8% | Power BI KPI visibility | Forecast accuracy ↑ 15%</p>
                         <p>• ORANGESNGO: Donor participation ↑ 25% in 2 months | 2,000+ beneficiaries tracked | 80+ regions standardized</p>
-                        <p>• ISU GTA: Led labs for 150+ students | MS Suite (Excel, Word, Access, PowerPoint) | Enhanced communication & mentorship</p>
+                        <p>• ISU: 95% student satisfaction | 30% grading efficiency increase</p>
                       </div>
                     </div>
 
@@ -818,6 +817,22 @@ export function DecodeJourney({ levelId, facts, onComplete, onBack }: DecodeJour
                     >
                       Continue → Next Mission
                     </Button>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg flex items-center gap-2">
+                      <Trophy className="w-5 h-5 text-yellow-500" />
+                      Key Achievements
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-2 text-sm text-muted-foreground">
+                      <p>• SmartPlanner iOS App: 4.5/5 user rating | 15% productivity boost</p>
+                      <p>• Futurristic: Downtime ↓ 8% | Power BI KPI visibility | Forecast accuracy ↑ 15%</p>
+                      <p>• ISU: 95% student satisfaction | 30% grading efficiency increase</p>
+                    </div>
                   </CardContent>
                 </Card>
               </motion.div>

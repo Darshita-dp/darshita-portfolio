@@ -63,7 +63,7 @@ export const LEVEL_DATA = {
     facts: [
       "Graduate Teaching Assistant — ISU",
       "Data & Web Development Intern — CIIWAS NGO",
-      "Data Analyst Intern — GMP MachPro",
+      "Data Analyst Intern — Futurristic",
       "IT Data Analyst Intern — ORANGESNGO",
     ],
   },

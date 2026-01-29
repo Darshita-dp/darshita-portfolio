@@ -856,12 +856,12 @@ export default function Classic() {
             },
             {
               icon: <Database className="w-4 h-4 text-blue-700" />,
-              title: "GMP MachPro | Data Analyst Intern — India",
-              period: "01/2023 – 06/2023",
+              title: "Futurristic | Data Analyst Intern — India",
+              period: "2023",
               desc:
-                "• Analyzed production datasets from granulation and liquid packaging lines, identifying efficiency gaps that reduced downtime by 8% and contributed to operational savings\n• Developed Power BI dashboards to monitor KPIs — machine output, rejection rates, and utilization — giving leadership realtime visibility into production performance\n• Conducted statistical reviews of sales and quality data, uncovering demand trends and batch variances that improved forecasting accuracy by 15% and strengthened compliance",
+                "Spearheaded data-driven decision making by developing Power BI dashboards that reduced manual reporting time by 30%. Analyzed production downtime using Python (Pandas/NumPy), identifying key bottlenecks that led to an 8% reduction in machine downtime. Improved demand forecasting accuracy by 15% through historical data trend analysis.",
               orgColor: "#6D28D9",
-              tags: ["Power BI", "KPIs", "Data Analytics"],
+              tags: ["Power BI", "Python", "Data Visualization", "SQL", "Predictive Modeling"],
               metrics: ["-8% downtime", "+15% forecasting accuracy"],
               link: "https://www.gmpmachpro.com/",
               category: "Internships",

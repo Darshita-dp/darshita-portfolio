@@ -1,5 +1,5 @@
 // Shared knowledge base for AI chat
-export type QA = { q: string; a: string; keywords: string[] };
+export type QA = { q: string; a: string; keywords?: string[]; category?: string };
 
 export const KNOWLEDGE: Array<QA> = [
   {
@@ -24,7 +24,7 @@ export const KNOWLEDGE: Array<QA> = [
   },
   {
     q: "Introduction & Overview",
-    a: "Hi! I'm Darshita Patel, a graduate student at Illinois State University with a 4.0 GPA in Information Systems. I'm passionate about data analytics, full-stack development, and building user-friendly applications. I've worked as a Graduate Teaching Assistant, completed internships at GMP MachPro and NGOs, and built projects like SmartPlanner (iOS app) and AI-driven analytics dashboards. I'm currently preparing for AWS and Tableau certifications while seeking opportunities as a Data Analyst or Systems Analyst. Outside of tech, I enjoy cooking, playing piano, badminton, and photography!",
+    a: "Hi! I'm Darshita Patel, a graduate student at Illinois State University with a 4.0 GPA in Information Systems. I'm passionate about data analytics, full-stack development, and building user-friendly applications. I've worked as a Graduate Teaching Assistant, completed internships at Futurristic and NGOs, and built projects like SmartPlanner (iOS app) and AI-driven analytics dashboards. I'm currently preparing for AWS and Tableau certifications while seeking opportunities as a Data Analyst or Systems Analyst. Outside of tech, I enjoy cooking, playing piano, badminton, and photography!",
     keywords: ["introduce", "introduction", "about you", "about yourself", "tell me about", "overview", "summary", "yourself", "background"],
   },
   {
@@ -88,8 +88,13 @@ export const KNOWLEDGE: Array<QA> = [
     keywords: ["ngo", "ciiwas", "oranges", "web development", "accessibility", "dashboards", "impact"],
   },
   {
-    q: "GMP MachPro Internship",
-    a: "During my Data Analyst Internship at GMP MachPro, I built Power BI dashboards to track daily production and quality metrics. These visualizations reduced manual reporting time by 30% and improved team decision-making.",
+    q: "Futurristic Internship",
+    a: "During my Data Analyst Internship at Futurristic, I built Power BI dashboards to track daily production and quality metrics. These visualizations reduced manual reporting time by 30% and improved team decision-making. I also analyzed downtime data using Python, identifying bottlenecks that led to an 8% reduction in machine downtime and a 15% improvement in forecast accuracy.",
+    keywords: ["futurristic", "internship", "data analyst", "dashboard", "metrics", "power bi", "production", "quality", "python", "downtime", "forecast accuracy"],
+  },
+  {
+    q: "Futurristic Internship",
+    a: "During my Data Analyst Internship at Futurristic, I built Power BI dashboards to track daily production and quality metrics. These visualizations reduced manual reporting time by 30% and improved team decision-making.",
     keywords: ["gmp", "internship", "machpro", "data analyst", "dashboard", "metrics", "power bi", "production", "quality"],
   },
   {
@@ -351,5 +356,20 @@ export const KNOWLEDGE: Array<QA> = [
     q: "Where do you see yourself in 5 years?",
     a: "In five years, I see myself as a skilled data professional — someone who not only analyzes data but also contributes to strategic decisions. I hope to mentor new team members, take on leadership responsibilities, and continue exploring tools that make businesses more data-driven and efficient.",
     keywords: ["5 years", "five years", "future", "career path", "where do you see"],
+  },
+  {
+    q: "Tell me about yourself",
+    a: "Hi! I'm Darshita Patel, a graduate student at Illinois State University with a 4.0 GPA in Information Systems. I'm passionate about data analytics, full-stack development, and building user-friendly applications. I've worked as a Graduate Teaching Assistant, completed internships at Futurristic and NGOs, and built projects like SmartPlanner (iOS app) and AI-driven analytics dashboards. I'm currently preparing for AWS and Tableau certifications while seeking opportunities as a Data Analyst or Systems Analyst. Outside of tech, I enjoy cooking, playing piano, badminton, and photography!",
+    category: "personal"
+  },
+  {
+    q: "What is your professional experience?",
+    a: "I have diverse experience in data analysis and development. Currently, I'm a Graduate Teaching Assistant at Illinois State University. Previously, I was a Data Analyst Intern at Futurristic, where I optimized production workflows using Power BI and Python. I also interned as a Web Developer at The Sparks Foundation and worked with NGOs like Hamari Pahchan to drive digital literacy.",
+    category: "experience"
+  },
+  {
+    q: "Futurristic Internship",
+    a: "During my Data Analyst Internship at Futurristic, I built Power BI dashboards to track daily production and quality metrics. These visualizations reduced manual reporting time by 30% and improved team decision-making. I also analyzed downtime data using Python, identifying bottlenecks that led to an 8% reduction in machine downtime and a 15% improvement in forecast accuracy.",
+    category: "experience"
   },
 ];
