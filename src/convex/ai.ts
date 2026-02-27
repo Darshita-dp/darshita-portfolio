@@ -3,6 +3,7 @@
 import { action } from "./_generated/server";
 import { v } from "convex/values";
 import { KNOWLEDGE } from "../lib/aiKnowledge";
+import { vly } from "../lib/vly-integrations";
 
 export const chat = action({
   args: {
@@ -13,12 +14,6 @@ export const chat = action({
     }))),
   },
   handler: async (ctx, args) => {
-    const apiKey = process.env.OPENROUTER_API_KEY;
-    
-    if (!apiKey) {
-      throw new Error("OPENROUTER_API_KEY is not configured. Please add it in the API Keys tab.");
-    }
-
     // Build context from knowledge base
     const knowledgeContext = KNOWLEDGE.map(item => `Q: ${item.q}\nA: ${item.a}`).join("\n\n");
     
@@ -39,41 +34,29 @@ Guidelines:
 - Use the pattern: "main content here.\n\n\nContextual closing question?" (note the triple newline for spacing)`;
 
     const messages = [
-      { role: "system", content: systemPrompt },
-      ...(args.conversationHistory || []),
-      { role: "user", content: args.message },
+      { role: "system" as const, content: systemPrompt },
+      ...(args.conversationHistory || []).map(m => ({ role: m.role as 'system' | 'user' | 'assistant', content: m.content })),
+      { role: "user" as const, content: args.message },
     ];
 
     try {
-      const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${apiKey}`,
-          "HTTP-Referer": process.env.CONVEX_SITE_URL || "https://darshita-portfolio.com",
-          "X-Title": "Darshita's Portfolio Chat",
-        },
-        body: JSON.stringify({
-          model: "openai/gpt-3.5-turbo",
-          messages: messages,
-          temperature: 0.7,
-          max_tokens: 500,
-        }),
+      const result = await vly.ai.completion({
+        model: 'gpt-4o-mini',
+        messages: messages,
+        maxTokens: 500,
       });
 
-      if (!response.ok) {
-        const error = await response.text();
-        console.error("OpenRouter API error:", error);
-        throw new Error(`OpenRouter API error: ${response.status}`);
+      if (result.success && result.data) {
+        return {
+          message: result.data.choices[0]?.message?.content || "No response",
+          success: true,
+        };
+      } else {
+        console.error("Vly AI error:", result.error);
+        throw new Error(result.error || "Request failed");
       }
-
-      const data = await response.json();
-      return {
-        message: data.choices[0].message.content,
-        success: true,
-      };
     } catch (error) {
-      console.error("Error calling OpenRouter:", error);
+      console.error("Error calling AI:", error);
       return {
         message: "I'm having trouble connecting right now. Please try again in a moment, or feel free to reach out to Darshita directly on LinkedIn! 🌼",
         success: false,
