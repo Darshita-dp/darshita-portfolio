@@ -23,7 +23,7 @@ export const KNOWLEDGE: Array<QA> = [
   },
   {
     q: "Introduction & Overview",
-    a: "Hi! I'm Darshita Patel, a graduate student at Illinois State University with a 4.0 GPA in Information Systems. I'm passionate about data analytics, full-stack development, and building user-friendly applications. I've worked as a Graduate Teaching Assistant, completed internships at Futurristic and NGOs, and built projects like SmartPlanner (iOS app) and AI-driven analytics dashboards. I'm currently preparing for AWS and Tableau certifications while seeking opportunities as a Data Analyst or Systems Analyst. Outside of tech, I enjoy cooking, playing piano, badminton, and photography!",
+    a: "Hi! I'm Darshita Patel, a graduate student at Illinois State University with a 4.0 GPA in Information Systems. I'm passionate about data analytics, full-stack development, and building user-friendly applications. I've worked as a Data & Process Analyst, completed internships at Futurristic and NGOs, and built projects like SmartPlanner (iOS app) and AI-driven analytics dashboards. I'm currently preparing for AWS and Tableau certifications while seeking opportunities as a Data Analyst or Systems Analyst. Outside of tech, I enjoy cooking, playing piano, badminton, and photography!",
     keywords: ["introduce", "introduction", "about you", "about yourself", "tell me about", "overview", "summary", "yourself", "background"],
   },
   {
@@ -48,7 +48,7 @@ export const KNOWLEDGE: Array<QA> = [
   },
   {
     q: "Proudest Achievement",
-    a: "My proudest achievement is completing my Master's with a 4.0 GPA while also working as a Teaching Assistant. It was challenging to balance coursework, labs, and mentoring more than 150 students each semester — but I managed through good planning and time management. I'm proud not just of the grades, but of how I grew — helping others learn while improving my own technical and communication skills. It showed me that with discipline and passion, I can handle multiple responsibilities successfully.",
+    a: "My proudest achievement is completing my Master's with a 4.0 GPA while also working as a Data & Process Analyst. It was challenging to balance coursework, labs, and mentoring more than 150 students each semester — but I managed through good planning and time management. I'm proud not just of the grades, but of how I grew — helping others learn while improving my own technical and communication skills. It showed me that with discipline and passion, I can handle multiple responsibilities successfully.",
     keywords: ["proudest achievement", "proud of", "biggest accomplishment", "what are you proud of", "greatest achievement"],
   },
   {
@@ -67,14 +67,14 @@ export const KNOWLEDGE: Array<QA> = [
     keywords: ["bachelor's", "undergrad", "bca", "devi ahilya", "india", "gpa", "computer applications", "courses", "subjects", "3.5", "vishwavidyalaya"],
   },
   {
-    q: "Graduate Teaching Assistant",
-    a: "As a Graduate Teaching Assistant at ISU, I taught IT-150 labs covering the full MS Office Suite — Word, Excel, Access, and PowerPoint — to around 150 students per semester for 2 semesters. I also graded assignments, guided projects, and provided one-on-one support.",
-    keywords: ["gta", "teaching", "ta", "assistant", "professor", "ms office", "word", "excel", "access", "powerpoint", "students", "it-150", "labs", "grading"],
+    q: "Data & Process Analyst",
+    a: "As a Data & Process Analyst at ISU, I taught IT-150 labs covering the full MS Office Suite — Word, Excel, Access, and PowerPoint — to around 150 students per semester for 2 semesters. I also graded assignments, guided projects, and provided one-on-one support.",
+    keywords: ["data analyst", "process analyst", "teaching", "ta", "assistant", "professor", "ms office", "word", "excel", "access", "powerpoint", "students", "it-150", "labs", "grading"],
   },
   {
     q: "Awards",
-    a: "I received a Graduate Teaching Assistantship and was honored with the Outstanding Graduate Student Award at Illinois State University.",
-    keywords: ["award", "scholarship", "recognition", "outstanding", "graduate", "achievement", "teaching assistantship", "honors"],
+    a: "I received a Data & Process Analyst position and was honored with the Outstanding Graduate Student Award at Illinois State University.",
+    keywords: ["award", "scholarship", "recognition", "outstanding", "graduate", "achievement", "honors"],
   },
   {
     q: "Research Work",
@@ -87,9 +87,9 @@ export const KNOWLEDGE: Array<QA> = [
     keywords: ["ngo", "ciiwas", "oranges", "web development", "accessibility", "dashboards", "impact"],
   },
   {
-    q: "Futurristic Internship",
-    a: "During my Data Analyst Internship at Futurristic, I built Power BI dashboards to track daily production and quality metrics. These visualizations reduced manual reporting time by 30% and improved team decision-making. I also analyzed downtime data using Python, identifying bottlenecks that led to an 8% reduction in machine downtime and a 15% improvement in forecast accuracy.",
-    keywords: ["futurristic", "internship", "data analyst", "dashboard", "metrics", "power bi", "production", "quality", "python", "downtime", "forecast accuracy"],
+    q: "Futurristic Experience",
+    a: "During my time as a Data Analyst at Futurristic, I built Power BI dashboards to track daily production and quality metrics. These visualizations reduced manual reporting time by 30% and improved team decision-making. I also analyzed downtime data using Python, identifying bottlenecks that led to an 8% reduction in machine downtime and a 15% improvement in forecast accuracy.",
+    keywords: ["futurristic", "data analyst", "dashboard", "metrics", "power bi", "production", "quality", "python", "downtime", "forecast accuracy"],
     category: "experience"
   },
   {
@@ -239,7 +239,7 @@ export const KNOWLEDGE: Array<QA> = [
   },
   {
     q: "What are your strengths?",
-    a: "I'd say my top strengths are adaptability, communication, and problem-solving. As an international student balancing studies, work, and projects, I've learned to adjust quickly to new environments. I also communicate well — whether teaching as a Graduate Assistant or collaborating in team projects. And when problems come up, I like to stay calm and think logically to find the root cause.",
+    a: "I'd say my top strengths are adaptability, communication, and problem-solving. As an international student balancing studies, work, and projects, I've learned to adjust quickly to new environments. I also communicate well — whether teaching as a Data & Process Analyst or collaborating in team projects. And when problems come up, I like to stay calm and think logically to find the root cause.",
     keywords: ["strengths", "strong points", "what are you good at", "adaptability", "communication", "problem solving"],
   },
   {
@@ -319,7 +319,7 @@ export const KNOWLEDGE: Array<QA> = [
   },
   {
     q: "Describe a time you managed multiple priorities",
-    a: "During my last semester, I was handling my coursework, internship, and Teaching Assistant duties all at once. To manage it, I planned my week in advance and prioritized tasks daily. I learned that being disciplined with time helps avoid burnout and ensures quality in every task.",
+    a: "During my last semester, I was handling my coursework, internship, and Data & Process Analyst duties all at once. To manage it, I planned my week in advance and prioritized tasks daily. I learned that being disciplined with time helps avoid burnout and ensures quality in every task.",
     keywords: ["multiple priorities", "multitasking", "time management", "juggling tasks"],
   },
   {
@@ -354,12 +354,12 @@ export const KNOWLEDGE: Array<QA> = [
   },
   {
     q: "Tell me about yourself",
-    a: "Hi! I'm Darshita Patel, a graduate student at Illinois State University with a 4.0 GPA in Information Systems. I'm passionate about data analytics, full-stack development, and building user-friendly applications. I've worked as a Graduate Teaching Assistant, completed internships at Futurristic and NGOs, and built projects like SmartPlanner (iOS app) and AI-driven analytics dashboards. I'm currently preparing for AWS and Tableau certifications while seeking opportunities as a Data Analyst or Systems Analyst. Outside of tech, I enjoy cooking, playing piano, badminton, and photography!",
+    a: "Hi! I'm Darshita Patel, a graduate student at Illinois State University with a 4.0 GPA in Information Systems. I'm passionate about data analytics, full-stack development, and building user-friendly applications. I've worked as a Data & Process Analyst, completed internships at Futurristic and NGOs, and built projects like SmartPlanner (iOS app) and AI-driven analytics dashboards. I'm currently preparing for AWS and Tableau certifications while seeking opportunities as a Data Analyst or Systems Analyst. Outside of tech, I enjoy cooking, playing piano, badminton, and photography!",
     category: "personal"
   },
   {
     q: "What is your professional experience?",
-    a: "I have diverse experience in data analysis and development. Currently, I'm a Graduate Teaching Assistant at Illinois State University. Previously, I was a Data Analyst Intern at Futurristic, where I optimized production workflows using Power BI and Python. I also interned as a Web Developer at The Sparks Foundation and worked with NGOs like Hamari Pahchan to drive digital literacy.",
+    a: "I have diverse experience in data analysis and development. Currently, I'm a Data & Process Analyst at Illinois State University. Previously, I was a Data Analyst at Futurristic, where I optimized production workflows using Power BI and Python. I also interned as a Web Developer at The Sparks Foundation and worked with NGOs like Hamari Pahchan to drive digital literacy.",
     category: "experience"
   },
 ];

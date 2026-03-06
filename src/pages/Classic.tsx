@@ -831,7 +831,7 @@ export default function Classic() {
           const items: Array<ExpItem> = [
             {
               icon: <Briefcase className="w-4 h-4 text-blue-700" />,
-              title: "Graduate Teaching Assistant | Illinois State University",
+              title: "Data & Process Analyst | Illinois State University",
               period: "Aug 2024 – May 2025",
               desc:
                 "Instructed and supported 120+ students in IT productivity tools; developed lab content and guided students in Microsoft Office Suite and data tools.",
@@ -843,7 +843,7 @@ export default function Classic() {
             },
             {
               icon: <Database className="w-4 h-4 text-blue-700" />,
-              title: "CIIWAS NGO | Data and Web Development Intern — Normal, IL",
+              title: "CIIWAS NGO | Data Analyst — Normal, IL",
               period: "08/2024 – 12/2024",
               desc:
                 "• Designed and deployed interactive web modules that centralized workshop resources, converting raw program data into structured dashboards used by 100+ women participants to track IT learning progress\n• Optimized MySQL queries and automated pipelines to manage participant records, accelerating enrollment insights and improving registration efficiency by 25%\n• Engineered React-based visualization components that translated training outcomes in Python, IT tools, and career readiness into accessible metrics, enabling leadership to measure program impact and refine workshops",
@@ -856,7 +856,7 @@ export default function Classic() {
             },
             {
               icon: <Database className="w-4 h-4 text-blue-700" />,
-              title: "Futurristic | Data Analyst Intern — India",
+              title: "Futurristic | Data Analyst — India",
               period: "2023",
               desc:
                 "Spearheaded data-driven decision making by developing Power BI dashboards that reduced manual reporting time by 30%. Analyzed production downtime using Python (Pandas/NumPy), identifying key bottlenecks that led to an 8% reduction in machine downtime. Improved demand forecasting accuracy by 15% through historical data trend analysis.",
@@ -1042,13 +1042,7 @@ export default function Classic() {
                                 {item.desc}
                               </div>
 
-                              {/* Compact Read more affordance (visible when not expanded) */}
-                              {!isOpen && (
-                                <div className="mt-2 text-xs text-blue-700 opacity-80 group-hover:opacity-100 transition flex items-center gap-1">
-                                  <span>Read more</span>
-                                  <span aria-hidden="true">▾</span>
-                                </div>
-                              )}
+                              {/* Compact Read more affordance removed as requested */}
                             </CardContent>
                           </Card>
                         </motion.div>
