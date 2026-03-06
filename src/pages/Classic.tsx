@@ -413,12 +413,31 @@ export default function Classic() {
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.5 }}
           >
-            <p>
-              I am a Master's in Information Systems graduate (GPA 4.0) from Illinois State University with a strong focus on
-              data analysis, system design, and web/mobile development. I enjoy exploring datasets to uncover insights and
-              building innovative solutions that merge creativity with technology. My journey combines analytical thinking,
-              teaching, and project management with hands-on experience in IT systems.
-            </p>
+            <div className="space-y-4">
+              <p className="font-medium text-lg text-slate-900">
+                Data tells the story. Systems make it work.
+              </p>
+              <p>
+                I turn complex datasets and systems into clear insights that help teams understand what is happening and make better decisions. My work sits at the intersection of data analysis, system thinking, and practical problem-solving, where structured data and well-designed workflows create reliable information for people who depend on it.
+              </p>
+              <div className="space-y-2">
+                <p>
+                  <strong>🔹 What drives me</strong><br />
+                  Understanding how data flows through systems and turning that data into insights that support real operational decisions.
+                </p>
+                <p>
+                  <strong>🔹 How I work</strong><br />
+                  Using SQL, Python, and BI tools to analyze datasets, validate data quality, and communicate insights through dashboards, reports, and documentation.
+                </p>
+                <p>
+                  <strong>🔹 What I bring</strong><br />
+                  Analytical thinking, structured problem solving, and a focus on building solutions that are reliable, scalable, and easy for teams to use.
+                </p>
+              </div>
+              <p>
+                I believe good analytics is not only about numbers—it is about building systems people trust and decisions people can act on.
+              </p>
+            </div>
           </motion.div>
         </div>
       </motion.section>
