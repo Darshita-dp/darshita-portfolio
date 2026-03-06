@@ -3,8 +3,6 @@
 import { action } from "./_generated/server";
 import { v } from "convex/values";
 import { KNOWLEDGE } from "../lib/aiKnowledge";
-import { vly } from "../lib/vly-integrations";
-
 export const chat = action({
   args: {
     message: v.string(),
@@ -34,26 +32,35 @@ Guidelines:
 - Use the pattern: "main content here.\n\n\nContextual closing question?" (note the triple newline for spacing)`;
 
     const messages = [
-      { role: "system" as const, content: systemPrompt },
-      ...(args.conversationHistory || []).map(m => ({ role: m.role as 'system' | 'user' | 'assistant', content: m.content })),
-      { role: "user" as const, content: args.message },
+      { role: "system", content: systemPrompt },
+      ...(args.conversationHistory || []).map(m => ({ role: m.role, content: m.content })),
+      { role: "user", content: args.message },
     ];
 
     try {
-      const result = await vly.ai.completion({
-        model: 'gpt-4o-mini',
-        messages: messages,
-        maxTokens: 500,
+      const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`,
+        },
+        body: JSON.stringify({
+          model: "openai/gpt-4o-mini",
+          messages: messages,
+          max_tokens: 500,
+        }),
       });
 
-      if (result.success && result.data) {
+      const result = await response.json();
+
+      if (response.ok && result.choices && result.choices.length > 0) {
         return {
-          message: result.data.choices[0]?.message?.content || "No response",
+          message: result.choices[0].message.content || "No response",
           success: true,
         };
       } else {
-        console.error("Vly AI error:", result.error);
-        throw new Error(result.error || "Request failed");
+        console.error("OpenRouter AI error:", result);
+        throw new Error(result.error?.message || "Request failed");
       }
     } catch (error) {
       console.error("Error calling AI:", error);

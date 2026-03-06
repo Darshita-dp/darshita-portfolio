@@ -16,6 +16,7 @@ import type * as emails from "../emails.js";
 import type * as gameProgress from "../gameProgress.js";
 import type * as guestbook from "../guestbook.js";
 import type * as http from "../http.js";
+import type * as testEnv from "../testEnv.js";
 import type * as users from "../users.js";
 
 import type {
@@ -33,6 +34,7 @@ declare const fullApi: ApiFromModules<{
   gameProgress: typeof gameProgress;
   guestbook: typeof guestbook;
   http: typeof http;
+  testEnv: typeof testEnv;
   users: typeof users;
 }>;
 
