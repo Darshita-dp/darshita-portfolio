@@ -846,8 +846,8 @@ export default function Classic() {
               period: "08/2024 – 12/2024",
               desc: "",
               orgColor: "#2E7D32",
-              tags: ["React", "MySQL", "Data Analytics", "Dashboards"],
-              metrics: ["100+ participants", "+25% efficiency"],
+              tags: ["SQL", "Python (Pandas)", "Power BI", "Data Analysis", "KPI Dashboards"],
+              metrics: ["2,000+ participants analyzed", "40% reporting automation"],
               category: "Internships",
             },
             {
