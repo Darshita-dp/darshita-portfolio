@@ -856,9 +856,9 @@ export default function Classic() {
               period: "2023",
               desc: "",
               orgColor: "#6D28D9",
-              tags: ["Power BI", "Python", "Data Visualization", "SQL", "Predictive Modeling"],
-              metrics: ["-8% downtime", "+15% forecasting accuracy"],
-              link: "https://www.gmpmachpro.com/",
+              tags: ["Power BI Dashboards", "SQL Optimization", "KPI Governance", "Data Validation", "Performance Analytics"],
+              metrics: ["50K+ records analyzed", "35% faster executive reporting"],
+              link: "https://futurristic.com/",
               category: "Internships",
             },
           ];
