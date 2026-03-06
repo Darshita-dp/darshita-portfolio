@@ -336,25 +336,23 @@ export default function Classic() {
                 Darshita Patel
               </h1>
               <p className="mt-1 text-base md:text-lg opacity-95">
-                Data Analyst & Developer
+                Data Analyst | Systems & Analytics
               </p>
               <motion.p
-                className="mt-2 text-sm md:text-base opacity-95"
+                className="mt-2 text-sm md:text-base opacity-95 max-w-xl"
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.15 }}
               >
-                <span className="inline-flex items-center gap-3">
-                  <span className="inline-flex items-center gap-1.5">
-                    <BarChart3 className="w-4 h-4" aria-hidden="true" />
-                    <span>Transforming data into insights</span>
-                  </span>
-                  <span aria-hidden="true" className="opacity-50">|</span>
-                  <span className="inline-flex items-center gap-1.5">
-                    <Code2 className="w-4 h-4" aria-hidden="true" />
-                    <span>Building solutions through code</span>
-                  </span>
-                </span>
+                Turning complex datasets and systems into clear insights that help teams understand performance, identify issues, and make better decisions.
+              </motion.p>
+              <motion.p
+                className="mt-2 text-sm md:text-base opacity-95 font-medium"
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+              >
+                SQL • Python • Power BI • Databases • Data Analytics
               </motion.p>
 
               <div className="mt-4 flex flex-wrap items-center justify-center md:justify-start gap-2">
