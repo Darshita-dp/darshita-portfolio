@@ -836,7 +836,7 @@ export default function Classic() {
               desc: "",
               orgColor: "#1E88E5",
               tags: ["SQL Analytics", "Power BI", "KPI Reporting", "Data Quality", "Academic Analytics"],
-              metrics: ["120+ students"],
+              metrics: ["2,800+ student records analyzed", "30% reporting efficiency improvement"],
               link: "https://it.illinoisstate.edu/",
               category: "Teaching",
             },
