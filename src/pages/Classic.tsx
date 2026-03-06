@@ -833,8 +833,7 @@ export default function Classic() {
               icon: <Briefcase className="w-4 h-4 text-blue-700" />,
               title: "Data & Process Analyst | Illinois State University",
               period: "Aug 2024 – May 2025",
-              desc:
-                "Instructed and supported 120+ students in IT productivity tools; developed lab content and guided students in Microsoft Office Suite and data tools.",
+              desc: "",
               orgColor: "#1E88E5",
               tags: ["Teaching", "MS Office", "Student Support"],
               metrics: ["120+ students"],
@@ -845,37 +844,21 @@ export default function Classic() {
               icon: <Database className="w-4 h-4 text-blue-700" />,
               title: "CIIWAS NGO | Data Analyst — Normal, IL",
               period: "08/2024 – 12/2024",
-              desc:
-                "• Designed and deployed interactive web modules that centralized workshop resources, converting raw program data into structured dashboards used by 100+ women participants to track IT learning progress\n• Optimized MySQL queries and automated pipelines to manage participant records, accelerating enrollment insights and improving registration efficiency by 25%\n• Engineered React-based visualization components that translated training outcomes in Python, IT tools, and career readiness into accessible metrics, enabling leadership to measure program impact and refine workshops",
+              desc: "",
               orgColor: "#2E7D32",
               tags: ["React", "MySQL", "Data Analytics", "Dashboards"],
               metrics: ["100+ participants", "+25% efficiency"],
-              // For CIIWAS: include direct contacts instead of creating a new page
-              // We'll show contacts as extra links in the card instead of a dedicated route.
               category: "Internships",
             },
             {
               icon: <Database className="w-4 h-4 text-blue-700" />,
               title: "Futurristic | Data Analyst — India",
               period: "2023",
-              desc:
-                "Spearheaded data-driven decision making by developing Power BI dashboards that reduced manual reporting time by 30%. Analyzed production downtime using Python (Pandas/NumPy), identifying key bottlenecks that led to an 8% reduction in machine downtime. Improved demand forecasting accuracy by 15% through historical data trend analysis.",
+              desc: "",
               orgColor: "#6D28D9",
               tags: ["Power BI", "Python", "Data Visualization", "SQL", "Predictive Modeling"],
               metrics: ["-8% downtime", "+15% forecasting accuracy"],
               link: "https://www.gmpmachpro.com/",
-              category: "Internships",
-            },
-            {
-              icon: <Database className="w-4 h-4 text-blue-700" />,
-              title: "ORANGES NGO | IT Data Analyst Intern — India",
-              period: "04/2022 – 12/2022",
-              desc:
-                "• Standardized donor datasets from 80+ regions, strengthening pipelines and improving reporting accuracy\n• Queried and modeled SQL datasets to uncover donation trends and community needs, delivering insights that boosted donor participation by 25% in 2 months\n• Automated cross-regional reporting by converting manual records into structured datasets, enabling leadership to track 2,000+ beneficiaries and optimize resource allocation in partnership with organizations like Smile Train",
-              orgColor: "#D97706",
-              tags: ["SQL", "Reporting", "Data Analytics"],
-              metrics: ["80+ regions", "+25% participation", "2000+ beneficiaries"],
-              link: "https://www.linkedin.com/in/oranges-ngo-4459411a9/",
               category: "Internships",
             },
           ];
