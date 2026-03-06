@@ -835,9 +835,9 @@ export default function Classic() {
               period: "Aug 2024 – May 2025",
               desc: "",
               orgColor: "#1E88E5",
-              tags: ["Teaching", "MS Office", "Student Support"],
+              tags: ["SQL Analytics", "Power BI", "KPI Reporting", "Data Quality", "Academic Analytics"],
               metrics: ["120+ students"],
-              link: "https://coursefinder.illinoisstate.edu/it/150/",
+              link: "https://it.illinoisstate.edu/",
               category: "Teaching",
             },
             {
