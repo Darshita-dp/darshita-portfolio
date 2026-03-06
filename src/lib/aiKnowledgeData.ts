@@ -83,8 +83,8 @@ export const KNOWLEDGE: Array<QA> = [
   },
   {
     q: "NGO Internships",
-    a: "I worked with NGOs including CIIWAS and ORANGES, building accessible websites and dashboards that supported community projects and increased engagement.",
-    keywords: ["ngo", "ciiwas", "oranges", "web development", "accessibility", "dashboards", "impact"],
+    a: "I worked with the CIIWAS NGO, building accessible websites and dashboards that supported community projects and increased engagement.",
+    keywords: ["ngo", "ciiwas", "web development", "accessibility", "dashboards", "impact"],
   },
   {
     q: "Futurristic Experience",
