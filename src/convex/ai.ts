@@ -3,6 +3,8 @@
 import { action } from "./_generated/server";
 import { v } from "convex/values";
 import { KNOWLEDGE } from "../lib/aiKnowledge";
+import { vly } from "../lib/vly-integrations";
+
 export const chat = action({
   args: {
     message: v.string(),
@@ -38,29 +40,20 @@ Guidelines:
     ];
 
     try {
-      const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`,
-        },
-        body: JSON.stringify({
-          model: "openai/gpt-4o-mini",
-          messages: messages,
-          max_tokens: 500,
-        }),
+      const result = await vly.ai.completion({
+        model: 'gpt-4o-mini',
+        messages: messages as any,
+        maxTokens: 500
       });
 
-      const result = await response.json();
-
-      if (response.ok && result.choices && result.choices.length > 0) {
+      if (result.success && result.data) {
         return {
-          message: result.choices[0].message.content || "No response",
+          message: result.data.choices[0]?.message?.content || "No response",
           success: true,
         };
       } else {
-        console.error("OpenRouter AI error:", result);
-        throw new Error(result.error?.message || "Request failed");
+        console.error("AI error:", result.error);
+        throw new Error(result.error || "Request failed");
       }
     } catch (error) {
       console.error("Error calling AI:", error);
