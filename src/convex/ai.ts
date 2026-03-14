@@ -3,7 +3,7 @@
 import { action } from "./_generated/server";
 import { v } from "convex/values";
 import { KNOWLEDGE } from "../lib/aiKnowledge";
-import { vly } from "../lib/vly-integrations";
+import OpenAI from "openai";
 
 export const chat = action({
   args: {
@@ -14,49 +14,43 @@ export const chat = action({
     }))),
   },
   handler: async (ctx, args) => {
-    // Build context from knowledge base
+    const apiKey = process.env.OPENROUTER_API_KEY;
+    if (!apiKey) {
+      return {
+        message: "AI is not configured yet. Please add the OPENROUTER_API_KEY environment variable.",
+        success: false,
+      };
+    }
+
+    const client = new OpenAI({
+      baseURL: "https://openrouter.ai/api/v1",
+      apiKey,
+    });
+
     const knowledgeContext = KNOWLEDGE.map(item => `Q: ${item.q}\nA: ${item.a}`).join("\n\n");
-    
-    const systemPrompt = `You are Darshita's AI assistant, helping visitors learn about her background, skills, projects, and experience. You have access to the following knowledge base about Darshita:
 
-${knowledgeContext}
-
-Guidelines:
-- Be friendly, conversational, and helpful
-- Use the knowledge base to answer questions accurately
-- If asked about something not in the knowledge base, politely say you don't have that specific information and suggest they contact Darshita directly via LinkedIn
-- Keep responses concise but informative
-- Use emojis occasionally to match Darshita's friendly personality (🌼, ✨, 🎯, etc.)
-- If someone asks about projects, skills, or education, provide specific details from the knowledge base
-- Format your responses with proper markdown: use **bold** for emphasis, line breaks between sections, and bullet points for lists
-- When ending responses with a follow-up question, add TWO blank lines before it for proper spacing
-- Make your closing questions specific and contextual based on what was just discussed (e.g., "Would you like to know more about her other projects?" or "Interested in learning about her technical skills?")
-- Use the pattern: "main content here.\n\n\nContextual closing question?" (note the triple newline for spacing)`;
+    const systemPrompt = `You are Darshita's AI assistant, helping visitors learn about her background, skills, projects, and experience. You have access to the following knowledge base about Darshita:\n\n${knowledgeContext}\n\nGuidelines:\n- Be friendly, conversational, and helpful\n- Use the knowledge base to answer questions accurately\n- If asked about something not in the knowledge base, politely say you don't have that specific information and suggest they contact Darshita directly via LinkedIn\n- Keep responses concise but informative\n- Use emojis occasionally to match Darshita's friendly personality (🌼, ✨, 🎯, etc.)\n- If someone asks about projects, skills, or education, provide specific details from the knowledge base\n- Format your responses with proper markdown: use **bold** for emphasis, line breaks between sections, and bullet points for lists\n- When ending responses with a follow-up question, add TWO blank lines before it for proper spacing\n- Make your closing questions specific and contextual based on what was just discussed\n- Use the pattern: "main content here.\n\n\nContextual closing question?" (note the triple newline for spacing)`;
 
     const messages = [
-      { role: "system", content: systemPrompt },
-      ...(args.conversationHistory || []).map(m => ({ role: m.role, content: m.content })),
-      { role: "user", content: args.message },
+      { role: "system" as const, content: systemPrompt },
+      ...(args.conversationHistory || []).map(m => ({ role: m.role as "user" | "assistant", content: m.content })),
+      { role: "user" as const, content: args.message },
     ];
 
     try {
-      const result = await vly.ai.completion({
-        model: 'gpt-4o-mini',
-        messages: messages as any,
-        maxTokens: 500
+      const completion = await client.chat.completions.create({
+        model: "openai/gpt-4o-mini",
+        messages,
+        max_tokens: 500,
       });
 
-      if (result.success && result.data) {
-        return {
-          message: result.data.choices[0]?.message?.content || "No response",
-          success: true,
-        };
-      } else {
-        console.error("AI error:", result.error);
-        throw new Error(result.error || "Request failed");
-      }
+      const responseText = completion.choices[0]?.message?.content || "No response";
+      return {
+        message: responseText,
+        success: true,
+      };
     } catch (error) {
-      console.error("Error calling AI:", error);
+      console.error("Error calling OpenRouter AI:", error);
       return {
         message: "I'm having trouble connecting right now. Please try again in a moment, or feel free to reach out to Darshita directly on LinkedIn! 🌼",
         success: false,
