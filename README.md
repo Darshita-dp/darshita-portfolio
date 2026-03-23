@@ -1,4 +1,39 @@
-## Overview
+# Darshita's Modes — Interactive Portfolio
+
+An interactive full-stack portfolio by **Darshita Patel**, showcasing her work through multiple engaging modes: Classic, Story, Play, and AI Interview.
+
+---
+
+## Live Modes
+
+| Mode | Route | Description |
+|------|-------|-------------|
+| **Classic** | `/classic` | Professional portfolio with experience, skills, and projects |
+| **Story** | `/story` | Cinematic, vertically scrolling narrative journey |
+| **Play** | `/play` | Gamified map with XP, levels, and mini-games |
+| **AI Interview** | `/ai` | AI-powered chat that simulates a portfolio interview |
+
+---
+
+## Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| Language | TypeScript |
+| Frontend | React 19, Vite, React Router v7 |
+| Styling | Tailwind CSS v4, Shadcn UI, Lucide Icons |
+| Animations | Framer Motion |
+| 3D Graphics | Three.js |
+| Backend & DB | Convex |
+| Auth | Convex Auth (Email OTP) |
+| AI | OpenRouter (via OpenAI SDK) |
+| Email | Resend |
+
+> All source files live in the `src/` directory. Use `pnpm` as the package manager.
+
+---
+
+## Project Structure
 
 This project uses the following tech stack:
 - Vite
