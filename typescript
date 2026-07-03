@@ -1,0 +1,5 @@
+const result = await vly.ai.completion({
+  model: 'gpt-4o-mini',
+  messages: messages,
+  maxTokens: 500,
+});

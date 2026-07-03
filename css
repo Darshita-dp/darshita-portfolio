@@ -1,0 +1,5 @@
+@media (pointer: coarse) {
+  .cursor-root {
+    display: none;
+  }
+}
