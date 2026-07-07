@@ -5,6 +5,41 @@ import { v } from "convex/values";
 import { KNOWLEDGE } from "../lib/aiKnowledge";
 import OpenAI from "openai";
 
+// Pick the top-k Q&As most relevant to the user's message via keyword overlap.
+// The KNOWLEDGE entries already ship with a curated `keywords[]` array per item,
+// so we lean on that rather than splitting the user text.
+function selectRelevantQA<
+  T extends { q: string; a: string; keywords?: string[] }
+>(
+  message: string,
+  knowledge: Array<T>,
+  k = 4
+): Array<T> {
+  const lower = message.toLowerCase();
+  const scored = knowledge.map((item) => {
+    const score = (item.keywords || []).reduce(
+      (acc, kw) => (lower.includes(kw.toLowerCase()) ? acc + 1 : acc),
+      0
+    );
+    return { item, score };
+  });
+  scored.sort((a, b) => b.score - a.score);
+  return scored.slice(0, k).map((s) => s.item);
+}
+
+// Always force-include an "introduction" Q&A so the model grounds itself, even
+// when the user prompt is vague (e.g. "hi") and the keyword overlap is 0 for
+// everything else.
+function getBaseline(knowledge: typeof KNOWLEDGE): typeof KNOWLEDGE {
+  const lq = (q: string) => q.toLowerCase();
+  const intro = knowledge.find(
+    (item) =>
+      lq(item.q).includes("introduction") ||
+      lq(item.q).includes("tell me about yourself")
+  );
+  return intro ? [intro] : [];
+}
+
 export const chat = action({
   args: {
     message: v.string(),
@@ -31,13 +66,29 @@ export const chat = action({
       },
     });
 
-    const knowledgeContext = KNOWLEDGE.map(item => `Q: ${item.q}\nA: ${item.a}`).join("\n\n");
+    // Mini-RAG: combine the always-on intro baseline with the top-k keyword
+    // matches, then dedupe so we never ship the same Q&A twice.
+    const seen = new Set<string>();
+    const selected = [...getBaseline(KNOWLEDGE), ...selectRelevantQA(args.message, KNOWLEDGE, 4)]
+      .filter((item) => {
+        if (seen.has(item.q)) return false;
+        seen.add(item.q);
+        return true;
+      });
 
-    const systemPrompt = `You are Darshita's AI assistant, helping visitors learn about her background, skills, projects, and experience. You have access to the following knowledge base about Darshita:\n\n${knowledgeContext}\n\nGuidelines:\n- Be friendly, conversational, and helpful\n- Use the knowledge base to answer questions accurately\n- If asked about something not in the knowledge base, politely say you don't have that specific information and suggest they contact Darshita directly via LinkedIn\n- Keep responses concise but informative\n- Use emojis occasionally to match Darshita's friendly personality (🌼, ✨, 🎯, etc.)\n- If someone asks about projects, skills, or education, provide specific details from the knowledge base\n- Format your responses with proper markdown: use **bold** for emphasis, line breaks between sections, and bullet points for lists\n- When ending responses with a follow-up question, add TWO blank lines before it for proper spacing\n- Make your closing questions specific and contextual based on what was just discussed\n- Use the pattern: "main content here.\n\n\nContextual closing question?" (note the triple newline for spacing)`;
+    const knowledgeContext = selected
+      .map((item) => `Q: ${item.q}\nA: ${item.a}`)
+      .join("\n\n");
+
+    const systemPrompt = `You are Darshita's AI assistant, helping visitors learn about her background, skills, projects, and experience. You have access to the following Q&A knowledge base about Darshita (only entries that may match this question are included to stay within the model's context window):\n\n${knowledgeContext}\n\nGuidelines:\n- Be friendly, conversational, and helpful\n- Use the knowledge base to answer questions accurately\n- If asked about something not in the knowledge base, politely say you don't have that specific information and suggest they contact Darshita directly via LinkedIn\n- Keep responses concise but informative\n- Use emojis occasionally to match Darshita's friendly personality (🌼, ✨, 🎯, etc.)\n- If someone asks about projects, skills, or education, provide specific details from the knowledge base\n- Format your responses with proper markdown: use **bold** for emphasis, line breaks between sections, and bullet points for lists\n- When ending responses with a follow-up question, add TWO blank lines before it for proper spacing\n- Make your closing questions specific and contextual based on what was just discussed\n- Use the pattern: "main content here.\n\n\nContextual closing question?" (note the triple newline for spacing)`;
+
+    // Truncate conversation history so a long chat doesn't refill our token
+    // budget mid-conversation and trigger the same 402 error later.
+    const recentHistory = (args.conversationHistory || []).slice(-6);
 
     const messages = [
       { role: "system" as const, content: systemPrompt },
-      ...(args.conversationHistory || []).map(m => ({ role: m.role as "user" | "assistant", content: m.content })),
+      ...recentHistory.map((m) => ({ role: m.role as "user" | "assistant", content: m.content })),
       { role: "user" as const, content: args.message },
     ];
 
