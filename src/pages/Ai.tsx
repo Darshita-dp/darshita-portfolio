@@ -464,7 +464,7 @@ function GuideMe() {
     let msg = "";
     if (id === "projects") {
       msg =
-        "Ahoy! Me chest o' projects: SmartPlanner (SwiftUI/Core Data/MVVM), Film-Fusion (web), Course Manager (tracking UX), and Courtside Leadership (WordPress/SEO).";
+        "Ahoy! Me chest o' projects: Healthcare Revenue Cycle Command Center (analytics), Virtual Birthday Party (React/TS multiplayer), E-commerce Funnel Analysis (Python/Jupyter), Walmart Sales Analysis (SQL+Python), plus Power BI dashboards for Spotify and WeatherAPI. All source code lives on me GitHub!";
     } else if (id === "skills") {
       msg =
         "Skills off the starboard bow: C, C++, Java, Python, Swift/SwiftUI, React/TS, PHP/MySQL, data tools. A full-stack sailor at heart!";
@@ -482,7 +482,7 @@ function GuideMe() {
       {
         id: "projects" as const,
         title: "See My Projects",
-        desc: "SmartPlanner, Film‑Fusion, Course Manager, Courtside Leadership",
+        desc: "Healthcare RCM, Virtual Birthday Party, E‑commerce Funnel, Spotify & Weather Power BI, Walmart Sales Analysis",
         action: () => {
           onSelect("projects");
         },
