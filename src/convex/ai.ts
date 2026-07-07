@@ -25,6 +25,10 @@ export const chat = action({
     const client = new OpenAI({
       baseURL: "https://openrouter.ai/api/v1",
       apiKey,
+      defaultHeaders: {
+        "HTTP-Referer": "https://darshitas-portfolio.app",
+        "X-Title": "Darshita's Portfolio",
+      },
     });
 
     const knowledgeContext = KNOWLEDGE.map(item => `Q: ${item.q}\nA: ${item.a}`).join("\n\n");
@@ -49,10 +53,13 @@ export const chat = action({
         message: responseText,
         success: true,
       };
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error calling OpenRouter AI:", error);
+      const errorMsg = error?.message || error?.toString?.() || "Unknown error";
+      const statusInfo = error?.status ? ` (HTTP ${error.status})` : "";
+      const codeInfo = error?.code ? ` [${error.code}]` : "";
       return {
-        message: "I'm having trouble connecting right now. Please try again in a moment, or feel free to reach out to Darshita directly on LinkedIn! 🌼",
+        message: `I'm having trouble connecting right now${statusInfo}${codeInfo}: ${errorMsg}. Please try again in a moment, or feel free to reach out to Darshita directly on LinkedIn! 🌼`,
         success: false,
       };
     }
