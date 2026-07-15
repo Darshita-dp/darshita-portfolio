@@ -849,7 +849,7 @@ export default function Classic() {
             {
               icon: <Briefcase className="w-4 h-4 text-blue-700" />,
               title: "Data & Process Analyst | Illinois State University",
-              period: "Aug 2024 – May 2025",
+              period: "Aug 2024 – Present",
               desc: "",
               orgColor: "#1E88E5",
               tags: ["SQL Analytics", "Power BI", "KPI Reporting", "Data Quality", "Academic Analytics"],
