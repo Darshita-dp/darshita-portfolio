@@ -859,7 +859,7 @@ export default function Classic() {
             },
             {
               icon: <Database className="w-4 h-4 text-blue-700" />,
-              title: "CIIWAS NGO | Data Analyst — Normal, IL",
+              title: "Data Analyst | CIIWAS",
               period: "08/2024 – 12/2024",
               desc: "",
               orgColor: "#2E7D32",
